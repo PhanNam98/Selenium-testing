@@ -1,0 +1,9 @@
+D:\downloads\Programing\Selenium\selenium_c-shap\bin\Debug\selenium_c-shap.exe.config
+D:\downloads\Programing\Selenium\selenium_c-shap\bin\Debug\selenium_c-shap.exe
+D:\downloads\Programing\Selenium\selenium_c-shap\bin\Debug\selenium_c-shap.pdb
+D:\downloads\Programing\Selenium\selenium_c-shap\bin\Debug\WebDriver.dll
+D:\downloads\Programing\Selenium\selenium_c-shap\bin\Debug\WebDriver.xml
+D:\downloads\Programing\Selenium\selenium_c-shap\obj\Debug\selenium_c-shap.csprojAssemblyReference.cache
+D:\downloads\Programing\Selenium\selenium_c-shap\obj\Debug\selenium_c-shap.csproj.CopyComplete
+D:\downloads\Programing\Selenium\selenium_c-shap\obj\Debug\selenium_c-shap.exe
+D:\downloads\Programing\Selenium\selenium_c-shap\obj\Debug\selenium_c-shap.pdb
