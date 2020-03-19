@@ -1,4 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using Generate_TestCase_Selenium.Models;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
@@ -14,29 +17,32 @@ namespace Generate_TestCase_Selenium
 {
     public partial class frmMain : Form
     {
-        
+
         public frmMain()
         {
             InitializeComponent();
+
         }
         private ChromeDriver chromedriver;
         private void btnCrawlWeb_Click(object sender, EventArgs e)
         {
-            SetUpDriver(txtboxUrl.Text);
-            var a = chromedriver.FindElementsByXPath("//input[@type='text']");
-            string lis = "";
-            for (int i = 0; i < a.Count(); i++)
-            {
-                lis +="\nElement " + i.ToString();
-                lis +="\n   Input text id: " + a[i].GetAttribute("id");
-                lis +="\n   Input text name: " + a[i].GetAttribute("name");
-                lis +="\n   Input text Tagname: " + a[i].TagName;
-                string xpath = getAbsoluteXPath(chromedriver, a[i]);
-                lis +="\n   Input text xpath relative: " + xpath+"\n";
-            }
-            QuitDriver();
-            MessageBox.Show(lis,"Input text elements");
+            //SetUpDriver(txtboxUrl.Text);
+            //var a = chromedriver.FindElementsByXPath("//input[@type='text']");
+            //string lis = "";
+            //for (int i = 0; i < a.Count(); i++)
+            //{
+            //    lis += "\nElement " + i.ToString();
+            //    lis += "\n   Input text id: " + a[i].GetAttribute("id");
+            //    lis += "\n   Input text name: " + a[i].GetAttribute("name");
+            //    lis += "\n   Input text Tagname: " + a[i].TagName;
+            //    string xpath = getAbsoluteXPath(chromedriver, a[i]);
+            //    lis += "\n   Input text xpath relative: " + xpath + "\n";
+            //}
+            //QuitDriver();
+            //MessageBox.Show(lis, "Input text elements");
+           
             
+
         }
 
         private void SetUpDriver(string url)
@@ -47,9 +53,9 @@ namespace Generate_TestCase_Selenium
         }
         private void QuitDriver()
         {
-           
+
             chromedriver.Quit();
-         
+
         }
         private void CloseDriver()
         {
@@ -119,3 +125,5 @@ namespace Generate_TestCase_Selenium
         }
     }
 }
+
+

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ElementDBModelStoreContainer" CdmEntityContainer="ElementDBEntities">
+    <EntitySetMapping Name="Form_elements">
+      <EntityTypeMapping TypeName="ElementDBModel.Form_elements">
+        <MappingFragment StoreEntitySet="Form_elements">
+          <ScalarProperty Name="id_form" ColumnName="id_form" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="id_url" ColumnName="id_url" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Input_elements">
+      <EntityTypeMapping TypeName="ElementDBModel.Input_elements">
+        <MappingFragment StoreEntitySet="Input_elements">
+          <ScalarProperty Name="id_input" ColumnName="id_input" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="class_name" ColumnName="class_name" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="id_form" ColumnName="id_form" />
+          <ScalarProperty Name="minlength" ColumnName="minlength" />
+          <ScalarProperty Name="maxlength" ColumnName="maxlength" />
+          <ScalarProperty Name="required" ColumnName="required" />
+          <ScalarProperty Name="readonly" ColumnName="readonly" />
+          <ScalarProperty Name="max" ColumnName="max" />
+          <ScalarProperty Name="min" ColumnName="min" />
+          <ScalarProperty Name="multiple" ColumnName="multiple" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Urls">
+      <EntityTypeMapping TypeName="ElementDBModel.Url">
+        <MappingFragment StoreEntitySet="Url">
+          <ScalarProperty Name="id_url" ColumnName="id_url" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="url1" ColumnName="url" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="ElementDBModel.Store.sp_alterdiagram" />
+    <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="ElementDBModel.Store.sp_creatediagram" />
+    <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="ElementDBModel.Store.sp_dropdiagram" />
+    <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="ElementDBModel.Store.sp_helpdiagramdefinition">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ElementDBModel.sp_helpdiagramdefinition_Result">
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="ElementDBModel.Store.sp_helpdiagrams">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="ElementDBModel.sp_helpdiagrams_Result">
+          <ScalarProperty Name="Database" ColumnName="Database" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Owner" ColumnName="Owner" />
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="ElementDBModel.Store.sp_renamediagram" />
+    <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="ElementDBModel.Store.sp_upgraddiagrams" />
+  </EntityContainerMapping>
+</Mapping>

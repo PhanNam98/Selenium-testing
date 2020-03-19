@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ElementDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Form_elements">
+    <Key>
+      <PropertyRef Name="id_form" />
+      <PropertyRef Name="id_url" />
+    </Key>
+    <Property Name="id_form" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="id_url" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Input_elements">
+    <Key>
+      <PropertyRef Name="id_input" />
+    </Key>
+    <Property Name="id_input" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
+    <Property Name="class_name" Type="nvarchar" MaxLength="50" />
+    <Property Name="type" Type="nvarchar" MaxLength="50" />
+    <Property Name="value" Type="nvarchar" MaxLength="50" />
+    <Property Name="id_form" Type="nvarchar" MaxLength="50" />
+    <Property Name="minlength" Type="int" />
+    <Property Name="maxlength" Type="int" />
+    <Property Name="required" Type="bit" />
+    <Property Name="readonly" Type="bit" />
+    <Property Name="max" Type="real" />
+    <Property Name="min" Type="real" />
+    <Property Name="multiple" Type="bit" />
+  </EntityType>
+  <EntityType Name="Url">
+    <Key>
+      <PropertyRef Name="id_url" />
+    </Key>
+    <Property Name="id_url" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="url" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Form_elements_Url">
+    <End Role="Url" Type="Self.Url" Multiplicity="1" />
+    <End Role="Form_elements" Type="Self.Form_elements" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Url">
+        <PropertyRef Name="id_url" />
+      </Principal>
+      <Dependent Role="Form_elements">
+        <PropertyRef Name="id_url" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="ElementDBModelStoreContainer">
+    <EntitySet Name="Form_elements" EntityType="Self.Form_elements" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Input_elements" EntityType="Self.Input_elements" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Url" EntityType="Self.Url" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Form_elements_Url" Association="Self.FK_Form_elements_Url">
+      <End Role="Url" EntitySet="Url" />
+      <End Role="Form_elements" EntitySet="Form_elements" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

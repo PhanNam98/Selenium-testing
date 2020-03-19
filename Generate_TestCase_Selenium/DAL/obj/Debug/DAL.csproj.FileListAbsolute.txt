@@ -1,0 +1,13 @@
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\DAL.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\DAL.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\EntityFramework.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\EntityFramework.SqlServer.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\Model.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\Model.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\Model.dll.config
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\EntityFramework.xml
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\EntityFramework.SqlServer.xml
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\obj\Debug\DAL.csprojAssemblyReference.cache
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\obj\Debug\DAL.csproj.CopyComplete
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\obj\Debug\DAL.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\obj\Debug\DAL.pdb

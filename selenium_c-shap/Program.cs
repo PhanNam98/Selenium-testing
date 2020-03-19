@@ -34,13 +34,24 @@ namespace selenium_c_shap
             IWebElement formElement =chromedriver.FindElementById("login_form");
             var allFormChildElements = formElement.FindElements(By.XPath("//input[@type='text']"));
             var allFormChildElements1 = chromedriver.FindElementsByXPath("//form[@id='login_form']/*");
+            var allFormChildElement = formElement.FindElement(By.XPath("//input[@type='submit']"));
             for (int i = 0; i < allFormChildElements.Count(); i++)
             {
-                Console.WriteLine("input text name: " + allFormChildElements[i].GetAttribute("name"));
-                Console.WriteLine("input text id: " + allFormChildElements[i].GetAttribute("id"));
-                Console.WriteLine("input text Tagname: " + allFormChildElements[i].TagName);
-                string xpath = getAbsoluteXPath(chromedriver, allFormChildElements[i]);
-                Console.WriteLine("input text xpath relative: " + xpath);
+                allFormChildElement.Click();
+
+                var allFormChildElements12 = chromedriver.FindElements(By.XPath("//input[@type='text']"));
+                for (int j = 0; j < allFormChildElements12.Count(); j++)
+                {
+                    Console.WriteLine("input text Requires: " + allFormChildElements12[j].GetAttribute("validationMessage"));
+                }
+
+                //    Console.WriteLine("input text name: " + allFormChildElements[i].GetAttribute("name"));
+                //Console.WriteLine("input text id: " + allFormChildElements[i].GetAttribute("id"));
+                //Console.WriteLine("input text Tagname: " + allFormChildElements[i].TagName);
+                //Console.WriteLine("input text Requires: " + allFormChildElements[i].GetAttribute("validationMessage"));
+                //Console.WriteLine("input text Requires: " + allFormChildElements[i].GetAttribute("minlength"));
+                //string xpath = getAbsoluteXPath(chromedriver, allFormChildElements[i]);
+                //Console.WriteLine("input text xpath relative: " + xpath);
               
 
             }

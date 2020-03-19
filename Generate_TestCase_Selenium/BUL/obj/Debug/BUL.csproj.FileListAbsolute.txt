@@ -1,0 +1,15 @@
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\BUL.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\BUL.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\DAL.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\EntityFramework.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\EntityFramework.SqlServer.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\Model.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\DAL.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\Model.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\Model.dll.config
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\EntityFramework.xml
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\bin\Debug\EntityFramework.SqlServer.xml
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\obj\Debug\BUL.csprojAssemblyReference.cache
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\obj\Debug\BUL.csproj.CopyComplete
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\obj\Debug\BUL.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\BUL\obj\Debug\BUL.pdb
