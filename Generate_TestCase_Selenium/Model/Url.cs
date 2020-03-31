@@ -17,7 +17,9 @@ namespace Model
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Url()
         {
+            this.Elements = new HashSet<Element>();
             this.Form_elements = new HashSet<Form_elements>();
+            this.Test_case = new HashSet<Test_case>();
         }
     
         public int id_url { get; set; }
@@ -25,6 +27,10 @@ namespace Model
         public string url1 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Element> Elements { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Form_elements> Form_elements { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Test_case> Test_case { get; set; }
     }
 }

@@ -4,11 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="537f24b240554b258e76e3a7992cbe20" Name="Diagram1">
-        <EntityTypeShape EntityType="ElementDBModel.Form_elements" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="ElementDBModel.Input_elements" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ElementDBModel.Url" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <AssociationConnector Association="ElementDBModel.FK_Form_elements_Url" ManuallyRouted="false" />
+      <Diagram DiagramId="9a39aff9ba4c452abc93568bc4ffef1d" Name="Diagram1" ZoomLevel="100">
+        <EntityTypeShape EntityType="ElementDBModel.Element" Width="1.5" PointX="3.125" PointY="1.375" />
+        <EntityTypeShape EntityType="ElementDBModel.Element_test" Width="1.5" PointX="14.25" PointY="3" />
+        <EntityTypeShape EntityType="ElementDBModel.Form_elements" Width="1.5" PointX="8.5" PointY="7.625" />
+        <EntityTypeShape EntityType="ElementDBModel.Input_testcase" Width="1.5" PointX="6.875" PointY="1" />
+        <EntityTypeShape EntityType="ElementDBModel.Redirect_url" Width="1.5" PointX="12.75" PointY="6.5" />
+        <EntityTypeShape EntityType="ElementDBModel.Test_case" Width="1.5" PointX="10.5" PointY="2.125" />
+        <EntityTypeShape EntityType="ElementDBModel.Url" Width="1.5" PointX="6.5" PointY="5.125" />
+        <AssociationConnector Association="ElementDBModel.FK_Element_Url" />
+        <AssociationConnector Association="ElementDBModel.FK_Input_testcase_Element" />
+        <AssociationConnector Association="ElementDBModel.FK_Element_test_Test_case" />
+        <AssociationConnector Association="ElementDBModel.FK_Form_elements_Url" />
+        <AssociationConnector Association="ElementDBModel.FK_Input_testcase_Test_case1" />
+        <AssociationConnector Association="ElementDBModel.FK_Test_case_Redirect_url" />
+        <AssociationConnector Association="ElementDBModel.FK_Test_case_Url" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -129,6 +129,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="BUL\BUL.csproj">
+      <Project>{d62c8943-6803-4627-b678-82e7561564e9}</Project>
+      <Name>BUL</Name>
+    </ProjectReference>
+    <ProjectReference Include="Crawler\Crawler.csproj">
+      <Project>{8d729470-bbcf-4a69-a036-4e45a13c97b9}</Project>
+      <Name>Crawler</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Selenium.WebDriver.ChromeDriver.80.0.3987.10600\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('packages\Selenium.WebDriver.ChromeDriver.80.0.3987.10600\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

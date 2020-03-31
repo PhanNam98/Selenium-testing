@@ -5,7 +5,7 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Mod
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Model\bin\Debug\EntityFramework.SqlServer.dll
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Model\bin\Debug\EntityFramework.xml
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Model\bin\Debug\EntityFramework.SqlServer.xml
-D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Model\obj\Debug\Model.csprojAssemblyReference.cache
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Model\obj\Debug\Model.csproj.CopyComplete
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Model\obj\Debug\Model.dll
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Model\obj\Debug\Model.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Model\obj\Debug\Model.csprojAssemblyReference.cache

@@ -1,45 +1,187 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="ElementDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="ElementDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Elements" EntityType="ElementDBModel.Element" />
+    <EntitySet Name="Element_test" EntityType="ElementDBModel.Element_test" />
+    <EntitySet Name="Form_elements" EntityType="ElementDBModel.Form_elements" />
+    <EntitySet Name="Input_testcase" EntityType="ElementDBModel.Input_testcase" />
+    <EntitySet Name="Redirect_url" EntityType="ElementDBModel.Redirect_url" />
+    <EntitySet Name="Test_case" EntityType="ElementDBModel.Test_case" />
+    <EntitySet Name="Urls" EntityType="ElementDBModel.Url" />
+    <AssociationSet Name="FK_Element_Url" Association="ElementDBModel.FK_Element_Url">
+      <End Role="Url" EntitySet="Urls" />
+      <End Role="Element" EntitySet="Elements" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Input_testcase_Element" Association="ElementDBModel.FK_Input_testcase_Element">
+      <End Role="Element" EntitySet="Elements" />
+      <End Role="Input_testcase" EntitySet="Input_testcase" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Element_test_Test_case" Association="ElementDBModel.FK_Element_test_Test_case">
+      <End Role="Test_case" EntitySet="Test_case" />
+      <End Role="Element_test" EntitySet="Element_test" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Form_elements_Url" Association="ElementDBModel.FK_Form_elements_Url">
+      <End Role="Url" EntitySet="Urls" />
+      <End Role="Form_elements" EntitySet="Form_elements" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Input_testcase_Test_case1" Association="ElementDBModel.FK_Input_testcase_Test_case1">
+      <End Role="Test_case" EntitySet="Test_case" />
+      <End Role="Input_testcase" EntitySet="Input_testcase" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Test_case_Redirect_url" Association="ElementDBModel.FK_Test_case_Redirect_url">
+      <End Role="Redirect_url" EntitySet="Redirect_url" />
+      <End Role="Test_case" EntitySet="Test_case" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Test_case_Url" Association="ElementDBModel.FK_Test_case_Url">
+      <End Role="Url" EntitySet="Urls" />
+      <End Role="Test_case" EntitySet="Test_case" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Element">
+    <Key>
+      <PropertyRef Name="id_element" />
+      <PropertyRef Name="id_url" />
+    </Key>
+    <Property Name="id_element" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="id_url" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="class_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="tag_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="href" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="title" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="id_form" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="minlength" Type="Double" />
+    <Property Name="maxlength" Type="Double" />
+    <Property Name="required" Type="Boolean" />
+    <Property Name="read_only" Type="Boolean" />
+    <Property Name="max_value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="min_value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="multiple" Type="Boolean" />
+    <Property Name="xpath" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Element_Url" FromRole="Element" ToRole="Url" />
+    <NavigationProperty Name="Input_testcase" Relationship="ElementDBModel.FK_Input_testcase_Element" FromRole="Element" ToRole="Input_testcase" />
+  </EntityType>
+  <EntityType Name="Element_test">
+    <Key>
+      <PropertyRef Name="id_testcase" />
+      <PropertyRef Name="id_url" />
+      <PropertyRef Name="id_element" />
+    </Key>
+    <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="id_url" Type="Int32" Nullable="false" />
+    <Property Name="id_element" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="xpath" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="xpath_full" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="value_return" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="value_test" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="class_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Element_test_Test_case" FromRole="Element_test" ToRole="Test_case" />
+  </EntityType>
   <EntityType Name="Form_elements">
     <Key>
       <PropertyRef Name="id_form" />
       <PropertyRef Name="id_url" />
     </Key>
-    <Property Name="id_form" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="id_url" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="Url" Relationship="Self.FK_Form_elements_Url" FromRole="Form_elements" ToRole="Url" />
-  </EntityType>
-  <EntityType Name="Input_elements">
-    <Key>
-      <PropertyRef Name="id_input" />
-    </Key>
-    <Property Name="id_input" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="id_form" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="class_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="id_form" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="minlength" Type="Int32" />
-    <Property Name="maxlength" Type="Int32" />
-    <Property Name="required" Type="Boolean" />
-    <Property Name="readonly" Type="Boolean" />
-    <Property Name="max" Type="Single" />
-    <Property Name="min" Type="Single" />
-    <Property Name="multiple" Type="Boolean" />
+    <Property Name="id_url" Type="Int32" Nullable="false" />
+    <Property Name="xpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Form_elements_Url" FromRole="Form_elements" ToRole="Url" />
+  </EntityType>
+  <EntityType Name="Input_testcase">
+    <Key>
+      <PropertyRef Name="id_testcase" />
+      <PropertyRef Name="id_element" />
+      <PropertyRef Name="id_url" />
+    </Key>
+    <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="id_element" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="id_url" Type="Int32" Nullable="false" />
+    <Property Name="xpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Element" Relationship="ElementDBModel.FK_Input_testcase_Element" FromRole="Input_testcase" ToRole="Element" />
+    <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Input_testcase" ToRole="Test_case" />
+  </EntityType>
+  <EntityType Name="Redirect_url">
+    <Key>
+      <PropertyRef Name="id_testcase" />
+    </Key>
+    <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="current_url" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="redirect_url_test" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Test_case_Redirect_url" FromRole="Redirect_url" ToRole="Test_case" />
+  </EntityType>
+  <EntityType Name="Test_case">
+    <Key>
+      <PropertyRef Name="id_testcase" />
+      <PropertyRef Name="id_url" />
+    </Key>
+    <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="id_url" Type="Int32" Nullable="false" />
+    <Property Name="result" Type="Int32" />
+    <Property Name="is_test" Type="Boolean" />
+    <NavigationProperty Name="Element_test" Relationship="ElementDBModel.FK_Element_test_Test_case" FromRole="Test_case" ToRole="Element_test" />
+    <NavigationProperty Name="Input_testcase" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Test_case" ToRole="Input_testcase" />
+    <NavigationProperty Name="Redirect_url" Relationship="ElementDBModel.FK_Test_case_Redirect_url" FromRole="Test_case" ToRole="Redirect_url" />
+    <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Test_case_Url" FromRole="Test_case" ToRole="Url" />
   </EntityType>
   <EntityType Name="Url">
     <Key>
       <PropertyRef Name="id_url" />
     </Key>
     <Property Name="id_url" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="url1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="Form_elements" Relationship="Self.FK_Form_elements_Url" FromRole="Url" ToRole="Form_elements" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="url1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Elements" Relationship="ElementDBModel.FK_Element_Url" FromRole="Url" ToRole="Element" />
+    <NavigationProperty Name="Form_elements" Relationship="ElementDBModel.FK_Form_elements_Url" FromRole="Url" ToRole="Form_elements" />
+    <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Test_case_Url" FromRole="Url" ToRole="Test_case" />
   </EntityType>
+  <Association Name="FK_Element_Url">
+    <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
+    <End Type="ElementDBModel.Element" Role="Element" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Url">
+        <PropertyRef Name="id_url" />
+      </Principal>
+      <Dependent Role="Element">
+        <PropertyRef Name="id_url" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Input_testcase_Element">
+    <End Type="ElementDBModel.Element" Role="Element" Multiplicity="1" />
+    <End Type="ElementDBModel.Input_testcase" Role="Input_testcase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Element">
+        <PropertyRef Name="id_element" />
+        <PropertyRef Name="id_url" />
+      </Principal>
+      <Dependent Role="Input_testcase">
+        <PropertyRef Name="id_element" />
+        <PropertyRef Name="id_url" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Element_test_Test_case">
+    <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
+    <End Type="ElementDBModel.Element_test" Role="Element_test" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Test_case">
+        <PropertyRef Name="id_testcase" />
+        <PropertyRef Name="id_url" />
+      </Principal>
+      <Dependent Role="Element_test">
+        <PropertyRef Name="id_testcase" />
+        <PropertyRef Name="id_url" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Form_elements_Url">
-    <End Role="Url" Type="Self.Url" Multiplicity="1" />
-    <End Role="Form_elements" Type="Self.Form_elements" Multiplicity="*" />
+    <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
+    <End Type="ElementDBModel.Form_elements" Role="Form_elements" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Url">
         <PropertyRef Name="id_url" />
@@ -49,54 +191,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="ElementDBEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="Form_elements" EntityType="Self.Form_elements" />
-    <EntitySet Name="Input_elements" EntityType="Self.Input_elements" />
-    <EntitySet Name="Urls" EntityType="Self.Url" />
-    <AssociationSet Name="FK_Form_elements_Url" Association="Self.FK_Form_elements_Url">
-      <End Role="Url" EntitySet="Urls" />
-      <End Role="Form_elements" EntitySet="Form_elements" />
-    </AssociationSet>
-    <FunctionImport Name="sp_alterdiagram">
-      <Parameter Name="diagramname" Mode="In" Type="String" />
-      <Parameter Name="owner_id" Mode="In" Type="Int32" />
-      <Parameter Name="version" Mode="In" Type="Int32" />
-      <Parameter Name="definition" Mode="In" Type="Binary" />
-    </FunctionImport>
-    <FunctionImport Name="sp_creatediagram">
-      <Parameter Name="diagramname" Mode="In" Type="String" />
-      <Parameter Name="owner_id" Mode="In" Type="Int32" />
-      <Parameter Name="version" Mode="In" Type="Int32" />
-      <Parameter Name="definition" Mode="In" Type="Binary" />
-    </FunctionImport>
-    <FunctionImport Name="sp_dropdiagram">
-      <Parameter Name="diagramname" Mode="In" Type="String" />
-      <Parameter Name="owner_id" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(ElementDBModel.sp_helpdiagramdefinition_Result)">
-      <Parameter Name="diagramname" Mode="In" Type="String" />
-      <Parameter Name="owner_id" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(ElementDBModel.sp_helpdiagrams_Result)">
-      <Parameter Name="diagramname" Mode="In" Type="String" />
-      <Parameter Name="owner_id" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_renamediagram">
-      <Parameter Name="diagramname" Mode="In" Type="String" />
-      <Parameter Name="owner_id" Mode="In" Type="Int32" />
-      <Parameter Name="new_diagramname" Mode="In" Type="String" />
-    </FunctionImport>
-    <FunctionImport Name="sp_upgraddiagrams" />
-  </EntityContainer>
-  <ComplexType Name="sp_helpdiagramdefinition_Result">
-    <Property Type="Int32" Name="version" Nullable="true" />
-    <Property Type="Binary" Name="definition" Nullable="true" />
-  </ComplexType>
-  <ComplexType Name="sp_helpdiagrams_Result">
-    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-    <Property Type="Int32" Name="ID" Nullable="false" />
-    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-    <Property Type="Int32" Name="OwnerID" Nullable="false" />
-  </ComplexType>
+  <Association Name="FK_Input_testcase_Test_case1">
+    <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
+    <End Type="ElementDBModel.Input_testcase" Role="Input_testcase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Test_case">
+        <PropertyRef Name="id_testcase" />
+        <PropertyRef Name="id_url" />
+      </Principal>
+      <Dependent Role="Input_testcase">
+        <PropertyRef Name="id_testcase" />
+        <PropertyRef Name="id_url" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Test_case_Redirect_url">
+    <End Type="ElementDBModel.Redirect_url" Role="Redirect_url" Multiplicity="1" />
+    <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Redirect_url">
+        <PropertyRef Name="id_testcase" />
+      </Principal>
+      <Dependent Role="Test_case">
+        <PropertyRef Name="id_testcase" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Test_case_Url">
+    <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
+    <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Url">
+        <PropertyRef Name="id_url" />
+      </Principal>
+      <Dependent Role="Test_case">
+        <PropertyRef Name="id_url" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

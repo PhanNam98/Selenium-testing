@@ -11,3 +11,7 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\obj\Debug\DAL.csproj.CopyComplete
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\obj\Debug\DAL.dll
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\obj\Debug\DAL.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\WebDriver.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\WebDriver.Support.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\WebDriver.xml
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\DAL\bin\Debug\WebDriver.Support.xml

@@ -17,6 +17,7 @@ namespace Model
         public string id_form { get; set; }
         public string name { get; set; }
         public int id_url { get; set; }
+        public string xpath { get; set; }
     
         public virtual Url Url { get; set; }
     }

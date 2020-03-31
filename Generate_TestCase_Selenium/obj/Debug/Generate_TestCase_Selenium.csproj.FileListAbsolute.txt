@@ -43,3 +43,16 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\obj
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\obj\Debug\Generate_TestCase_Selenium.csproj.CopyComplete
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\obj\Debug\Generate_TestCase_Selenium.exe
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\obj\Debug\Generate_TestCase_Selenium.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\BUL.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\EntityFramework.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\EntityFramework.SqlServer.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\DAL.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\Model.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\BUL.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\EntityFramework.xml
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\EntityFramework.SqlServer.xml
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\DAL.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\Model.pdb
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\Model.dll.config
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\Crawler.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\Crawler.pdb

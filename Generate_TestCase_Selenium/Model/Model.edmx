@@ -4,33 +4,86 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ElementDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ElementDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Element">
+          <Key>
+            <PropertyRef Name="id_element" />
+            <PropertyRef Name="id_url" />
+          </Key>
+          <Property Name="id_element" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_url" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="class_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="tag_name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="type" Type="nvarchar" MaxLength="20" />
+          <Property Name="value" Type="nvarchar(max)" />
+          <Property Name="href" Type="nvarchar(max)" />
+          <Property Name="title" Type="nvarchar" MaxLength="1000" />
+          <Property Name="id_form" Type="nvarchar" MaxLength="50" />
+          <Property Name="minlength" Type="float" />
+          <Property Name="maxlength" Type="float" />
+          <Property Name="required" Type="bit" />
+          <Property Name="read_only" Type="bit" />
+          <Property Name="max_value" Type="nvarchar" MaxLength="50" />
+          <Property Name="min_value" Type="nvarchar" MaxLength="50" />
+          <Property Name="multiple" Type="bit" />
+          <Property Name="xpath" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Element_test">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+            <PropertyRef Name="id_url" />
+            <PropertyRef Name="id_element" />
+          </Key>
+          <Property Name="id_testcase" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_url" Type="int" Nullable="false" />
+          <Property Name="id_element" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="xpath" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="xpath_full" Type="nvarchar(max)" />
+          <Property Name="value_return" Type="nvarchar(max)" />
+          <Property Name="value_test" Type="nvarchar(max)" />
+          <Property Name="class_name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Form_elements">
           <Key>
             <PropertyRef Name="id_form" />
             <PropertyRef Name="id_url" />
           </Key>
           <Property Name="id_form" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="id_url" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Input_elements">
-          <Key>
-            <PropertyRef Name="id_input" />
-          </Key>
-          <Property Name="id_input" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="50" />
-          <Property Name="class_name" Type="nvarchar" MaxLength="50" />
-          <Property Name="type" Type="nvarchar" MaxLength="50" />
-          <Property Name="value" Type="nvarchar" MaxLength="50" />
-          <Property Name="id_form" Type="nvarchar" MaxLength="50" />
-          <Property Name="minlength" Type="int" />
-          <Property Name="maxlength" Type="int" />
-          <Property Name="required" Type="bit" />
-          <Property Name="readonly" Type="bit" />
-          <Property Name="max" Type="real" />
-          <Property Name="min" Type="real" />
-          <Property Name="multiple" Type="bit" />
+          <Property Name="id_url" Type="int" Nullable="false" />
+          <Property Name="xpath" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Input_testcase">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+            <PropertyRef Name="id_element" />
+            <PropertyRef Name="id_url" />
+          </Key>
+          <Property Name="id_testcase" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_element" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_url" Type="int" Nullable="false" />
+          <Property Name="xpath" Type="nvarchar(max)" />
+          <Property Name="value" Type="nvarchar(max)" />
+          <Property Name="action" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Redirect_url">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+          </Key>
+          <Property Name="id_testcase" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="current_url" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="redirect_url_test" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Test_case">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+            <PropertyRef Name="id_url" />
+          </Key>
+          <Property Name="id_testcase" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_url" Type="int" Nullable="false" />
+          <Property Name="result" Type="int" />
+          <Property Name="is_test" Type="bit" />
         </EntityType>
         <EntityType Name="Url">
           <Key>
@@ -40,6 +93,32 @@
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="url" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Element_test_Test_case">
+          <End Role="Test_case" Type="Self.Test_case" Multiplicity="1" />
+          <End Role="Element_test" Type="Self.Element_test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_case">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Element_test">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Element_Url">
+          <End Role="Url" Type="Self.Url" Multiplicity="1" />
+          <End Role="Element" Type="Self.Element" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Url">
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Element">
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Form_elements_Url">
           <End Role="Url" Type="Self.Url" Multiplicity="1" />
           <End Role="Form_elements" Type="Self.Form_elements" Multiplicity="*" />
@@ -52,91 +131,281 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Association Name="FK_Input_testcase_Element">
+          <End Role="Element" Type="Self.Element" Multiplicity="1" />
+          <End Role="Input_testcase" Type="Self.Input_testcase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Element">
+              <PropertyRef Name="id_element" />
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Input_testcase">
+              <PropertyRef Name="id_element" />
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Input_testcase_Test_case1">
+          <End Role="Test_case" Type="Self.Test_case" Multiplicity="1" />
+          <End Role="Input_testcase" Type="Self.Input_testcase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_case">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Input_testcase">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_case_Redirect_url">
+          <End Role="Redirect_url" Type="Self.Redirect_url" Multiplicity="1" />
+          <End Role="Test_case" Type="Self.Test_case" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Redirect_url">
+              <PropertyRef Name="id_testcase" />
+            </Principal>
+            <Dependent Role="Test_case">
+              <PropertyRef Name="id_testcase" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_case_Url">
+          <End Role="Url" Type="Self.Url" Multiplicity="1" />
+          <End Role="Test_case" Type="Self.Test_case" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Url">
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Test_case">
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ElementDBModelStoreContainer">
+          <EntitySet Name="Element" EntityType="Self.Element" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Element_test" EntityType="Self.Element_test" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Form_elements" EntityType="Self.Form_elements" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Input_elements" EntityType="Self.Input_elements" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Input_testcase" EntityType="Self.Input_testcase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Redirect_url" EntityType="Self.Redirect_url" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Test_case" EntityType="Self.Test_case" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Url" EntityType="Self.Url" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Element_test_Test_case" Association="Self.FK_Element_test_Test_case">
+            <End Role="Test_case" EntitySet="Test_case" />
+            <End Role="Element_test" EntitySet="Element_test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Element_Url" Association="Self.FK_Element_Url">
+            <End Role="Url" EntitySet="Url" />
+            <End Role="Element" EntitySet="Element" />
+          </AssociationSet>
           <AssociationSet Name="FK_Form_elements_Url" Association="Self.FK_Form_elements_Url">
             <End Role="Url" EntitySet="Url" />
             <End Role="Form_elements" EntitySet="Form_elements" />
           </AssociationSet>
+          <AssociationSet Name="FK_Input_testcase_Element" Association="Self.FK_Input_testcase_Element">
+            <End Role="Element" EntitySet="Element" />
+            <End Role="Input_testcase" EntitySet="Input_testcase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Input_testcase_Test_case1" Association="Self.FK_Input_testcase_Test_case1">
+            <End Role="Test_case" EntitySet="Test_case" />
+            <End Role="Input_testcase" EntitySet="Input_testcase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_case_Redirect_url" Association="Self.FK_Test_case_Redirect_url">
+            <End Role="Redirect_url" EntitySet="Redirect_url" />
+            <End Role="Test_case" EntitySet="Test_case" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_case_Url" Association="Self.FK_Test_case_Url">
+            <End Role="Url" EntitySet="Url" />
+            <End Role="Test_case" EntitySet="Test_case" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ElementDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ElementDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Elements" EntityType="ElementDBModel.Element" />
+          <EntitySet Name="Element_test" EntityType="ElementDBModel.Element_test" />
+          <EntitySet Name="Form_elements" EntityType="ElementDBModel.Form_elements" />
+          <EntitySet Name="Input_testcase" EntityType="ElementDBModel.Input_testcase" />
+          <EntitySet Name="Redirect_url" EntityType="ElementDBModel.Redirect_url" />
+          <EntitySet Name="Test_case" EntityType="ElementDBModel.Test_case" />
+          <EntitySet Name="Urls" EntityType="ElementDBModel.Url" />
+          <AssociationSet Name="FK_Element_Url" Association="ElementDBModel.FK_Element_Url">
+            <End Role="Url" EntitySet="Urls" />
+            <End Role="Element" EntitySet="Elements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Input_testcase_Element" Association="ElementDBModel.FK_Input_testcase_Element">
+            <End Role="Element" EntitySet="Elements" />
+            <End Role="Input_testcase" EntitySet="Input_testcase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Element_test_Test_case" Association="ElementDBModel.FK_Element_test_Test_case">
+            <End Role="Test_case" EntitySet="Test_case" />
+            <End Role="Element_test" EntitySet="Element_test" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Form_elements_Url" Association="ElementDBModel.FK_Form_elements_Url">
+            <End Role="Url" EntitySet="Urls" />
+            <End Role="Form_elements" EntitySet="Form_elements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Input_testcase_Test_case1" Association="ElementDBModel.FK_Input_testcase_Test_case1">
+            <End Role="Test_case" EntitySet="Test_case" />
+            <End Role="Input_testcase" EntitySet="Input_testcase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_case_Redirect_url" Association="ElementDBModel.FK_Test_case_Redirect_url">
+            <End Role="Redirect_url" EntitySet="Redirect_url" />
+            <End Role="Test_case" EntitySet="Test_case" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Test_case_Url" Association="ElementDBModel.FK_Test_case_Url">
+            <End Role="Url" EntitySet="Urls" />
+            <End Role="Test_case" EntitySet="Test_case" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Element">
+          <Key>
+            <PropertyRef Name="id_element" />
+            <PropertyRef Name="id_url" />
+          </Key>
+          <Property Name="id_element" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_url" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="class_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="tag_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="href" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="title" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="id_form" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="minlength" Type="Double" />
+          <Property Name="maxlength" Type="Double" />
+          <Property Name="required" Type="Boolean" />
+          <Property Name="read_only" Type="Boolean" />
+          <Property Name="max_value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="min_value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="multiple" Type="Boolean" />
+          <Property Name="xpath" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Element_Url" FromRole="Element" ToRole="Url" />
+          <NavigationProperty Name="Input_testcase" Relationship="ElementDBModel.FK_Input_testcase_Element" FromRole="Element" ToRole="Input_testcase" />
+        </EntityType>
+        <EntityType Name="Element_test">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+            <PropertyRef Name="id_url" />
+            <PropertyRef Name="id_element" />
+          </Key>
+          <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_url" Type="Int32" Nullable="false" />
+          <Property Name="id_element" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="xpath" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="xpath_full" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="value_return" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="value_test" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="class_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Element_test_Test_case" FromRole="Element_test" ToRole="Test_case" />
+        </EntityType>
         <EntityType Name="Form_elements">
           <Key>
             <PropertyRef Name="id_form" />
             <PropertyRef Name="id_url" />
           </Key>
-          <Property Name="id_form" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="id_url" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Url" Relationship="Self.FK_Form_elements_Url" FromRole="Form_elements" ToRole="Url" />
-        </EntityType>
-        <EntityType Name="Input_elements">
-          <Key>
-            <PropertyRef Name="id_input" />
-          </Key>
-          <Property Name="id_input" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="id_form" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="class_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="id_form" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="minlength" Type="Int32" />
-          <Property Name="maxlength" Type="Int32" />
-          <Property Name="required" Type="Boolean" />
-          <Property Name="readonly" Type="Boolean" />
-          <Property Name="max" Type="Single" />
-          <Property Name="min" Type="Single" />
-          <Property Name="multiple" Type="Boolean" />
+          <Property Name="id_url" Type="Int32" Nullable="false" />
+          <Property Name="xpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Form_elements_Url" FromRole="Form_elements" ToRole="Url" />
+        </EntityType>
+        <EntityType Name="Input_testcase">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+            <PropertyRef Name="id_element" />
+            <PropertyRef Name="id_url" />
+          </Key>
+          <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_element" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_url" Type="Int32" Nullable="false" />
+          <Property Name="xpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Element" Relationship="ElementDBModel.FK_Input_testcase_Element" FromRole="Input_testcase" ToRole="Element" />
+          <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Input_testcase" ToRole="Test_case" />
+        </EntityType>
+        <EntityType Name="Redirect_url">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+          </Key>
+          <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="current_url" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="redirect_url_test" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Test_case_Redirect_url" FromRole="Redirect_url" ToRole="Test_case" />
+        </EntityType>
+        <EntityType Name="Test_case">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+            <PropertyRef Name="id_url" />
+          </Key>
+          <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="id_url" Type="Int32" Nullable="false" />
+          <Property Name="result" Type="Int32" />
+          <Property Name="is_test" Type="Boolean" />
+          <NavigationProperty Name="Element_test" Relationship="ElementDBModel.FK_Element_test_Test_case" FromRole="Test_case" ToRole="Element_test" />
+          <NavigationProperty Name="Input_testcase" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Test_case" ToRole="Input_testcase" />
+          <NavigationProperty Name="Redirect_url" Relationship="ElementDBModel.FK_Test_case_Redirect_url" FromRole="Test_case" ToRole="Redirect_url" />
+          <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Test_case_Url" FromRole="Test_case" ToRole="Url" />
         </EntityType>
         <EntityType Name="Url">
           <Key>
             <PropertyRef Name="id_url" />
           </Key>
           <Property Name="id_url" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="url1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Form_elements" Relationship="Self.FK_Form_elements_Url" FromRole="Url" ToRole="Form_elements" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="url1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Elements" Relationship="ElementDBModel.FK_Element_Url" FromRole="Url" ToRole="Element" />
+          <NavigationProperty Name="Form_elements" Relationship="ElementDBModel.FK_Form_elements_Url" FromRole="Url" ToRole="Form_elements" />
+          <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Test_case_Url" FromRole="Url" ToRole="Test_case" />
         </EntityType>
+        <Association Name="FK_Element_Url">
+          <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
+          <End Type="ElementDBModel.Element" Role="Element" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Url">
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Element">
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Input_testcase_Element">
+          <End Type="ElementDBModel.Element" Role="Element" Multiplicity="1" />
+          <End Type="ElementDBModel.Input_testcase" Role="Input_testcase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Element">
+              <PropertyRef Name="id_element" />
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Input_testcase">
+              <PropertyRef Name="id_element" />
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Element_test_Test_case">
+          <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
+          <End Type="ElementDBModel.Element_test" Role="Element_test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_case">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Element_test">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Form_elements_Url">
-          <End Role="Url" Type="Self.Url" Multiplicity="1" />
-          <End Role="Form_elements" Type="Self.Form_elements" Multiplicity="*" />
+          <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
+          <End Type="ElementDBModel.Form_elements" Role="Form_elements" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Url">
               <PropertyRef Name="id_url" />
@@ -146,123 +415,138 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ElementDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Form_elements" EntityType="Self.Form_elements" />
-          <EntitySet Name="Input_elements" EntityType="Self.Input_elements" />
-          <EntitySet Name="Urls" EntityType="Self.Url" />
-          <AssociationSet Name="FK_Form_elements_Url" Association="Self.FK_Form_elements_Url">
-            <End Role="Url" EntitySet="Urls" />
-            <End Role="Form_elements" EntitySet="Form_elements" />
-          </AssociationSet>
-          <FunctionImport Name="sp_alterdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_creatediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(ElementDBModel.sp_helpdiagramdefinition_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(ElementDBModel.sp_helpdiagrams_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_renamediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams" />
-        </EntityContainer>
-        <ComplexType Name="sp_helpdiagramdefinition_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_helpdiagrams_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
-      </Schema>
+        <Association Name="FK_Input_testcase_Test_case1">
+          <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
+          <End Type="ElementDBModel.Input_testcase" Role="Input_testcase" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_case">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Input_testcase">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_case_Redirect_url">
+          <End Type="ElementDBModel.Redirect_url" Role="Redirect_url" Multiplicity="1" />
+          <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Redirect_url">
+              <PropertyRef Name="id_testcase" />
+            </Principal>
+            <Dependent Role="Test_case">
+              <PropertyRef Name="id_testcase" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Test_case_Url">
+          <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
+          <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Url">
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Test_case">
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ElementDBModelStoreContainer" CdmEntityContainer="ElementDBEntities">
-          <EntitySetMapping Name="Form_elements">
-            <EntityTypeMapping TypeName="ElementDBModel.Form_elements">
-              <MappingFragment StoreEntitySet="Form_elements">
+          <EntitySetMapping Name="Elements">
+            <EntityTypeMapping TypeName="ElementDBModel.Element">
+              <MappingFragment StoreEntitySet="Element">
+                <ScalarProperty Name="xpath" ColumnName="xpath" />
+                <ScalarProperty Name="multiple" ColumnName="multiple" />
+                <ScalarProperty Name="min_value" ColumnName="min_value" />
+                <ScalarProperty Name="max_value" ColumnName="max_value" />
+                <ScalarProperty Name="read_only" ColumnName="read_only" />
+                <ScalarProperty Name="required" ColumnName="required" />
+                <ScalarProperty Name="maxlength" ColumnName="maxlength" />
+                <ScalarProperty Name="minlength" ColumnName="minlength" />
                 <ScalarProperty Name="id_form" ColumnName="id_form" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="href" ColumnName="href" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="tag_name" ColumnName="tag_name" />
+                <ScalarProperty Name="class_name" ColumnName="class_name" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id_url" ColumnName="id_url" />
+                <ScalarProperty Name="id_element" ColumnName="id_element" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Input_elements">
-            <EntityTypeMapping TypeName="ElementDBModel.Input_elements">
-              <MappingFragment StoreEntitySet="Input_elements">
-                <ScalarProperty Name="id_input" ColumnName="id_input" />
-                <ScalarProperty Name="name" ColumnName="name" />
+          <EntitySetMapping Name="Element_test">
+            <EntityTypeMapping TypeName="ElementDBModel.Element_test">
+              <MappingFragment StoreEntitySet="Element_test">
                 <ScalarProperty Name="class_name" ColumnName="class_name" />
-                <ScalarProperty Name="type" ColumnName="type" />
-                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="value_test" ColumnName="value_test" />
+                <ScalarProperty Name="value_return" ColumnName="value_return" />
+                <ScalarProperty Name="xpath_full" ColumnName="xpath_full" />
+                <ScalarProperty Name="xpath" ColumnName="xpath" />
+                <ScalarProperty Name="id_element" ColumnName="id_element" />
+                <ScalarProperty Name="id_url" ColumnName="id_url" />
+                <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Form_elements">
+            <EntityTypeMapping TypeName="ElementDBModel.Form_elements">
+              <MappingFragment StoreEntitySet="Form_elements">
+                <ScalarProperty Name="xpath" ColumnName="xpath" />
+                <ScalarProperty Name="id_url" ColumnName="id_url" />
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id_form" ColumnName="id_form" />
-                <ScalarProperty Name="minlength" ColumnName="minlength" />
-                <ScalarProperty Name="maxlength" ColumnName="maxlength" />
-                <ScalarProperty Name="required" ColumnName="required" />
-                <ScalarProperty Name="readonly" ColumnName="readonly" />
-                <ScalarProperty Name="max" ColumnName="max" />
-                <ScalarProperty Name="min" ColumnName="min" />
-                <ScalarProperty Name="multiple" ColumnName="multiple" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Input_testcase">
+            <EntityTypeMapping TypeName="ElementDBModel.Input_testcase">
+              <MappingFragment StoreEntitySet="Input_testcase">
+                <ScalarProperty Name="action" ColumnName="action" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="xpath" ColumnName="xpath" />
+                <ScalarProperty Name="id_url" ColumnName="id_url" />
+                <ScalarProperty Name="id_element" ColumnName="id_element" />
+                <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Redirect_url">
+            <EntityTypeMapping TypeName="ElementDBModel.Redirect_url">
+              <MappingFragment StoreEntitySet="Redirect_url">
+                <ScalarProperty Name="redirect_url_test" ColumnName="redirect_url_test" />
+                <ScalarProperty Name="current_url" ColumnName="current_url" />
+                <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Test_case">
+            <EntityTypeMapping TypeName="ElementDBModel.Test_case">
+              <MappingFragment StoreEntitySet="Test_case">
+                <ScalarProperty Name="is_test" ColumnName="is_test" />
+                <ScalarProperty Name="result" ColumnName="result" />
+                <ScalarProperty Name="id_url" ColumnName="id_url" />
+                <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Urls">
             <EntityTypeMapping TypeName="ElementDBModel.Url">
               <MappingFragment StoreEntitySet="Url">
-                <ScalarProperty Name="id_url" ColumnName="id_url" />
-                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="url1" ColumnName="url" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id_url" ColumnName="id_url" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="ElementDBModel.Store.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="ElementDBModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="ElementDBModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="ElementDBModel.Store.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="ElementDBModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="ElementDBModel.Store.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="ElementDBModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="ElementDBModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="ElementDBModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
