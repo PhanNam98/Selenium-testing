@@ -26,50 +26,59 @@ namespace Crawler
            
             SetUp(url);
         }
-        public void GetElement()
+        public int GetElements()
         {
-            //int id_Url=UrlBUL.insertURL(Url, Url.Substring(8));
-            int id_Url = 1; //For example
-            SetUpDriver(Url);
-            var form = chromedriver.FindElementsByXPath("//form");
-            if (form != null)// have at least one form
+            int flag = 0;
+            try
             {
-                listForm = new List<Form_elements>();
-                for (int i = 0; i < form.Count; i++)
+                //int id_Url=UrlBUL.insertURL(Url, Url.Substring(8));
+                int id_Url = 1; //For example
+                SetUpDriver(Url);
+                var form = chromedriver.FindElementsByXPath("//form");
+                if (form != null)// have at least one form
                 {
-                    Form_elements form_ = new Form_elements();
-                    form_.id_form = form[i].GetAttribute("id");
-                    form_.id_url = id_Url;
-                    try
+                    listForm = new List<Form_elements>();
+                    for (int i = 0; i < form.Count; i++)
                     {
-                        form_.name = form[i].GetAttribute("name");
+                        Form_elements form_ = new Form_elements();
+                        form_.id_form = form[i].GetAttribute("id");
+                        form_.id_url = id_Url;
+                        try
+                        {
+                            form_.name = form[i].GetAttribute("name");
+                        }
+                        catch { }
+                        try
+                        {
+                            form_.xpath = getAbsoluteXPath(chromedriver, form[i]);
+                        }
+                        catch { }
+                        //BUL.FormBUL.insert_Form(form_);//save into database
+                        listForm.Add(form_);
                     }
-                    catch { }
-                    try
+                    foreach (string tag in tag_elts)
                     {
-                        form_.xpath = getAbsoluteXPath(chromedriver, form[i]);
+                        GetElements(chromedriver, id_Url, tag, "", listForm);
                     }
-                    catch { }
-                    //BUL.FormBUL.insert_Form(form_);//save into database
-                    listForm.Add(form_);
+
+
+
                 }
-                foreach (string tag in tag_elts)
+                else //no form found
                 {
-                    GetElements(chromedriver, id_Url, tag, "", listForm);
+                    foreach (string tag in tag_elts)
+                    {
+                        GetElements(chromedriver, id_Url, tag, "");
+                    }
                 }
-
-               
-
+                flag = 1;
             }
-            else //no form found
+            catch
             {
-                foreach (string tag in tag_elts)
-                {
-                    GetElements(chromedriver, id_Url, tag, "");
-                }
+                flag = -1;
             }
-            int li = listElt.Count();
             CloseDriver();
+            return flag;
         }
         private void SetUp(string url)
         {
@@ -97,7 +106,7 @@ namespace Crawler
             service.HideCommandPromptWindow = true;//hide commandPromptWindow
 
             var options = new ChromeOptions();
-            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
             chromedriver = new ChromeDriver(service, options);
             chromedriver.Url = url;
             chromedriver.Navigate();
@@ -228,12 +237,12 @@ namespace Crawler
                 else
                 {
                     Element elt = new Element();
-                    string xpath = getAbsoluteXPath(driver, item);
+                    elt.xpath = getAbsoluteXPath(driver, item);
                     if (form_elts != null)
                     {
                         foreach (var form in form_elts)
                         {
-                            if (xpath.Contains(form.xpath))
+                            if (elt.xpath.Contains(form.xpath))
                             {
 
                                 elt.id_form = form.id_form;
@@ -260,14 +269,7 @@ namespace Crawler
                     {
 
                     }
-                    try
-                    {
-                        elt.xpath = getAbsoluteXPath(driver, item);
-                    }
-                    catch
-                    {
-
-                    }
+                   
                     try
                     {
                         elt.value = item.GetAttribute("value");
@@ -426,5 +428,24 @@ namespace Crawler
             //}
 
         }
+        public List<Element> GetListElement()
+        {
+            return this.listElt;
+        }
+
+        public int StopWebDriver()
+        {
+            try
+            {
+                QuitDriver();
+                return 1;
+            }
+            catch
+            {
+                
+            }
+            return 0;
+        }
+           
     }
 }
