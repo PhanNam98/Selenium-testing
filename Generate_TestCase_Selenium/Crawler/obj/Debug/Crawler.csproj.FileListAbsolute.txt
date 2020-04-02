@@ -15,3 +15,4 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Cra
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Crawler\bin\Debug\Model.pdb
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Crawler\bin\Debug\Model.dll.config
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Crawler\bin\Debug\EntityFramework.xml
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Crawler\bin\Debug\Crawler.dll.config

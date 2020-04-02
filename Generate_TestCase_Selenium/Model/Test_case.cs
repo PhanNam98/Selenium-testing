@@ -30,7 +30,6 @@ namespace Model
         public virtual ICollection<Element_test> Element_test { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Input_testcase> Input_testcase { get; set; }
-        public virtual Redirect_url Redirect_url { get; set; }
         public virtual Url Url { get; set; }
     }
 }

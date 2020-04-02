@@ -21,6 +21,12 @@ namespace BUL
            return Url.insertURL(url, name);
 
         }
+        public static int insertURL(Url newurl)
+        {
+
+            return Url.insertURL(newurl);
+
+        }
         public static Url getURL(int id)
         {
 

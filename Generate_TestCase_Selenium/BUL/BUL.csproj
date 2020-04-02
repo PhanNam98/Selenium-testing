@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ElementBUL.cs" />
     <Compile Include="FormBUL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UrlBUL.cs" />

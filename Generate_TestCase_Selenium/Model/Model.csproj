@@ -50,7 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="A_tag.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Element.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -58,6 +60,9 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Form_elements.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Input_elements.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Input_testcase.cs">
@@ -79,9 +84,6 @@
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Redirect_url.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Test_case.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

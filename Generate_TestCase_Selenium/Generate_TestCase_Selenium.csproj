@@ -99,17 +99,31 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ElementDBDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ElementDBDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ElementDBDataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmTestCase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTestCase.Designer.cs">
+      <DependentUpon>frmTestCase.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Form_element.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmTestCase.resx">
+      <DependentUpon>frmTestCase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -130,6 +144,17 @@
     </None>
     <None Include="ElementDBDataSet.xss">
       <DependentUpon>ElementDBDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ElementDBDataSet1.xsc">
+      <DependentUpon>ElementDBDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="ElementDBDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ElementDBDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ElementDBDataSet1.xss">
+      <DependentUpon>ElementDBDataSet1.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

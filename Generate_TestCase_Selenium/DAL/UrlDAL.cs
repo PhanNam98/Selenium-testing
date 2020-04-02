@@ -22,13 +22,33 @@ namespace DAL
                     newurl.url1 = url;
                     db.Urls.Add(newurl);
                     db.SaveChanges();
-                    return 0;
+                    return newurl.id_url;
                 }
                 catch
                 {
                     return -1;
                 }
                
+            }
+
+        }
+        public int insertURL(Url newurl)
+        {
+
+            using (ElementDBEntities db = new ElementDBEntities())
+            {
+                try
+                {
+                    
+                    db.Urls.Add(newurl);
+                    db.SaveChanges();
+                    return newurl.id_url;
+                }
+                catch
+                {
+                    return -1;
+                }
+
             }
 
         }

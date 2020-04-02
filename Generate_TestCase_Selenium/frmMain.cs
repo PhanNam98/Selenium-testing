@@ -27,7 +27,7 @@ namespace Generate_TestCase_Selenium
             CheckForIllegalCrossThreadCalls = false;
 
         }
-        private ChromeDriver chromedriver;
+        
         private List<Element> listElements;
         private int Crawwling = 1;
         Thread CrawlThread;
@@ -43,7 +43,7 @@ namespace Generate_TestCase_Selenium
                 lbMessage.Text = "Crawling data, please wait...";
                 CrawlThread = new Thread(CrawlingElement);
                 CrawlThread.Start();
-
+                Crawwling--;
                 //SetUpDriver(txtboxUrl.Text);
                 //var a = chromedriver.FindElementsByXPath("//input[@type='text']");
                 //var a2 = chromedriver.FindElementByXPath("//button[@id='u_0_13']");
@@ -70,7 +70,7 @@ namespace Generate_TestCase_Selenium
                 //MessageBox.Show(lis, "Input text elements");
 
                 //UrlBUL.insertURL(txtboxUrl.Text, txtboxUrl.Text.Substring(8));
-                Crawwling--;
+
 
             }
             else if (Crawwling == 0)
@@ -115,116 +115,8 @@ namespace Generate_TestCase_Selenium
             }
         }
 
-        private void SetUpDriver(string url)
-        {
-            chromedriver = new ChromeDriver();
-            chromedriver.Url = url;
-            chromedriver.Navigate();
-        }
-        private void QuitDriver()
-        {
-
-            chromedriver.Quit();
-
-        }
-        private void CloseDriver()
-        {
-
-            chromedriver.Close();
-
-        }
-        public static String getAbsoluteXPath(ChromeDriver driver, IWebElement element)
-        {
-            //https://gist.github.com/beatngu13/a3312b98de57610c5ecd27ea84a7fbeb
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            return (String)js.ExecuteScript(
-                    "function absoluteXPath(element) {" +
-                            "var comp, comps = [];" +
-                            "var parent = null;" +
-                            "var xpath = '';" +
-                            "var getPos = function(element) {" +
-                            "var position = 1, curNode;" +
-                            "if (element.nodeType == Node.ATTRIBUTE_NODE) {" +
-                            "return null;" +
-                            "}" +
-                            "for (curNode = element.previousSibling; curNode; curNode = curNode.previousSibling) {" +
-                            "if (curNode.nodeName == element.nodeName) {" +
-                            "++position;" +
-                            "}" +
-                            "}" +
-                            "return position;" +
-                            "};" +
-
-                            "if (element instanceof Document) {" +
-                            "return '/';" +
-                            "}" +
-
-                            "for (; element && !(element instanceof Document); element = element.nodeType == Node.ATTRIBUTE_NODE ? element.ownerElement : element.parentNode) {" +
-                            "comp = comps[comps.length] = {};" +
-                            "switch (element.nodeType) {" +
-                            "case Node.TEXT_NODE:" +
-                            "comp.name = 'text()';" +
-                            "break;" +
-                            "case Node.ATTRIBUTE_NODE:" +
-                            "comp.name = '@' + element.nodeName;" +
-                            "break;" +
-                            "case Node.PROCESSING_INSTRUCTION_NODE:" +
-                            "comp.name = 'processing-instruction()';" +
-                            "break;" +
-                            "case Node.COMMENT_NODE:" +
-                            "comp.name = 'comment()';" +
-                            "break;" +
-                            "case Node.ELEMENT_NODE:" +
-                            "comp.name = element.nodeName;" +
-                            "break;" +
-                            "}" +
-                            "comp.position = getPos(element);" +
-                            "}" +
-
-                            "for (var i = comps.length - 1; i >= 0; i--) {" +
-                            "comp = comps[i];" +
-                            "xpath += '/' + comp.name.toLowerCase();" +
-                            "if (comp.position !== null) {" +
-                            "xpath += '[' + comp.position + ']';" +
-                            "}" +
-                            "}" +
-
-                            "return xpath;" +
-
-                            "} return absoluteXPath(arguments[0]);", element);
-        }
-
-
-        public static String getElementXPath(ChromeDriver driver, IWebElement elt)
-        {
-            //https://gist.github.com/beatngu13/a3312b98de57610c5ecd27ea84a7fbeb
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            return (String)js.ExecuteScript(
-                    "function getElementXPath(elt) {" +
-
-                        "var path = '';" +
-                        "for (; elt && elt.nodeType == 1; elt = elt.parentNode){" +
-
-                            " idx = getElementIdx(elt);" +
-                             " xname = elt.tagName;" +
-                            " if (idx > 1) xname += '[' + idx + ']';" +
-                             "path = '/' + xname + path;}" +
-
-
-                          " return path;}" +
-
-                    "function getElementIdx(elt){" +
-
-                           "var count = 1;" +
-                         " for (var sib = elt.previousSibling; sib; sib = sib.previousSibling){" +
-
-                      "   if (sib.nodeType == 1 && sib.tagName == elt.tagName) count++}" +
-
-
-                    " return count;}" +
-                    "return getElementXPath(arguments[0]);", elt);
-        }
-
+       
+      
         public static class ThreadHelperClass
         {
             delegate void SetTextCallback(Form f, Control ctrl, string text);
@@ -260,27 +152,69 @@ namespace Generate_TestCase_Selenium
 
         private void CrawlingElement()
         {
-            Craw_element = new Crawler.ElementCrawl(txtboxUrl.Text);
+            string url_test = txtboxUrl.Text;
+            Craw_element = new Crawler.ElementCrawl(url_test);
+          
             if (Craw_element.GetElements() == 1)
             {
-                MessageBox.Show("Retrieve data successfully", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                listElements = Craw_element.GetListElement();
+                dgvElements.DataSource = listElements;
+                ThreadHelperClass.SetText(this, lbMessage, String.Format("{0} elements found. Saving into database...", listElements.Count));
+                btnCrawlWeb.Enabled = false;
+               
+                try
+                {
+
+                    //InsertIntoDB(url_test);//insert into DB
+                    MessageBox.Show("Retrieve and save data into database successfully", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    btnGenerateTestCase.Enabled = true;
+                    
+                }
+                catch
+                {
+                    MessageBox.Show("Retrieve data successfully, but save data failed, please try again", "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+               
             }
             else
             {
-                MessageBox.Show("Retrieving data failed, please try again", "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Retrieve data failed, please try again", "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            listElements = Craw_element.GetListElement();
-            dgvElements.DataSource = listElements;
+            
+           
             btnCrawlWeb.Text = "Crawl Data";
+            btnCrawlWeb.Enabled = true;
             ThreadHelperClass.SetText(this, lbMessage, String.Format("{0} elements found.", listElements.Count));
-            btnGenerateTestCase.Enabled = true;
+           
             Crawwling++;
 
         }
-
+        public void InsertIntoDB(string url_test)
+        {
+            
+            Url newurl = new Url();
+            newurl.name = url_test.Substring(8);
+            newurl.url1 = url_test;
+            int id_Url = UrlBUL.insertURL(newurl);
+            List<Form_elements> listForm = Craw_element.GetListForm();
+            foreach (Form_elements item in listForm)
+            {
+                item.id_url = id_Url;
+                BUL.FormBUL.insert_Form(item);
+            }
+            List<Element> listElt = Craw_element.GetListElement();
+            foreach (Element item in listElt)
+            {
+                item.id_url = id_Url;
+                BUL.ElementBUL.insert_Element(item);
+            }
+        }
         private void btnGenerateTestCase_Click(object sender, EventArgs e)
         {
-
+            frmTestCase newfrmTestCase = new frmTestCase();
+            this.Hide();
+            newfrmTestCase.ShowDialog();
+            this.Show();
         }
     }
 }

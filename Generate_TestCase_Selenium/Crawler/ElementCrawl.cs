@@ -7,12 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Model;
 using BUL;
+using System.Runtime.InteropServices;
 
 namespace Crawler
 {
     public class ElementCrawl
     {
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
         private string Url;
+
         private ChromeDriver chromedriver;
         private List<Form_elements> listForm;
         private List<Element> listElt;
@@ -23,16 +28,26 @@ namespace Crawler
 
         public ElementCrawl(string url)
         {
-           
+
             SetUp(url);
         }
+
+
         public int GetElements()
         {
             int flag = 0;
             try
             {
-                //int id_Url=UrlBUL.insertURL(Url, Url.Substring(8));
-                int id_Url = 1; //For example
+                //Url newurl = new Url();
+                //newurl.name = Url.Substring(8);
+                //newurl.url1 = Url;
+                //int id_Url = UrlBUL.insertURL(newurl);
+                //int id_Url = 3; //For example
+                //if (id_Url == -1)
+                //{
+                //    return -1;
+                //}
+
                 SetUpDriver(Url);
                 var form = chromedriver.FindElementsByXPath("//form");
                 if (form != null)// have at least one form
@@ -42,7 +57,7 @@ namespace Crawler
                     {
                         Form_elements form_ = new Form_elements();
                         form_.id_form = form[i].GetAttribute("id");
-                        form_.id_url = id_Url;
+                        //form_.id_url = id_Url;
                         try
                         {
                             form_.name = form[i].GetAttribute("name");
@@ -55,11 +70,13 @@ namespace Crawler
                         catch { }
                         //BUL.FormBUL.insert_Form(form_);//save into database
                         listForm.Add(form_);
+
                     }
                     foreach (string tag in tag_elts)
                     {
-                        GetElements(chromedriver, id_Url, tag, "", listForm);
+                        GetElements(chromedriver,  tag, "", listForm);
                     }
+                    //GetElements(chromedriver, id_Url, "a", "", listForm);
 
 
 
@@ -68,7 +85,7 @@ namespace Crawler
                 {
                     foreach (string tag in tag_elts)
                     {
-                        GetElements(chromedriver, id_Url, tag, "");
+                        GetElements(chromedriver, tag, "");
                     }
                 }
                 flag = 1;
@@ -80,6 +97,7 @@ namespace Crawler
             CloseDriver();
             return flag;
         }
+       
         private void SetUp(string url)
         {
             Url = url;
@@ -100,6 +118,7 @@ namespace Crawler
             type_elts[7] = "number";
             type_elts[8] = "date";
         }
+
         private void SetUpDriver(string url)
         {
             ChromeDriverService service = ChromeDriverService.CreateDefaultService();
@@ -214,7 +233,7 @@ namespace Crawler
                     "return getElementXPath(arguments[0]);", elt);
         }
 
-        public void GetElements(ChromeDriver driver, int id_Url, string TagName, string TypeName, List<Form_elements> form_elts = null)
+        public void GetElements(ChromeDriver driver,string TagName, string TypeName, List<Form_elements> form_elts = null)
         {
             List<IWebElement> allElements = new List<IWebElement>();
             if (TypeName != "" && TagName.Equals("input"))
@@ -250,11 +269,16 @@ namespace Crawler
                             }
                         }
                     }
-                    elt.id_url = id_Url;
+                    //elt.id_url = id_Url;
                     elt.tag_name = item.TagName;
                     try
                     {
                         elt.id_element = item.GetAttribute("id");
+                        if (elt.id_element.Equals(""))
+                        {
+                            elt.id_element = item.TagName + id_for_elt;
+                            id_for_elt++;
+                        }
                     }
                     catch
                     {
@@ -269,14 +293,15 @@ namespace Crawler
                     {
 
                     }
-                   
+
                     try
                     {
                         elt.value = item.GetAttribute("value");
+
                     }
                     catch
                     {
-
+                        elt.value = "";
                     }
                     try
                     {
@@ -289,6 +314,14 @@ namespace Crawler
                     try
                     {
                         elt.title = item.GetAttribute("title");
+                    }
+                    catch
+                    {
+
+                    }
+                    try
+                    {
+                        elt.href = item.GetAttribute("href");
                     }
                     catch
                     {
@@ -359,10 +392,13 @@ namespace Crawler
 
                     }
                     listElt.Add(elt);
-
+                    //if (BUL.ElementBUL.insert_Element(elt) == -1)
+                    //{
+                    //    throw new Exception();
+                    //}
                 }
             }
-            //Use later
+            //Use later. dont delete
             //if (item.TagName.Equals("input"))
             //{
             //    switch (item.GetAttribute("type"))
@@ -432,6 +468,10 @@ namespace Crawler
         {
             return this.listElt;
         }
+        public List<Form_elements> GetListForm()
+        {
+            return this.listForm;
+        }
 
         public int StopWebDriver()
         {
@@ -442,10 +482,10 @@ namespace Crawler
             }
             catch
             {
-                
+
             }
             return 0;
         }
-           
+
     }
 }
