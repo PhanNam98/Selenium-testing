@@ -104,6 +104,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ElementDBDataSet1.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ElementDBDataSet2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ElementDBDataSet2.xsd</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +161,17 @@
     <None Include="ElementDBDataSet1.xss">
       <DependentUpon>ElementDBDataSet1.xsd</DependentUpon>
     </None>
+    <None Include="ElementDBDataSet2.xsc">
+      <DependentUpon>ElementDBDataSet2.xsd</DependentUpon>
+    </None>
+    <None Include="ElementDBDataSet2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ElementDBDataSet2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ElementDBDataSet2.xss">
+      <DependentUpon>ElementDBDataSet2.xsd</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -182,6 +198,10 @@
     <ProjectReference Include="Model\Model.csproj">
       <Project>{bbe45c8e-2406-4439-86d0-f7e0ebb8a582}</Project>
       <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="TestCase\TestCase.csproj">
+      <Project>{72630755-3e10-4732-bfac-1183aced92bc}</Project>
+      <Name>TestCase</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

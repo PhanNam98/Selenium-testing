@@ -1,17 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="ElementDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityType Name="A_tag">
-    <Key>
-      <PropertyRef Name="id_a_tag" />
-      <PropertyRef Name="id_url" />
-    </Key>
-    <Property Name="id_a_tag" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="href" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="id_url" Type="int" Nullable="false" />
-    <Property Name="title" Type="nvarchar(max)" />
-    <Property Name="text_value" Type="nvarchar(max)" />
-    <Property Name="xpath" Type="nvarchar(max)" />
-  </EntityType>
   <EntityType Name="Element">
     <Key>
       <PropertyRef Name="id_element" />
@@ -102,8 +90,11 @@
     </Key>
     <Property Name="id_testcase" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="id_url" Type="int" Nullable="false" />
-    <Property Name="result" Type="int" />
+    <Property Name="description" Type="nvarchar" MaxLength="200" />
+    <Property Name="result" Type="nvarchar" MaxLength="50" />
     <Property Name="is_test" Type="bit" />
+    <Property Name="CreatedDate" Type="date" />
+    <Property Name="ModifiedDate" Type="date" />
   </EntityType>
   <EntityType Name="Url">
     <Key>
@@ -113,18 +104,6 @@
     <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="url" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
-  <Association Name="FK_A_tag_Url">
-    <End Role="Url" Type="Self.Url" Multiplicity="1" />
-    <End Role="A_tag" Type="Self.A_tag" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Url">
-        <PropertyRef Name="id_url" />
-      </Principal>
-      <Dependent Role="A_tag">
-        <PropertyRef Name="id_url" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Element_test_Test_case">
     <End Role="Test_case" Type="Self.Test_case" Multiplicity="1" />
     <End Role="Element_test" Type="Self.Element_test" Multiplicity="*" />
@@ -216,7 +195,6 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="ElementDBModelStoreContainer">
-    <EntitySet Name="A_tag" EntityType="Self.A_tag" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Element" EntityType="Self.Element" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Element_test" EntityType="Self.Element_test" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Form_elements" EntityType="Self.Form_elements" Schema="dbo" store:Type="Tables" />
@@ -224,10 +202,6 @@
     <EntitySet Name="Input_testcase" EntityType="Self.Input_testcase" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Test_case" EntityType="Self.Test_case" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Url" EntityType="Self.Url" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_A_tag_Url" Association="Self.FK_A_tag_Url">
-      <End Role="Url" EntitySet="Url" />
-      <End Role="A_tag" EntitySet="A_tag" />
-    </AssociationSet>
     <AssociationSet Name="FK_Element_test_Test_case" Association="Self.FK_Element_test_Test_case">
       <End Role="Test_case" EntitySet="Test_case" />
       <End Role="Element_test" EntitySet="Element_test" />

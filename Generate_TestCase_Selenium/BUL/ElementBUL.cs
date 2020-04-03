@@ -39,5 +39,25 @@ namespace BUL
             return elementDAL.insert_List_Element(listnewElement);
 
         }
+        public static List<Element> get_List_Elt_Type_Submit(int id_url)
+        {
+
+            return elementDAL.get_List_Elt_Type_Submit(id_url);
+
+        }
+        public static List<Element> get_List_Elt_Type_Submit(int id_url,string id_form)
+        {
+
+            return elementDAL.get_List_Elt_Type_Submit(id_url,id_form);
+
+        }
+        public static List<Element> get_List_Input_Tag_Type_Text(int id_url)
+        {
+            return elementDAL.get_List_Input_Tag_Type_Text(id_url);
+        }
+        public static List<Element> get_List_Input_Tag_Type_Text(int id_url,string id_form)
+        {
+            return elementDAL.get_List_Input_Tag_Type_Text(id_url, id_form);
+        }
     }
 }

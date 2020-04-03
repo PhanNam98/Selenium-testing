@@ -1,18 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="ElementDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="ElementDBEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="A_tag" EntityType="ElementDBModel.A_tag" />
     <EntitySet Name="Elements" EntityType="ElementDBModel.Element" />
     <EntitySet Name="Element_test" EntityType="ElementDBModel.Element_test" />
     <EntitySet Name="Form_elements" EntityType="ElementDBModel.Form_elements" />
     <EntitySet Name="Input_elements" EntityType="ElementDBModel.Input_elements" />
     <EntitySet Name="Input_testcase" EntityType="ElementDBModel.Input_testcase" />
-    <EntitySet Name="Test_case" EntityType="ElementDBModel.Test_case" />
     <EntitySet Name="Urls" EntityType="ElementDBModel.Url" />
-    <AssociationSet Name="FK_A_tag_Url" Association="ElementDBModel.FK_A_tag_Url">
-      <End Role="Url" EntitySet="Urls" />
-      <End Role="A_tag" EntitySet="A_tag" />
-    </AssociationSet>
     <AssociationSet Name="FK_Element_Url" Association="ElementDBModel.FK_Element_Url">
       <End Role="Url" EntitySet="Urls" />
       <End Role="Element" EntitySet="Elements" />
@@ -21,10 +15,6 @@
       <End Role="Element" EntitySet="Elements" />
       <End Role="Input_testcase" EntitySet="Input_testcase" />
     </AssociationSet>
-    <AssociationSet Name="FK_Element_test_Test_case" Association="ElementDBModel.FK_Element_test_Test_case">
-      <End Role="Test_case" EntitySet="Test_case" />
-      <End Role="Element_test" EntitySet="Element_test" />
-    </AssociationSet>
     <AssociationSet Name="FK_Form_elements_Url" Association="ElementDBModel.FK_Form_elements_Url">
       <End Role="Url" EntitySet="Urls" />
       <End Role="Form_elements" EntitySet="Form_elements" />
@@ -32,6 +22,11 @@
     <AssociationSet Name="FK_Input_elements_Url" Association="ElementDBModel.FK_Input_elements_Url">
       <End Role="Url" EntitySet="Urls" />
       <End Role="Input_elements" EntitySet="Input_elements" />
+    </AssociationSet>
+    <EntitySet Name="Test_case" EntityType="ElementDBModel.Test_case" />
+    <AssociationSet Name="FK_Element_test_Test_case" Association="ElementDBModel.FK_Element_test_Test_case">
+      <End Role="Test_case" EntitySet="Test_case" />
+      <End Role="Element_test" EntitySet="Element_test" />
     </AssociationSet>
     <AssociationSet Name="FK_Input_testcase_Test_case1" Association="ElementDBModel.FK_Input_testcase_Test_case1">
       <End Role="Test_case" EntitySet="Test_case" />
@@ -42,19 +37,6 @@
       <End Role="Test_case" EntitySet="Test_case" />
     </AssociationSet>
   </EntityContainer>
-  <EntityType Name="A_tag">
-    <Key>
-      <PropertyRef Name="id_a_tag" />
-      <PropertyRef Name="id_url" />
-    </Key>
-    <Property Name="id_a_tag" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="href" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="id_url" Type="Int32" Nullable="false" />
-    <Property Name="title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="text_value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="xpath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_A_tag_Url" FromRole="A_tag" ToRole="Url" />
-  </EntityType>
   <EntityType Name="Element">
     <Key>
       <PropertyRef Name="id_element" />
@@ -145,19 +127,6 @@
     <NavigationProperty Name="Element" Relationship="ElementDBModel.FK_Input_testcase_Element" FromRole="Input_testcase" ToRole="Element" />
     <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Input_testcase" ToRole="Test_case" />
   </EntityType>
-  <EntityType Name="Test_case">
-    <Key>
-      <PropertyRef Name="id_testcase" />
-      <PropertyRef Name="id_url" />
-    </Key>
-    <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="id_url" Type="Int32" Nullable="false" />
-    <Property Name="result" Type="Int32" />
-    <Property Name="is_test" Type="Boolean" />
-    <NavigationProperty Name="Element_test" Relationship="ElementDBModel.FK_Element_test_Test_case" FromRole="Test_case" ToRole="Element_test" />
-    <NavigationProperty Name="Input_testcase" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Test_case" ToRole="Input_testcase" />
-    <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Test_case_Url" FromRole="Test_case" ToRole="Url" />
-  </EntityType>
   <EntityType Name="Url">
     <Key>
       <PropertyRef Name="id_url" />
@@ -165,24 +134,11 @@
     <Property Name="id_url" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="url1" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="A_tag" Relationship="ElementDBModel.FK_A_tag_Url" FromRole="Url" ToRole="A_tag" />
     <NavigationProperty Name="Elements" Relationship="ElementDBModel.FK_Element_Url" FromRole="Url" ToRole="Element" />
     <NavigationProperty Name="Form_elements" Relationship="ElementDBModel.FK_Form_elements_Url" FromRole="Url" ToRole="Form_elements" />
     <NavigationProperty Name="Input_elements" Relationship="ElementDBModel.FK_Input_elements_Url" FromRole="Url" ToRole="Input_elements" />
     <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Test_case_Url" FromRole="Url" ToRole="Test_case" />
   </EntityType>
-  <Association Name="FK_A_tag_Url">
-    <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
-    <End Type="ElementDBModel.A_tag" Role="A_tag" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Url">
-        <PropertyRef Name="id_url" />
-      </Principal>
-      <Dependent Role="A_tag">
-        <PropertyRef Name="id_url" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Element_Url">
     <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
     <End Type="ElementDBModel.Element" Role="Element" Multiplicity="*" />
@@ -209,20 +165,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Element_test_Test_case">
-    <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
-    <End Type="ElementDBModel.Element_test" Role="Element_test" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Test_case">
-        <PropertyRef Name="id_testcase" />
-        <PropertyRef Name="id_url" />
-      </Principal>
-      <Dependent Role="Element_test">
-        <PropertyRef Name="id_testcase" />
-        <PropertyRef Name="id_url" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Form_elements_Url">
     <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
     <End Type="ElementDBModel.Form_elements" Role="Form_elements" Multiplicity="*" />
@@ -243,6 +185,36 @@
         <PropertyRef Name="id_url" />
       </Principal>
       <Dependent Role="Input_elements">
+        <PropertyRef Name="id_url" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Test_case">
+    <Key>
+      <PropertyRef Name="id_testcase" />
+      <PropertyRef Name="id_url" />
+    </Key>
+    <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="id_url" Type="Int32" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="result" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="is_test" Type="Boolean" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+    <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Element_test" Relationship="ElementDBModel.FK_Element_test_Test_case" FromRole="Test_case" ToRole="Element_test" />
+    <NavigationProperty Name="Input_testcase" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Test_case" ToRole="Input_testcase" />
+    <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Test_case_Url" FromRole="Test_case" ToRole="Url" />
+  </EntityType>
+  <Association Name="FK_Element_test_Test_case">
+    <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
+    <End Type="ElementDBModel.Element_test" Role="Element_test" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Test_case">
+        <PropertyRef Name="id_testcase" />
+        <PropertyRef Name="id_url" />
+      </Principal>
+      <Dependent Role="Element_test">
+        <PropertyRef Name="id_testcase" />
         <PropertyRef Name="id_url" />
       </Dependent>
     </ReferentialConstraint>

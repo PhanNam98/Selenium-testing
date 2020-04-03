@@ -33,21 +33,21 @@
             this.elementDBDataSet = new Generate_TestCase_Selenium.ElementDBDataSet();
             this.elementTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSetTableAdapters.ElementTableAdapter();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.labelUrl = new System.Windows.Forms.Label();
-            this.btnCrawlWeb = new System.Windows.Forms.Button();
-            this.txtboxUrl = new System.Windows.Forms.TextBox();
             this.btnGenerateTestCase = new System.Windows.Forms.Button();
+            this.txtboxUrl = new System.Windows.Forms.TextBox();
+            this.btnCrawlWeb = new System.Windows.Forms.Button();
+            this.labelUrl = new System.Windows.Forms.Label();
             this.dgvElements = new System.Windows.Forms.DataGridView();
-            this.xpathDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idformDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hrefDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.valueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tagnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.classnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.idelementDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.classnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tagnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.valueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hrefDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.idformDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.xpathDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lbMessage = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -79,30 +79,20 @@
             this.panel2.Controls.Add(this.txtboxUrl);
             this.panel2.Controls.Add(this.btnCrawlWeb);
             this.panel2.Controls.Add(this.labelUrl);
-            this.panel2.Location = new System.Drawing.Point(74, 3);
+            this.panel2.Location = new System.Drawing.Point(67, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(577, 69);
+            this.panel2.Size = new System.Drawing.Size(596, 69);
             this.panel2.TabIndex = 4;
             // 
-            // labelUrl
+            // btnGenerateTestCase
             // 
-            this.labelUrl.AutoSize = true;
-            this.labelUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUrl.Location = new System.Drawing.Point(16, 29);
-            this.labelUrl.Name = "labelUrl";
-            this.labelUrl.Size = new System.Drawing.Size(38, 16);
-            this.labelUrl.TabIndex = 0;
-            this.labelUrl.Text = "URL:";
-            // 
-            // btnCrawlWeb
-            // 
-            this.btnCrawlWeb.Location = new System.Drawing.Point(338, 23);
-            this.btnCrawlWeb.Name = "btnCrawlWeb";
-            this.btnCrawlWeb.Size = new System.Drawing.Size(75, 28);
-            this.btnCrawlWeb.TabIndex = 3;
-            this.btnCrawlWeb.Text = "Crawl Data";
-            this.btnCrawlWeb.UseVisualStyleBackColor = true;
-            this.btnCrawlWeb.Click += new System.EventHandler(this.btnCrawlWeb_Click);
+            this.btnGenerateTestCase.Location = new System.Drawing.Point(432, 23);
+            this.btnGenerateTestCase.Name = "btnGenerateTestCase";
+            this.btnGenerateTestCase.Size = new System.Drawing.Size(115, 28);
+            this.btnGenerateTestCase.TabIndex = 4;
+            this.btnGenerateTestCase.Text = "Generate TestCase";
+            this.btnGenerateTestCase.UseVisualStyleBackColor = true;
+            this.btnGenerateTestCase.Click += new System.EventHandler(this.btnGenerateTestCase_Click);
             // 
             // txtboxUrl
             // 
@@ -114,15 +104,25 @@
             this.txtboxUrl.TabIndex = 1;
             this.txtboxUrl.Text = "https://facebook.com/";
             // 
-            // btnGenerateTestCase
+            // btnCrawlWeb
             // 
-            this.btnGenerateTestCase.Location = new System.Drawing.Point(432, 23);
-            this.btnGenerateTestCase.Name = "btnGenerateTestCase";
-            this.btnGenerateTestCase.Size = new System.Drawing.Size(115, 28);
-            this.btnGenerateTestCase.TabIndex = 4;
-            this.btnGenerateTestCase.Text = "Generate TestCase";
-            this.btnGenerateTestCase.UseVisualStyleBackColor = true;
-            this.btnGenerateTestCase.Click += new System.EventHandler(this.btnGenerateTestCase_Click);
+            this.btnCrawlWeb.Location = new System.Drawing.Point(338, 23);
+            this.btnCrawlWeb.Name = "btnCrawlWeb";
+            this.btnCrawlWeb.Size = new System.Drawing.Size(75, 28);
+            this.btnCrawlWeb.TabIndex = 3;
+            this.btnCrawlWeb.Text = "Crawl Data";
+            this.btnCrawlWeb.UseVisualStyleBackColor = true;
+            this.btnCrawlWeb.Click += new System.EventHandler(this.btnCrawlWeb_Click);
+            // 
+            // labelUrl
+            // 
+            this.labelUrl.AutoSize = true;
+            this.labelUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUrl.Location = new System.Drawing.Point(16, 29);
+            this.labelUrl.Name = "labelUrl";
+            this.labelUrl.Size = new System.Drawing.Size(38, 16);
+            this.labelUrl.TabIndex = 0;
+            this.labelUrl.Text = "URL:";
             // 
             // dgvElements
             // 
@@ -146,72 +146,16 @@
             this.dgvElements.DataSource = this.elementBindingSource;
             this.dgvElements.Location = new System.Drawing.Point(3, 111);
             this.dgvElements.Name = "dgvElements";
-            this.dgvElements.Size = new System.Drawing.Size(730, 349);
+            this.dgvElements.Size = new System.Drawing.Size(730, 367);
             this.dgvElements.TabIndex = 5;
             // 
-            // xpathDataGridViewTextBoxColumn
+            // idelementDataGridViewTextBoxColumn
             // 
-            this.xpathDataGridViewTextBoxColumn.DataPropertyName = "xpath";
-            this.xpathDataGridViewTextBoxColumn.HeaderText = "xpath";
-            this.xpathDataGridViewTextBoxColumn.Name = "xpathDataGridViewTextBoxColumn";
-            this.xpathDataGridViewTextBoxColumn.ReadOnly = true;
-            this.xpathDataGridViewTextBoxColumn.Width = 69;
-            // 
-            // idformDataGridViewTextBoxColumn
-            // 
-            this.idformDataGridViewTextBoxColumn.DataPropertyName = "id_form";
-            this.idformDataGridViewTextBoxColumn.HeaderText = "id_form";
-            this.idformDataGridViewTextBoxColumn.Name = "idformDataGridViewTextBoxColumn";
-            this.idformDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idformDataGridViewTextBoxColumn.Width = 68;
-            // 
-            // titleDataGridViewTextBoxColumn
-            // 
-            this.titleDataGridViewTextBoxColumn.DataPropertyName = "title";
-            this.titleDataGridViewTextBoxColumn.HeaderText = "title";
-            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
-            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
-            this.titleDataGridViewTextBoxColumn.Width = 69;
-            // 
-            // hrefDataGridViewTextBoxColumn
-            // 
-            this.hrefDataGridViewTextBoxColumn.DataPropertyName = "href";
-            this.hrefDataGridViewTextBoxColumn.HeaderText = "href";
-            this.hrefDataGridViewTextBoxColumn.Name = "hrefDataGridViewTextBoxColumn";
-            this.hrefDataGridViewTextBoxColumn.ReadOnly = true;
-            this.hrefDataGridViewTextBoxColumn.Width = 69;
-            // 
-            // valueDataGridViewTextBoxColumn
-            // 
-            this.valueDataGridViewTextBoxColumn.DataPropertyName = "value";
-            this.valueDataGridViewTextBoxColumn.HeaderText = "value";
-            this.valueDataGridViewTextBoxColumn.Name = "valueDataGridViewTextBoxColumn";
-            this.valueDataGridViewTextBoxColumn.ReadOnly = true;
-            this.valueDataGridViewTextBoxColumn.Width = 69;
-            // 
-            // typeDataGridViewTextBoxColumn
-            // 
-            this.typeDataGridViewTextBoxColumn.DataPropertyName = "type";
-            this.typeDataGridViewTextBoxColumn.HeaderText = "type";
-            this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
-            this.typeDataGridViewTextBoxColumn.ReadOnly = true;
-            this.typeDataGridViewTextBoxColumn.Width = 68;
-            // 
-            // tagnameDataGridViewTextBoxColumn
-            // 
-            this.tagnameDataGridViewTextBoxColumn.DataPropertyName = "tag_name";
-            this.tagnameDataGridViewTextBoxColumn.HeaderText = "tag name";
-            this.tagnameDataGridViewTextBoxColumn.Name = "tagnameDataGridViewTextBoxColumn";
-            this.tagnameDataGridViewTextBoxColumn.ReadOnly = true;
-            this.tagnameDataGridViewTextBoxColumn.Width = 69;
-            // 
-            // classnameDataGridViewTextBoxColumn
-            // 
-            this.classnameDataGridViewTextBoxColumn.DataPropertyName = "class_name";
-            this.classnameDataGridViewTextBoxColumn.HeaderText = "class name";
-            this.classnameDataGridViewTextBoxColumn.Name = "classnameDataGridViewTextBoxColumn";
-            this.classnameDataGridViewTextBoxColumn.ReadOnly = true;
-            this.classnameDataGridViewTextBoxColumn.Width = 69;
+            this.idelementDataGridViewTextBoxColumn.DataPropertyName = "id_element";
+            this.idelementDataGridViewTextBoxColumn.HeaderText = "Element id";
+            this.idelementDataGridViewTextBoxColumn.Name = "idelementDataGridViewTextBoxColumn";
+            this.idelementDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idelementDataGridViewTextBoxColumn.Width = 69;
             // 
             // nameDataGridViewTextBoxColumn
             // 
@@ -221,13 +165,69 @@
             this.nameDataGridViewTextBoxColumn.ReadOnly = true;
             this.nameDataGridViewTextBoxColumn.Width = 68;
             // 
-            // idelementDataGridViewTextBoxColumn
+            // classnameDataGridViewTextBoxColumn
             // 
-            this.idelementDataGridViewTextBoxColumn.DataPropertyName = "id_element";
-            this.idelementDataGridViewTextBoxColumn.HeaderText = "Element id";
-            this.idelementDataGridViewTextBoxColumn.Name = "idelementDataGridViewTextBoxColumn";
-            this.idelementDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idelementDataGridViewTextBoxColumn.Width = 69;
+            this.classnameDataGridViewTextBoxColumn.DataPropertyName = "class_name";
+            this.classnameDataGridViewTextBoxColumn.HeaderText = "class name";
+            this.classnameDataGridViewTextBoxColumn.Name = "classnameDataGridViewTextBoxColumn";
+            this.classnameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.classnameDataGridViewTextBoxColumn.Width = 69;
+            // 
+            // tagnameDataGridViewTextBoxColumn
+            // 
+            this.tagnameDataGridViewTextBoxColumn.DataPropertyName = "tag_name";
+            this.tagnameDataGridViewTextBoxColumn.HeaderText = "tag name";
+            this.tagnameDataGridViewTextBoxColumn.Name = "tagnameDataGridViewTextBoxColumn";
+            this.tagnameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.tagnameDataGridViewTextBoxColumn.Width = 69;
+            // 
+            // typeDataGridViewTextBoxColumn
+            // 
+            this.typeDataGridViewTextBoxColumn.DataPropertyName = "type";
+            this.typeDataGridViewTextBoxColumn.HeaderText = "type";
+            this.typeDataGridViewTextBoxColumn.Name = "typeDataGridViewTextBoxColumn";
+            this.typeDataGridViewTextBoxColumn.ReadOnly = true;
+            this.typeDataGridViewTextBoxColumn.Width = 68;
+            // 
+            // valueDataGridViewTextBoxColumn
+            // 
+            this.valueDataGridViewTextBoxColumn.DataPropertyName = "value";
+            this.valueDataGridViewTextBoxColumn.HeaderText = "value";
+            this.valueDataGridViewTextBoxColumn.Name = "valueDataGridViewTextBoxColumn";
+            this.valueDataGridViewTextBoxColumn.ReadOnly = true;
+            this.valueDataGridViewTextBoxColumn.Width = 69;
+            // 
+            // hrefDataGridViewTextBoxColumn
+            // 
+            this.hrefDataGridViewTextBoxColumn.DataPropertyName = "href";
+            this.hrefDataGridViewTextBoxColumn.HeaderText = "href";
+            this.hrefDataGridViewTextBoxColumn.Name = "hrefDataGridViewTextBoxColumn";
+            this.hrefDataGridViewTextBoxColumn.ReadOnly = true;
+            this.hrefDataGridViewTextBoxColumn.Width = 69;
+            // 
+            // titleDataGridViewTextBoxColumn
+            // 
+            this.titleDataGridViewTextBoxColumn.DataPropertyName = "title";
+            this.titleDataGridViewTextBoxColumn.HeaderText = "title";
+            this.titleDataGridViewTextBoxColumn.Name = "titleDataGridViewTextBoxColumn";
+            this.titleDataGridViewTextBoxColumn.ReadOnly = true;
+            this.titleDataGridViewTextBoxColumn.Width = 69;
+            // 
+            // idformDataGridViewTextBoxColumn
+            // 
+            this.idformDataGridViewTextBoxColumn.DataPropertyName = "id_form";
+            this.idformDataGridViewTextBoxColumn.HeaderText = "id_form";
+            this.idformDataGridViewTextBoxColumn.Name = "idformDataGridViewTextBoxColumn";
+            this.idformDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idformDataGridViewTextBoxColumn.Width = 68;
+            // 
+            // xpathDataGridViewTextBoxColumn
+            // 
+            this.xpathDataGridViewTextBoxColumn.DataPropertyName = "xpath";
+            this.xpathDataGridViewTextBoxColumn.HeaderText = "xpath";
+            this.xpathDataGridViewTextBoxColumn.Name = "xpathDataGridViewTextBoxColumn";
+            this.xpathDataGridViewTextBoxColumn.ReadOnly = true;
+            this.xpathDataGridViewTextBoxColumn.Width = 69;
             // 
             // lbMessage
             // 
@@ -239,15 +239,16 @@
             this.lbMessage.TabIndex = 7;
             this.lbMessage.Text = "Crawling data, please wait...";
             this.lbMessage.Visible = false;
+            this.lbMessage.Click += new System.EventHandler(this.lbMessage_Click);
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.lbMessage);
             this.panel1.Controls.Add(this.dgvElements);
             this.panel1.Controls.Add(this.panel2);
-            this.panel1.Location = new System.Drawing.Point(12, 12);
+            this.panel1.Location = new System.Drawing.Point(12, 27);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(736, 460);
+            this.panel1.Size = new System.Drawing.Size(736, 481);
             this.panel1.TabIndex = 0;
             // 
             // menuStrip1
@@ -263,7 +264,7 @@
             this.AcceptButton = this.btnCrawlWeb;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(762, 504);
+            this.ClientSize = new System.Drawing.Size(762, 520);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;

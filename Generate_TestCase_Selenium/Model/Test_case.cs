@@ -23,8 +23,11 @@ namespace Model
     
         public string id_testcase { get; set; }
         public int id_url { get; set; }
-        public Nullable<int> result { get; set; }
+        public string description { get; set; }
+        public string result { get; set; }
         public Nullable<bool> is_test { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<System.DateTime> ModifiedDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Element_test> Element_test { get; set; }

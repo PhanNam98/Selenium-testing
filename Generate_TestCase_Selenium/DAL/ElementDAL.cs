@@ -73,5 +73,34 @@ namespace DAL
             }
 
         }
+        public List<Element> get_List_Elt_Type_Submit(int id_url)
+        {
+            using (ElementDBEntities db = new ElementDBEntities())
+            {
+                return db.Elements.Where(p => p.id_url == id_url && p.type=="submit").ToList();
+            }
+        }
+
+        public List<Element> get_List_Elt_Type_Submit(int id_url,string id_form)
+        {
+            using (ElementDBEntities db = new ElementDBEntities())
+            {
+                return db.Elements.Where(p => p.id_url == id_url && p.type == "submit" && p.id_form==id_form).ToList();
+            }
+        }
+        public List<Element> get_List_Input_Tag_Type_Text(int id_url)
+        {
+            using (ElementDBEntities db = new ElementDBEntities())
+            {
+                return db.Elements.Where(p => p.id_url == id_url && p.type == "text").ToList();
+            }
+        }
+        public List<Element> get_List_Input_Tag_Type_Text(int id_url,string id_form)
+        {
+            using (ElementDBEntities db = new ElementDBEntities())
+            {
+                return db.Elements.Where(p => p.id_url == id_url && p.type == "text" && p.id_form==id_form).ToList();
+            }
+        }
     }
 }

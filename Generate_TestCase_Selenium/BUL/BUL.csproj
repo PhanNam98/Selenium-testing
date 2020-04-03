@@ -50,6 +50,7 @@
     <Compile Include="ElementBUL.cs" />
     <Compile Include="FormBUL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCaseBUL.cs" />
     <Compile Include="UrlBUL.cs" />
   </ItemGroup>
   <ItemGroup>

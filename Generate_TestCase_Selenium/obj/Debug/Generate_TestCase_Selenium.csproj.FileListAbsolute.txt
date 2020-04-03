@@ -58,3 +58,5 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\Crawler.pdb
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\Crawler.dll.config
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\obj\Debug\Generate_TestCase_Selenium.frmTestCase.resources
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\TestCase.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\bin\Debug\TestCase.pdb

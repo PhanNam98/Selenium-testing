@@ -1,18 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="ElementDBModelStoreContainer" CdmEntityContainer="ElementDBEntities">
-    <EntitySetMapping Name="A_tag">
-      <EntityTypeMapping TypeName="ElementDBModel.A_tag">
-        <MappingFragment StoreEntitySet="A_tag">
-          <ScalarProperty Name="xpath" ColumnName="xpath" />
-          <ScalarProperty Name="text_value" ColumnName="text_value" />
-          <ScalarProperty Name="title" ColumnName="title" />
-          <ScalarProperty Name="id_url" ColumnName="id_url" />
-          <ScalarProperty Name="href" ColumnName="href" />
-          <ScalarProperty Name="id_a_tag" ColumnName="id_a_tag" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Elements">
       <EntityTypeMapping TypeName="ElementDBModel.Element">
         <MappingFragment StoreEntitySet="Element">
@@ -94,22 +82,25 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Test_case">
-      <EntityTypeMapping TypeName="ElementDBModel.Test_case">
-        <MappingFragment StoreEntitySet="Test_case">
-          <ScalarProperty Name="is_test" ColumnName="is_test" />
-          <ScalarProperty Name="result" ColumnName="result" />
-          <ScalarProperty Name="id_url" ColumnName="id_url" />
-          <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Urls">
       <EntityTypeMapping TypeName="ElementDBModel.Url">
         <MappingFragment StoreEntitySet="Url">
           <ScalarProperty Name="url1" ColumnName="url" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="id_url" ColumnName="id_url" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Test_case">
+      <EntityTypeMapping TypeName="ElementDBModel.Test_case">
+        <MappingFragment StoreEntitySet="Test_case">
+          <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="is_test" ColumnName="is_test" />
+          <ScalarProperty Name="result" ColumnName="result" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="id_url" ColumnName="id_url" />
+          <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

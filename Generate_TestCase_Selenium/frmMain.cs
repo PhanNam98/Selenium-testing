@@ -32,15 +32,16 @@ namespace Generate_TestCase_Selenium
         private int Crawwling = 1;
         Thread CrawlThread;
         Crawler.ElementCrawl Craw_element;
+        private int Id_Url;
         private void btnCrawlWeb_Click(object sender, EventArgs e)
         {
             btnGenerateTestCase.Enabled = false;
             dgvElements.DataSource = null;
             if (Crawwling > 0)
             {
-                btnCrawlWeb.Text = "Cancel";
+                
                 lbMessage.Visible = true;
-                lbMessage.Text = "Crawling data, please wait...";
+                lbMessage.Text = "Crawling data, please wait a few minutes...";
                 CrawlThread = new Thread(CrawlingElement);
                 CrawlThread.Start();
                 Crawwling--;
@@ -75,37 +76,25 @@ namespace Generate_TestCase_Selenium
             }
             else if (Crawwling == 0)
             {
-
+                
+               
                 DialogResult result = MessageBox.Show("Stop the process?", "Message", MessageBoxButtons.YesNo);
+                
                 if (result == DialogResult.Yes)
                 {
-                    try
-                    {
+                    btnCrawlWeb.Enabled = false;
+                    lbMessage.Text = "Stoping the process...";
+                    Thread stop = new Thread(StopCrawl);
+                    stop.Start();
+                    //btnCrawlWeb.Enabled = false;
+                    //lbMessage.Visible = false;
+                    //btnCrawlWeb.Text = "Crawl Data";
+                    //Crawwling++;
+                    //lbMessage.Text = "";
+                    //lbMessage.Visible = true;
 
-                        btnCrawlWeb.Enabled = false;
-                        lbMessage.Visible = false;
-
-                        if (Craw_element.StopWebDriver() == 0)
-                        {
-                            btnCrawlWeb.Enabled = true;
-                            lbMessage.Visible = true;
-                            throw new Exception();
-                        }
-                        btnCrawlWeb.Enabled = false;
-                        lbMessage.Visible = false;
-                        btnCrawlWeb.Text = "Crawl Data";
-                        Crawwling++;
-                        lbMessage.Text = "";
-                        lbMessage.Visible = true;
-
-                        CrawlThread.Abort();
-                        btnCrawlWeb.Enabled = true;
-                        MessageBox.Show("Stop the process successfully", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Stop the process failed, please try again", "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+                    //CrawlThread.Abort();
+                    //btnCrawlWeb.Enabled = true;
                 }
                 else if (result == DialogResult.No)
                 {
@@ -115,7 +104,37 @@ namespace Generate_TestCase_Selenium
             }
         }
 
-       
+       private void StopCrawl()
+        {
+            try
+            {
+
+                //btnCrawlWeb.Enabled = false;
+                //lbMessage.Visible = false;
+
+                if (Craw_element.StopWebDriver() == 0)
+                {
+                    btnCrawlWeb.Enabled = true;
+                    lbMessage.Visible = true;
+                    throw new Exception();
+                }
+                btnCrawlWeb.Enabled = false;
+                lbMessage.Visible = false;
+                btnCrawlWeb.Text = "Crawl Data";
+                Crawwling++;
+                lbMessage.Text = "";
+                lbMessage.Visible = true;
+                btnCrawlWeb.Enabled = true;
+
+                MessageBox.Show("Stop the process successfully", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch
+            {
+                MessageBox.Show("Stop the process failed, please try again", "Message", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            CrawlThread.Abort();
+            
+        }
       
         public static class ThreadHelperClass
         {
@@ -154,7 +173,7 @@ namespace Generate_TestCase_Selenium
         {
             string url_test = txtboxUrl.Text;
             Craw_element = new Crawler.ElementCrawl(url_test);
-          
+            btnCrawlWeb.Text = "Cancel";
             if (Craw_element.GetElements() == 1)
             {
                 listElements = Craw_element.GetListElement();
@@ -211,10 +230,27 @@ namespace Generate_TestCase_Selenium
         }
         private void btnGenerateTestCase_Click(object sender, EventArgs e)
         {
-            frmTestCase newfrmTestCase = new frmTestCase();
+            lbMessage.Visible = true;
+            lbMessage.Text="Generating testcase, Please wait a few minutes...";
+            //frmTestCase newfrmTestCase = new frmTestCase(Id_Url,true);
+            Thread GenerateThread = new Thread(GenerateTestCase);
+            GenerateThread.Start();
+           
+
+        }
+        private void GenerateTestCase()
+        {
+            frmTestCase newfrmTestCase = new frmTestCase(27, true);
             this.Hide();
             newfrmTestCase.ShowDialog();
+            lbMessage.Text = "";
             this.Show();
+            this.TopMost = true;
+            
+        }
+        private void lbMessage_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
