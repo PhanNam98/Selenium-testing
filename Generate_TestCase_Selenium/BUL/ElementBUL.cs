@@ -51,13 +51,14 @@ namespace BUL
             return elementDAL.get_List_Elt_Type_Submit(id_url,id_form);
 
         }
-        public static List<Element> get_List_Input_Tag_Type_Text(int id_url)
+      
+        public static List<Element> get_List_Input_Tag_Type(int id_url,string type, string id_form)
         {
-            return elementDAL.get_List_Input_Tag_Type_Text(id_url);
+            return elementDAL.get_List_Input_Tag_Type(id_url,type,id_form);
         }
-        public static List<Element> get_List_Input_Tag_Type_Text(int id_url,string id_form)
+        public static List<Element> get_List_Input_Tag_Type(int id_url, string type)
         {
-            return elementDAL.get_List_Input_Tag_Type_Text(id_url, id_form);
+            return elementDAL.get_List_Input_Tag_Type(id_url,type);
         }
     }
 }

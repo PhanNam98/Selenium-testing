@@ -88,19 +88,21 @@ namespace DAL
                 return db.Elements.Where(p => p.id_url == id_url && p.type == "submit" && p.id_form==id_form).ToList();
             }
         }
-        public List<Element> get_List_Input_Tag_Type_Text(int id_url)
+    
+        public List<Element> get_List_Input_Tag_Type(int id_url,string type)
         {
             using (ElementDBEntities db = new ElementDBEntities())
             {
-                return db.Elements.Where(p => p.id_url == id_url && p.type == "text").ToList();
+                return db.Elements.Where(p => p.id_url == id_url && p.type == type).ToList();
             }
         }
-        public List<Element> get_List_Input_Tag_Type_Text(int id_url,string id_form)
+        public List<Element> get_List_Input_Tag_Type(int id_url,string type, string id_form)
         {
             using (ElementDBEntities db = new ElementDBEntities())
             {
-                return db.Elements.Where(p => p.id_url == id_url && p.type == "text" && p.id_form==id_form).ToList();
+                return db.Elements.Where(p => p.id_url == id_url && p.type == type && p.id_form == id_form).ToList();
             }
         }
     }
+    
 }
