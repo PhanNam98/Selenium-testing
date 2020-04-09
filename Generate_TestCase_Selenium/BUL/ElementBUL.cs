@@ -45,6 +45,13 @@ namespace BUL
             return elementDAL.get_List_Elt_Type_Submit(id_url);
 
         }
+        public static List<Element> get_List_Button_Not_Type_Submit(int id_url)
+        {
+
+            return elementDAL.get_List_Button_Not_Type_Submit(id_url);
+
+        }
+        
         public static List<Element> get_List_Elt_Type_Submit(int id_url,string id_form)
         {
 
@@ -59,6 +66,22 @@ namespace BUL
         public static List<Element> get_List_Input_Tag_Type(int id_url, string type)
         {
             return elementDAL.get_List_Input_Tag_Type(id_url,type);
+        }
+        public static List<Element> get_List_Element_Tag_Type(int id_url,string tag, string type, string id_form)
+        {
+            return elementDAL.get_List_Element_Tag_Type(id_url,tag, type, id_form);
+        }
+        public static List<Element> get_List_Element_Tag_Type(int id_url, string tag, string type)
+        {
+            return elementDAL.get_List_Element_Tag_Type(id_url,tag, type);
+        }
+        public static List<Element> get_List_Element_Tag(int id_url, string tag, string id_form)
+        {
+            return elementDAL.get_List_Element_Tag(id_url, tag, id_form);
+        }
+        public static List<Element> get_List_Element_Tag(int id_url, string tag)
+        {
+            return elementDAL.get_List_Element_Tag(id_url, tag);
         }
     }
 }

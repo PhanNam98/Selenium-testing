@@ -36,11 +36,18 @@ namespace DAL
         }
         public List<Form_elements> get_ListForm_ByIdUrl(int id_Url)
         {
-
-            using (ElementDBEntities db = new ElementDBEntities())
+            try
             {
-                return db.Form_elements.Where(p => p.id_url == id_Url).ToList();
+                using (ElementDBEntities db = new ElementDBEntities())
+                {
+                    return db.Form_elements.Where(p => p.id_url == id_Url).ToList();
+                }
             }
+            catch
+            {
+
+            }
+            return null;
 
         }
         public Form_elements get_Form_ByIdForm(string idForm,int idUrl)

@@ -38,7 +38,11 @@
             this.btnCrawlWeb = new System.Windows.Forms.Button();
             this.labelUrl = new System.Windows.Forms.Label();
             this.dgvElements = new System.Windows.Forms.DataGridView();
+            this.lbMessage = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.idelementDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.idformDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.classnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tagnameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -46,11 +50,8 @@
             this.valueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hrefDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.titleDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idformDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.required = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.xpathDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lbMessage = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             ((System.ComponentModel.ISupportInitialize)(this.elementBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementDBDataSet)).BeginInit();
             this.panel2.SuspendLayout();
@@ -128,12 +129,12 @@
             // 
             this.dgvElements.AllowUserToAddRows = false;
             this.dgvElements.AllowUserToDeleteRows = false;
-            this.dgvElements.AllowUserToOrderColumns = true;
             this.dgvElements.AutoGenerateColumns = false;
             this.dgvElements.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvElements.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvElements.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idelementDataGridViewTextBoxColumn,
+            this.idformDataGridViewTextBoxColumn,
             this.nameDataGridViewTextBoxColumn,
             this.classnameDataGridViewTextBoxColumn,
             this.tagnameDataGridViewTextBoxColumn,
@@ -141,13 +142,44 @@
             this.valueDataGridViewTextBoxColumn,
             this.hrefDataGridViewTextBoxColumn,
             this.titleDataGridViewTextBoxColumn,
-            this.idformDataGridViewTextBoxColumn,
+            this.required,
             this.xpathDataGridViewTextBoxColumn});
             this.dgvElements.DataSource = this.elementBindingSource;
             this.dgvElements.Location = new System.Drawing.Point(3, 111);
             this.dgvElements.Name = "dgvElements";
-            this.dgvElements.Size = new System.Drawing.Size(730, 367);
+            this.dgvElements.ReadOnly = true;
+            this.dgvElements.Size = new System.Drawing.Size(787, 367);
             this.dgvElements.TabIndex = 5;
+            // 
+            // lbMessage
+            // 
+            this.lbMessage.AutoSize = true;
+            this.lbMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbMessage.Location = new System.Drawing.Point(3, 84);
+            this.lbMessage.Name = "lbMessage";
+            this.lbMessage.Size = new System.Drawing.Size(241, 24);
+            this.lbMessage.TabIndex = 7;
+            this.lbMessage.Text = "Crawling data, please wait...";
+            this.lbMessage.Visible = false;
+            this.lbMessage.Click += new System.EventHandler(this.lbMessage_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.lbMessage);
+            this.panel1.Controls.Add(this.dgvElements);
+            this.panel1.Controls.Add(this.panel2);
+            this.panel1.Location = new System.Drawing.Point(12, 27);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(793, 481);
+            this.panel1.TabIndex = 0;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(809, 24);
+            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.Text = "menuStrip1";
             // 
             // idelementDataGridViewTextBoxColumn
             // 
@@ -156,6 +188,14 @@
             this.idelementDataGridViewTextBoxColumn.Name = "idelementDataGridViewTextBoxColumn";
             this.idelementDataGridViewTextBoxColumn.ReadOnly = true;
             this.idelementDataGridViewTextBoxColumn.Width = 69;
+            // 
+            // idformDataGridViewTextBoxColumn
+            // 
+            this.idformDataGridViewTextBoxColumn.DataPropertyName = "id_form";
+            this.idformDataGridViewTextBoxColumn.HeaderText = "id_form";
+            this.idformDataGridViewTextBoxColumn.Name = "idformDataGridViewTextBoxColumn";
+            this.idformDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idformDataGridViewTextBoxColumn.Width = 68;
             // 
             // nameDataGridViewTextBoxColumn
             // 
@@ -213,13 +253,12 @@
             this.titleDataGridViewTextBoxColumn.ReadOnly = true;
             this.titleDataGridViewTextBoxColumn.Width = 69;
             // 
-            // idformDataGridViewTextBoxColumn
+            // required
             // 
-            this.idformDataGridViewTextBoxColumn.DataPropertyName = "id_form";
-            this.idformDataGridViewTextBoxColumn.HeaderText = "id_form";
-            this.idformDataGridViewTextBoxColumn.Name = "idformDataGridViewTextBoxColumn";
-            this.idformDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idformDataGridViewTextBoxColumn.Width = 68;
+            this.required.DataPropertyName = "required";
+            this.required.HeaderText = "required";
+            this.required.Name = "required";
+            this.required.ReadOnly = true;
             // 
             // xpathDataGridViewTextBoxColumn
             // 
@@ -229,42 +268,12 @@
             this.xpathDataGridViewTextBoxColumn.ReadOnly = true;
             this.xpathDataGridViewTextBoxColumn.Width = 69;
             // 
-            // lbMessage
-            // 
-            this.lbMessage.AutoSize = true;
-            this.lbMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMessage.Location = new System.Drawing.Point(3, 84);
-            this.lbMessage.Name = "lbMessage";
-            this.lbMessage.Size = new System.Drawing.Size(241, 24);
-            this.lbMessage.TabIndex = 7;
-            this.lbMessage.Text = "Crawling data, please wait...";
-            this.lbMessage.Visible = false;
-            this.lbMessage.Click += new System.EventHandler(this.lbMessage_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.lbMessage);
-            this.panel1.Controls.Add(this.dgvElements);
-            this.panel1.Controls.Add(this.panel2);
-            this.panel1.Location = new System.Drawing.Point(12, 27);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(736, 481);
-            this.panel1.TabIndex = 0;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(762, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
             // frmMain
             // 
             this.AcceptButton = this.btnCrawlWeb;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(762, 520);
+            this.ClientSize = new System.Drawing.Size(809, 520);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -294,7 +303,11 @@
         private System.Windows.Forms.Button btnCrawlWeb;
         private System.Windows.Forms.Label labelUrl;
         private System.Windows.Forms.DataGridView dgvElements;
+        private System.Windows.Forms.Label lbMessage;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.DataGridViewTextBoxColumn idelementDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idformDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn classnameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn tagnameDataGridViewTextBoxColumn;
@@ -302,11 +315,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn valueDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn hrefDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn titleDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn idformDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn required;
         private System.Windows.Forms.DataGridViewTextBoxColumn xpathDataGridViewTextBoxColumn;
-        private System.Windows.Forms.Label lbMessage;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.MenuStrip menuStrip1;
     }
 }
 

@@ -15,6 +15,10 @@ namespace Generate_TestCase_Selenium
         private bool isNew;
         private int Id_URL;
         private List<Test_case> ListTestCase;
+        private int CountTestcaseTest=0;
+        private int NumberOfTestcase = 0;
+
+        CheckBox headerCheckBox = new CheckBox();
         public frmTestCase(int id_url, bool isnew)
         {
             InitializeComponent();
@@ -23,12 +27,23 @@ namespace Generate_TestCase_Selenium
             if (isNew == true)
             {
                 ListTestCase = new List<Test_case>();
+              
+                //Place the Header CheckBox in the Location of the Header Cell.
+                headerCheckBox.Location = new Point(60, 5);
+                headerCheckBox.BackColor = Color.White;
+                headerCheckBox.Size = new Size(13, 13);
+                headerCheckBox.Checked = true;
+                //Assign Click event to the Header CheckBox.
+                headerCheckBox.Click += new EventHandler(HeaderCheckBox_Clicked);
+                dataGridViewListTestCase.Controls.Add(headerCheckBox);
                 if (isNew)
                 {
                     TestCase.TestCase NewListTestCase = new TestCase.TestCase(Id_URL);
                     ListTestCase = NewListTestCase.Generate_testcase();
                     dataGridViewListTestCase.DataSource = ListTestCase;
-
+                    CountTestcaseTest = NumberOfTestcase = ListTestCase.Count;
+                    lbNumberOfTestcase.Text ="/"+ NumberOfTestcase.ToString();
+                    lbCurrentCount.Text = CountTestcaseTest.ToString();
                 }
             }
             else
@@ -47,10 +62,7 @@ namespace Generate_TestCase_Selenium
 
         }
 
-        private void btnCrawlWeb_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void dataGridViewListTestCase_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -63,5 +75,109 @@ namespace Generate_TestCase_Selenium
                 if (dataGridViewListTestCase.Rows[e.RowIndex].Cells[4].Value.Equals("Skip"))
                 dataGridViewListTestCase.Columns[4].DefaultCellStyle.ForeColor = Color.Blue;
         }
+
+        private void dataGridViewListTestCase_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dataGridViewListTestCase.Columns["btnRun"].Index && e.RowIndex >= 0)
+            {
+                MessageBox.Show(String.Format("Button on row {0} clicked"+ dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString(), e.RowIndex));
+            }
+            else
+            {
+                if (e.RowIndex >= 0 && e.ColumnIndex == 0)
+                {
+                    //Loop to verify whether all row CheckBoxes are checked or not.
+                    bool isChecked = true;
+                    foreach (DataGridViewRow row in dataGridViewListTestCase.Rows)
+                    {
+                        if (Convert.ToBoolean(row.Cells["istestDataGridViewCheckBoxColumn"].EditedFormattedValue) == false)
+                        {
+                            isChecked = false;
+                            break;
+                        }
+                    }
+                    headerCheckBox.Checked = isChecked;
+                    
+                }
+            }
+        }
+
+        
+        private void dataGridViewListTestCase_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            dataGridViewListTestCase.CommitEdit(DataGridViewDataErrorContexts.Commit);
+
+
+        }
+
+        private void dataGridViewListTestCase_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dataGridViewListTestCase.Columns["istestDataGridViewCheckBoxColumn"].Index && e.RowIndex >= 0)
+            {
+                bool isChecked = (bool)dataGridViewListTestCase[e.ColumnIndex, e.RowIndex].EditedFormattedValue;
+                ListTestCase[e.RowIndex].is_test = isChecked;
+                dataGridViewListTestCase.DataSource = ListTestCase;
+
+              
+             
+                CountTestcaseTest = ListTestCase.Where(p => p.is_test == true).Count();
+                if (CountTestcaseTest == NumberOfTestcase)
+                {
+                    btnRunTestCase.Text = "Run All";
+                    headerCheckBox.Checked = true;
+                    btnRunTestCase.Enabled = true;
+                    headerCheckBox.Checked = true;
+                }
+                else
+                    if (CountTestcaseTest == 0)
+                {
+                    btnRunTestCase.Enabled = false;
+                    headerCheckBox.Checked = false;
+                }
+                else
+                {
+                    btnRunTestCase.Text = "Run " + CountTestcaseTest;
+                    btnRunTestCase.Enabled = true;
+                    headerCheckBox.Checked = false;
+                }
+                lbCurrentCount.Text = ListTestCase.Where(p => p.is_test == true).Count().ToString();
+            }
+        }
+
+
+        private void btnRunTestCase_Click(object sender, EventArgs e)
+        {
+            dataGridViewListTestCase.DataSource = ListTestCase;
+        }
+        private void HeaderCheckBox_Clicked(object sender, EventArgs e)
+        {
+            //Necessary to end the edit mode of the Cell.
+            dataGridViewListTestCase.EndEdit();
+
+            //Loop and check and uncheck all row CheckBoxes based on Header Cell CheckBox.
+            foreach (DataGridViewRow row in dataGridViewListTestCase.Rows)
+            {
+               
+
+                DataGridViewCheckBoxCell checkBox = (row.Cells["istestDataGridViewCheckBoxColumn"] as DataGridViewCheckBoxCell);
+                checkBox.Value = headerCheckBox.Checked;
+               
+                if (!headerCheckBox.Checked)
+                {
+                    btnRunTestCase.Enabled = false;
+                    CountTestcaseTest = 0;
+                  
+                }
+                else
+                {
+                    btnRunTestCase.Text = "Run All";
+                    btnRunTestCase.Enabled = true;
+                    CountTestcaseTest = NumberOfTestcase;
+
+                }
+                lbCurrentCount.Text = ListTestCase.Where(p => p.is_test == true).Count().ToString();
+            }
+        }
+
     }
 }

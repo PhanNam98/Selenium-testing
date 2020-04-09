@@ -305,7 +305,12 @@ namespace Crawler
                     }
                     try
                     {
+                       
                         elt.type = item.GetAttribute("type");
+                        if (item.GetAttribute("type").Equals("select-multiple"))
+                            {
+                            elt.multiple = true;
+                        }
                     }
                     catch
                     {
@@ -385,7 +390,10 @@ namespace Crawler
                     }
                     try
                     {
-                        elt.multiple = item.GetAttribute("multiple").Equals("true") ? true : false;
+                        if (elt.multiple == null)
+                        {
+                            elt.multiple = item.GetAttribute("multiple").Equals("true") ? true : false;
+                        }
                     }
                     catch
                     {
