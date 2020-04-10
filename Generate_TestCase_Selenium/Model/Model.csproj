@@ -81,6 +81,9 @@
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Redirect_url.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Test_case.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

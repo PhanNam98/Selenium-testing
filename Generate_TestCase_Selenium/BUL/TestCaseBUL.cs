@@ -18,5 +18,9 @@ namespace BUL
         {
             return testCaseDAL.insert_Testcase(newTestcase);
         }
+        public static bool Insert_ListTestcase(List<Test_case> newList)
+        {
+            return testCaseDAL.insert_ListTestcase(newList);
+        }
     }
 }

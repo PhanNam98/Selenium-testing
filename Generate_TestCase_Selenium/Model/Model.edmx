@@ -88,6 +88,16 @@
           <Property Name="value" Type="nvarchar(max)" />
           <Property Name="action" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Redirect_url">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+            <PropertyRef Name="id_url" />
+          </Key>
+          <Property Name="id_testcase" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="id_url" Type="int" Nullable="false" />
+          <Property Name="current_url" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="redirect_url_test" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="Test_case">
           <Key>
             <PropertyRef Name="id_testcase" />
@@ -187,6 +197,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Redirect_url_Test_case">
+          <End Role="Test_case" Type="Self.Test_case" Multiplicity="1" />
+          <End Role="Redirect_url" Type="Self.Redirect_url" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Test_case">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Redirect_url">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Test_case_Url">
           <End Role="Url" Type="Self.Url" Multiplicity="1" />
           <End Role="Test_case" Type="Self.Test_case" Multiplicity="*" />
@@ -205,6 +229,7 @@
           <EntitySet Name="Form_elements" EntityType="Self.Form_elements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Input_elements" EntityType="Self.Input_elements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Input_testcase" EntityType="Self.Input_testcase" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Redirect_url" EntityType="Self.Redirect_url" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Test_case" EntityType="Self.Test_case" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Url" EntityType="Self.Url" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Element_test_Test_case" Association="Self.FK_Element_test_Test_case">
@@ -231,6 +256,10 @@
             <End Role="Test_case" EntitySet="Test_case" />
             <End Role="Input_testcase" EntitySet="Input_testcase" />
           </AssociationSet>
+          <AssociationSet Name="FK_Redirect_url_Test_case" Association="Self.FK_Redirect_url_Test_case">
+            <End Role="Test_case" EntitySet="Test_case" />
+            <End Role="Redirect_url" EntitySet="Redirect_url" />
+          </AssociationSet>
           <AssociationSet Name="FK_Test_case_Url" Association="Self.FK_Test_case_Url">
             <End Role="Url" EntitySet="Url" />
             <End Role="Test_case" EntitySet="Test_case" />
@@ -246,6 +275,8 @@
           <EntitySet Name="Form_elements" EntityType="ElementDBModel.Form_elements" />
           <EntitySet Name="Input_elements" EntityType="ElementDBModel.Input_elements" />
           <EntitySet Name="Input_testcase" EntityType="ElementDBModel.Input_testcase" />
+          <EntitySet Name="Redirect_url" EntityType="ElementDBModel.Redirect_url" />
+          <EntitySet Name="Test_case" EntityType="ElementDBModel.Test_case" />
           <EntitySet Name="Urls" EntityType="ElementDBModel.Url" />
           <AssociationSet Name="FK_Element_Url" Association="ElementDBModel.FK_Element_Url">
             <End Role="Url" EntitySet="Urls" />
@@ -255,6 +286,10 @@
             <End Role="Element" EntitySet="Elements" />
             <End Role="Input_testcase" EntitySet="Input_testcase" />
           </AssociationSet>
+          <AssociationSet Name="FK_Element_test_Test_case" Association="ElementDBModel.FK_Element_test_Test_case">
+            <End Role="Test_case" EntitySet="Test_case" />
+            <End Role="Element_test" EntitySet="Element_test" />
+          </AssociationSet>
           <AssociationSet Name="FK_Form_elements_Url" Association="ElementDBModel.FK_Form_elements_Url">
             <End Role="Url" EntitySet="Urls" />
             <End Role="Form_elements" EntitySet="Form_elements" />
@@ -263,20 +298,19 @@
             <End Role="Url" EntitySet="Urls" />
             <End Role="Input_elements" EntitySet="Input_elements" />
           </AssociationSet>
-          <EntitySet Name="Test_case" EntityType="ElementDBModel.Test_case" />
-          <AssociationSet Name="FK_Element_test_Test_case" Association="ElementDBModel.FK_Element_test_Test_case">
-            <End Role="Test_case" EntitySet="Test_case" />
-            <End Role="Element_test" EntitySet="Element_test" />
-          </AssociationSet>
           <AssociationSet Name="FK_Input_testcase_Test_case1" Association="ElementDBModel.FK_Input_testcase_Test_case1">
             <End Role="Test_case" EntitySet="Test_case" />
             <End Role="Input_testcase" EntitySet="Input_testcase" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Redirect_url_Test_case" Association="ElementDBModel.FK_Redirect_url_Test_case">
+            <End Role="Test_case" EntitySet="Test_case" />
+            <End Role="Redirect_url" EntitySet="Redirect_url" />
           </AssociationSet>
           <AssociationSet Name="FK_Test_case_Url" Association="ElementDBModel.FK_Test_case_Url">
             <End Role="Url" EntitySet="Urls" />
             <End Role="Test_case" EntitySet="Test_case" />
           </AssociationSet>
-          </EntityContainer>
+        </EntityContainer>
         <EntityType Name="Element">
           <Key>
             <PropertyRef Name="id_element" />
@@ -367,6 +401,34 @@
           <NavigationProperty Name="Element" Relationship="ElementDBModel.FK_Input_testcase_Element" FromRole="Input_testcase" ToRole="Element" />
           <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Input_testcase" ToRole="Test_case" />
         </EntityType>
+        <EntityType Name="Redirect_url">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+            <PropertyRef Name="id_url" />
+          </Key>
+          <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="id_url" Type="Int32" Nullable="false" />
+          <Property Name="current_url" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="redirect_url_test" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Test_case" Relationship="ElementDBModel.FK_Redirect_url_Test_case" FromRole="Redirect_url" ToRole="Test_case" />
+        </EntityType>
+        <EntityType Name="Test_case">
+          <Key>
+            <PropertyRef Name="id_testcase" />
+            <PropertyRef Name="id_url" />
+          </Key>
+          <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="id_url" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="result" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="is_test" Type="Boolean" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Element_test" Relationship="ElementDBModel.FK_Element_test_Test_case" FromRole="Test_case" ToRole="Element_test" />
+          <NavigationProperty Name="Input_testcase" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Test_case" ToRole="Input_testcase" />
+          <NavigationProperty Name="Redirect_url" Relationship="ElementDBModel.FK_Redirect_url_Test_case" FromRole="Test_case" ToRole="Redirect_url" />
+          <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Test_case_Url" FromRole="Test_case" ToRole="Url" />
+        </EntityType>
         <EntityType Name="Url">
           <Key>
             <PropertyRef Name="id_url" />
@@ -405,6 +467,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Element_test_Test_case">
+          <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
+          <End Type="ElementDBModel.Element_test" Role="Element_test" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Test_case">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Element_test">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Form_elements_Url">
           <End Type="ElementDBModel.Url" Role="Url" Multiplicity="1" />
           <End Type="ElementDBModel.Form_elements" Role="Form_elements" Multiplicity="*" />
@@ -429,36 +505,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Test_case">
-          <Key>
-            <PropertyRef Name="id_testcase" />
-            <PropertyRef Name="id_url" />
-          </Key>
-          <Property Name="id_testcase" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="id_url" Type="Int32" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="result" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="is_test" Type="Boolean" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
-          <Property Name="ModifiedDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="Element_test" Relationship="ElementDBModel.FK_Element_test_Test_case" FromRole="Test_case" ToRole="Element_test" />
-          <NavigationProperty Name="Input_testcase" Relationship="ElementDBModel.FK_Input_testcase_Test_case1" FromRole="Test_case" ToRole="Input_testcase" />
-          <NavigationProperty Name="Url" Relationship="ElementDBModel.FK_Test_case_Url" FromRole="Test_case" ToRole="Url" />
-        </EntityType>
-        <Association Name="FK_Element_test_Test_case">
-          <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
-          <End Type="ElementDBModel.Element_test" Role="Element_test" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Test_case">
-              <PropertyRef Name="id_testcase" />
-              <PropertyRef Name="id_url" />
-            </Principal>
-            <Dependent Role="Element_test">
-              <PropertyRef Name="id_testcase" />
-              <PropertyRef Name="id_url" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Input_testcase_Test_case1">
           <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
           <End Type="ElementDBModel.Input_testcase" Role="Input_testcase" Multiplicity="*" />
@@ -468,6 +514,20 @@
               <PropertyRef Name="id_url" />
             </Principal>
             <Dependent Role="Input_testcase">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Redirect_url_Test_case">
+          <End Type="ElementDBModel.Test_case" Role="Test_case" Multiplicity="1" />
+          <End Type="ElementDBModel.Redirect_url" Role="Redirect_url" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Test_case">
+              <PropertyRef Name="id_testcase" />
+              <PropertyRef Name="id_url" />
+            </Principal>
+            <Dependent Role="Redirect_url">
               <PropertyRef Name="id_testcase" />
               <PropertyRef Name="id_url" />
             </Dependent>
@@ -572,12 +632,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Urls">
-            <EntityTypeMapping TypeName="ElementDBModel.Url">
-              <MappingFragment StoreEntitySet="Url">
-                <ScalarProperty Name="url1" ColumnName="url" />
-                <ScalarProperty Name="name" ColumnName="name" />
+          <EntitySetMapping Name="Redirect_url">
+            <EntityTypeMapping TypeName="ElementDBModel.Redirect_url">
+              <MappingFragment StoreEntitySet="Redirect_url">
+                <ScalarProperty Name="redirect_url_test" ColumnName="redirect_url_test" />
+                <ScalarProperty Name="current_url" ColumnName="current_url" />
                 <ScalarProperty Name="id_url" ColumnName="id_url" />
+                <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -591,6 +652,15 @@
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="id_url" ColumnName="id_url" />
                 <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Urls">
+            <EntityTypeMapping TypeName="ElementDBModel.Url">
+              <MappingFragment StoreEntitySet="Url">
+                <ScalarProperty Name="url1" ColumnName="url" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id_url" ColumnName="id_url" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

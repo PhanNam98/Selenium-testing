@@ -25,6 +25,23 @@ namespace DAL
             catch { }
             return false;
         }
+        public bool insert_ListTestcase(List<Test_case> newList)
+        {
+            try
+            {
+                using (ElementDBEntities db = new ElementDBEntities())
+                {
+                    db.Test_case.AddRange(newList);
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+
+            }
+            return false;
+        }
 
     }
 }

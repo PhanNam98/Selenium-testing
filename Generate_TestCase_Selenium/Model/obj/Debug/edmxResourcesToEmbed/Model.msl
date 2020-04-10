@@ -82,12 +82,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Urls">
-      <EntityTypeMapping TypeName="ElementDBModel.Url">
-        <MappingFragment StoreEntitySet="Url">
-          <ScalarProperty Name="url1" ColumnName="url" />
-          <ScalarProperty Name="name" ColumnName="name" />
+    <EntitySetMapping Name="Redirect_url">
+      <EntityTypeMapping TypeName="ElementDBModel.Redirect_url">
+        <MappingFragment StoreEntitySet="Redirect_url">
+          <ScalarProperty Name="redirect_url_test" ColumnName="redirect_url_test" />
+          <ScalarProperty Name="current_url" ColumnName="current_url" />
           <ScalarProperty Name="id_url" ColumnName="id_url" />
+          <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -101,6 +102,15 @@
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="id_url" ColumnName="id_url" />
           <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Urls">
+      <EntityTypeMapping TypeName="ElementDBModel.Url">
+        <MappingFragment StoreEntitySet="Url">
+          <ScalarProperty Name="url1" ColumnName="url" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="id_url" ColumnName="id_url" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

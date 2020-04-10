@@ -32,11 +32,7 @@ namespace DAL
             {
                 using (ElementDBEntities db = new ElementDBEntities())
                 {
-                    foreach(var input in newListInput)
-                    {
-                        db.Input_testcase.Add(input);
-                        
-                    }
+                    db.Input_testcase.AddRange(newListInput);
                     db.SaveChanges();
                     return true;
                 }
@@ -44,6 +40,7 @@ namespace DAL
             catch { }
             return false;
         }
+       
         public List<Input_testcase> get_InputTestcase_ByIdTestcase(string id_testcase,int id_url)
         {
             try

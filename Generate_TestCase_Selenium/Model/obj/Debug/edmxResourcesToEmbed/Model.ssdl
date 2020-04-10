@@ -83,6 +83,16 @@
     <Property Name="value" Type="nvarchar(max)" />
     <Property Name="action" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="Redirect_url">
+    <Key>
+      <PropertyRef Name="id_testcase" />
+      <PropertyRef Name="id_url" />
+    </Key>
+    <Property Name="id_testcase" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="id_url" Type="int" Nullable="false" />
+    <Property Name="current_url" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="redirect_url_test" Type="nvarchar(max)" />
+  </EntityType>
   <EntityType Name="Test_case">
     <Key>
       <PropertyRef Name="id_testcase" />
@@ -182,6 +192,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Redirect_url_Test_case">
+    <End Role="Test_case" Type="Self.Test_case" Multiplicity="1" />
+    <End Role="Redirect_url" Type="Self.Redirect_url" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Test_case">
+        <PropertyRef Name="id_testcase" />
+        <PropertyRef Name="id_url" />
+      </Principal>
+      <Dependent Role="Redirect_url">
+        <PropertyRef Name="id_testcase" />
+        <PropertyRef Name="id_url" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Test_case_Url">
     <End Role="Url" Type="Self.Url" Multiplicity="1" />
     <End Role="Test_case" Type="Self.Test_case" Multiplicity="*" />
@@ -200,6 +224,7 @@
     <EntitySet Name="Form_elements" EntityType="Self.Form_elements" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Input_elements" EntityType="Self.Input_elements" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Input_testcase" EntityType="Self.Input_testcase" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Redirect_url" EntityType="Self.Redirect_url" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Test_case" EntityType="Self.Test_case" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Url" EntityType="Self.Url" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Element_test_Test_case" Association="Self.FK_Element_test_Test_case">
@@ -225,6 +250,10 @@
     <AssociationSet Name="FK_Input_testcase_Test_case1" Association="Self.FK_Input_testcase_Test_case1">
       <End Role="Test_case" EntitySet="Test_case" />
       <End Role="Input_testcase" EntitySet="Input_testcase" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Redirect_url_Test_case" Association="Self.FK_Redirect_url_Test_case">
+      <End Role="Test_case" EntitySet="Test_case" />
+      <End Role="Redirect_url" EntitySet="Redirect_url" />
     </AssociationSet>
     <AssociationSet Name="FK_Test_case_Url" Association="Self.FK_Test_case_Url">
       <End Role="Url" EntitySet="Url" />

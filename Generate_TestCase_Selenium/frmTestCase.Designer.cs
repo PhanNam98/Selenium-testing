@@ -32,21 +32,6 @@
             this.pnlForm = new System.Windows.Forms.Panel();
             this.pnlTestcase = new System.Windows.Forms.Panel();
             this.dataGridViewListTestCase = new System.Windows.Forms.DataGridView();
-            this.testcaseBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.elementDBDataSet2 = new Generate_TestCase_Selenium.ElementDBDataSet2();
-            this.pnlStatus = new System.Windows.Forms.Panel();
-            this.pnlTitle = new System.Windows.Forms.Panel();
-            this.btnRunTestCase = new System.Windows.Forms.Button();
-            this.txtboxUrl = new System.Windows.Forms.TextBox();
-            this.labelUrl = new System.Windows.Forms.Label();
-            this.elementDBDataSet1 = new Generate_TestCase_Selenium.ElementDBDataSet1();
-            this.test_caseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Test_caseTableAdapter();
-            this.fKInputtestcaseTestcase1BindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.input_testcaseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Input_testcaseTableAdapter();
-            this.test_caseTableAdapter1 = new Generate_TestCase_Selenium.ElementDBDataSet2TableAdapters.Test_caseTableAdapter();
-            this.labelNumber = new System.Windows.Forms.Label();
-            this.lbNumberOfTestcase = new System.Windows.Forms.Label();
-            this.lbCurrentCount = new System.Windows.Forms.Label();
             this.istestDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.idtestcaseDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.idurlDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,6 +41,23 @@
             this.modifiedDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnRun = new System.Windows.Forms.DataGridViewButtonColumn();
             this.btnViewTestcase = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.testcaseBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.elementDBDataSet2 = new Generate_TestCase_Selenium.ElementDBDataSet2();
+            this.pnlStatus = new System.Windows.Forms.Panel();
+            this.lbCurrentCount = new System.Windows.Forms.Label();
+            this.lbNumberOfTestcase = new System.Windows.Forms.Label();
+            this.labelNumber = new System.Windows.Forms.Label();
+            this.pnlTitle = new System.Windows.Forms.Panel();
+            this.btnRunTestCase = new System.Windows.Forms.Button();
+            this.txtboxUrl = new System.Windows.Forms.TextBox();
+            this.labelUrl = new System.Windows.Forms.Label();
+            this.elementDBDataSet1 = new Generate_TestCase_Selenium.ElementDBDataSet1();
+            this.test_caseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Test_caseTableAdapter();
+            this.fKInputtestcaseTestcase1BindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.input_testcaseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Input_testcaseTableAdapter();
+            this.test_caseTableAdapter1 = new Generate_TestCase_Selenium.ElementDBDataSet2TableAdapters.Test_caseTableAdapter();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lbid_url = new System.Windows.Forms.Label();
             this.pnlForm.SuspendLayout();
             this.pnlTestcase.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewListTestCase)).BeginInit();
@@ -106,12 +108,84 @@
             this.dataGridViewListTestCase.DataSource = this.testcaseBindingSource;
             this.dataGridViewListTestCase.Location = new System.Drawing.Point(9, 56);
             this.dataGridViewListTestCase.Name = "dataGridViewListTestCase";
+            this.dataGridViewListTestCase.ReadOnly = true;
             this.dataGridViewListTestCase.Size = new System.Drawing.Size(793, 439);
             this.dataGridViewListTestCase.TabIndex = 1;
             this.dataGridViewListTestCase.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewListTestCase_CellClick);
             this.dataGridViewListTestCase.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewListTestCase_CellContentClick);
             this.dataGridViewListTestCase.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewListTestCase_CellFormatting);
             this.dataGridViewListTestCase.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewListTestCase_CurrentCellDirtyStateChanged);
+            // 
+            // istestDataGridViewCheckBoxColumn
+            // 
+            this.istestDataGridViewCheckBoxColumn.DataPropertyName = "is_test";
+            this.istestDataGridViewCheckBoxColumn.HeaderText = "";
+            this.istestDataGridViewCheckBoxColumn.Name = "istestDataGridViewCheckBoxColumn";
+            this.istestDataGridViewCheckBoxColumn.ReadOnly = true;
+            this.istestDataGridViewCheckBoxColumn.Width = 50;
+            // 
+            // idtestcaseDataGridViewTextBoxColumn
+            // 
+            this.idtestcaseDataGridViewTextBoxColumn.DataPropertyName = "id_testcase";
+            this.idtestcaseDataGridViewTextBoxColumn.HeaderText = "id_testcase";
+            this.idtestcaseDataGridViewTextBoxColumn.Name = "idtestcaseDataGridViewTextBoxColumn";
+            this.idtestcaseDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idtestcaseDataGridViewTextBoxColumn.Width = 220;
+            // 
+            // idurlDataGridViewTextBoxColumn
+            // 
+            this.idurlDataGridViewTextBoxColumn.DataPropertyName = "id_url";
+            this.idurlDataGridViewTextBoxColumn.HeaderText = "id_url";
+            this.idurlDataGridViewTextBoxColumn.Name = "idurlDataGridViewTextBoxColumn";
+            this.idurlDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idurlDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // descriptionDataGridViewTextBoxColumn
+            // 
+            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "description";
+            this.descriptionDataGridViewTextBoxColumn.HeaderText = "description";
+            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // resultDataGridViewTextBoxColumn
+            // 
+            this.resultDataGridViewTextBoxColumn.DataPropertyName = "result";
+            this.resultDataGridViewTextBoxColumn.HeaderText = "result";
+            this.resultDataGridViewTextBoxColumn.Name = "resultDataGridViewTextBoxColumn";
+            this.resultDataGridViewTextBoxColumn.ReadOnly = true;
+            this.resultDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // createdDateDataGridViewTextBoxColumn
+            // 
+            this.createdDateDataGridViewTextBoxColumn.DataPropertyName = "CreatedDate";
+            this.createdDateDataGridViewTextBoxColumn.HeaderText = "CreatedDate";
+            this.createdDateDataGridViewTextBoxColumn.Name = "createdDateDataGridViewTextBoxColumn";
+            this.createdDateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // modifiedDateDataGridViewTextBoxColumn
+            // 
+            this.modifiedDateDataGridViewTextBoxColumn.DataPropertyName = "ModifiedDate";
+            this.modifiedDateDataGridViewTextBoxColumn.HeaderText = "ModifiedDate";
+            this.modifiedDateDataGridViewTextBoxColumn.Name = "modifiedDateDataGridViewTextBoxColumn";
+            this.modifiedDateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // btnRun
+            // 
+            this.btnRun.HeaderText = "Run";
+            this.btnRun.Name = "btnRun";
+            this.btnRun.ReadOnly = true;
+            this.btnRun.Text = "Run";
+            this.btnRun.UseColumnTextForButtonValue = true;
+            this.btnRun.Width = 50;
+            // 
+            // btnViewTestcase
+            // 
+            this.btnViewTestcase.HeaderText = "";
+            this.btnViewTestcase.Name = "btnViewTestcase";
+            this.btnViewTestcase.ReadOnly = true;
+            this.btnViewTestcase.Text = "Detail";
+            this.btnViewTestcase.UseColumnTextForButtonValue = true;
+            this.btnViewTestcase.Width = 60;
             // 
             // testcaseBindingSource
             // 
@@ -133,9 +207,44 @@
             this.pnlStatus.Size = new System.Drawing.Size(738, 47);
             this.pnlStatus.TabIndex = 0;
             // 
+            // lbCurrentCount
+            // 
+            this.lbCurrentCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbCurrentCount.AutoSize = true;
+            this.lbCurrentCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbCurrentCount.Location = new System.Drawing.Point(141, 16);
+            this.lbCurrentCount.Name = "lbCurrentCount";
+            this.lbCurrentCount.Size = new System.Drawing.Size(15, 16);
+            this.lbCurrentCount.TabIndex = 8;
+            this.lbCurrentCount.Text = "0";
+            this.lbCurrentCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lbNumberOfTestcase
+            // 
+            this.lbNumberOfTestcase.AutoSize = true;
+            this.lbNumberOfTestcase.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNumberOfTestcase.Location = new System.Drawing.Point(162, 16);
+            this.lbNumberOfTestcase.Name = "lbNumberOfTestcase";
+            this.lbNumberOfTestcase.Size = new System.Drawing.Size(15, 16);
+            this.lbNumberOfTestcase.TabIndex = 7;
+            this.lbNumberOfTestcase.Text = "0";
+            // 
+            // labelNumber
+            // 
+            this.labelNumber.AutoSize = true;
+            this.labelNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelNumber.Location = new System.Drawing.Point(3, 16);
+            this.labelNumber.Name = "labelNumber";
+            this.labelNumber.Size = new System.Drawing.Size(136, 16);
+            this.labelNumber.TabIndex = 6;
+            this.labelNumber.Text = "Number of Test case:";
+            // 
             // pnlTitle
             // 
             this.pnlTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlTitle.Controls.Add(this.lbid_url);
+            this.pnlTitle.Controls.Add(this.label1);
             this.pnlTitle.Controls.Add(this.btnRunTestCase);
             this.pnlTitle.Controls.Add(this.txtboxUrl);
             this.pnlTitle.Controls.Add(this.labelUrl);
@@ -146,7 +255,7 @@
             // 
             // btnRunTestCase
             // 
-            this.btnRunTestCase.Location = new System.Drawing.Point(399, 22);
+            this.btnRunTestCase.Location = new System.Drawing.Point(423, 11);
             this.btnRunTestCase.Name = "btnRunTestCase";
             this.btnRunTestCase.Size = new System.Drawing.Size(90, 28);
             this.btnRunTestCase.TabIndex = 4;
@@ -158,7 +267,7 @@
             // 
             this.txtboxUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtboxUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtboxUrl.Location = new System.Drawing.Point(106, 22);
+            this.txtboxUrl.Location = new System.Drawing.Point(135, 11);
             this.txtboxUrl.Name = "txtboxUrl";
             this.txtboxUrl.ReadOnly = true;
             this.txtboxUrl.Size = new System.Drawing.Size(272, 26);
@@ -169,7 +278,7 @@
             // 
             this.labelUrl.AutoSize = true;
             this.labelUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUrl.Location = new System.Drawing.Point(62, 27);
+            this.labelUrl.Location = new System.Drawing.Point(62, 16);
             this.labelUrl.Name = "labelUrl";
             this.labelUrl.Size = new System.Drawing.Size(38, 16);
             this.labelUrl.TabIndex = 1;
@@ -192,101 +301,25 @@
             // 
             this.test_caseTableAdapter1.ClearBeforeFill = true;
             // 
-            // labelNumber
+            // label1
             // 
-            this.labelNumber.AutoSize = true;
-            this.labelNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNumber.Location = new System.Drawing.Point(3, 16);
-            this.labelNumber.Name = "labelNumber";
-            this.labelNumber.Size = new System.Drawing.Size(136, 16);
-            this.labelNumber.TabIndex = 6;
-            this.labelNumber.Text = "Number of Test case:";
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(62, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(58, 16);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "ID_URL:";
             // 
-            // lbNumberOfTestcase
+            // lbid_url
             // 
-            this.lbNumberOfTestcase.AutoSize = true;
-            this.lbNumberOfTestcase.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNumberOfTestcase.Location = new System.Drawing.Point(162, 16);
-            this.lbNumberOfTestcase.Name = "lbNumberOfTestcase";
-            this.lbNumberOfTestcase.Size = new System.Drawing.Size(15, 16);
-            this.lbNumberOfTestcase.TabIndex = 7;
-            this.lbNumberOfTestcase.Text = "0";
-            // 
-            // lbCurrentCount
-            // 
-            this.lbCurrentCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbCurrentCount.AutoSize = true;
-            this.lbCurrentCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCurrentCount.Location = new System.Drawing.Point(141, 16);
-            this.lbCurrentCount.Name = "lbCurrentCount";
-            this.lbCurrentCount.Size = new System.Drawing.Size(15, 16);
-            this.lbCurrentCount.TabIndex = 8;
-            this.lbCurrentCount.Text = "0";
-            this.lbCurrentCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // istestDataGridViewCheckBoxColumn
-            // 
-            this.istestDataGridViewCheckBoxColumn.DataPropertyName = "is_test";
-            this.istestDataGridViewCheckBoxColumn.HeaderText = "";
-            this.istestDataGridViewCheckBoxColumn.Name = "istestDataGridViewCheckBoxColumn";
-            this.istestDataGridViewCheckBoxColumn.Width = 50;
-            // 
-            // idtestcaseDataGridViewTextBoxColumn
-            // 
-            this.idtestcaseDataGridViewTextBoxColumn.DataPropertyName = "id_testcase";
-            this.idtestcaseDataGridViewTextBoxColumn.HeaderText = "id_testcase";
-            this.idtestcaseDataGridViewTextBoxColumn.Name = "idtestcaseDataGridViewTextBoxColumn";
-            this.idtestcaseDataGridViewTextBoxColumn.Width = 220;
-            // 
-            // idurlDataGridViewTextBoxColumn
-            // 
-            this.idurlDataGridViewTextBoxColumn.DataPropertyName = "id_url";
-            this.idurlDataGridViewTextBoxColumn.HeaderText = "id_url";
-            this.idurlDataGridViewTextBoxColumn.Name = "idurlDataGridViewTextBoxColumn";
-            this.idurlDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // descriptionDataGridViewTextBoxColumn
-            // 
-            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "description";
-            this.descriptionDataGridViewTextBoxColumn.HeaderText = "description";
-            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
-            // 
-            // resultDataGridViewTextBoxColumn
-            // 
-            this.resultDataGridViewTextBoxColumn.DataPropertyName = "result";
-            this.resultDataGridViewTextBoxColumn.HeaderText = "result";
-            this.resultDataGridViewTextBoxColumn.Name = "resultDataGridViewTextBoxColumn";
-            this.resultDataGridViewTextBoxColumn.ReadOnly = true;
-            this.resultDataGridViewTextBoxColumn.Width = 50;
-            // 
-            // createdDateDataGridViewTextBoxColumn
-            // 
-            this.createdDateDataGridViewTextBoxColumn.DataPropertyName = "CreatedDate";
-            this.createdDateDataGridViewTextBoxColumn.HeaderText = "CreatedDate";
-            this.createdDateDataGridViewTextBoxColumn.Name = "createdDateDataGridViewTextBoxColumn";
-            // 
-            // modifiedDateDataGridViewTextBoxColumn
-            // 
-            this.modifiedDateDataGridViewTextBoxColumn.DataPropertyName = "ModifiedDate";
-            this.modifiedDateDataGridViewTextBoxColumn.HeaderText = "ModifiedDate";
-            this.modifiedDateDataGridViewTextBoxColumn.Name = "modifiedDateDataGridViewTextBoxColumn";
-            // 
-            // btnRun
-            // 
-            this.btnRun.HeaderText = "Run";
-            this.btnRun.Name = "btnRun";
-            this.btnRun.Text = "Run";
-            this.btnRun.UseColumnTextForButtonValue = true;
-            this.btnRun.Width = 50;
-            // 
-            // btnViewTestcase
-            // 
-            this.btnViewTestcase.HeaderText = "";
-            this.btnViewTestcase.Name = "btnViewTestcase";
-            this.btnViewTestcase.Text = "Detail";
-            this.btnViewTestcase.UseColumnTextForButtonValue = true;
-            this.btnViewTestcase.Width = 60;
+            this.lbid_url.AutoSize = true;
+            this.lbid_url.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbid_url.Location = new System.Drawing.Point(132, 42);
+            this.lbid_url.Name = "lbid_url";
+            this.lbid_url.Size = new System.Drawing.Size(15, 16);
+            this.lbid_url.TabIndex = 6;
+            this.lbid_url.Text = "0";
             // 
             // frmTestCase
             // 
@@ -343,5 +376,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn modifiedDateDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn btnRun;
         private System.Windows.Forms.DataGridViewButtonColumn btnViewTestcase;
+        private System.Windows.Forms.Label lbid_url;
+        private System.Windows.Forms.Label label1;
     }
 }

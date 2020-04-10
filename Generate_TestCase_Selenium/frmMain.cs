@@ -240,17 +240,31 @@ namespace Generate_TestCase_Selenium
         }
         private void GenerateTestCase()
         {
-            frmTestCase newfrmTestCase = new frmTestCase(27, true);
+            frmTestCase newfrmTestCase = new frmTestCase(27, "https://facebook.com/", true);
+            //frmTestCase newfrmTestCase = new frmTestCase(27, txtboxUrl.Text, true);
             this.Hide();
             newfrmTestCase.ShowDialog();
             lbMessage.Text = "";
             this.Show();
-            this.TopMost = true;
+            this.Select(true,true);
+            //this.TopMost = true;
             
         }
         private void lbMessage_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            frmTestCase newfrmTestCase = new frmTestCase(27, "https://facebook.com/", false);
+            //frmTestCase newfrmTestCase = new frmTestCase(27, txtboxUrl.Text, true);
+            this.Hide();
+            newfrmTestCase.ShowDialog();
+            lbMessage.Text = "";
+            this.Show();
+            this.Select(true, true);
+            //this.TopMost = true;
         }
     }
 }

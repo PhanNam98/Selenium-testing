@@ -5,21 +5,23 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="9a39aff9ba4c452abc93568bc4ffef1d" Name="Diagram1" ZoomLevel="55">
-        <EntityTypeShape EntityType="ElementDBModel.Element" Width="1.5" PointX="3" PointY="16" />
-        <EntityTypeShape EntityType="ElementDBModel.Element_test" Width="1.5" PointX="5.25" PointY="4.875" />
-        <EntityTypeShape EntityType="ElementDBModel.Form_elements" Width="1.5" PointX="3" PointY="13.25" />
-        <EntityTypeShape EntityType="ElementDBModel.Input_elements" Width="1.5" PointX="3" PointY="8.375" />
-        <EntityTypeShape EntityType="ElementDBModel.Input_testcase" Width="1.5" PointX="5.25" PointY="11.625" />
-        <EntityTypeShape EntityType="ElementDBModel.Url" Width="1.5" PointX="0.75" PointY="10" />
+        <EntityTypeShape EntityType="ElementDBModel.Element" Width="1.5" PointX="3" PointY="15.625" />
+        <EntityTypeShape EntityType="ElementDBModel.Element_test" Width="1.5" PointX="5.25" PointY="1.75" />
+        <EntityTypeShape EntityType="ElementDBModel.Form_elements" Width="1.5" PointX="3" PointY="8" />
+        <EntityTypeShape EntityType="ElementDBModel.Input_elements" Width="1.5" PointX="3" PointY="10.75" />
+        <EntityTypeShape EntityType="ElementDBModel.Input_testcase" Width="1.5" PointX="5.25" PointY="10.375" />
+        <EntityTypeShape EntityType="ElementDBModel.Redirect_url" Width="1.5" PointX="5.25" PointY="5.25" />
+        <EntityTypeShape EntityType="ElementDBModel.Test_case" Width="1.5" PointX="3" PointY="2.875" />
+        <EntityTypeShape EntityType="ElementDBModel.Url" Width="1.5" PointX="0.75" PointY="9.875" />
         <AssociationConnector Association="ElementDBModel.FK_Element_Url" />
         <AssociationConnector Association="ElementDBModel.FK_Input_testcase_Element" />
+        <AssociationConnector Association="ElementDBModel.FK_Element_test_Test_case" />
         <AssociationConnector Association="ElementDBModel.FK_Form_elements_Url" />
         <AssociationConnector Association="ElementDBModel.FK_Input_elements_Url" />
-        <EntityTypeShape EntityType="ElementDBModel.Test_case" Width="1.5" PointX="3" PointY="21.75" />
-        <AssociationConnector Association="ElementDBModel.FK_Element_test_Test_case" />
         <AssociationConnector Association="ElementDBModel.FK_Input_testcase_Test_case1" />
+        <AssociationConnector Association="ElementDBModel.FK_Redirect_url_Test_case" />
         <AssociationConnector Association="ElementDBModel.FK_Test_case_Url" />
-        </Diagram>
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

@@ -46,7 +46,8 @@ namespace TestCase
         {
             fill,
             click,
-            select
+            select,
+            submit
         }
 
         public List<Test_case> Generate_testcase()
@@ -77,6 +78,33 @@ namespace TestCase
             return ListTestCase;
 
         }
+        public bool Save_testcase()
+        {
+            //try
+            //{
+            //    BUL.TestCaseBUL.Insert_ListTestcase(ListTestCase);
+            //    foreach(var inputtest in List_ListInputTestcase)
+            //    {
+            //        BUL.InputTestcaseBUL.Insert_ListInputTestcase(inputtest);
+            //    }
+            //    return true;
+            //}
+            //catch
+            //{
+
+            //}
+            
+            if (BUL.TestCaseBUL.Insert_ListTestcase(ListTestCase))
+            {
+                foreach (var inputtest in List_ListInputTestcase)
+                {
+                    if (!BUL.InputTestcaseBUL.Insert_ListInputTestcase(inputtest))
+                        return false;
+                }
+                return true;
+            }
+            return false;
+        }
         public List<Test_case> GetTestcase_ByIdUrl(int id_url)
         {
 
@@ -100,7 +128,7 @@ namespace TestCase
             newinput.id_element = submit.id_element;
             newinput.id_testcase = id_testCase;
             newinput.id_url = Id_Url;
-            newinput.action = "click";
+            newinput.action = "submit";
             newinput.xpath = submit.xpath;
             List<Input_testcase> listInputElt = new List<Input_testcase>();
             listInputElt.Add(newinput);
@@ -109,7 +137,7 @@ namespace TestCase
         }
         #endregion
         #region Input Type Text
-        public void Input_Type_Text(string id_form, int index_submit, Element submit)
+        private void Input_Type_Text(string id_form, int index_submit, Element submit)
         {
             Fill_1000_charter_TypeText(id_form, index_submit, submit);
             Fill_Text_TypeText(id_form, index_submit, submit);
@@ -119,7 +147,7 @@ namespace TestCase
             Fill_Text_Number_TypeText(id_form, index_submit, submit);
             Fill_Text_Number_Special_TypeText(id_form, index_submit, submit);
         }
-        public void Fill_1000_charter_TypeText(string id_form, int index_submit, Element submit)
+        private void Fill_1000_charter_TypeText(string id_form, int index_submit, Element submit)
         {
             string id_testCase = "Fill_1000_charter_TypeText_" + id_form + "_" + index_submit;
             var listTypeText = BUL.ElementBUL.get_List_Input_Tag_Type(Id_Url, "text", id_form);
@@ -135,14 +163,14 @@ namespace TestCase
                     listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 1000), Actions.fill.ToString()));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.click.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
 
                 List_ListInputTestcase.Add(listInputElt);
 
             }
 
         }
-        public void Fill_Text_TypeText(string id_form, int index_submit, Element submit)
+        private void Fill_Text_TypeText(string id_form, int index_submit, Element submit)
         {
             string id_testCase = "Fill_Text_TypeText_" + id_form + "_" + index_submit;
             var listTypeText = BUL.ElementBUL.get_List_Input_Tag_Type(Id_Url, "text", id_form);
@@ -160,13 +188,13 @@ namespace TestCase
                     listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 8), Actions.fill.ToString()));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.click.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
 
                 List_ListInputTestcase.Add(listInputElt);
 
             }
         }
-        public void Fill_out_1_Field_Blank_TypeText(string id_form, int index_submit, Element submit)
+        private void Fill_out_1_Field_Blank_TypeText(string id_form, int index_submit, Element submit)
         {
 
             var listTypeText = BUL.ElementBUL.get_List_Input_Tag_Type(Id_Url, "text", id_form);
@@ -194,7 +222,7 @@ namespace TestCase
                         
 
                     }
-                    listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.click.ToString()));
+                    listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
 
                     List_ListInputTestcase.Add(listInputElt);
 
@@ -202,7 +230,7 @@ namespace TestCase
 
             }
         }
-        public void Fill_Text_Two_Leading_Spaces_TypeText(string id_form, int index_submit, Element submit)
+        private void Fill_Text_Two_Leading_Spaces_TypeText(string id_form, int index_submit, Element submit)
         {
             string id_testCase = "Fill_Text_Two_Leading_Spaces_TypeText_" + id_form + "_" + index_submit;
             var listTypeText = BUL.ElementBUL.get_List_Input_Tag_Type(Id_Url, "text", id_form);
@@ -220,13 +248,13 @@ namespace TestCase
                     listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, " " + Generate_RandomString(random, 8) + " ", Actions.fill.ToString()));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.click.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
 
                 List_ListInputTestcase.Add(listInputElt);
 
             }
         }
-        public void Fill_One_letter_characters_TypeText(string id_form, int index_submit, Element submit)
+        private void Fill_One_letter_characters_TypeText(string id_form, int index_submit, Element submit)
         {
             string id_testCase = "Fill_One_letter_characters_TypeText_" + id_form + "_" + index_submit;
             var listTypeText = BUL.ElementBUL.get_List_Input_Tag_Type(Id_Url, "text", id_form);
@@ -242,14 +270,14 @@ namespace TestCase
                     listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 1), Actions.fill.ToString()));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.click.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
 
                 List_ListInputTestcase.Add(listInputElt);
 
             }
 
         }
-        public void Fill_Text_Number_TypeText(string id_form, int index_submit, Element submit)
+        private void Fill_Text_Number_TypeText(string id_form, int index_submit, Element submit)
         {
             string id_testCase = "Fill_Text_Number_TypeText_" + id_form + "_" + index_submit;
             var listTypeText = BUL.ElementBUL.get_List_Input_Tag_Type(Id_Url, "text", id_form);
@@ -266,13 +294,13 @@ namespace TestCase
                     listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 6) + Generate_RandomNumber(random, 0, 100) + Generate_RandomString(random, 3), Actions.fill.ToString()));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.click.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
 
                 List_ListInputTestcase.Add(listInputElt);
 
             }
         }
-        public void Fill_Text_Number_Special_TypeText(string id_form, int index_submit, Element submit)
+        private void Fill_Text_Number_Special_TypeText(string id_form, int index_submit, Element submit)
         {
             string id_testCase = "Fill_Text_Number_Special_TypeText_" + id_form + "_" + index_submit;
             var listTypeText = BUL.ElementBUL.get_List_Input_Tag_Type(Id_Url, "text", id_form);
@@ -290,7 +318,7 @@ namespace TestCase
                     listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomStringNumberSpecialString(random), Actions.fill.ToString()));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.click.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
 
                 List_ListInputTestcase.Add(listInputElt);
 
