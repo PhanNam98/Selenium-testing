@@ -80,19 +80,7 @@ namespace TestCase
         }
         public bool Save_testcase()
         {
-            //try
-            //{
-            //    BUL.TestCaseBUL.Insert_ListTestcase(ListTestCase);
-            //    foreach(var inputtest in List_ListInputTestcase)
-            //    {
-            //        BUL.InputTestcaseBUL.Insert_ListInputTestcase(inputtest);
-            //    }
-            //    return true;
-            //}
-            //catch
-            //{
-
-            //}
+          
             
             if (BUL.TestCaseBUL.Insert_ListTestcase(ListTestCase))
             {
@@ -113,26 +101,17 @@ namespace TestCase
             return null;
         }
         #region Not Fill, Submit
-        public void NotFill_ClickSubmit(string id_form, int index_submit, Element submit)
+        private void NotFill_ClickSubmit(string id_form, int index_submit, Element submit)
         {
             string id_testCase = "NotFill_ClickSubmit_" + id_form + "_" + index_submit;
-            Test_case newTestCase = new Test_case();
-            newTestCase.id_testcase = id_testCase;
-            newTestCase.id_url = Id_Url;
-            newTestCase.result = "";
-            newTestCase.is_test = true;
-            newTestCase.CreatedDate = DateTime.Now.Date;
-            newTestCase.ModifiedDate = DateTime.Now.Date;
-            ListTestCase.Add(newTestCase);
-            Input_testcase newinput = new Input_testcase();
-            newinput.id_element = submit.id_element;
-            newinput.id_testcase = id_testCase;
-            newinput.id_url = Id_Url;
-            newinput.action = "submit";
-            newinput.xpath = submit.xpath;
+
+            Crate_Testcase(id_testCase);
             List<Input_testcase> listInputElt = new List<Input_testcase>();
-            listInputElt.Add(newinput);
+            int step = 1;
+            
+            listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
             List_ListInputTestcase.Add(listInputElt);
+           
 
         }
         #endregion
@@ -153,17 +132,17 @@ namespace TestCase
             var listTypeText = BUL.ElementBUL.get_List_Input_Tag_Type(Id_Url, "text", id_form);
             if (listTypeText.Count > 0)
             {
-
+                int step = 1;
                 Crate_Testcase(id_testCase);
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeText.Count; i++)
                 {
                     Random random = new Random();
-                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 1000), Actions.fill.ToString()));
+                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 1000), Actions.fill.ToString(),step++));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(),step++));
 
                 List_ListInputTestcase.Add(listInputElt);
 
@@ -178,17 +157,17 @@ namespace TestCase
 
             if (listTypeText.Count > 0)
             {
-
+                int step = 1;
                 Crate_Testcase(id_testCase);
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeText.Count; i++)
                 {
                     Random random = new Random();
-                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 8), Actions.fill.ToString()));
+                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 8), Actions.fill.ToString(), step++));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(),step++));
 
                 List_ListInputTestcase.Add(listInputElt);
 
@@ -202,27 +181,28 @@ namespace TestCase
 
             if (number_of_elements > 0)
             {
+                
                 for (int i = 0; i < number_of_elements; i++)
                 {
                     string id_testCase = "Fill_out_1_Field_Blank_TypeText_" + id_form + "_" + index_submit + "_" + i;
                     Crate_Testcase(id_testCase);
                     List<Input_testcase> listInputElt = new List<Input_testcase>();
-
+                    int step = 1;
                     for (int j = 0; j < listTypeText.Count; j++)
                     {
                         if(i==j)
                         {
-                            listInputElt.Add(Crate_InputTestcase(listTypeText[j], id_testCase,"", Actions.fill.ToString()));
+                            listInputElt.Add(Crate_InputTestcase(listTypeText[j], id_testCase,"", Actions.fill.ToString(),step++));
                         }
                         else
                         {
                             Random random = new Random();
-                            listInputElt.Add(Crate_InputTestcase(listTypeText[j], id_testCase, Generate_RandomString(random, 8), Actions.fill.ToString()));
+                            listInputElt.Add(Crate_InputTestcase(listTypeText[j], id_testCase, Generate_RandomString(random, 8), Actions.fill.ToString(),step++));
                         }
                         
 
                     }
-                    listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
+                    listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(),step++));
 
                     List_ListInputTestcase.Add(listInputElt);
 
@@ -241,14 +221,14 @@ namespace TestCase
 
                 Crate_Testcase(id_testCase);
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
-
+                int step = 1;
                 for (int i = 0; i < listTypeText.Count; i++)
                 {
                     Random random = new Random();
-                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, " " + Generate_RandomString(random, 8) + " ", Actions.fill.ToString()));
+                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, " " + Generate_RandomString(random, 8) + " ", Actions.fill.ToString(),step++));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(),step++));
 
                 List_ListInputTestcase.Add(listInputElt);
 
@@ -263,14 +243,14 @@ namespace TestCase
 
                 Crate_Testcase(id_testCase);
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
-
+                int step = 1;
                 for (int i = 0; i < listTypeText.Count; i++)
                 {
                     Random random = new Random();
-                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 1), Actions.fill.ToString()));
+                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 1), Actions.fill.ToString(),step++));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(),step++));
 
                 List_ListInputTestcase.Add(listInputElt);
 
@@ -287,14 +267,14 @@ namespace TestCase
 
                 Crate_Testcase(id_testCase);
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
-
+                int step = 1;
                 for (int i = 0; i < listTypeText.Count; i++)
                 {
                     Random random = new Random();
-                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 6) + Generate_RandomNumber(random, 0, 100) + Generate_RandomString(random, 3), Actions.fill.ToString()));
+                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomString(random, 6) + Generate_RandomNumber(random, 0, 100) + Generate_RandomString(random, 3), Actions.fill.ToString(),step++));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(),step++));
 
                 List_ListInputTestcase.Add(listInputElt);
 
@@ -311,20 +291,22 @@ namespace TestCase
 
                 Crate_Testcase(id_testCase);
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
-
+                int step = 1;
                 for (int i = 0; i < listTypeText.Count; i++)
                 {
                     Random random = new Random();
-                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomStringNumberSpecialString(random), Actions.fill.ToString()));
+                    listInputElt.Add(Crate_InputTestcase(listTypeText[i], id_testCase, Generate_RandomStringNumberSpecialString(random), Actions.fill.ToString(),step++));
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString()));
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(),step++));
 
                 List_ListInputTestcase.Add(listInputElt);
 
             }
         }
         #endregion
+
+
         #region Input type Number
         public void Fill_Big_Number_TypeNumber_ClickSubmit(string id_form, int index_submit, Element submit)
         {
@@ -1426,7 +1408,7 @@ namespace TestCase
 
         }
         #endregion
-        #region Helper
+        #region Helper Generate
         ///https://www.c-sharpcorner.com/article/generating-random-number-and-string-in-C-Sharp/
 
         public string Generate_RandomPassword()
@@ -1528,8 +1510,7 @@ namespace TestCase
 
             return random.Next(min, max);
         }
-        #endregion
-        #region
+      
         public bool Crate_Testcase(string id_testCase)
         {
             Test_case newTestCase = new Test_case();
@@ -1544,7 +1525,7 @@ namespace TestCase
             return true;
 
         }
-        public Input_testcase Crate_InputTestcase(Element testElt, string id_testCase, string value, string action)
+        public Input_testcase Crate_InputTestcase(Element testElt, string id_testCase, string value, string action,int step)
         {
             Input_testcase newinput = new Input_testcase();
             try
@@ -1555,7 +1536,7 @@ namespace TestCase
                 newinput.value = value;
                 newinput.action = action;
                 newinput.xpath = testElt.xpath;
-
+                newinput.test_step = step;
             }
             catch
             {

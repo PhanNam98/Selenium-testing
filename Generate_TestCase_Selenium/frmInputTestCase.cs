@@ -1,0 +1,290 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Model;
+using BUL;
+using System.Threading;
+
+namespace Generate_TestCase_Selenium
+{
+    public partial class frmInputTestCase : Form
+    {
+        public frmInputTestCase(int id_url, string id_testcase)
+        {
+            InitializeComponent();
+            this.ID_URL = id_url;
+            this.ID_Testcase = id_testcase;
+            lbIdUrl.Text = ID_URL.ToString();
+            txtboxId_testcase.Text = ID_Testcase;
+            lbResult.Text = BUL.TestCaseBUL.Get_ResultTestcase(ID_URL,ID_Testcase);
+        }
+        private int ID_URL;
+        private string ID_Testcase;
+        private bool IsNew = true;
+        
+        private void frmInputTestCase_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the 'elementDBDataSet4.Element_test' table. You can move, or remove it, as needed.
+            //this.element_testTableAdapter.Fill(this.elementDBDataSet4.Element_test);
+            // TODO: This line of code loads data into the 'elementDBDataSet4.Input_testcase' table. You can move, or remove it, as needed.
+            //this.input_testcaseTableAdapter1.Fill(this.elementDBDataSet4.Input_testcase);
+
+            this.Show();
+            this.Select();
+            dgvInput.DataSource = BUL.InputTestcaseBUL.Get_InputTestcase_ByIdTestcase(ID_Testcase, ID_URL);
+        }
+
+        private void lbIdTestcase_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvInput_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int r = dgvInput.CurrentCell.RowIndex;
+            txtBoxInputId_Elt.Text = dgvInput.Rows[r].Cells["idelementDataGridViewTextBoxColumn"].Value.ToString();
+            txtBoxInputValue.Text = dgvInput.Rows[r].Cells["valueDataGridViewTextBoxColumn"].Value.ToString();
+            txtBoxInputXpath.Text = dgvInput.Rows[r].Cells["xpathDataGridViewTextBoxColumn"].Value.ToString();
+            comboBoxAction.SelectedItem= dgvInput.Rows[r].Cells["actionDataGridViewTextBoxColumn"].Value.ToString();
+        }
+
+       
+
+        private void btnAddInputElt_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void btnDeleteInputElt_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnEditInputElt_Click(object sender, EventArgs e)
+        {
+            groupBoxEdit.Visible = true;
+            groupBoxAction.Visible = false;
+        }
+
+        private void btnSaveEdit_Click(object sender, EventArgs e)
+        {
+            groupBoxEdit.Visible = false;
+            groupBoxAction.Visible = true;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            groupBoxEdit.Visible = false;
+            groupBoxAction.Visible = true;
+        }
+
+        private void btnClose1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnAddTestElt_Click(object sender, EventArgs e)
+        {
+            IsNew = true;
+            txtBoxClassnameTestElt.ReadOnly = false;
+            txtBoxFullxpathTestElt.ReadOnly = false;
+            txtBoxXpathTestElt.ReadOnly = false;
+            txtBoxTestValue.ReadOnly = false;
+            txtBoxClassnameTestElt.Clear();
+            txtBoxFullxpathTestElt.Clear();
+            txtBoxXpathTestElt.Clear();
+            txtBoxTestValue.Clear();
+            txtBoxOutputValue.Clear();
+            txtBoxIdElementTest.Clear();
+            groupBoxActionOutput.Enabled = false;
+            groupBoxComfirmOutput.Visible = true;
+        }
+
+        private void btnDeleteTestElt_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Delete this test element?", "Warning", MessageBoxButtons.YesNo,MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                Element_test element_Test = new Element_test();
+                element_Test.class_name = txtBoxClassnameTestElt.Text;
+                element_Test.id_element = txtBoxIdElementTest.Text;
+                element_Test.id_testcase = ID_Testcase;
+                element_Test.id_url = ID_URL;
+                element_Test.value_test = txtBoxTestValue.Text;
+                element_Test.xpath = txtBoxXpathTestElt.Text;
+                element_Test.xpath_full = txtBoxFullxpathTestElt.Text;
+                element_Test.value_return = txtBoxOutputValue.Text;
+                if(!BUL.TestElementBUL.Delete_TestElement(element_Test))
+                {
+                    MessageBox.Show("Error when delete test element", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Delete test element successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else if (result == DialogResult.No)
+            {
+                
+            }
+            dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, ID_Testcase);
+        }
+
+        private void btnEditTestElt_Click(object sender, EventArgs e)
+        {
+            IsNew = false;
+            txtBoxClassnameTestElt.ReadOnly = false;
+            txtBoxFullxpathTestElt.ReadOnly = false;
+            txtBoxXpathTestElt.ReadOnly = false;
+            txtBoxTestValue.ReadOnly = false;
+
+            groupBoxActionOutput.Enabled = false;
+            groupBoxComfirmOutput.Visible = true;
+        }
+
+        private void btnSaveOutput_Click(object sender, EventArgs e)
+        {
+            if(IsNew)
+            {
+                Random random = new Random();
+                Element_test element_Test = new Element_test();
+                element_Test.class_name = txtBoxClassnameTestElt.Text;
+                element_Test.id_element = ID_Testcase+ Generate_RandomString(random, 5, true);
+                element_Test.id_testcase = ID_Testcase;
+                element_Test.id_url = ID_URL;
+                element_Test.value_test = txtBoxTestValue.Text;
+                element_Test.xpath = txtBoxXpathTestElt.Text;
+                element_Test.xpath_full = txtBoxFullxpathTestElt.Text;
+                element_Test.value_return = "";
+                if(!BUL.TestElementBUL.Insert_TestElement(element_Test))
+                {
+                    MessageBox.Show("Error when save test element into database", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Save test element successfully into database", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                
+                
+            }
+            else
+            {
+                
+                Element_test element_Test = new Element_test();
+                element_Test.class_name = txtBoxClassnameTestElt.Text;
+                element_Test.id_element = txtBoxIdElementTest.Text;
+                element_Test.id_testcase = ID_Testcase;
+                element_Test.id_url = ID_URL;
+                element_Test.value_test = txtBoxTestValue.Text;
+                element_Test.xpath = txtBoxXpathTestElt.Text;
+                element_Test.xpath_full = txtBoxFullxpathTestElt.Text;
+                element_Test.value_return = txtBoxOutputValue.Text;
+                if (!BUL.TestElementBUL.Update_TestElement(element_Test))
+                {
+                    MessageBox.Show("Error when update test element", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Update test element successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+            }
+            txtBoxClassnameTestElt.Clear();
+            txtBoxFullxpathTestElt.Clear();
+            txtBoxXpathTestElt.Clear();
+            txtBoxTestValue.Clear();
+            txtBoxOutputValue.Clear();
+            txtBoxIdElementTest.Clear();
+            dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, ID_Testcase);
+            txtBoxClassnameTestElt.ReadOnly = true;
+            txtBoxFullxpathTestElt.ReadOnly = true;
+            txtBoxXpathTestElt.ReadOnly = true;
+            txtBoxTestValue.ReadOnly = true;
+            groupBoxActionOutput.Enabled = true;
+            groupBoxComfirmOutput.Visible = false;
+        }
+
+        private void btnCancelOutput_Click(object sender, EventArgs e)
+        {
+
+            txtBoxClassnameTestElt.Clear();
+            txtBoxFullxpathTestElt.Clear();
+            txtBoxXpathTestElt.Clear();
+            txtBoxTestValue.Clear();
+            txtBoxOutputValue.Clear();
+            txtBoxIdElementTest.Clear();
+            txtBoxClassnameTestElt.ReadOnly = true;
+            txtBoxFullxpathTestElt.ReadOnly = true;
+            txtBoxXpathTestElt.ReadOnly = true;
+            txtBoxTestValue.ReadOnly = true;
+            groupBoxActionOutput.Enabled = true;
+            groupBoxComfirmOutput.Visible = false;
+        }
+
+        private void tabPageInputEltTest_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("", "");
+        }
+
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl.SelectedTab.Text == "Output")
+            {
+                dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, ID_Testcase);
+            }
+            
+            
+        }
+        public string Generate_RandomString(Random random, int size, bool lowerCase = true)
+        {
+            StringBuilder builder = new StringBuilder();
+            Thread.Sleep(10);
+
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
+        }
+
+        private void dgvOutputtest_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int r = dgvOutputtest.CurrentCell.RowIndex;
+            txtBoxTestValue.Text= dgvOutputtest.Rows[r].Cells["value_test"].Value.ToString();
+            txtBoxOutputValue.Text = dgvOutputtest.Rows[r].Cells["value_return"].Value.ToString();
+            txtBoxClassnameTestElt.Text = dgvOutputtest.Rows[r].Cells["class_name"].Value.ToString();
+            txtBoxFullxpathTestElt.Text = dgvOutputtest.Rows[r].Cells["xpath_full"].Value.ToString();
+            txtBoxXpathTestElt.Text = dgvOutputtest.Rows[r].Cells["xpath"].Value.ToString();
+            txtBoxIdElementTest.Text = dgvOutputtest.Rows[r].Cells["id_element"].Value.ToString();
+
+        }
+
+        private void txtBoxIdElementTest_TextChanged(object sender, EventArgs e)
+        {
+            if(txtBoxIdElementTest.Text=="")
+            {
+                btnDeleteTestElt.Enabled = false;
+                btnEditTestElt.Enabled = false;
+            }
+            else
+            {
+                btnDeleteTestElt.Enabled = true;
+                btnEditTestElt.Enabled = true;
+            }
+        }
+    }
+}

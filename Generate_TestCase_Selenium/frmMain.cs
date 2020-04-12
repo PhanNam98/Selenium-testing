@@ -230,6 +230,7 @@ namespace Generate_TestCase_Selenium
         }
         private void btnGenerateTestCase_Click(object sender, EventArgs e)
         {
+            btnCrawlWeb.Enabled = false;
             lbMessage.Visible = true;
             lbMessage.Text="Generating testcase, Please wait a few minutes...";
             //frmTestCase newfrmTestCase = new frmTestCase(Id_Url,true);
@@ -250,21 +251,30 @@ namespace Generate_TestCase_Selenium
             //this.TopMost = true;
             
         }
+        private void LoadListTestCase()
+        {
+            frmTestCase newfrmTestCase = new frmTestCase(27, "https://facebook.com/", false);
+            this.Hide();
+            newfrmTestCase.ShowDialog();
+            lbMessage.Text = "";
+            btnCrawlWeb.Enabled = true;
+            this.Show();
+            this.Select(true, true);
+           
+
+        }
         private void lbMessage_Click(object sender, EventArgs e)
         {
 
         }
-
+        // used to test code
         private void button1_Click(object sender, EventArgs e)
         {
-            frmTestCase newfrmTestCase = new frmTestCase(27, "https://facebook.com/", false);
-            //frmTestCase newfrmTestCase = new frmTestCase(27, txtboxUrl.Text, true);
-            this.Hide();
-            newfrmTestCase.ShowDialog();
-            lbMessage.Text = "";
-            this.Show();
-            this.Select(true, true);
-            //this.TopMost = true;
+            btnCrawlWeb.Enabled = false;
+            lbMessage.Visible = true;
+            lbMessage.Text = "Loading testcase, Please wait a few minutes...";
+            Thread GenerateThread = new Thread(LoadListTestCase);
+            GenerateThread.Start();
         }
     }
 }

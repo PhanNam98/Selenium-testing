@@ -59,9 +59,6 @@
     <Compile Include="Form_elements.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Input_elements.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
     <Compile Include="Input_testcase.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

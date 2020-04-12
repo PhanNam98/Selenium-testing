@@ -47,7 +47,7 @@ namespace DAL
             {
                 using (ElementDBEntities db = new ElementDBEntities())
                 {
-                   return db.Input_testcase.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).ToList();
+                   return db.Input_testcase.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).OrderBy(p=>p.test_step).ToList();
                   
                 }
             }

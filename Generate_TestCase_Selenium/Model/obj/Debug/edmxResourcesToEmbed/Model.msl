@@ -49,39 +49,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Input_elements">
-      <EntityTypeMapping TypeName="ElementDBModel.Input_elements">
-        <MappingFragment StoreEntitySet="Input_elements">
-          <ScalarProperty Name="id_url" ColumnName="id_url" />
-          <ScalarProperty Name="xpath" ColumnName="xpath" />
-          <ScalarProperty Name="multiple" ColumnName="multiple" />
-          <ScalarProperty Name="min" ColumnName="min" />
-          <ScalarProperty Name="max" ColumnName="max" />
-          <ScalarProperty Name="readonly" ColumnName="readonly" />
-          <ScalarProperty Name="required" ColumnName="required" />
-          <ScalarProperty Name="maxlength" ColumnName="maxlength" />
-          <ScalarProperty Name="minlength" ColumnName="minlength" />
-          <ScalarProperty Name="id_form" ColumnName="id_form" />
-          <ScalarProperty Name="value" ColumnName="value" />
-          <ScalarProperty Name="type" ColumnName="type" />
-          <ScalarProperty Name="class_name" ColumnName="class_name" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="id_input" ColumnName="id_input" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Input_testcase">
-      <EntityTypeMapping TypeName="ElementDBModel.Input_testcase">
-        <MappingFragment StoreEntitySet="Input_testcase">
-          <ScalarProperty Name="action" ColumnName="action" />
-          <ScalarProperty Name="value" ColumnName="value" />
-          <ScalarProperty Name="xpath" ColumnName="xpath" />
-          <ScalarProperty Name="id_url" ColumnName="id_url" />
-          <ScalarProperty Name="id_element" ColumnName="id_element" />
-          <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Redirect_url">
       <EntityTypeMapping TypeName="ElementDBModel.Redirect_url">
         <MappingFragment StoreEntitySet="Redirect_url">
@@ -111,6 +78,19 @@
           <ScalarProperty Name="url1" ColumnName="url" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="id_url" ColumnName="id_url" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Input_testcase">
+      <EntityTypeMapping TypeName="ElementDBModel.Input_testcase">
+        <MappingFragment StoreEntitySet="Input_testcase">
+          <ScalarProperty Name="action" ColumnName="action" />
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="xpath" ColumnName="xpath" />
+          <ScalarProperty Name="test_step" ColumnName="test_step" />
+          <ScalarProperty Name="id_url" ColumnName="id_url" />
+          <ScalarProperty Name="id_element" ColumnName="id_element" />
+          <ScalarProperty Name="id_testcase" ColumnName="id_testcase" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

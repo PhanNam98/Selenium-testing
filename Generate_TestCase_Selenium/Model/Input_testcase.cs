@@ -17,6 +17,7 @@ namespace Model
         public string id_testcase { get; set; }
         public string id_element { get; set; }
         public int id_url { get; set; }
+        public int test_step { get; set; }
         public string xpath { get; set; }
         public string value { get; set; }
         public string action { get; set; }

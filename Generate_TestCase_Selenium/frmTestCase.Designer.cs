@@ -48,6 +48,8 @@
             this.lbNumberOfTestcase = new System.Windows.Forms.Label();
             this.labelNumber = new System.Windows.Forms.Label();
             this.pnlTitle = new System.Windows.Forms.Panel();
+            this.lbid_url = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnRunTestCase = new System.Windows.Forms.Button();
             this.txtboxUrl = new System.Windows.Forms.TextBox();
             this.labelUrl = new System.Windows.Forms.Label();
@@ -56,8 +58,6 @@
             this.fKInputtestcaseTestcase1BindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.input_testcaseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Input_testcaseTableAdapter();
             this.test_caseTableAdapter1 = new Generate_TestCase_Selenium.ElementDBDataSet2TableAdapters.Test_caseTableAdapter();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lbid_url = new System.Windows.Forms.Label();
             this.pnlForm.SuspendLayout();
             this.pnlTestcase.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewListTestCase)).BeginInit();
@@ -253,6 +253,26 @@
             this.pnlTitle.Size = new System.Drawing.Size(669, 77);
             this.pnlTitle.TabIndex = 0;
             // 
+            // lbid_url
+            // 
+            this.lbid_url.AutoSize = true;
+            this.lbid_url.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbid_url.Location = new System.Drawing.Point(132, 42);
+            this.lbid_url.Name = "lbid_url";
+            this.lbid_url.Size = new System.Drawing.Size(15, 16);
+            this.lbid_url.TabIndex = 6;
+            this.lbid_url.Text = "0";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(62, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(58, 16);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "ID_URL:";
+            // 
             // btnRunTestCase
             // 
             this.btnRunTestCase.Location = new System.Drawing.Point(423, 11);
@@ -300,26 +320,6 @@
             // test_caseTableAdapter1
             // 
             this.test_caseTableAdapter1.ClearBeforeFill = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(62, 42);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 16);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "ID_URL:";
-            // 
-            // lbid_url
-            // 
-            this.lbid_url.AutoSize = true;
-            this.lbid_url.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbid_url.Location = new System.Drawing.Point(132, 42);
-            this.lbid_url.Name = "lbid_url";
-            this.lbid_url.Size = new System.Drawing.Size(15, 16);
-            this.lbid_url.TabIndex = 6;
-            this.lbid_url.Text = "0";
             // 
             // frmTestCase
             // 

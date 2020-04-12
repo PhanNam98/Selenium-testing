@@ -49,27 +49,6 @@
     <Property Name="id_url" Type="int" Nullable="false" />
     <Property Name="xpath" Type="nvarchar(max)" />
   </EntityType>
-  <EntityType Name="Input_elements">
-    <Key>
-      <PropertyRef Name="id_input" />
-      <PropertyRef Name="id_url" />
-    </Key>
-    <Property Name="id_input" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="50" />
-    <Property Name="class_name" Type="nvarchar" MaxLength="50" />
-    <Property Name="type" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="value" Type="nvarchar" MaxLength="50" />
-    <Property Name="id_form" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="minlength" Type="int" />
-    <Property Name="maxlength" Type="int" />
-    <Property Name="required" Type="bit" />
-    <Property Name="readonly" Type="bit" />
-    <Property Name="max" Type="real" />
-    <Property Name="min" Type="real" />
-    <Property Name="multiple" Type="bit" />
-    <Property Name="xpath" Type="nvarchar(max)" />
-    <Property Name="id_url" Type="int" Nullable="false" />
-  </EntityType>
   <EntityType Name="Input_testcase">
     <Key>
       <PropertyRef Name="id_testcase" />
@@ -79,6 +58,7 @@
     <Property Name="id_testcase" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="id_element" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="id_url" Type="int" Nullable="false" />
+    <Property Name="test_step" Type="int" Nullable="false" />
     <Property Name="xpath" Type="nvarchar(max)" />
     <Property Name="value" Type="nvarchar(max)" />
     <Property Name="action" Type="nvarchar" MaxLength="50" />
@@ -152,18 +132,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Input_elements_Url">
-    <End Role="Url" Type="Self.Url" Multiplicity="1" />
-    <End Role="Input_elements" Type="Self.Input_elements" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Url">
-        <PropertyRef Name="id_url" />
-      </Principal>
-      <Dependent Role="Input_elements">
-        <PropertyRef Name="id_url" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Input_testcase_Element">
     <End Role="Element" Type="Self.Element" Multiplicity="1" />
     <End Role="Input_testcase" Type="Self.Input_testcase" Multiplicity="*" />
@@ -222,7 +190,6 @@
     <EntitySet Name="Element" EntityType="Self.Element" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Element_test" EntityType="Self.Element_test" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Form_elements" EntityType="Self.Form_elements" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Input_elements" EntityType="Self.Input_elements" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Input_testcase" EntityType="Self.Input_testcase" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Redirect_url" EntityType="Self.Redirect_url" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Test_case" EntityType="Self.Test_case" Schema="dbo" store:Type="Tables" />
@@ -238,10 +205,6 @@
     <AssociationSet Name="FK_Form_elements_Url" Association="Self.FK_Form_elements_Url">
       <End Role="Url" EntitySet="Url" />
       <End Role="Form_elements" EntitySet="Form_elements" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Input_elements_Url" Association="Self.FK_Input_elements_Url">
-      <End Role="Url" EntitySet="Url" />
-      <End Role="Input_elements" EntitySet="Input_elements" />
     </AssociationSet>
     <AssociationSet Name="FK_Input_testcase_Element" Association="Self.FK_Input_testcase_Element">
       <End Role="Element" EntitySet="Element" />

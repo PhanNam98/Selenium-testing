@@ -22,5 +22,13 @@ namespace BUL
         {
             return testCaseDAL.insert_ListTestcase(newList);
         }
+        public static List<Test_case> Get_ListTestcase(int id_url)
+        {
+            return testCaseDAL.get_ListTestcase(id_url);
+        }
+        public static string Get_ResultTestcase(int id_url, string id_testcase)
+        {
+            return testCaseDAL.get_ResultTestcase(id_url, id_testcase);
+        }
     }
 }

@@ -109,6 +109,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ElementDBDataSet2.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ElementDBDataSet3.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ElementDBDataSet3.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ElementDBDataSet4.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ElementDBDataSet4.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="frmInputTestCase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmInputTestCase.Designer.cs">
+      <DependentUpon>frmInputTestCase.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +140,9 @@
     <Compile Include="Models\Form_element.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmInputTestCase.resx">
+      <DependentUpon>frmInputTestCase.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -171,6 +190,28 @@
     </None>
     <None Include="ElementDBDataSet2.xss">
       <DependentUpon>ElementDBDataSet2.xsd</DependentUpon>
+    </None>
+    <None Include="ElementDBDataSet3.xsc">
+      <DependentUpon>ElementDBDataSet3.xsd</DependentUpon>
+    </None>
+    <None Include="ElementDBDataSet3.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ElementDBDataSet3.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ElementDBDataSet3.xss">
+      <DependentUpon>ElementDBDataSet3.xsd</DependentUpon>
+    </None>
+    <None Include="ElementDBDataSet4.xsc">
+      <DependentUpon>ElementDBDataSet4.xsd</DependentUpon>
+    </None>
+    <None Include="ElementDBDataSet4.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ElementDBDataSet4.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ElementDBDataSet4.xss">
+      <DependentUpon>ElementDBDataSet4.xsd</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

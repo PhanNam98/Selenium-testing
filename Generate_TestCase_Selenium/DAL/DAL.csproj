@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ElementDAL.cs" />
+    <Compile Include="TestElementDAL.cs" />
     <Compile Include="FormDAL.cs" />
     <Compile Include="InputTestcaseDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -28,10 +28,9 @@ namespace Model
         public virtual DbSet<Element> Elements { get; set; }
         public virtual DbSet<Element_test> Element_test { get; set; }
         public virtual DbSet<Form_elements> Form_elements { get; set; }
-        public virtual DbSet<Input_elements> Input_elements { get; set; }
-        public virtual DbSet<Input_testcase> Input_testcase { get; set; }
         public virtual DbSet<Redirect_url> Redirect_url { get; set; }
         public virtual DbSet<Test_case> Test_case { get; set; }
         public virtual DbSet<Url> Urls { get; set; }
+        public virtual DbSet<Input_testcase> Input_testcase { get; set; }
     }
 }
