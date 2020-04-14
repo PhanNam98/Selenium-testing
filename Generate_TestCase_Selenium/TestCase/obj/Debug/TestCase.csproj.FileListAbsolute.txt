@@ -15,3 +15,5 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\Tes
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\TestCase\obj\Debug\TestCase.pdb
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\TestCase\bin\Debug\WebDriver.dll
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\TestCase\bin\Debug\WebDriver.xml
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\TestCase\bin\Debug\WebDriver.Support.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium\TestCase\bin\Debug\WebDriver.Support.xml

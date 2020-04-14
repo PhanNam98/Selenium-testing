@@ -1259,7 +1259,8 @@ namespace TestCase
                 newinput.id_testcase = id_testCase;
                 newinput.id_url = Id_Url;
                 newinput.value = "";
-                newinput.action = "select";
+                //newinput.action = "select";
+                newinput.action = "click";
                 newinput.xpath = radio.xpath;
                 listInputElt.Add(newinput);
 

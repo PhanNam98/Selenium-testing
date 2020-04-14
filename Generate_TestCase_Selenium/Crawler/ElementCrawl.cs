@@ -74,7 +74,7 @@ namespace Crawler
                     }
                     foreach (string tag in tag_elts)
                     {
-                        GetElements(chromedriver,  tag, "", listForm);
+                        GetElements(chromedriver, tag, "", listForm);
                     }
                     //GetElements(chromedriver, id_Url, "a", "", listForm);
 
@@ -97,7 +97,74 @@ namespace Crawler
             CloseDriver();
             return flag;
         }
-       
+        public int GetElements(bool IsOnlyDislayed)
+        {
+            int flag = 0;
+            try
+            {
+                //Url newurl = new Url();
+                //newurl.name = Url.Substring(8);
+                //newurl.url1 = Url;
+                //int id_Url = UrlBUL.insertURL(newurl);
+                //int id_Url = 3; //For example
+                //if (id_Url == -1)
+                //{
+                //    return -1;
+                //}
+
+                SetUpDriver(Url);
+                var form = chromedriver.FindElementsByXPath("//form");
+                if (form != null)// have at least one form
+                {
+                    listForm = new List<Form_elements>();
+                    for (int i = 0; i < form.Count; i++)
+                    {
+                        Form_elements form_ = new Form_elements();
+                        form_.id_form = form[i].GetAttribute("id");
+
+                        //form_.id_url = id_Url;
+                        try
+                        {
+                            form_.name = form[i].GetAttribute("name");
+                        }
+                        catch { }
+                        try
+                        {
+                            form_.xpath = getAbsoluteXPath(chromedriver, form[i]);
+                        }
+                        catch { }
+                        if (chromedriver.FindElementByXPath(form_.xpath).Displayed && IsOnlyDislayed==true)
+                            listForm.Add(form_);
+                        if ( IsOnlyDislayed == false)
+                            listForm.Add(form_);
+
+
+                    }
+                    foreach (string tag in tag_elts)
+                    {
+                        GetElements(chromedriver, tag, "", listForm);
+                    }
+                    //GetElements(chromedriver, id_Url, "a", "", listForm);
+
+
+
+                }
+                else //no form found
+                {
+                    foreach (string tag in tag_elts)
+                    {
+                        GetElements(chromedriver, tag, "");
+                    }
+                }
+                flag = 1;
+            }
+            catch
+            {
+                flag = -1;
+            }
+            CloseDriver();
+            return flag;
+        }
         private void SetUp(string url)
         {
             Url = url;
@@ -133,7 +200,7 @@ namespace Crawler
 
         private void QuitDriver()
         {
-          
+
             chromedriver.Quit();
 
         }
@@ -233,7 +300,7 @@ namespace Crawler
                     "return getElementXPath(arguments[0]);", elt);
         }
 
-        public void GetElements(ChromeDriver driver,string TagName, string TypeName, List<Form_elements> form_elts = null)
+        public void GetElements(ChromeDriver driver, string TagName, string TypeName, List<Form_elements> form_elts = null)
         {
             List<IWebElement> allElements = new List<IWebElement>();
             if (TypeName != "" && TagName.Equals("input"))
@@ -305,10 +372,10 @@ namespace Crawler
                     }
                     try
                     {
-                       
+
                         elt.type = item.GetAttribute("type");
                         if (item.GetAttribute("type").Equals("select-multiple"))
-                            {
+                        {
                             elt.multiple = true;
                         }
                     }

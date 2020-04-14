@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Model;
@@ -124,8 +125,11 @@ namespace Generate_TestCase_Selenium
             if (e.ColumnIndex == dataGridViewListTestCase.Columns["btnRun"].Index && e.RowIndex >= 0)
             {
                 // MessageBox.Show(String.Format("Button on row {0} clicked" + dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString(), e.RowIndex));
-                TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString());
-                a.Run();
+                //TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString());
+                //a.Run();
+                Thread runThread = new Thread(() => RunTestCase(dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString(),e.RowIndex));
+                runThread.Start();
+               
             }
             if (e.ColumnIndex == dataGridViewListTestCase.Columns["btnViewTestcase"].Index && e.RowIndex >= 0)
             {
@@ -151,6 +155,7 @@ namespace Generate_TestCase_Selenium
 
                 }
             }
+            RefeshDatagridview();
         }
 
 
@@ -198,8 +203,9 @@ namespace Generate_TestCase_Selenium
 
         private void btnRunTestCase_Click(object sender, EventArgs e)
         {
-            TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, "Fill_1000_charter_TypeText_reg_0");
-            a.Run();
+            Thread runThread = new Thread(()=>RunTestCase("Fill_1000_charter_TypeText_reg_0"));
+            runThread.Start();
+            
         }
         private void HeaderCheckBox_Clicked(object sender, EventArgs e)
         {
@@ -230,6 +236,25 @@ namespace Generate_TestCase_Selenium
                 lbCurrentCount.Text = ListTestCase.Where(p => p.is_test == true).Count().ToString();
             }
         }
-
+        private void RunTestCase(string id_testcase)
+        {
+            TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, id_testcase);
+            a.Run();
+            dataGridViewListTestCase.DataSource = BUL.TestCaseBUL.Get_ListTestcase(Id_URL);
+        }
+        private void RunTestCase(string id_testcase,int indexList)
+        {
+            TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, id_testcase);
+            ListTestCase[indexList].result = a.Run_ReturnResult();
+            dataGridViewListTestCase.DataSource = ListTestCase;
+        }
+        private void RefeshDatagridview()
+        {
+            dataGridViewListTestCase.DataSource = ListTestCase;
+        }
+        private void RefeshDatagridview(int Id_URL)
+        {
+            BUL.TestCaseBUL.Get_ListTestcase(Id_URL);
+        }
     }
 }

@@ -33,6 +33,7 @@ namespace Generate_TestCase_Selenium
         Thread CrawlThread;
         Crawler.ElementCrawl Craw_element;
         private int Id_Url;
+        private bool IsOnlyDislayed = false;
         private void btnCrawlWeb_Click(object sender, EventArgs e)
         {
             btnGenerateTestCase.Enabled = false;
@@ -242,7 +243,7 @@ namespace Generate_TestCase_Selenium
         private void GenerateTestCase()
         {
             frmTestCase newfrmTestCase = new frmTestCase(27, "https://facebook.com/", true);
-            //frmTestCase newfrmTestCase = new frmTestCase(27, txtboxUrl.Text, true);
+            //frmTestCase newfrmTestCase = new frmTestCase(ID_URL, txtboxUrl.Text, true);
             this.Hide();
             newfrmTestCase.ShowDialog();
             lbMessage.Text = "";
@@ -275,6 +276,18 @@ namespace Generate_TestCase_Selenium
             lbMessage.Text = "Loading testcase, Please wait a few minutes...";
             Thread GenerateThread = new Thread(LoadListTestCase);
             GenerateThread.Start();
+        }
+
+        private void checkBoxIsdisplayed_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBoxIsdisplayed.Checked)
+            {
+                IsOnlyDislayed = true;
+            }
+            else
+            {
+                IsOnlyDislayed = false;
+            }
         }
     }
 }
