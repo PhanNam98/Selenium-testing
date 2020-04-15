@@ -34,5 +34,10 @@ namespace BUL
         {
             return testElementDAL.get_ElementTest_ByIdTestcase(id_testcase,id_url);
         }
+        public static bool Update_ValueResult_Testcase(int id_url, string id_testcase, string valueresult)
+        {
+            return testElementDAL.update_ValueResult_Testcase(id_url, id_testcase, valueresult);
+        }
+
     }
 }

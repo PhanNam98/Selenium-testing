@@ -127,9 +127,10 @@ namespace Generate_TestCase_Selenium
                 // MessageBox.Show(String.Format("Button on row {0} clicked" + dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString(), e.RowIndex));
                 //TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString());
                 //a.Run();
-                Thread runThread = new Thread(() => RunTestCase(dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString(),e.RowIndex));
+              
+                Thread runThread = new Thread(() => RunTestCase(dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString(), e.RowIndex));
                 runThread.Start();
-               
+
             }
             if (e.ColumnIndex == dataGridViewListTestCase.Columns["btnViewTestcase"].Index && e.RowIndex >= 0)
             {
@@ -155,7 +156,8 @@ namespace Generate_TestCase_Selenium
 
                 }
             }
-            RefeshDatagridview();
+            //RefeshDatagridview();
+            //RefeshDatagridview(Id_URL);
         }
 
 
@@ -240,13 +242,14 @@ namespace Generate_TestCase_Selenium
         {
             TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, id_testcase);
             a.Run();
-            dataGridViewListTestCase.DataSource = BUL.TestCaseBUL.Get_ListTestcase(Id_URL);
+            RefeshDatagridview(Id_URL);
+            
         }
         private void RunTestCase(string id_testcase,int indexList)
         {
             TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, id_testcase);
             ListTestCase[indexList].result = a.Run_ReturnResult();
-            dataGridViewListTestCase.DataSource = ListTestCase;
+            RefeshDatagridview();
         }
         private void RefeshDatagridview()
         {
@@ -254,7 +257,7 @@ namespace Generate_TestCase_Selenium
         }
         private void RefeshDatagridview(int Id_URL)
         {
-            BUL.TestCaseBUL.Get_ListTestcase(Id_URL);
+            dataGridViewListTestCase.DataSource = BUL.TestCaseBUL.Get_ListTestcase(Id_URL);
         }
     }
 }

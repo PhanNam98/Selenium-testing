@@ -32,15 +32,6 @@
             this.pnlForm = new System.Windows.Forms.Panel();
             this.pnlTestcase = new System.Windows.Forms.Panel();
             this.dataGridViewListTestCase = new System.Windows.Forms.DataGridView();
-            this.istestDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.idtestcaseDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idurlDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.resultDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.createdDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.modifiedDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnRun = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.btnViewTestcase = new System.Windows.Forms.DataGridViewButtonColumn();
             this.testcaseBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.elementDBDataSet2 = new Generate_TestCase_Selenium.ElementDBDataSet2();
             this.pnlStatus = new System.Windows.Forms.Panel();
@@ -58,6 +49,15 @@
             this.fKInputtestcaseTestcase1BindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.input_testcaseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Input_testcaseTableAdapter();
             this.test_caseTableAdapter1 = new Generate_TestCase_Selenium.ElementDBDataSet2TableAdapters.Test_caseTableAdapter();
+            this.istestDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.idtestcaseDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.idurlDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.resultDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.createdDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.modifiedDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnRun = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.btnViewTestcase = new System.Windows.Forms.DataGridViewButtonColumn();
             this.pnlForm.SuspendLayout();
             this.pnlTestcase.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewListTestCase)).BeginInit();
@@ -115,77 +115,6 @@
             this.dataGridViewListTestCase.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewListTestCase_CellContentClick);
             this.dataGridViewListTestCase.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewListTestCase_CellFormatting);
             this.dataGridViewListTestCase.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewListTestCase_CurrentCellDirtyStateChanged);
-            // 
-            // istestDataGridViewCheckBoxColumn
-            // 
-            this.istestDataGridViewCheckBoxColumn.DataPropertyName = "is_test";
-            this.istestDataGridViewCheckBoxColumn.HeaderText = "";
-            this.istestDataGridViewCheckBoxColumn.Name = "istestDataGridViewCheckBoxColumn";
-            this.istestDataGridViewCheckBoxColumn.ReadOnly = true;
-            this.istestDataGridViewCheckBoxColumn.Width = 50;
-            // 
-            // idtestcaseDataGridViewTextBoxColumn
-            // 
-            this.idtestcaseDataGridViewTextBoxColumn.DataPropertyName = "id_testcase";
-            this.idtestcaseDataGridViewTextBoxColumn.HeaderText = "id_testcase";
-            this.idtestcaseDataGridViewTextBoxColumn.Name = "idtestcaseDataGridViewTextBoxColumn";
-            this.idtestcaseDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idtestcaseDataGridViewTextBoxColumn.Width = 220;
-            // 
-            // idurlDataGridViewTextBoxColumn
-            // 
-            this.idurlDataGridViewTextBoxColumn.DataPropertyName = "id_url";
-            this.idurlDataGridViewTextBoxColumn.HeaderText = "id_url";
-            this.idurlDataGridViewTextBoxColumn.Name = "idurlDataGridViewTextBoxColumn";
-            this.idurlDataGridViewTextBoxColumn.ReadOnly = true;
-            this.idurlDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // descriptionDataGridViewTextBoxColumn
-            // 
-            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "description";
-            this.descriptionDataGridViewTextBoxColumn.HeaderText = "description";
-            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
-            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // resultDataGridViewTextBoxColumn
-            // 
-            this.resultDataGridViewTextBoxColumn.DataPropertyName = "result";
-            this.resultDataGridViewTextBoxColumn.HeaderText = "result";
-            this.resultDataGridViewTextBoxColumn.Name = "resultDataGridViewTextBoxColumn";
-            this.resultDataGridViewTextBoxColumn.ReadOnly = true;
-            this.resultDataGridViewTextBoxColumn.Width = 50;
-            // 
-            // createdDateDataGridViewTextBoxColumn
-            // 
-            this.createdDateDataGridViewTextBoxColumn.DataPropertyName = "CreatedDate";
-            this.createdDateDataGridViewTextBoxColumn.HeaderText = "CreatedDate";
-            this.createdDateDataGridViewTextBoxColumn.Name = "createdDateDataGridViewTextBoxColumn";
-            this.createdDateDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // modifiedDateDataGridViewTextBoxColumn
-            // 
-            this.modifiedDateDataGridViewTextBoxColumn.DataPropertyName = "ModifiedDate";
-            this.modifiedDateDataGridViewTextBoxColumn.HeaderText = "ModifiedDate";
-            this.modifiedDateDataGridViewTextBoxColumn.Name = "modifiedDateDataGridViewTextBoxColumn";
-            this.modifiedDateDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // btnRun
-            // 
-            this.btnRun.HeaderText = "Run";
-            this.btnRun.Name = "btnRun";
-            this.btnRun.ReadOnly = true;
-            this.btnRun.Text = "Run";
-            this.btnRun.UseColumnTextForButtonValue = true;
-            this.btnRun.Width = 50;
-            // 
-            // btnViewTestcase
-            // 
-            this.btnViewTestcase.HeaderText = "";
-            this.btnViewTestcase.Name = "btnViewTestcase";
-            this.btnViewTestcase.ReadOnly = true;
-            this.btnViewTestcase.Text = "Detail";
-            this.btnViewTestcase.UseColumnTextForButtonValue = true;
-            this.btnViewTestcase.Width = 60;
             // 
             // testcaseBindingSource
             // 
@@ -321,6 +250,77 @@
             // 
             this.test_caseTableAdapter1.ClearBeforeFill = true;
             // 
+            // istestDataGridViewCheckBoxColumn
+            // 
+            this.istestDataGridViewCheckBoxColumn.DataPropertyName = "is_test";
+            this.istestDataGridViewCheckBoxColumn.HeaderText = "";
+            this.istestDataGridViewCheckBoxColumn.Name = "istestDataGridViewCheckBoxColumn";
+            this.istestDataGridViewCheckBoxColumn.ReadOnly = true;
+            this.istestDataGridViewCheckBoxColumn.Width = 50;
+            // 
+            // idtestcaseDataGridViewTextBoxColumn
+            // 
+            this.idtestcaseDataGridViewTextBoxColumn.DataPropertyName = "id_testcase";
+            this.idtestcaseDataGridViewTextBoxColumn.HeaderText = "Id_testcase";
+            this.idtestcaseDataGridViewTextBoxColumn.Name = "idtestcaseDataGridViewTextBoxColumn";
+            this.idtestcaseDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idtestcaseDataGridViewTextBoxColumn.Width = 220;
+            // 
+            // idurlDataGridViewTextBoxColumn
+            // 
+            this.idurlDataGridViewTextBoxColumn.DataPropertyName = "id_url";
+            this.idurlDataGridViewTextBoxColumn.HeaderText = "id_url";
+            this.idurlDataGridViewTextBoxColumn.Name = "idurlDataGridViewTextBoxColumn";
+            this.idurlDataGridViewTextBoxColumn.ReadOnly = true;
+            this.idurlDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // descriptionDataGridViewTextBoxColumn
+            // 
+            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "description";
+            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
+            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // resultDataGridViewTextBoxColumn
+            // 
+            this.resultDataGridViewTextBoxColumn.DataPropertyName = "result";
+            this.resultDataGridViewTextBoxColumn.HeaderText = "Result";
+            this.resultDataGridViewTextBoxColumn.Name = "resultDataGridViewTextBoxColumn";
+            this.resultDataGridViewTextBoxColumn.ReadOnly = true;
+            this.resultDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // createdDateDataGridViewTextBoxColumn
+            // 
+            this.createdDateDataGridViewTextBoxColumn.DataPropertyName = "CreatedDate";
+            this.createdDateDataGridViewTextBoxColumn.HeaderText = "Created Date";
+            this.createdDateDataGridViewTextBoxColumn.Name = "createdDateDataGridViewTextBoxColumn";
+            this.createdDateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // modifiedDateDataGridViewTextBoxColumn
+            // 
+            this.modifiedDateDataGridViewTextBoxColumn.DataPropertyName = "ModifiedDate";
+            this.modifiedDateDataGridViewTextBoxColumn.HeaderText = "Modified Date";
+            this.modifiedDateDataGridViewTextBoxColumn.Name = "modifiedDateDataGridViewTextBoxColumn";
+            this.modifiedDateDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // btnRun
+            // 
+            this.btnRun.HeaderText = "Run";
+            this.btnRun.Name = "btnRun";
+            this.btnRun.ReadOnly = true;
+            this.btnRun.Text = "Run";
+            this.btnRun.UseColumnTextForButtonValue = true;
+            this.btnRun.Width = 50;
+            // 
+            // btnViewTestcase
+            // 
+            this.btnViewTestcase.HeaderText = "Detail";
+            this.btnViewTestcase.Name = "btnViewTestcase";
+            this.btnViewTestcase.ReadOnly = true;
+            this.btnViewTestcase.Text = "Detail";
+            this.btnViewTestcase.UseColumnTextForButtonValue = true;
+            this.btnViewTestcase.Width = 60;
+            // 
             // frmTestCase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -367,6 +367,8 @@
         private System.Windows.Forms.Label lbNumberOfTestcase;
         private System.Windows.Forms.Label labelNumber;
         private System.Windows.Forms.Label lbCurrentCount;
+        private System.Windows.Forms.Label lbid_url;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewCheckBoxColumn istestDataGridViewCheckBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn idtestcaseDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn idurlDataGridViewTextBoxColumn;
@@ -376,7 +378,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn modifiedDateDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn btnRun;
         private System.Windows.Forms.DataGridViewButtonColumn btnViewTestcase;
-        private System.Windows.Forms.Label lbid_url;
-        private System.Windows.Forms.Label label1;
     }
 }

@@ -33,6 +33,7 @@
             this.elementDBDataSet = new Generate_TestCase_Selenium.ElementDBDataSet();
             this.elementTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSetTableAdapters.ElementTableAdapter();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.checkBoxIsdisplayed = new System.Windows.Forms.CheckBox();
             this.btnGenerateTestCase = new System.Windows.Forms.Button();
             this.txtboxUrl = new System.Windows.Forms.TextBox();
             this.btnCrawlWeb = new System.Windows.Forms.Button();
@@ -53,7 +54,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.checkBoxIsdisplayed = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.elementBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementDBDataSet)).BeginInit();
             this.panel2.SuspendLayout();
@@ -88,9 +88,20 @@
             this.panel2.Size = new System.Drawing.Size(596, 78);
             this.panel2.TabIndex = 4;
             // 
+            // checkBoxIsdisplayed
+            // 
+            this.checkBoxIsdisplayed.AutoSize = true;
+            this.checkBoxIsdisplayed.Location = new System.Drawing.Point(19, 56);
+            this.checkBoxIsdisplayed.Name = "checkBoxIsdisplayed";
+            this.checkBoxIsdisplayed.Size = new System.Drawing.Size(165, 17);
+            this.checkBoxIsdisplayed.TabIndex = 9;
+            this.checkBoxIsdisplayed.Text = "Only the element  is displayed";
+            this.checkBoxIsdisplayed.UseVisualStyleBackColor = true;
+            this.checkBoxIsdisplayed.CheckedChanged += new System.EventHandler(this.checkBoxIsdisplayed_CheckedChanged);
+            // 
             // btnGenerateTestCase
             // 
-            this.btnGenerateTestCase.Location = new System.Drawing.Point(476, 23);
+            this.btnGenerateTestCase.Location = new System.Drawing.Point(451, 23);
             this.btnGenerateTestCase.Name = "btnGenerateTestCase";
             this.btnGenerateTestCase.Size = new System.Drawing.Size(115, 28);
             this.btnGenerateTestCase.TabIndex = 4;
@@ -281,17 +292,6 @@
             this.menuStrip1.Size = new System.Drawing.Size(809, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // checkBoxIsdisplayed
-            // 
-            this.checkBoxIsdisplayed.AutoSize = true;
-            this.checkBoxIsdisplayed.Location = new System.Drawing.Point(327, 56);
-            this.checkBoxIsdisplayed.Name = "checkBoxIsdisplayed";
-            this.checkBoxIsdisplayed.Size = new System.Drawing.Size(165, 17);
-            this.checkBoxIsdisplayed.TabIndex = 9;
-            this.checkBoxIsdisplayed.Text = "Only the element  is displayed";
-            this.checkBoxIsdisplayed.UseVisualStyleBackColor = true;
-            this.checkBoxIsdisplayed.CheckedChanged += new System.EventHandler(this.checkBoxIsdisplayed_CheckedChanged);
             // 
             // frmMain
             // 

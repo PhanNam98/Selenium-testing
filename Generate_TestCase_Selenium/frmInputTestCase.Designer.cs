@@ -75,6 +75,7 @@
             this.btnDeleteTestElt = new System.Windows.Forms.Button();
             this.btnAddTestElt = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtBoxIdElementTest = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.txtBoxOutputValue = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -89,17 +90,25 @@
             this.elementtestBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabPageRedirectUrl = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnAddRedirectTest = new System.Windows.Forms.Button();
+            this.btnCancelAddTestRedirect = new System.Windows.Forms.Button();
+            this.btnSaveTestRedirectUrl = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtBoxRedirectUrl = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtBoxTestRediectUrl = new System.Windows.Forms.TextBox();
             this.inputtestcaseBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.elementDBDataSet1BindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.elementDBDataSet1 = new Generate_TestCase_Selenium.ElementDBDataSet1();
             this.input_testcaseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Input_testcaseTableAdapter();
             this.input_testcaseTableAdapter1 = new Generate_TestCase_Selenium.ElementDBDataSet4TableAdapters.Input_testcaseTableAdapter();
             this.element_testTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet4TableAdapters.Element_testTableAdapter();
-            this.txtBoxIdElementTest = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnAddUpdateDescription = new System.Windows.Forms.Button();
+            this.btnCancelDescription = new System.Windows.Forms.Button();
+            this.btnSaveDescription = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.xpath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.id_element = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.xpath_full = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -128,6 +137,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.inputtestcaseBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementDBDataSet1BindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementDBDataSet1)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -620,6 +630,17 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Element";
             // 
+            // txtBoxIdElementTest
+            // 
+            this.txtBoxIdElementTest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtBoxIdElementTest.Location = new System.Drawing.Point(243, 31);
+            this.txtBoxIdElementTest.Name = "txtBoxIdElementTest";
+            this.txtBoxIdElementTest.ReadOnly = true;
+            this.txtBoxIdElementTest.Size = new System.Drawing.Size(100, 20);
+            this.txtBoxIdElementTest.TabIndex = 13;
+            this.txtBoxIdElementTest.Visible = false;
+            this.txtBoxIdElementTest.TextChanged += new System.EventHandler(this.txtBoxIdElementTest_TextChanged);
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -743,27 +764,62 @@
             // 
             // tabPageRedirectUrl
             // 
+            this.tabPageRedirectUrl.Controls.Add(this.groupBox1);
             this.tabPageRedirectUrl.Controls.Add(this.groupBox4);
             this.tabPageRedirectUrl.Location = new System.Drawing.Point(4, 22);
             this.tabPageRedirectUrl.Name = "tabPageRedirectUrl";
             this.tabPageRedirectUrl.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageRedirectUrl.Size = new System.Drawing.Size(786, 448);
             this.tabPageRedirectUrl.TabIndex = 2;
-            this.tabPageRedirectUrl.Text = "Redirect Url";
             this.tabPageRedirectUrl.UseVisualStyleBackColor = true;
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.btnAddRedirectTest);
+            this.groupBox4.Controls.Add(this.btnCancelAddTestRedirect);
+            this.groupBox4.Controls.Add(this.btnSaveTestRedirectUrl);
             this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Controls.Add(this.textBox2);
+            this.groupBox4.Controls.Add(this.txtBoxRedirectUrl);
             this.groupBox4.Controls.Add(this.label7);
-            this.groupBox4.Controls.Add(this.textBox1);
-            this.groupBox4.Location = new System.Drawing.Point(122, 74);
+            this.groupBox4.Controls.Add(this.txtBoxTestRediectUrl);
+            this.groupBox4.Location = new System.Drawing.Point(126, 168);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(509, 179);
             this.groupBox4.TabIndex = 0;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Redirect url";
+            this.groupBox4.Text = "Redirect Url";
+            // 
+            // btnAddRedirectTest
+            // 
+            this.btnAddRedirectTest.Location = new System.Drawing.Point(406, 139);
+            this.btnAddRedirectTest.Name = "btnAddRedirectTest";
+            this.btnAddRedirectTest.Size = new System.Drawing.Size(75, 23);
+            this.btnAddRedirectTest.TabIndex = 23;
+            this.btnAddRedirectTest.Text = "Add";
+            this.btnAddRedirectTest.UseVisualStyleBackColor = true;
+            this.btnAddRedirectTest.Click += new System.EventHandler(this.btnAddRedirectTest_Click);
+            // 
+            // btnCancelAddTestRedirect
+            // 
+            this.btnCancelAddTestRedirect.Location = new System.Drawing.Point(406, 139);
+            this.btnCancelAddTestRedirect.Name = "btnCancelAddTestRedirect";
+            this.btnCancelAddTestRedirect.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelAddTestRedirect.TabIndex = 22;
+            this.btnCancelAddTestRedirect.Text = "Cancel";
+            this.btnCancelAddTestRedirect.UseVisualStyleBackColor = true;
+            this.btnCancelAddTestRedirect.Visible = false;
+            this.btnCancelAddTestRedirect.Click += new System.EventHandler(this.btnCancelAddTestRedirect_Click);
+            // 
+            // btnSaveTestRedirectUrl
+            // 
+            this.btnSaveTestRedirectUrl.Location = new System.Drawing.Point(311, 139);
+            this.btnSaveTestRedirectUrl.Name = "btnSaveTestRedirectUrl";
+            this.btnSaveTestRedirectUrl.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveTestRedirectUrl.TabIndex = 21;
+            this.btnSaveTestRedirectUrl.Text = "Save";
+            this.btnSaveTestRedirectUrl.UseVisualStyleBackColor = true;
+            this.btnSaveTestRedirectUrl.Visible = false;
+            this.btnSaveTestRedirectUrl.Click += new System.EventHandler(this.btnSaveTestRedirectUrl_Click);
             // 
             // label10
             // 
@@ -775,14 +831,14 @@
             this.label10.TabIndex = 20;
             this.label10.Text = "Redirect Url:";
             // 
-            // textBox2
+            // txtBoxRedirectUrl
             // 
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox2.Location = new System.Drawing.Point(154, 96);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(327, 20);
-            this.textBox2.TabIndex = 19;
+            this.txtBoxRedirectUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtBoxRedirectUrl.Location = new System.Drawing.Point(154, 96);
+            this.txtBoxRedirectUrl.Name = "txtBoxRedirectUrl";
+            this.txtBoxRedirectUrl.ReadOnly = true;
+            this.txtBoxRedirectUrl.Size = new System.Drawing.Size(327, 20);
+            this.txtBoxRedirectUrl.TabIndex = 19;
             // 
             // label7
             // 
@@ -794,14 +850,13 @@
             this.label7.TabIndex = 18;
             this.label7.Text = "Test Redirect Url :";
             // 
-            // textBox1
+            // txtBoxTestRediectUrl
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Location = new System.Drawing.Point(154, 60);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(327, 20);
-            this.textBox1.TabIndex = 17;
+            this.txtBoxTestRediectUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtBoxTestRediectUrl.Location = new System.Drawing.Point(154, 60);
+            this.txtBoxTestRediectUrl.Name = "txtBoxTestRediectUrl";
+            this.txtBoxTestRediectUrl.Size = new System.Drawing.Size(327, 20);
+            this.txtBoxTestRediectUrl.TabIndex = 17;
             // 
             // inputtestcaseBindingSource
             // 
@@ -830,15 +885,69 @@
             // 
             this.element_testTableAdapter.ClearBeforeFill = true;
             // 
-            // txtBoxIdElementTest
+            // groupBox1
             // 
-            this.txtBoxIdElementTest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtBoxIdElementTest.Location = new System.Drawing.Point(243, 31);
-            this.txtBoxIdElementTest.Name = "txtBoxIdElementTest";
-            this.txtBoxIdElementTest.ReadOnly = true;
-            this.txtBoxIdElementTest.Size = new System.Drawing.Size(100, 20);
-            this.txtBoxIdElementTest.TabIndex = 13;
-            this.txtBoxIdElementTest.TextChanged += new System.EventHandler(this.txtBoxIdElementTest_TextChanged);
+            this.groupBox1.Controls.Add(this.btnAddUpdateDescription);
+            this.groupBox1.Controls.Add(this.btnCancelDescription);
+            this.groupBox1.Controls.Add(this.btnSaveDescription);
+            this.groupBox1.Controls.Add(this.label13);
+            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Location = new System.Drawing.Point(126, 22);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(509, 140);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Description";
+            // 
+            // btnAddUpdateDescription
+            // 
+            this.btnAddUpdateDescription.Location = new System.Drawing.Point(406, 86);
+            this.btnAddUpdateDescription.Name = "btnAddUpdateDescription";
+            this.btnAddUpdateDescription.Size = new System.Drawing.Size(75, 23);
+            this.btnAddUpdateDescription.TabIndex = 23;
+            this.btnAddUpdateDescription.Text = "Add";
+            this.btnAddUpdateDescription.UseVisualStyleBackColor = true;
+            this.btnAddUpdateDescription.Click += new System.EventHandler(this.btnAddUpdateDescription_Click);
+            // 
+            // btnCancelDescription
+            // 
+            this.btnCancelDescription.Location = new System.Drawing.Point(406, 105);
+            this.btnCancelDescription.Name = "btnCancelDescription";
+            this.btnCancelDescription.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelDescription.TabIndex = 22;
+            this.btnCancelDescription.Text = "Cancel";
+            this.btnCancelDescription.UseVisualStyleBackColor = true;
+            this.btnCancelDescription.Visible = false;
+            this.btnCancelDescription.Click += new System.EventHandler(this.btnCancelDescription_Click);
+            // 
+            // btnSaveDescription
+            // 
+            this.btnSaveDescription.Location = new System.Drawing.Point(317, 105);
+            this.btnSaveDescription.Name = "btnSaveDescription";
+            this.btnSaveDescription.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveDescription.TabIndex = 21;
+            this.btnSaveDescription.Text = "Save";
+            this.btnSaveDescription.UseVisualStyleBackColor = true;
+            this.btnSaveDescription.Visible = false;
+            this.btnSaveDescription.Click += new System.EventHandler(this.btnSaveDescription_Click);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(39, 60);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(76, 16);
+            this.label13.TabIndex = 18;
+            this.label13.Text = "Description";
+            // 
+            // textBox2
+            // 
+            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox2.Location = new System.Drawing.Point(154, 60);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(327, 20);
+            this.textBox2.TabIndex = 17;
             // 
             // xpath
             // 
@@ -923,6 +1032,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.inputtestcaseBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementDBDataSet1BindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementDBDataSet1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -994,12 +1105,21 @@
         private System.Windows.Forms.TabPage tabPageRedirectUrl;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtBoxRedirectUrl;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtBoxTestRediectUrl;
         private System.Windows.Forms.Label lbResult;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox txtBoxIdElementTest;
+        private System.Windows.Forms.Button btnCancelAddTestRedirect;
+        private System.Windows.Forms.Button btnSaveTestRedirectUrl;
+        private System.Windows.Forms.Button btnAddRedirectTest;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnAddUpdateDescription;
+        private System.Windows.Forms.Button btnCancelDescription;
+        private System.Windows.Forms.Button btnSaveDescription;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.DataGridViewTextBoxColumn xpath;
         private System.Windows.Forms.DataGridViewTextBoxColumn id_element;
         private System.Windows.Forms.DataGridViewTextBoxColumn xpath_full;

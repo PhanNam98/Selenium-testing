@@ -27,7 +27,7 @@ namespace Generate_TestCase_Selenium
         private int ID_URL;
         private string ID_Testcase;
         private bool IsNew = true;
-        
+        private bool IsNewRedirect = true;
         private void frmInputTestCase_Load(object sender, EventArgs e)
         {
             // TODO: This line of code loads data into the 'elementDBDataSet4.Element_test' table. You can move, or remove it, as needed.
@@ -231,19 +231,33 @@ namespace Generate_TestCase_Selenium
             groupBoxComfirmOutput.Visible = false;
         }
 
-        private void tabPageInputEltTest_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("", "");
-        }
-
+      
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControl.SelectedTab.Text == "Output")
             {
                 dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, ID_Testcase);
             }
-            
-            
+            else
+                if (tabControl.SelectedIndex == 2)
+            {
+                var redirect_Url = BUL.RedirectUrlBUL.Get_RedirectUrlTest(ID_Testcase,ID_URL);
+                if(redirect_Url!=null)
+                {
+                    IsNewRedirect = false;
+                    btnAddRedirectTest.Text = "Edit";
+                    txtBoxRedirectUrl.Text = redirect_Url.current_url;
+                    txtBoxTestRediectUrl.Text = redirect_Url.redirect_url_test;
+                    txtBoxTestRediectUrl.ReadOnly = true;
+                }
+                else
+                {
+                    btnAddRedirectTest.Text = "Add";
+                    IsNewRedirect = true;
+                }
+            }
+
+
         }
         public string Generate_RandomString(Random random, int size, bool lowerCase = true)
         {
@@ -285,6 +299,89 @@ namespace Generate_TestCase_Selenium
                 btnDeleteTestElt.Enabled = true;
                 btnEditTestElt.Enabled = true;
             }
+        }
+
+        private void btnSaveTestRedirectUrl_Click(object sender, EventArgs e)
+        {
+            if (txtBoxTestRediectUrl.Text != "")
+            {
+                if (IsNewRedirect)
+                {
+                    if (BUL.RedirectUrlBUL.Insert_RedirectUrlTest(new Redirect_url()
+                    {
+                        id_url = ID_URL,
+                        current_url = "",
+                        id_testcase = ID_Testcase,
+                        redirect_url_test = txtBoxTestRediectUrl.Text
+                    }))
+                    {
+                        MessageBox.Show("Insert successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnAddRedirectTest.Text = "Edit";
+                    }
+                    else
+                        MessageBox.Show("Error when insert", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                }
+                else if (!IsNewRedirect)
+                {
+                    if (BUL.RedirectUrlBUL.Update_RedirectUrlTest(ID_Testcase, ID_URL, txtBoxTestRediectUrl.Text))
+                    {
+                        MessageBox.Show("Update successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnAddRedirectTest.Text = "Edit";
+                    }
+                    else
+                        MessageBox.Show("Error when update", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Test Redirect Url is required ", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            btnSaveTestRedirectUrl.Visible = false;
+            btnCancelAddTestRedirect.Visible = false;
+            btnAddRedirectTest.Visible = true;
+        }
+
+        private void btnAddRedirectTest_Click(object sender, EventArgs e)
+        {
+            btnAddRedirectTest.Visible = false;
+            btnSaveTestRedirectUrl.Visible = true;
+            btnCancelAddTestRedirect.Visible = true;
+            txtBoxTestRediectUrl.ReadOnly = false;
+            
+        }
+
+        private void btnCancelAddTestRedirect_Click(object sender, EventArgs e)
+        {
+            var redirect_Url = BUL.RedirectUrlBUL.Get_RedirectUrlTest(ID_Testcase, ID_URL);
+            if (redirect_Url != null)
+            {
+                IsNewRedirect = false;
+                btnAddRedirectTest.Text = "Edit";
+                txtBoxRedirectUrl.Text = redirect_Url.current_url;
+                txtBoxTestRediectUrl.Text = redirect_Url.redirect_url_test;
+                txtBoxTestRediectUrl.ReadOnly = true;
+            }
+            else
+            {
+                btnAddRedirectTest.Text = "Add";
+                IsNewRedirect = true;
+            }
+        }
+
+        private void btnSaveDescription_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddUpdateDescription_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCancelDescription_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

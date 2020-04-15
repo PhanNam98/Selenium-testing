@@ -69,5 +69,26 @@ namespace DAL
             catch { }
             return null;
         }
+        public bool update_ValueResult_Testcase(int id_url, string id_testcase, string valueresult)
+        {
+            try
+            {
+                using (ElementDBEntities db = new ElementDBEntities())
+                {
+
+                    var testcase = db.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
+                    testcase.value_return = valueresult;
+                    db.Element_test.Attach(testcase);
+                    db.Entry(testcase).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+
+            }
+            return false;
+        }
     }
 }

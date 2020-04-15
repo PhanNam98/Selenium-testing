@@ -34,5 +34,9 @@ namespace BUL
         {
             return testCaseDAL.Update_ResultTestcase(id_url, id_testcase,result);
         }
+        public static bool Update_DescriptionTestcase(int id_url, string id_testcase, string description)
+        {
+            return testCaseDAL.Update_DescriptionTestcase(id_url, id_testcase, description);
+        }
     }
 }

@@ -28,12 +28,12 @@ namespace TestCase
         private Thread runTest;
         public void Run()
         {
-          
+
             int isPass = 1;
             //try
             //{
             SetUpDriver(URL);
-            chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            //chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             var list_inputtest = BUL.InputTestcaseBUL.Get_InputTestcase_ByIdTestcase(Id_testcase, ID_URL).ToList();
             var list_output = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, Id_testcase).ToList();
             //var submit = list_inputtest.Where(p => p.action.Equals("submit")).SingleOrDefault();
@@ -101,7 +101,18 @@ namespace TestCase
                         }
                     case "submit":
                         {
-                            chromedriver.FindElementByXPath(inputtest.xpath).Click();
+                            try
+                            {
+                                chromedriver.FindElementByXPath(inputtest.xpath).Click();
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.Message.Equals("element not interactable"))
+                                {
+
+                                }
+                            }
+
                             break;
                         }
                 }
@@ -145,83 +156,85 @@ namespace TestCase
                             }
                             catch
                             {
-
-                            }
-                        }
-                    }
-                    catch
-                    {
-                        foreach (var inputtest in list_inputtest)
-                        {
-                            try
-                            {
-                                chromedriver.FindElementByXPath(inputtest.xpath).Click();
-                                try
+                                foreach (var inputtest in list_inputtest)
                                 {
-                                    IWebElement testelt;
                                     try
                                     {
-                                        testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                                    }
-                                    catch
-                                    {
+                                        chromedriver.FindElementByXPath(inputtest.xpath).Click();
                                         try
                                         {
-                                            testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                                            string vt;
+                                            //IWebElement testelt;
                                             try
                                             {
-                                                vt = testelt.Text;
+                                                testelt = chromedriver.FindElementByXPath(outputtest.xpath);
                                             }
                                             catch
                                             {
-                                                vt = testelt.GetAttribute("value");
-                                            }
-                                            if (vt != null)
-                                            {
-                                                outputtest.value_return = vt;
-                                                if (!vt.Equals(outputtest.value_test))
+                                                try
                                                 {
-                                                    isPass = 0;
+                                                    testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                                                    string vt;
+                                                    try
+                                                    {
+                                                        vt = testelt.Text;
+                                                    }
+                                                    catch
+                                                    {
+                                                        vt = testelt.GetAttribute("value");
+                                                    }
+                                                    if (vt != null)
+                                                    {
+                                                        outputtest.value_return = vt;
+                                                        if (!vt.Equals(outputtest.value_test))
+                                                        {
+                                                            isPass = 0;
+                                                        }
+                                                    }
+                                                    break;
                                                 }
+                                                catch
+                                                {
+
+                                                }
+
                                             }
-                                            break;
+
+
                                         }
                                         catch
                                         {
 
                                         }
+                                    }
+                                    catch
+                                    {
 
                                     }
 
 
-                                }
-                                catch
-                                {
 
                                 }
                             }
-                            catch
-                            {
-
-                            }
-
 
 
                         }
                     }
 
+                    catch
+                    {
 
 
+                    }
                 }
             }
             else
             {
                 isPass = -1;
             }
-
+            string current_url = chromedriver.Url;
+            BUL.RedirectUrlBUL.Update_RedirectUrl(Id_testcase, ID_URL, current_url);
             QuitDriver();
-            if(isPass==1)
+            if (isPass == 1)
             {
                 BUL.TestCaseBUL.Update_ResultTestcase(ID_URL, Id_testcase, "Pass");
             }
@@ -263,15 +276,19 @@ namespace TestCase
                             try
                             {
                                 var fill = chromedriver.FindElementByXPath(inputtest.xpath);
-                                fill.Click();
-                                fill.SendKeys(inputtest.value);
+                                if (fill.Displayed)
+                                {
+                                    fill.Click();
+                                    fill.SendKeys(inputtest.value);
+                                }
+
                             }
                             catch (Exception e)
                             {
-                                if (e.Message.Equals("element not interactable"))
-                                {
+                                //if (e.Message.Equals("element not interactable"))
+                                //{
 
-                                }
+                                //}
                             }
 
 
@@ -320,7 +337,7 @@ namespace TestCase
                             try
                             {
                                 chromedriver.FindElementByXPath(inputtest.xpath).Click();
-                                
+
                             }
                             catch (Exception e)
                             {
@@ -329,7 +346,7 @@ namespace TestCase
 
                                 }
                             }
-                           
+
                             break;
                         }
                 }
@@ -340,56 +357,91 @@ namespace TestCase
             {
                 foreach (var outputtest in list_output)
                 {
+
+                    IWebElement testelt;
+
                     try
                     {
-                        IWebElement testelt;
+
+                        testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                        string vt;
                         try
                         {
-                            testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                            vt = testelt.Text;
                         }
                         catch
                         {
-                            try
-                            {
-                                testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                                string vt;
-                                try
-                                {
-                                    vt = testelt.Text;
-                                }
-                                catch
-                                {
-                                    vt = testelt.GetAttribute("value");
-                                }
-                                if (vt != null)
-                                {
-                                    outputtest.value_return = vt;
-                                    if (!vt.Equals(outputtest.value_test))
-                                    {
-                                        isPass = 0;
-                                    }
-                                }
-                                break;
-                            }
-                            catch
-                            {
-
-                            }
+                            vt = testelt.GetAttribute("value");
                         }
+                        if (vt != null)
+                        {
+                            outputtest.value_return = vt;
+                            if (!vt.Equals(outputtest.value_test))
+                            {
+                                isPass = 0;
+                            }
+                            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
+                        }
+
+
+
                     }
                     catch
                     {
-                        foreach (var inputtest in list_inputtest)
+                        try
                         {
+                            testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                            string vt;
                             try
                             {
-                                chromedriver.FindElementByXPath(inputtest.xpath).Click();
-                                try
+                                vt = testelt.Text;
+                            }
+                            catch
+                            {
+                                vt = testelt.GetAttribute("value");
+                            }
+                            if (vt != null)
+                            {
+                                outputtest.value_return = vt;
+                                if (!vt.Equals(outputtest.value_test))
                                 {
-                                    IWebElement testelt;
+                                    isPass = 0;
+                                }
+                                BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
+                            }
+
+                        }
+                        catch
+                        {
+                            foreach (var inputtest in list_inputtest)
+                            {
+
+                                var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
+                                if (testDisplayed.Displayed)
+                                {
+                                    testDisplayed.Click();
                                     try
                                     {
                                         testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                                        string vt;
+                                        try
+                                        {
+                                            vt = testelt.Text;
+                                        }
+                                        catch
+                                        {
+                                            vt = testelt.GetAttribute("value");
+                                        }
+                                        if (vt != null)
+                                        {
+                                            outputtest.value_return = vt;
+                                            if (!vt.Equals(outputtest.value_test))
+                                            {
+                                                isPass = 0;
+                                            }
+                                            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
+                                        }
+                                        break;
                                     }
                                     catch
                                     {
@@ -412,6 +464,7 @@ namespace TestCase
                                                 {
                                                     isPass = 0;
                                                 }
+                                                BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
                                             }
                                             break;
                                         }
@@ -424,20 +477,11 @@ namespace TestCase
 
 
                                 }
-                                catch
-                                {
-
-                                }
-                            }
-                            catch
-                            {
 
                             }
-
-
-
                         }
                     }
+
 
 
 
@@ -447,7 +491,8 @@ namespace TestCase
             {
                 isPass = -1;
             }
-
+            string current_url = chromedriver.Url;
+            BUL.RedirectUrlBUL.Update_RedirectUrl(Id_testcase, ID_URL, current_url);
             QuitDriver();
             string result;
             if (isPass == 1)
