@@ -32,6 +32,15 @@
             this.pnlForm = new System.Windows.Forms.Panel();
             this.pnlTestcase = new System.Windows.Forms.Panel();
             this.dataGridViewListTestCase = new System.Windows.Forms.DataGridView();
+            this.istestDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.idtestcaseDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.idurlDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.resultDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.createdDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.modifiedDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnRun = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.btnViewTestcase = new System.Windows.Forms.DataGridViewButtonColumn();
             this.testcaseBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.elementDBDataSet2 = new Generate_TestCase_Selenium.ElementDBDataSet2();
             this.pnlStatus = new System.Windows.Forms.Panel();
@@ -49,15 +58,13 @@
             this.fKInputtestcaseTestcase1BindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.input_testcaseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Input_testcaseTableAdapter();
             this.test_caseTableAdapter1 = new Generate_TestCase_Selenium.ElementDBDataSet2TableAdapters.Test_caseTableAdapter();
-            this.istestDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.idtestcaseDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.idurlDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.resultDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.createdDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.modifiedDateDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnRun = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.btnViewTestcase = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lbPass = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lbFailure = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lbSkip = new System.Windows.Forms.Label();
+            this.lbRemainingRun = new System.Windows.Forms.Label();
             this.pnlForm.SuspendLayout();
             this.pnlTestcase.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewListTestCase)).BeginInit();
@@ -115,140 +122,6 @@
             this.dataGridViewListTestCase.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewListTestCase_CellContentClick);
             this.dataGridViewListTestCase.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewListTestCase_CellFormatting);
             this.dataGridViewListTestCase.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridViewListTestCase_CurrentCellDirtyStateChanged);
-            // 
-            // testcaseBindingSource
-            // 
-            this.testcaseBindingSource.DataMember = "Test_case";
-            this.testcaseBindingSource.DataSource = this.elementDBDataSet2;
-            // 
-            // elementDBDataSet2
-            // 
-            this.elementDBDataSet2.DataSetName = "ElementDBDataSet2";
-            this.elementDBDataSet2.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // pnlStatus
-            // 
-            this.pnlStatus.Controls.Add(this.lbCurrentCount);
-            this.pnlStatus.Controls.Add(this.lbNumberOfTestcase);
-            this.pnlStatus.Controls.Add(this.labelNumber);
-            this.pnlStatus.Location = new System.Drawing.Point(9, 3);
-            this.pnlStatus.Name = "pnlStatus";
-            this.pnlStatus.Size = new System.Drawing.Size(738, 47);
-            this.pnlStatus.TabIndex = 0;
-            // 
-            // lbCurrentCount
-            // 
-            this.lbCurrentCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbCurrentCount.AutoSize = true;
-            this.lbCurrentCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCurrentCount.Location = new System.Drawing.Point(141, 16);
-            this.lbCurrentCount.Name = "lbCurrentCount";
-            this.lbCurrentCount.Size = new System.Drawing.Size(15, 16);
-            this.lbCurrentCount.TabIndex = 8;
-            this.lbCurrentCount.Text = "0";
-            this.lbCurrentCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // lbNumberOfTestcase
-            // 
-            this.lbNumberOfTestcase.AutoSize = true;
-            this.lbNumberOfTestcase.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNumberOfTestcase.Location = new System.Drawing.Point(162, 16);
-            this.lbNumberOfTestcase.Name = "lbNumberOfTestcase";
-            this.lbNumberOfTestcase.Size = new System.Drawing.Size(15, 16);
-            this.lbNumberOfTestcase.TabIndex = 7;
-            this.lbNumberOfTestcase.Text = "0";
-            // 
-            // labelNumber
-            // 
-            this.labelNumber.AutoSize = true;
-            this.labelNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelNumber.Location = new System.Drawing.Point(3, 16);
-            this.labelNumber.Name = "labelNumber";
-            this.labelNumber.Size = new System.Drawing.Size(136, 16);
-            this.labelNumber.TabIndex = 6;
-            this.labelNumber.Text = "Number of Test case:";
-            // 
-            // pnlTitle
-            // 
-            this.pnlTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlTitle.Controls.Add(this.lbid_url);
-            this.pnlTitle.Controls.Add(this.label1);
-            this.pnlTitle.Controls.Add(this.btnRunTestCase);
-            this.pnlTitle.Controls.Add(this.txtboxUrl);
-            this.pnlTitle.Controls.Add(this.labelUrl);
-            this.pnlTitle.Location = new System.Drawing.Point(3, 0);
-            this.pnlTitle.Name = "pnlTitle";
-            this.pnlTitle.Size = new System.Drawing.Size(669, 77);
-            this.pnlTitle.TabIndex = 0;
-            // 
-            // lbid_url
-            // 
-            this.lbid_url.AutoSize = true;
-            this.lbid_url.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbid_url.Location = new System.Drawing.Point(132, 42);
-            this.lbid_url.Name = "lbid_url";
-            this.lbid_url.Size = new System.Drawing.Size(15, 16);
-            this.lbid_url.TabIndex = 6;
-            this.lbid_url.Text = "0";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(62, 42);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 16);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "ID_URL:";
-            // 
-            // btnRunTestCase
-            // 
-            this.btnRunTestCase.Location = new System.Drawing.Point(423, 11);
-            this.btnRunTestCase.Name = "btnRunTestCase";
-            this.btnRunTestCase.Size = new System.Drawing.Size(90, 28);
-            this.btnRunTestCase.TabIndex = 4;
-            this.btnRunTestCase.Text = "Run All";
-            this.btnRunTestCase.UseVisualStyleBackColor = true;
-            this.btnRunTestCase.Click += new System.EventHandler(this.btnRunTestCase_Click);
-            // 
-            // txtboxUrl
-            // 
-            this.txtboxUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtboxUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtboxUrl.Location = new System.Drawing.Point(135, 11);
-            this.txtboxUrl.Name = "txtboxUrl";
-            this.txtboxUrl.ReadOnly = true;
-            this.txtboxUrl.Size = new System.Drawing.Size(272, 26);
-            this.txtboxUrl.TabIndex = 2;
-            this.txtboxUrl.Text = "https://facebook.com/";
-            // 
-            // labelUrl
-            // 
-            this.labelUrl.AutoSize = true;
-            this.labelUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUrl.Location = new System.Drawing.Point(62, 16);
-            this.labelUrl.Name = "labelUrl";
-            this.labelUrl.Size = new System.Drawing.Size(38, 16);
-            this.labelUrl.TabIndex = 1;
-            this.labelUrl.Text = "URL:";
-            // 
-            // elementDBDataSet1
-            // 
-            this.elementDBDataSet1.DataSetName = "ElementDBDataSet1";
-            this.elementDBDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // test_caseTableAdapter
-            // 
-            this.test_caseTableAdapter.ClearBeforeFill = true;
-            // 
-            // input_testcaseTableAdapter
-            // 
-            this.input_testcaseTableAdapter.ClearBeforeFill = true;
-            // 
-            // test_caseTableAdapter1
-            // 
-            this.test_caseTableAdapter1.ClearBeforeFill = true;
             // 
             // istestDataGridViewCheckBoxColumn
             // 
@@ -321,6 +194,221 @@
             this.btnViewTestcase.UseColumnTextForButtonValue = true;
             this.btnViewTestcase.Width = 60;
             // 
+            // testcaseBindingSource
+            // 
+            this.testcaseBindingSource.DataMember = "Test_case";
+            this.testcaseBindingSource.DataSource = this.elementDBDataSet2;
+            // 
+            // elementDBDataSet2
+            // 
+            this.elementDBDataSet2.DataSetName = "ElementDBDataSet2";
+            this.elementDBDataSet2.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // pnlStatus
+            // 
+            this.pnlStatus.Controls.Add(this.lbSkip);
+            this.pnlStatus.Controls.Add(this.label6);
+            this.pnlStatus.Controls.Add(this.lbFailure);
+            this.pnlStatus.Controls.Add(this.label4);
+            this.pnlStatus.Controls.Add(this.lbPass);
+            this.pnlStatus.Controls.Add(this.label2);
+            this.pnlStatus.Controls.Add(this.lbCurrentCount);
+            this.pnlStatus.Controls.Add(this.lbNumberOfTestcase);
+            this.pnlStatus.Controls.Add(this.labelNumber);
+            this.pnlStatus.Location = new System.Drawing.Point(9, 3);
+            this.pnlStatus.Name = "pnlStatus";
+            this.pnlStatus.Size = new System.Drawing.Size(738, 47);
+            this.pnlStatus.TabIndex = 0;
+            // 
+            // lbCurrentCount
+            // 
+            this.lbCurrentCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbCurrentCount.AutoSize = true;
+            this.lbCurrentCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbCurrentCount.Location = new System.Drawing.Point(141, 16);
+            this.lbCurrentCount.Name = "lbCurrentCount";
+            this.lbCurrentCount.Size = new System.Drawing.Size(15, 16);
+            this.lbCurrentCount.TabIndex = 8;
+            this.lbCurrentCount.Text = "0";
+            this.lbCurrentCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lbNumberOfTestcase
+            // 
+            this.lbNumberOfTestcase.AutoSize = true;
+            this.lbNumberOfTestcase.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbNumberOfTestcase.Location = new System.Drawing.Point(162, 16);
+            this.lbNumberOfTestcase.Name = "lbNumberOfTestcase";
+            this.lbNumberOfTestcase.Size = new System.Drawing.Size(15, 16);
+            this.lbNumberOfTestcase.TabIndex = 7;
+            this.lbNumberOfTestcase.Text = "0";
+            // 
+            // labelNumber
+            // 
+            this.labelNumber.AutoSize = true;
+            this.labelNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelNumber.Location = new System.Drawing.Point(3, 16);
+            this.labelNumber.Name = "labelNumber";
+            this.labelNumber.Size = new System.Drawing.Size(136, 16);
+            this.labelNumber.TabIndex = 6;
+            this.labelNumber.Text = "Number of Test case:";
+            // 
+            // pnlTitle
+            // 
+            this.pnlTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlTitle.Controls.Add(this.lbRemainingRun);
+            this.pnlTitle.Controls.Add(this.lbid_url);
+            this.pnlTitle.Controls.Add(this.label1);
+            this.pnlTitle.Controls.Add(this.btnRunTestCase);
+            this.pnlTitle.Controls.Add(this.txtboxUrl);
+            this.pnlTitle.Controls.Add(this.labelUrl);
+            this.pnlTitle.Location = new System.Drawing.Point(3, 0);
+            this.pnlTitle.Name = "pnlTitle";
+            this.pnlTitle.Size = new System.Drawing.Size(796, 77);
+            this.pnlTitle.TabIndex = 0;
+            // 
+            // lbid_url
+            // 
+            this.lbid_url.AutoSize = true;
+            this.lbid_url.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbid_url.Location = new System.Drawing.Point(132, 42);
+            this.lbid_url.Name = "lbid_url";
+            this.lbid_url.Size = new System.Drawing.Size(15, 16);
+            this.lbid_url.TabIndex = 6;
+            this.lbid_url.Text = "0";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(62, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(58, 16);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "ID_URL:";
+            // 
+            // btnRunTestCase
+            // 
+            this.btnRunTestCase.Location = new System.Drawing.Point(423, 11);
+            this.btnRunTestCase.Name = "btnRunTestCase";
+            this.btnRunTestCase.Size = new System.Drawing.Size(90, 28);
+            this.btnRunTestCase.TabIndex = 4;
+            this.btnRunTestCase.Text = "Run All";
+            this.btnRunTestCase.UseVisualStyleBackColor = true;
+            this.btnRunTestCase.Click += new System.EventHandler(this.btnRunTestCase_Click);
+            // 
+            // txtboxUrl
+            // 
+            this.txtboxUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtboxUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtboxUrl.Location = new System.Drawing.Point(135, 11);
+            this.txtboxUrl.Name = "txtboxUrl";
+            this.txtboxUrl.ReadOnly = true;
+            this.txtboxUrl.Size = new System.Drawing.Size(272, 26);
+            this.txtboxUrl.TabIndex = 2;
+            this.txtboxUrl.Text = "https://facebook.com/";
+            // 
+            // labelUrl
+            // 
+            this.labelUrl.AutoSize = true;
+            this.labelUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUrl.Location = new System.Drawing.Point(62, 16);
+            this.labelUrl.Name = "labelUrl";
+            this.labelUrl.Size = new System.Drawing.Size(38, 16);
+            this.labelUrl.TabIndex = 1;
+            this.labelUrl.Text = "URL:";
+            // 
+            // elementDBDataSet1
+            // 
+            this.elementDBDataSet1.DataSetName = "ElementDBDataSet1";
+            this.elementDBDataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // test_caseTableAdapter
+            // 
+            this.test_caseTableAdapter.ClearBeforeFill = true;
+            // 
+            // input_testcaseTableAdapter
+            // 
+            this.input_testcaseTableAdapter.ClearBeforeFill = true;
+            // 
+            // test_caseTableAdapter1
+            // 
+            this.test_caseTableAdapter1.ClearBeforeFill = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.LimeGreen;
+            this.label2.Location = new System.Drawing.Point(350, 15);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(42, 16);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Pass:";
+            // 
+            // lbPass
+            // 
+            this.lbPass.AutoSize = true;
+            this.lbPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPass.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbPass.Location = new System.Drawing.Point(394, 15);
+            this.lbPass.Name = "lbPass";
+            this.lbPass.Size = new System.Drawing.Size(15, 16);
+            this.lbPass.TabIndex = 10;
+            this.lbPass.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Red;
+            this.label4.Location = new System.Drawing.Point(458, 15);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(52, 16);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Failure:";
+            // 
+            // lbFailure
+            // 
+            this.lbFailure.AutoSize = true;
+            this.lbFailure.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFailure.Location = new System.Drawing.Point(516, 16);
+            this.lbFailure.Name = "lbFailure";
+            this.lbFailure.Size = new System.Drawing.Size(15, 16);
+            this.lbFailure.TabIndex = 12;
+            this.lbFailure.Text = "0";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.Blue;
+            this.label6.Location = new System.Drawing.Point(574, 16);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(38, 16);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Skip:";
+            // 
+            // lbSkip
+            // 
+            this.lbSkip.AutoSize = true;
+            this.lbSkip.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSkip.Location = new System.Drawing.Point(618, 16);
+            this.lbSkip.Name = "lbSkip";
+            this.lbSkip.Size = new System.Drawing.Size(15, 16);
+            this.lbSkip.TabIndex = 14;
+            this.lbSkip.Text = "0";
+            // 
+            // lbRemainingRun
+            // 
+            this.lbRemainingRun.AutoSize = true;
+            this.lbRemainingRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbRemainingRun.Location = new System.Drawing.Point(546, 16);
+            this.lbRemainingRun.Name = "lbRemainingRun";
+            this.lbRemainingRun.Size = new System.Drawing.Size(161, 16);
+            this.lbRemainingRun.TabIndex = 7;
+            this.lbRemainingRun.Text = "Remaining 0 Test case(s)";
+            // 
             // frmTestCase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -378,5 +466,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn modifiedDateDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewButtonColumn btnRun;
         private System.Windows.Forms.DataGridViewButtonColumn btnViewTestcase;
+        private System.Windows.Forms.Label lbSkip;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lbFailure;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbPass;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbRemainingRun;
     }
 }

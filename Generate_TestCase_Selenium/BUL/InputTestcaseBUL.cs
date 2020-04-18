@@ -29,5 +29,17 @@ namespace BUL
            
             return inputTestcase.get_InputTestcase_ByIdTestcase(id_testcase,id_url);
         }
+        public static bool Delete_ListInputTestcase(string id_testcase, int id_url)
+        {
+            return inputTestcase.delete_InputTestElement(id_testcase, id_url);
+        }
+        public static bool Update_ListInputTestcase(Input_testcase oldElement)
+        {
+            return inputTestcase.update_InputTestElement(oldElement);
+        }
+        public static bool update_ValueInputTestElement(int id_url, string id_testcase,string id_element, string value)
+        {
+            return inputTestcase.update_ValueInputTestElement(id_url, id_testcase, id_element, value);
+        }
     }
 }

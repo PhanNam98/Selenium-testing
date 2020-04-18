@@ -24,10 +24,24 @@ namespace Generate_TestCase_Selenium
             txtboxId_testcase.Text = ID_Testcase;
             lbResult.Text = BUL.TestCaseBUL.Get_ResultTestcase(ID_URL,ID_Testcase);
         }
+        public frmInputTestCase(int id_url, string id_testcase,List<Test_case> listTestcase)
+        {
+            InitializeComponent();
+            ListTestCase = listTestcase;
+            indexList = ListTestCase.IndexOf(ListTestCase.Where(p => p.id_testcase == id_testcase).SingleOrDefault());
+            this.ID_URL = id_url;
+            this.ID_Testcase = id_testcase;
+            lbIdUrl.Text = ID_URL.ToString();
+            txtboxId_testcase.Text = ID_Testcase;
+            lbResult.Text = BUL.TestCaseBUL.Get_ResultTestcase(ID_URL,ID_Testcase);
+        }
+        private List<Test_case> ListTestCase;
         private int ID_URL;
         private string ID_Testcase;
+        private int indexList = 0;
         private bool IsNew = true;
         private bool IsNewRedirect = true;
+        private bool IsNewInputTestcase = true;
         private void frmInputTestCase_Load(object sender, EventArgs e)
         {
             // TODO: This line of code loads data into the 'elementDBDataSet4.Element_test' table. You can move, or remove it, as needed.
@@ -58,30 +72,76 @@ namespace Generate_TestCase_Selenium
 
         private void btnAddInputElt_Click(object sender, EventArgs e)
         {
-            
+            IsNewInputTestcase = true;
         }
 
         private void btnDeleteInputElt_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = MessageBox.Show("Delete this element?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                
+                if (!BUL.InputTestcaseBUL.Delete_ListInputTestcase(ID_Testcase,ID_URL))
+                {
+                    MessageBox.Show("Delete fail", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Delete successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            RefreshDataGridViewInput();
         }
 
         private void btnEditInputElt_Click(object sender, EventArgs e)
         {
             groupBoxEdit.Visible = true;
             groupBoxAction.Visible = false;
+            txtBoxInputValue.ReadOnly = false;
+            IsNewInputTestcase = false;
+
         }
 
         private void btnSaveEdit_Click(object sender, EventArgs e)
         {
+            if(IsNewInputTestcase)
+            {
+
+            }
+            else
+            {
+                if(!BUL.InputTestcaseBUL.update_ValueInputTestElement(ID_URL,ID_Testcase, txtBoxInputId_Elt.Text, txtBoxInputValue.Text))
+                {
+                    MessageBox.Show("Update fail", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Update successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+
             groupBoxEdit.Visible = false;
             groupBoxAction.Visible = true;
+            txtBoxInputValue.ReadOnly = true;
+            RefreshDataGridViewInput();
+            int r = dgvInput.CurrentCell.RowIndex;
+            txtBoxInputId_Elt.Text = dgvInput.Rows[r].Cells["idelementDataGridViewTextBoxColumn"].Value.ToString();
+            txtBoxInputValue.Text = dgvInput.Rows[r].Cells["valueDataGridViewTextBoxColumn"].Value.ToString();
+            txtBoxInputXpath.Text = dgvInput.Rows[r].Cells["xpathDataGridViewTextBoxColumn"].Value.ToString();
+            comboBoxAction.SelectedItem = dgvInput.Rows[r].Cells["actionDataGridViewTextBoxColumn"].Value.ToString();
+
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             groupBoxEdit.Visible = false;
             groupBoxAction.Visible = true;
+            txtBoxInputValue.ReadOnly = true;
+            int r = dgvInput.CurrentCell.RowIndex;
+            txtBoxInputId_Elt.Text = dgvInput.Rows[r].Cells["idelementDataGridViewTextBoxColumn"].Value.ToString();
+            txtBoxInputValue.Text = dgvInput.Rows[r].Cells["valueDataGridViewTextBoxColumn"].Value.ToString();
+            txtBoxInputXpath.Text = dgvInput.Rows[r].Cells["xpathDataGridViewTextBoxColumn"].Value.ToString();
+            comboBoxAction.SelectedItem = dgvInput.Rows[r].Cells["actionDataGridViewTextBoxColumn"].Value.ToString();
         }
 
         private void btnClose1_Click(object sender, EventArgs e)
@@ -89,6 +149,10 @@ namespace Generate_TestCase_Selenium
             this.Close();
         }
         private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        private void btnClose2_Click(object sender, EventArgs e)
         {
             this.Close();
         }
@@ -154,64 +218,72 @@ namespace Generate_TestCase_Selenium
 
         private void btnSaveOutput_Click(object sender, EventArgs e)
         {
-            if(IsNew)
+            if ((txtBoxFullxpathTestElt.Text.Equals("") && txtBoxXpathTestElt.Text.Equals("")))
             {
-                Random random = new Random();
-                Element_test element_Test = new Element_test();
-                element_Test.class_name = txtBoxClassnameTestElt.Text;
-                element_Test.id_element = ID_Testcase+ Generate_RandomString(random, 5, true);
-                element_Test.id_testcase = ID_Testcase;
-                element_Test.id_url = ID_URL;
-                element_Test.value_test = txtBoxTestValue.Text;
-                element_Test.xpath = txtBoxXpathTestElt.Text;
-                element_Test.xpath_full = txtBoxFullxpathTestElt.Text;
-                element_Test.value_return = "";
-                if(!BUL.TestElementBUL.Insert_TestElement(element_Test))
-                {
-                    MessageBox.Show("Error when save test element into database", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    MessageBox.Show("Save test element successfully into database", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                
-                
+                MessageBox.Show("Please fill Xpath or Full Xpath", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-                
-                Element_test element_Test = new Element_test();
-                element_Test.class_name = txtBoxClassnameTestElt.Text;
-                element_Test.id_element = txtBoxIdElementTest.Text;
-                element_Test.id_testcase = ID_Testcase;
-                element_Test.id_url = ID_URL;
-                element_Test.value_test = txtBoxTestValue.Text;
-                element_Test.xpath = txtBoxXpathTestElt.Text;
-                element_Test.xpath_full = txtBoxFullxpathTestElt.Text;
-                element_Test.value_return = txtBoxOutputValue.Text;
-                if (!BUL.TestElementBUL.Update_TestElement(element_Test))
+                if (IsNew)
                 {
-                    MessageBox.Show("Error when update test element", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Random random = new Random();
+                    Element_test element_Test = new Element_test();
+                    element_Test.class_name = txtBoxClassnameTestElt.Text;
+                    element_Test.id_element = ID_Testcase + Generate_RandomString(random, 5, true);
+                    element_Test.id_testcase = ID_Testcase;
+                    element_Test.id_url = ID_URL;
+                    element_Test.value_test = txtBoxTestValue.Text;
+                    element_Test.xpath = txtBoxXpathTestElt.Text;
+                    element_Test.xpath_full = txtBoxFullxpathTestElt.Text;
+                    element_Test.value_return = "";
+                    if (!BUL.TestElementBUL.Insert_TestElement(element_Test))
+                    {
+                        MessageBox.Show("Error when save test element into database", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Save test element successfully into database", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+
                 }
                 else
                 {
-                    MessageBox.Show("Update test element successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    Element_test element_Test = new Element_test();
+                    element_Test.class_name = txtBoxClassnameTestElt.Text;
+                    element_Test.id_element = txtBoxIdElementTest.Text;
+                    element_Test.id_testcase = ID_Testcase;
+                    element_Test.id_url = ID_URL;
+                    element_Test.value_test = txtBoxTestValue.Text;
+                    element_Test.xpath = txtBoxXpathTestElt.Text;
+                    element_Test.xpath_full = txtBoxFullxpathTestElt.Text;
+                    element_Test.value_return = txtBoxOutputValue.Text;
+                    if (!BUL.TestElementBUL.Update_TestElement(element_Test))
+                    {
+                        MessageBox.Show("Error when update test element", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Update test element successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
                 }
 
+                txtBoxClassnameTestElt.Clear();
+                txtBoxFullxpathTestElt.Clear();
+                txtBoxXpathTestElt.Clear();
+                txtBoxTestValue.Clear();
+                txtBoxOutputValue.Clear();
+                txtBoxIdElementTest.Clear();
+                dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, ID_Testcase);
+                txtBoxClassnameTestElt.ReadOnly = true;
+                txtBoxFullxpathTestElt.ReadOnly = true;
+                txtBoxXpathTestElt.ReadOnly = true;
+                txtBoxTestValue.ReadOnly = true;
+                groupBoxActionOutput.Enabled = true;
+                groupBoxComfirmOutput.Visible = false;
             }
-            txtBoxClassnameTestElt.Clear();
-            txtBoxFullxpathTestElt.Clear();
-            txtBoxXpathTestElt.Clear();
-            txtBoxTestValue.Clear();
-            txtBoxOutputValue.Clear();
-            txtBoxIdElementTest.Clear();
-            dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, ID_Testcase);
-            txtBoxClassnameTestElt.ReadOnly = true;
-            txtBoxFullxpathTestElt.ReadOnly = true;
-            txtBoxXpathTestElt.ReadOnly = true;
-            txtBoxTestValue.ReadOnly = true;
-            groupBoxActionOutput.Enabled = true;
-            groupBoxComfirmOutput.Visible = false;
         }
 
         private void btnCancelOutput_Click(object sender, EventArgs e)
@@ -255,6 +327,9 @@ namespace Generate_TestCase_Selenium
                     btnAddRedirectTest.Text = "Add";
                     IsNewRedirect = true;
                 }
+              
+                txtBoxDescription.Text = ListTestCase[indexList].description;
+                
             }
 
 
@@ -369,19 +444,48 @@ namespace Generate_TestCase_Selenium
             }
         }
 
-        private void btnSaveDescription_Click(object sender, EventArgs e)
-        {
-
-        }
-
+       
         private void btnAddUpdateDescription_Click(object sender, EventArgs e)
         {
-
+            DialogResult result = MessageBox.Show("Update description?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+               
+                if (!BUL.TestCaseBUL.Update_DescriptionTestcase(ID_URL,ID_Testcase,txtBoxDescription.Text))
+                {
+                    MessageBox.Show("Update fail", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Update successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            
         }
-
-        private void btnCancelDescription_Click(object sender, EventArgs e)
+        private void RefreshDataGridViewInput()
         {
-
+            dgvInput.DataSource = BUL.InputTestcaseBUL.Get_InputTestcase_ByIdTestcase(ID_Testcase, ID_URL);
         }
+
+        private void lbResult_TextChanged(object sender, EventArgs e)
+        {
+            if(lbResult.Text.ToLower().Equals("pass"))
+                {
+                lbResult.ForeColor = Color.Green;
+            }
+            else
+                if (lbResult.Text.ToLower().Equals("skip"))
+            {
+                lbResult.ForeColor = Color.Blue;
+            }
+            else
+            {
+                lbResult.ForeColor = Color.Red;
+            }
+        }
+
+
+
+        
     }
 }
