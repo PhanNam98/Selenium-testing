@@ -22,9 +22,10 @@ namespace Generate_TestCase_Selenium
             this.ID_Testcase = id_testcase;
             lbIdUrl.Text = ID_URL.ToString();
             txtboxId_testcase.Text = ID_Testcase;
-            lbResult.Text = BUL.TestCaseBUL.Get_ResultTestcase(ID_URL,ID_Testcase);
+            lbResult.Text = BUL.TestCaseBUL.Get_ResultTestcase(ID_URL, ID_Testcase);
+            LoadBtnNext_Prev();
         }
-        public frmInputTestCase(int id_url, string id_testcase,List<Test_case> listTestcase)
+        public frmInputTestCase(int id_url, string id_testcase, List<Test_case> listTestcase)
         {
             InitializeComponent();
             ListTestCase = listTestcase;
@@ -33,7 +34,8 @@ namespace Generate_TestCase_Selenium
             this.ID_Testcase = id_testcase;
             lbIdUrl.Text = ID_URL.ToString();
             txtboxId_testcase.Text = ID_Testcase;
-            lbResult.Text = BUL.TestCaseBUL.Get_ResultTestcase(ID_URL,ID_Testcase);
+            lbResult.Text = BUL.TestCaseBUL.Get_ResultTestcase(ID_URL, ID_Testcase);
+            LoadBtnNext_Prev();
         }
         private List<Test_case> ListTestCase;
         private int ID_URL;
@@ -65,10 +67,10 @@ namespace Generate_TestCase_Selenium
             txtBoxInputId_Elt.Text = dgvInput.Rows[r].Cells["idelementDataGridViewTextBoxColumn"].Value.ToString();
             txtBoxInputValue.Text = dgvInput.Rows[r].Cells["valueDataGridViewTextBoxColumn"].Value.ToString();
             txtBoxInputXpath.Text = dgvInput.Rows[r].Cells["xpathDataGridViewTextBoxColumn"].Value.ToString();
-            comboBoxAction.SelectedItem= dgvInput.Rows[r].Cells["actionDataGridViewTextBoxColumn"].Value.ToString();
+            comboBoxAction.SelectedItem = dgvInput.Rows[r].Cells["actionDataGridViewTextBoxColumn"].Value.ToString();
         }
 
-       
+
 
         private void btnAddInputElt_Click(object sender, EventArgs e)
         {
@@ -80,8 +82,8 @@ namespace Generate_TestCase_Selenium
             DialogResult result = MessageBox.Show("Delete this element?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                
-                if (!BUL.InputTestcaseBUL.Delete_ListInputTestcase(ID_Testcase,ID_URL))
+
+                if (!BUL.InputTestcaseBUL.Delete_ListInputTestcase(ID_Testcase, ID_URL))
                 {
                     MessageBox.Show("Delete fail", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -104,13 +106,13 @@ namespace Generate_TestCase_Selenium
 
         private void btnSaveEdit_Click(object sender, EventArgs e)
         {
-            if(IsNewInputTestcase)
+            if (IsNewInputTestcase)
             {
 
             }
             else
             {
-                if(!BUL.InputTestcaseBUL.update_ValueInputTestElement(ID_URL,ID_Testcase, txtBoxInputId_Elt.Text, txtBoxInputValue.Text))
+                if (!BUL.InputTestcaseBUL.update_ValueInputTestElement(ID_URL, ID_Testcase, txtBoxInputId_Elt.Text, txtBoxInputValue.Text))
                 {
                     MessageBox.Show("Update fail", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -176,7 +178,7 @@ namespace Generate_TestCase_Selenium
 
         private void btnDeleteTestElt_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Delete this test element?", "Warning", MessageBoxButtons.YesNo,MessageBoxIcon.Warning);
+            DialogResult result = MessageBox.Show("Delete this test element?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
                 Element_test element_Test = new Element_test();
@@ -188,7 +190,7 @@ namespace Generate_TestCase_Selenium
                 element_Test.xpath = txtBoxXpathTestElt.Text;
                 element_Test.xpath_full = txtBoxFullxpathTestElt.Text;
                 element_Test.value_return = txtBoxOutputValue.Text;
-                if(!BUL.TestElementBUL.Delete_TestElement(element_Test))
+                if (!BUL.TestElementBUL.Delete_TestElement(element_Test))
                 {
                     MessageBox.Show("Error when delete test element", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -199,7 +201,7 @@ namespace Generate_TestCase_Selenium
             }
             else if (result == DialogResult.No)
             {
-                
+
             }
             dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, ID_Testcase);
         }
@@ -303,21 +305,32 @@ namespace Generate_TestCase_Selenium
             groupBoxComfirmOutput.Visible = false;
         }
 
-      
+
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl.SelectedTab.Text == "Output")
+            LoadTab();
+
+        }
+        private void LoadTab()
+        {
+            if (tabControl.SelectedTab.Text == "Input")
             {
-                dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, ID_Testcase);
+                dgvInput.DataSource = BUL.InputTestcaseBUL.Get_InputTestcase_ByIdTestcase(txtboxId_testcase.Text, ID_URL);
+            }
+            else
+           if (tabControl.SelectedTab.Text == "Output")
+            {
+                dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, txtboxId_testcase.Text);
             }
             else
                 if (tabControl.SelectedIndex == 2)
             {
-                var redirect_Url = BUL.RedirectUrlBUL.Get_RedirectUrlTest(ID_Testcase,ID_URL);
-                if(redirect_Url!=null)
+                var redirect_Url = BUL.RedirectUrlBUL.Get_RedirectUrlTest(txtboxId_testcase.Text, ID_URL);
+                if (redirect_Url != null)
                 {
                     IsNewRedirect = false;
                     btnAddRedirectTest.Text = "Edit";
+                    txtBoxRedirectUrl.Clear();
                     txtBoxRedirectUrl.Text = redirect_Url.current_url;
                     txtBoxTestRediectUrl.Text = redirect_Url.redirect_url_test;
                     txtBoxTestRediectUrl.ReadOnly = true;
@@ -327,11 +340,10 @@ namespace Generate_TestCase_Selenium
                     btnAddRedirectTest.Text = "Add";
                     IsNewRedirect = true;
                 }
-              
-                txtBoxDescription.Text = ListTestCase[indexList].description;
-                
-            }
 
+                txtBoxDescription.Text = ListTestCase[indexList].description;
+
+            }
 
         }
         public string Generate_RandomString(Random random, int size, bool lowerCase = true)
@@ -353,7 +365,7 @@ namespace Generate_TestCase_Selenium
         private void dgvOutputtest_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int r = dgvOutputtest.CurrentCell.RowIndex;
-            txtBoxTestValue.Text= dgvOutputtest.Rows[r].Cells["value_test"].Value.ToString();
+            txtBoxTestValue.Text = dgvOutputtest.Rows[r].Cells["value_test"].Value.ToString();
             txtBoxOutputValue.Text = dgvOutputtest.Rows[r].Cells["value_return"].Value.ToString();
             txtBoxClassnameTestElt.Text = dgvOutputtest.Rows[r].Cells["class_name"].Value.ToString();
             txtBoxFullxpathTestElt.Text = dgvOutputtest.Rows[r].Cells["xpath_full"].Value.ToString();
@@ -364,7 +376,7 @@ namespace Generate_TestCase_Selenium
 
         private void txtBoxIdElementTest_TextChanged(object sender, EventArgs e)
         {
-            if(txtBoxIdElementTest.Text=="")
+            if (txtBoxIdElementTest.Text == "")
             {
                 btnDeleteTestElt.Enabled = false;
                 btnEditTestElt.Enabled = false;
@@ -423,7 +435,7 @@ namespace Generate_TestCase_Selenium
             btnSaveTestRedirectUrl.Visible = true;
             btnCancelAddTestRedirect.Visible = true;
             txtBoxTestRediectUrl.ReadOnly = false;
-            
+
         }
 
         private void btnCancelAddTestRedirect_Click(object sender, EventArgs e)
@@ -444,14 +456,14 @@ namespace Generate_TestCase_Selenium
             }
         }
 
-       
+
         private void btnAddUpdateDescription_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Update description?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-               
-                if (!BUL.TestCaseBUL.Update_DescriptionTestcase(ID_URL,ID_Testcase,txtBoxDescription.Text))
+
+                if (!BUL.TestCaseBUL.Update_DescriptionTestcase(ID_URL, ID_Testcase, txtBoxDescription.Text))
                 {
                     MessageBox.Show("Update fail", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -460,7 +472,7 @@ namespace Generate_TestCase_Selenium
                     MessageBox.Show("Update successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            
+
         }
         private void RefreshDataGridViewInput()
         {
@@ -469,8 +481,8 @@ namespace Generate_TestCase_Selenium
 
         private void lbResult_TextChanged(object sender, EventArgs e)
         {
-            if(lbResult.Text.ToLower().Equals("pass"))
-                {
+            if (lbResult.Text.ToLower().Equals("pass"))
+            {
                 lbResult.ForeColor = Color.Green;
             }
             else
@@ -484,8 +496,48 @@ namespace Generate_TestCase_Selenium
             }
         }
 
+        private void btnPrevTestcase_Click(object sender, EventArgs e)
+        {
 
+            ChangeTestcase(-1);
+            LoadBtnNext_Prev();
+        }
 
-        
+        private void btnNextTestcase_Click(object sender, EventArgs e)
+        {
+
+            ChangeTestcase(1);
+            LoadBtnNext_Prev();
+        }
+        private void ChangeTestcase(int step)
+        {
+            if (indexList + step >= 0 && indexList + step < ListTestCase.Count)
+            {
+                indexList += step;
+                this.ID_Testcase = ListTestCase[indexList].id_testcase;
+                txtboxId_testcase.Text = ID_Testcase;
+                lbResult.Text = BUL.TestCaseBUL.Get_ResultTestcase(ID_URL, ID_Testcase);
+                LoadTab();
+            }
+        }
+        private void LoadBtnNext_Prev()
+        {
+            if (indexList == 0)
+            {
+                btnPrevTestcase.Enabled = false;
+                btnNextTestcase.Enabled = true;
+            }
+            else
+            if (indexList == ListTestCase.Count - 1)
+            {
+                btnPrevTestcase.Enabled = true;
+                btnNextTestcase.Enabled = false;
+            }
+            else
+            {
+                btnPrevTestcase.Enabled = true;
+                btnNextTestcase.Enabled = true;
+            }
+        }
     }
 }

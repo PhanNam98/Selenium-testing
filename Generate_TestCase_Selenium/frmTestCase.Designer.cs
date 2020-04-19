@@ -44,10 +44,17 @@
             this.testcaseBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.elementDBDataSet2 = new Generate_TestCase_Selenium.ElementDBDataSet2();
             this.pnlStatus = new System.Windows.Forms.Panel();
+            this.lbSkip = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lbFailure = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lbPass = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.lbCurrentCount = new System.Windows.Forms.Label();
             this.lbNumberOfTestcase = new System.Windows.Forms.Label();
             this.labelNumber = new System.Windows.Forms.Label();
             this.pnlTitle = new System.Windows.Forms.Panel();
+            this.lbRemainingRun = new System.Windows.Forms.Label();
             this.lbid_url = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnRunTestCase = new System.Windows.Forms.Button();
@@ -58,13 +65,7 @@
             this.fKInputtestcaseTestcase1BindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.input_testcaseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Input_testcaseTableAdapter();
             this.test_caseTableAdapter1 = new Generate_TestCase_Selenium.ElementDBDataSet2TableAdapters.Test_caseTableAdapter();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lbPass = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.lbFailure = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.lbSkip = new System.Windows.Forms.Label();
-            this.lbRemainingRun = new System.Windows.Forms.Label();
+            this.pnlResult = new System.Windows.Forms.Panel();
             this.pnlForm.SuspendLayout();
             this.pnlTestcase.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewListTestCase)).BeginInit();
@@ -74,6 +75,7 @@
             this.pnlTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.elementDBDataSet1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fKInputtestcaseTestcase1BindingSource)).BeginInit();
+            this.pnlResult.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlForm
@@ -206,12 +208,7 @@
             // 
             // pnlStatus
             // 
-            this.pnlStatus.Controls.Add(this.lbSkip);
-            this.pnlStatus.Controls.Add(this.label6);
-            this.pnlStatus.Controls.Add(this.lbFailure);
-            this.pnlStatus.Controls.Add(this.label4);
-            this.pnlStatus.Controls.Add(this.lbPass);
-            this.pnlStatus.Controls.Add(this.label2);
+            this.pnlStatus.Controls.Add(this.pnlResult);
             this.pnlStatus.Controls.Add(this.lbCurrentCount);
             this.pnlStatus.Controls.Add(this.lbNumberOfTestcase);
             this.pnlStatus.Controls.Add(this.labelNumber);
@@ -219,6 +216,70 @@
             this.pnlStatus.Name = "pnlStatus";
             this.pnlStatus.Size = new System.Drawing.Size(738, 47);
             this.pnlStatus.TabIndex = 0;
+            // 
+            // lbSkip
+            // 
+            this.lbSkip.AutoSize = true;
+            this.lbSkip.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSkip.Location = new System.Drawing.Point(273, 11);
+            this.lbSkip.Name = "lbSkip";
+            this.lbSkip.Size = new System.Drawing.Size(15, 16);
+            this.lbSkip.TabIndex = 14;
+            this.lbSkip.Text = "0";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.Blue;
+            this.label6.Location = new System.Drawing.Point(229, 11);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(38, 16);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Skip:";
+            // 
+            // lbFailure
+            // 
+            this.lbFailure.AutoSize = true;
+            this.lbFailure.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbFailure.Location = new System.Drawing.Point(171, 11);
+            this.lbFailure.Name = "lbFailure";
+            this.lbFailure.Size = new System.Drawing.Size(15, 16);
+            this.lbFailure.TabIndex = 12;
+            this.lbFailure.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Red;
+            this.label4.Location = new System.Drawing.Point(113, 10);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(52, 16);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Failure:";
+            // 
+            // lbPass
+            // 
+            this.lbPass.AutoSize = true;
+            this.lbPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbPass.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbPass.Location = new System.Drawing.Point(49, 10);
+            this.lbPass.Name = "lbPass";
+            this.lbPass.Size = new System.Drawing.Size(15, 16);
+            this.lbPass.TabIndex = 10;
+            this.lbPass.Text = "0";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.LimeGreen;
+            this.label2.Location = new System.Drawing.Point(5, 10);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(42, 16);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Pass:";
             // 
             // lbCurrentCount
             // 
@@ -232,6 +293,7 @@
             this.lbCurrentCount.TabIndex = 8;
             this.lbCurrentCount.Text = "0";
             this.lbCurrentCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lbCurrentCount.Visible = false;
             // 
             // lbNumberOfTestcase
             // 
@@ -266,6 +328,16 @@
             this.pnlTitle.Name = "pnlTitle";
             this.pnlTitle.Size = new System.Drawing.Size(796, 77);
             this.pnlTitle.TabIndex = 0;
+            // 
+            // lbRemainingRun
+            // 
+            this.lbRemainingRun.AutoSize = true;
+            this.lbRemainingRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbRemainingRun.Location = new System.Drawing.Point(546, 16);
+            this.lbRemainingRun.Name = "lbRemainingRun";
+            this.lbRemainingRun.Size = new System.Drawing.Size(161, 16);
+            this.lbRemainingRun.TabIndex = 7;
+            this.lbRemainingRun.Text = "Remaining 0 Test case(s)";
             // 
             // lbid_url
             // 
@@ -335,79 +407,18 @@
             // 
             this.test_caseTableAdapter1.ClearBeforeFill = true;
             // 
-            // label2
+            // pnlResult
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.LimeGreen;
-            this.label2.Location = new System.Drawing.Point(350, 15);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 16);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Pass:";
-            // 
-            // lbPass
-            // 
-            this.lbPass.AutoSize = true;
-            this.lbPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPass.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbPass.Location = new System.Drawing.Point(394, 15);
-            this.lbPass.Name = "lbPass";
-            this.lbPass.Size = new System.Drawing.Size(15, 16);
-            this.lbPass.TabIndex = 10;
-            this.lbPass.Text = "0";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.Red;
-            this.label4.Location = new System.Drawing.Point(458, 15);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 16);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Failure:";
-            // 
-            // lbFailure
-            // 
-            this.lbFailure.AutoSize = true;
-            this.lbFailure.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbFailure.Location = new System.Drawing.Point(516, 16);
-            this.lbFailure.Name = "lbFailure";
-            this.lbFailure.Size = new System.Drawing.Size(15, 16);
-            this.lbFailure.TabIndex = 12;
-            this.lbFailure.Text = "0";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.Blue;
-            this.label6.Location = new System.Drawing.Point(574, 16);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(38, 16);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "Skip:";
-            // 
-            // lbSkip
-            // 
-            this.lbSkip.AutoSize = true;
-            this.lbSkip.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSkip.Location = new System.Drawing.Point(618, 16);
-            this.lbSkip.Name = "lbSkip";
-            this.lbSkip.Size = new System.Drawing.Size(15, 16);
-            this.lbSkip.TabIndex = 14;
-            this.lbSkip.Text = "0";
-            // 
-            // lbRemainingRun
-            // 
-            this.lbRemainingRun.AutoSize = true;
-            this.lbRemainingRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbRemainingRun.Location = new System.Drawing.Point(546, 16);
-            this.lbRemainingRun.Name = "lbRemainingRun";
-            this.lbRemainingRun.Size = new System.Drawing.Size(161, 16);
-            this.lbRemainingRun.TabIndex = 7;
-            this.lbRemainingRun.Text = "Remaining 0 Test case(s)";
+            this.pnlResult.Controls.Add(this.lbSkip);
+            this.pnlResult.Controls.Add(this.label6);
+            this.pnlResult.Controls.Add(this.label2);
+            this.pnlResult.Controls.Add(this.lbFailure);
+            this.pnlResult.Controls.Add(this.lbPass);
+            this.pnlResult.Controls.Add(this.label4);
+            this.pnlResult.Location = new System.Drawing.Point(251, 3);
+            this.pnlResult.Name = "pnlResult";
+            this.pnlResult.Size = new System.Drawing.Size(300, 37);
+            this.pnlResult.TabIndex = 2;
             // 
             // frmTestCase
             // 
@@ -431,6 +442,8 @@
             this.pnlTitle.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.elementDBDataSet1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fKInputtestcaseTestcase1BindingSource)).EndInit();
+            this.pnlResult.ResumeLayout(false);
+            this.pnlResult.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -473,5 +486,6 @@
         private System.Windows.Forms.Label lbPass;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lbRemainingRun;
+        private System.Windows.Forms.Panel pnlResult;
     }
 }

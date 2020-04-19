@@ -122,6 +122,8 @@
             this.input_testcaseTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet1TableAdapters.Input_testcaseTableAdapter();
             this.input_testcaseTableAdapter1 = new Generate_TestCase_Selenium.ElementDBDataSet4TableAdapters.Input_testcaseTableAdapter();
             this.element_testTableAdapter = new Generate_TestCase_Selenium.ElementDBDataSet4TableAdapters.Element_testTableAdapter();
+            this.btnNextTestcase = new System.Windows.Forms.Button();
+            this.btnPrevTestcase = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -149,12 +151,14 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnPrevTestcase);
+            this.panel1.Controls.Add(this.btnNextTestcase);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.tabControl);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 520);
+            this.panel1.Size = new System.Drawing.Size(800, 554);
             this.panel1.TabIndex = 0;
             // 
             // panel2
@@ -237,10 +241,10 @@
             this.tabControl.Controls.Add(this.tabInput);
             this.tabControl.Controls.Add(this.tabPageInputEltTest);
             this.tabControl.Controls.Add(this.tabPageRedirectUrl);
-            this.tabControl.Location = new System.Drawing.Point(3, 46);
+            this.tabControl.Location = new System.Drawing.Point(3, 71);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(794, 474);
+            this.tabControl.Size = new System.Drawing.Size(794, 480);
             this.tabControl.TabIndex = 0;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -254,7 +258,7 @@
             this.tabInput.Location = new System.Drawing.Point(4, 22);
             this.tabInput.Name = "tabInput";
             this.tabInput.Padding = new System.Windows.Forms.Padding(3);
-            this.tabInput.Size = new System.Drawing.Size(786, 448);
+            this.tabInput.Size = new System.Drawing.Size(786, 454);
             this.tabInput.TabIndex = 0;
             this.tabInput.Text = "Input";
             this.tabInput.UseVisualStyleBackColor = true;
@@ -1046,11 +1050,31 @@
             // 
             this.element_testTableAdapter.ClearBeforeFill = true;
             // 
+            // btnNextTestcase
+            // 
+            this.btnNextTestcase.Location = new System.Drawing.Point(728, 10);
+            this.btnNextTestcase.Name = "btnNextTestcase";
+            this.btnNextTestcase.Size = new System.Drawing.Size(42, 22);
+            this.btnNextTestcase.TabIndex = 1;
+            this.btnNextTestcase.Text = "=>";
+            this.btnNextTestcase.UseVisualStyleBackColor = true;
+            this.btnNextTestcase.Click += new System.EventHandler(this.btnNextTestcase_Click);
+            // 
+            // btnPrevTestcase
+            // 
+            this.btnPrevTestcase.Location = new System.Drawing.Point(23, 10);
+            this.btnPrevTestcase.Name = "btnPrevTestcase";
+            this.btnPrevTestcase.Size = new System.Drawing.Size(42, 22);
+            this.btnPrevTestcase.TabIndex = 2;
+            this.btnPrevTestcase.Text = "<=";
+            this.btnPrevTestcase.UseVisualStyleBackColor = true;
+            this.btnPrevTestcase.Click += new System.EventHandler(this.btnPrevTestcase_Click);
+            // 
             // frmInputTestCase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 520);
+            this.ClientSize = new System.Drawing.Size(800, 554);
             this.Controls.Add(this.panel1);
             this.Name = "frmInputTestCase";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -1183,5 +1207,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn valuetestDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn classnameDataGridViewTextBoxColumn;
         private System.Windows.Forms.Button btnClose2;
+        private System.Windows.Forms.Button btnPrevTestcase;
+        private System.Windows.Forms.Button btnNextTestcase;
     }
 }

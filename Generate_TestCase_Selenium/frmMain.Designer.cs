@@ -54,11 +54,15 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.testCaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newWebsiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.elementBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.elementDBDataSet)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvElements)).BeginInit();
             this.panel1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // elementBindingSource
@@ -287,11 +291,34 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testCaseToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(809, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // testCaseToolStripMenuItem
+            // 
+            this.testCaseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newWebsiteToolStripMenuItem,
+            this.openToolStripMenuItem});
+            this.testCaseToolStripMenuItem.Name = "testCaseToolStripMenuItem";
+            this.testCaseToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.testCaseToolStripMenuItem.Text = "Test case";
+            // 
+            // newWebsiteToolStripMenuItem
+            // 
+            this.newWebsiteToolStripMenuItem.Name = "newWebsiteToolStripMenuItem";
+            this.newWebsiteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newWebsiteToolStripMenuItem.Text = "New";
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Text = "Open ";
             // 
             // frmMain
             // 
@@ -313,6 +340,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvElements)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -344,6 +373,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn xpathDataGridViewTextBoxColumn;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox checkBoxIsdisplayed;
+        private System.Windows.Forms.ToolStripMenuItem testCaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newWebsiteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
     }
 }
 

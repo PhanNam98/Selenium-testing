@@ -59,7 +59,7 @@ namespace Generate_TestCase_Selenium
                 dataGridViewListTestCase.DataSource = ListTestCase;
 
                 CountTestcaseTest = NumberOfTestcase = ListTestCase.Count;
-                lbNumberOfTestcase.Text = "/" + NumberOfTestcase.ToString();
+                lbNumberOfTestcase.Text = NumberOfTestcase.ToString();
                 lbCurrentCount.Text = CountTestcaseTest.ToString();
             }
             catch
@@ -114,11 +114,9 @@ namespace Generate_TestCase_Selenium
                 dataGridViewListTestCase.Rows[e.RowIndex].Cells["resultDataGridViewTextBoxColumn"].Style.ForeColor = Color.Red;
             else
             if (dataGridViewListTestCase.Rows[e.RowIndex].Cells["resultDataGridViewTextBoxColumn"].Value.Equals("Pass"))
-                // dataGridViewListTestCase.Columns[4].DefaultCellStyle.ForeColor = Color.Green;
                 dataGridViewListTestCase.Rows[e.RowIndex].Cells["resultDataGridViewTextBoxColumn"].Style.ForeColor = Color.Green;
             else
                 if (dataGridViewListTestCase.Rows[e.RowIndex].Cells["resultDataGridViewTextBoxColumn"].Value.Equals("Skip"))
-                //dataGridViewListTestCase.Columns[4].DefaultCellStyle.ForeColor = Color.Blue;
                 dataGridViewListTestCase.Rows[e.RowIndex].Cells["resultDataGridViewTextBoxColumn"].Style.ForeColor = Color.Blue;
 
         }
@@ -127,6 +125,8 @@ namespace Generate_TestCase_Selenium
         {
             if (e.ColumnIndex == dataGridViewListTestCase.Columns["btnRun"].Index && e.RowIndex >= 0)
             {
+                NumberOfTestcaseRunning++;
+                lbRemainingRun.Text = String.Format("Remaining {0} Test case(s)", NumberOfTestcaseRunning);
                 // MessageBox.Show(String.Format("Button on row {0} clicked" + dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString(), e.RowIndex));
                 //TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, dataGridViewListTestCase.Rows[e.RowIndex].Cells["idtestcaseDataGridViewTextBoxColumn"].Value.ToString());
                 //a.Run();
@@ -213,11 +213,14 @@ namespace Generate_TestCase_Selenium
             List<Test_case> numberoftestcaserun = ListTestCase.Where(p => p.is_test == true).ToList();
             for (int i = 0; i < numberoftestcaserun.Count; i++)
             {
+                NumberOfTestcaseRunning++;
+                lbRemainingRun.Text = String.Format("Remaining {0} Test case(s)", NumberOfTestcaseRunning);
                 int indexofList = ListTestCase.IndexOf(numberoftestcaserun[i]);
                 Thread runThread = new Thread(() => RunTestCase(numberoftestcaserun[i].id_testcase, indexofList));
                 runThread.Start();
                 Thread.Sleep(500);
             }
+            
             
         }
         private void HeaderCheckBox_Clicked(object sender, EventArgs e)
@@ -249,7 +252,7 @@ namespace Generate_TestCase_Selenium
                 lbCurrentCount.Text = ListTestCase.Where(p => p.is_test == true).Count().ToString();
             }
         }
-        private void RunTestCase(string id_testcase)
+        private void RunTestCase(string id_testcase)// old code
         {
             TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, id_testcase);
             a.Run();
@@ -258,20 +261,29 @@ namespace Generate_TestCase_Selenium
         }
         private void RunTestCase(string id_testcase, int indexList)
         {
-            NumberOfTestcaseRunning++;
-            lbRemainingRun.Text = String.Format("Remaining {0} Test case(s)", NumberOfTestcaseRunning);
+          
             TestCase.RunTestCase a = new TestCase.RunTestCase(Id_URL, txtboxUrl.Text, id_testcase);
             ListTestCase[indexList].result = a.Run_ReturnResult();
             NumberOfTestcaseRunning--;
             lbRemainingRun.Text = String.Format("Remaining {0} Test case(s)", NumberOfTestcaseRunning);
             if (NumberOfTestcaseRunning == 0)
+            {
+                Thread runThread = new Thread(() =>
+                {
+                    MessageBox.Show("Run finish", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                });
+
+                runThread.Start();
                 RefeshDatagridview();
+            }
         }
 
         private void RefeshDatagridview()
         {
-            dataGridViewListTestCase.DataSource = null;
-            ListTestCase =BUL.TestCaseBUL.Get_ListTestcase(Id_URL);
+            ////Load from db
+            //dataGridViewListTestCase.DataSource = null;
+            //ListTestCase =BUL.TestCaseBUL.Get_ListTestcase(Id_URL);
             dataGridViewListTestCase.DataSource = ListTestCase;
             GetNumberOfResult();
         }
