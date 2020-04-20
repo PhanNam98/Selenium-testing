@@ -105,6 +105,7 @@
             // 
             // btnGenerateTestCase
             // 
+            this.btnGenerateTestCase.Enabled = false;
             this.btnGenerateTestCase.Location = new System.Drawing.Point(451, 23);
             this.btnGenerateTestCase.Name = "btnGenerateTestCase";
             this.btnGenerateTestCase.Size = new System.Drawing.Size(115, 28);
@@ -287,6 +288,7 @@
             this.button1.TabIndex = 8;
             this.button1.Text = "Test";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // menuStrip1
@@ -311,13 +313,13 @@
             // newWebsiteToolStripMenuItem
             // 
             this.newWebsiteToolStripMenuItem.Name = "newWebsiteToolStripMenuItem";
-            this.newWebsiteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newWebsiteToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
             this.newWebsiteToolStripMenuItem.Text = "New";
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
             this.openToolStripMenuItem.Text = "Open ";
             // 
             // frmMain

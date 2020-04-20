@@ -323,7 +323,7 @@ namespace Generate_TestCase_Selenium
                 dgvOutputtest.DataSource = BUL.TestElementBUL.Get_ListTestElemt(ID_URL, txtboxId_testcase.Text);
             }
             else
-                if (tabControl.SelectedIndex == 2)
+                if (tabControl.SelectedTab.Text == "Description")
             {
                 var redirect_Url = BUL.RedirectUrlBUL.Get_RedirectUrlTest(txtboxId_testcase.Text, ID_URL);
                 if (redirect_Url != null)
@@ -337,6 +337,8 @@ namespace Generate_TestCase_Selenium
                 }
                 else
                 {
+                    txtBoxRedirectUrl.Clear();
+                    txtBoxTestRediectUrl.Clear();
                     btnAddRedirectTest.Text = "Add";
                     IsNewRedirect = true;
                 }
@@ -498,14 +500,24 @@ namespace Generate_TestCase_Selenium
 
         private void btnPrevTestcase_Click(object sender, EventArgs e)
         {
-
+            txtBoxClassnameTestElt.Clear();
+            txtBoxFullxpathTestElt.Clear();
+            txtBoxXpathTestElt.Clear();
+            txtBoxTestValue.Clear();
+            txtBoxOutputValue.Clear();
+            txtBoxIdElementTest.Clear();
             ChangeTestcase(-1);
             LoadBtnNext_Prev();
         }
 
         private void btnNextTestcase_Click(object sender, EventArgs e)
         {
-
+            txtBoxClassnameTestElt.Clear();
+            txtBoxFullxpathTestElt.Clear();
+            txtBoxXpathTestElt.Clear();
+            txtBoxTestValue.Clear();
+            txtBoxOutputValue.Clear();
+            txtBoxIdElementTest.Clear();
             ChangeTestcase(1);
             LoadBtnNext_Prev();
         }

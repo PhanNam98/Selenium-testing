@@ -84,17 +84,21 @@ namespace Generate_TestCase_Selenium
             //this.test_caseTableAdapter1.Fill(this.elementDBDataSet2.Test_case);
             this.Show();
             this.Select();
-            if (isNew)
-            {
-                if (Save_testcase())
-                {
-                    btnRunTestCase.Enabled = true;
-                }
-                else
-                {
-                    MessageBox.Show("Error when save test case into database", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            dataGridViewListTestCase.DataSource = BUL.TestCaseBUL.Get_ListTestcase(Id_URL);
+            btnRunTestCase.Enabled = true;
+            //if (isNew)
+            //{
+            //    if (Save_testcase())
+            //    {
+            //        dataGridViewListTestCase.DataSource = null;
+            //        dataGridViewListTestCase.DataSource = BUL.TestCaseBUL.Get_ListTestcase(Id_URL);
+            //        btnRunTestCase.Enabled = true;
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("Error when save test case into database", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    }
+            //}
 
             dataGridViewListTestCase.ReadOnly = false;
 

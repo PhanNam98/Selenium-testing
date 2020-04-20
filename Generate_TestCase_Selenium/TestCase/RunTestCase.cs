@@ -394,7 +394,6 @@ namespace TestCase
                         {
                             foreach (var inputtest in list_inputtest)
                             {
-
                                 var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
                                 if (testDisplayed.Displayed)
                                 {
@@ -435,10 +434,12 @@ namespace TestCase
                                 }
 
                             }
+                            isSkip++;
                         }
                     }
                     if (!outputtest.xpath_full.Equals("") && !WasTested)
                     {
+                        isSkip--;
                         try
                         {
                             testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
@@ -500,7 +501,7 @@ namespace TestCase
                                     }
                                     catch
                                     {
-                                        isSkip++;
+                                        
 
                                     }
 
@@ -509,8 +510,10 @@ namespace TestCase
 
 
                                 }
+                              
 
                             }
+                            isSkip++;
 
                         }
                     }

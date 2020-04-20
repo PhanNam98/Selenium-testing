@@ -173,7 +173,7 @@ namespace Generate_TestCase_Selenium
         private void CrawlingElement()
         {
             string url_test = txtboxUrl.Text;
-            Craw_element = new Crawler.ElementCrawl(url_test);
+            Craw_element = new Crawler.ElementCrawl(url_test, IsOnlyDislayed);
             btnCrawlWeb.Text = "Cancel";
             if (Craw_element.GetElements() == 1)
             {
@@ -228,6 +228,7 @@ namespace Generate_TestCase_Selenium
                 item.id_url = id_Url;
                 BUL.ElementBUL.insert_Element(item);
             }
+            this.Id_Url = id_Url;
         }
         private void btnGenerateTestCase_Click(object sender, EventArgs e)
         {
@@ -235,6 +236,7 @@ namespace Generate_TestCase_Selenium
             lbMessage.Visible = true;
             lbMessage.Text="Generating testcase, Please wait a few minutes...";
             //frmTestCase newfrmTestCase = new frmTestCase(Id_Url,true);
+            //Thread GenerateThread = new Thread(GenerateTestCase);
             Thread GenerateThread = new Thread(GenerateTestCase);
             GenerateThread.Start();
            
@@ -242,8 +244,9 @@ namespace Generate_TestCase_Selenium
         }
         private void GenerateTestCase()
         {
-            frmTestCase newfrmTestCase = new frmTestCase(27, "https://facebook.com/", true);
-            //frmTestCase newfrmTestCase = new frmTestCase(ID_URL, txtboxUrl.Text, true);
+            //frmTestCase newfrmTestCase = new frmTestCase(27, "https://facebook.com/", true);
+            frmTestCase newfrmTestCase = new frmTestCase(29, "https://facebook.com/", true);
+            //frmTestCase newfrmTestCase = new frmTestCase(Id_Url, txtboxUrl.Text, true);
             this.Hide();
             newfrmTestCase.ShowDialog();
             lbMessage.Text = "";
@@ -254,7 +257,7 @@ namespace Generate_TestCase_Selenium
         }
         private void LoadListTestCase()
         {
-            frmTestCase newfrmTestCase = new frmTestCase(27, "https://facebook.com/", false);
+            frmTestCase newfrmTestCase = new frmTestCase(29, "https://facebook.com/", false);
             this.Hide();
             newfrmTestCase.ShowDialog();
             lbMessage.Text = "";

@@ -24,11 +24,17 @@ namespace Crawler
         private int id_for_elt = 0;
         private string[] tag_elts;
         private string[] type_elts;
+        private bool IsOnlyDislayed = false;
         public ElementCrawl() { }
 
         public ElementCrawl(string url)
         {
 
+            SetUp(url);
+        }
+        public ElementCrawl(string url, bool isOnlyDislayed = false)
+        {
+            this.IsOnlyDislayed = isOnlyDislayed;
             SetUp(url);
         }
 
@@ -133,9 +139,9 @@ namespace Crawler
                             form_.xpath = getAbsoluteXPath(chromedriver, form[i]);
                         }
                         catch { }
-                        if (chromedriver.FindElementByXPath(form_.xpath).Displayed && IsOnlyDislayed==true)
+                        if (chromedriver.FindElementByXPath(form_.xpath).Displayed && IsOnlyDislayed == true)
                             listForm.Add(form_);
-                        if ( IsOnlyDislayed == false)
+                        if (IsOnlyDislayed == false)
                             listForm.Add(form_);
 
 
@@ -316,6 +322,7 @@ namespace Crawler
 
             foreach (var item in allElements)
             {
+
                 if (item.TagName.Equals("input") && Array.IndexOf(type_elts, item.GetAttribute("type")) <= -1)
                 {
 
@@ -466,7 +473,17 @@ namespace Crawler
                     {
 
                     }
-                    listElt.Add(elt);
+
+                    if (IsOnlyDislayed == false)
+                    {
+                        listElt.Add(elt);
+                    }
+                    else
+                         if (item.Displayed == true && IsOnlyDislayed == true)
+                    {
+                        listElt.Add(elt);
+                    }
+
                     //if (BUL.ElementBUL.insert_Element(elt) == -1)
                     //{
                     //    throw new Exception();
