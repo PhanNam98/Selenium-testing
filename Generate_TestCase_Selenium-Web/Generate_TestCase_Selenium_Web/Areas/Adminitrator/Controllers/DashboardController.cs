@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Generate_TestCase_Selenium_Web.Areas.Adminitrator.Controllers
 {
     [Area("Adminitrator")]
-    //[Authorize(Roles = "Adminitrator")]
+    [Authorize(Roles = "Adminitrator")]
     public class DashboardController : Controller
     {
         public IActionResult Index()

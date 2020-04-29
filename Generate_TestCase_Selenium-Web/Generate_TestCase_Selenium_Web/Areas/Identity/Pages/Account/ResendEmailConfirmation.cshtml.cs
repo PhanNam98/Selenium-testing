@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Generate_TestCase_Selenium_Web.Models.Mail;
 
 namespace Generate_TestCase_Selenium_Web.Areas.Identity.Pages.Account
 {
@@ -61,11 +62,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.Identity.Pages.Account
                 pageHandler: null,
                 values: new { userId = userId, code = code },
                 protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                Input.Email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
+            //await _emailSender.SendEmailAsync(
+            //    Input.Email,
+            //    "Confirm your email",
+            //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            await SendMail.SendMailASync($"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.", Input.Email,
+                       "Confirm your email");
             ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
             return Page();
         }
