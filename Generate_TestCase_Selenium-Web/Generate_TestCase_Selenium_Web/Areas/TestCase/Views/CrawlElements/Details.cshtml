@@ -1,0 +1,121 @@
+﻿@model Generate_TestCase_Selenium_Web.Models.ModelDB.Element
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Element</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.class_name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.class_name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.tag_name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.tag_name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.type)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.value)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.value)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.href)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.href)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_form)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.id_form)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.minlength)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.minlength)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.maxlength)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.maxlength)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.required)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.required)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.read_only)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.read_only)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.max_value)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.max_value)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.min_value)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.min_value)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.multiple)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.multiple)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.xpath)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.xpath)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_urlNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.id_urlNavigation.name)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

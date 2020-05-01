@@ -1,0 +1,138 @@
+﻿@model IEnumerable<Generate_TestCase_Selenium_Web.Models.ModelDB.Element>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id_element)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.name)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.class_name)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.tag_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.href)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.id_form)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.minlength)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.maxlength)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.required)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.read_only)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.max_value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.min_value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.multiple)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.xpath)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.id_urlNavigation)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_element)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.class_name)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.tag_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.href)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_form)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.minlength)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.maxlength)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.required)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.read_only)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.max_value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.min_value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.multiple)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.xpath)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.id_urlNavigation.name)
+            </td>*@
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

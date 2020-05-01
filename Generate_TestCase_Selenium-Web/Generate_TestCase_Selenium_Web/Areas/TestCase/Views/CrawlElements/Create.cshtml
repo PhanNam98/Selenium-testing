@@ -1,0 +1,115 @@
+﻿@model Generate_TestCase_Selenium_Web.Models.ModelDB.Element
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Element</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="id_element" class="control-label"></label>
+                <input asp-for="id_element" class="form-control" />
+                <span asp-validation-for="id_element" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="id_url" class="control-label"></label>
+                <select asp-for="id_url" class ="form-control" asp-items="ViewBag.id_url"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="class_name" class="control-label"></label>
+                <input asp-for="class_name" class="form-control" />
+                <span asp-validation-for="class_name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="tag_name" class="control-label"></label>
+                <input asp-for="tag_name" class="form-control" />
+                <span asp-validation-for="tag_name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="type" class="control-label"></label>
+                <input asp-for="type" class="form-control" />
+                <span asp-validation-for="type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="value" class="control-label"></label>
+                <input asp-for="value" class="form-control" />
+                <span asp-validation-for="value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="href" class="control-label"></label>
+                <input asp-for="href" class="form-control" />
+                <span asp-validation-for="href" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="title" class="control-label"></label>
+                <input asp-for="title" class="form-control" />
+                <span asp-validation-for="title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="id_form" class="control-label"></label>
+                <input asp-for="id_form" class="form-control" />
+                <span asp-validation-for="id_form" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="minlength" class="control-label"></label>
+                <input asp-for="minlength" class="form-control" />
+                <span asp-validation-for="minlength" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="maxlength" class="control-label"></label>
+                <input asp-for="maxlength" class="form-control" />
+                <span asp-validation-for="maxlength" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="required" class="control-label"></label>
+                <input asp-for="required" class="form-control" />
+                <span asp-validation-for="required" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="read_only" class="control-label"></label>
+                <input asp-for="read_only" class="form-control" />
+                <span asp-validation-for="read_only" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="max_value" class="control-label"></label>
+                <input asp-for="max_value" class="form-control" />
+                <span asp-validation-for="max_value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="min_value" class="control-label"></label>
+                <input asp-for="min_value" class="form-control" />
+                <span asp-validation-for="min_value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="multiple" class="control-label"></label>
+                <input asp-for="multiple" class="form-control" />
+                <span asp-validation-for="multiple" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="xpath" class="control-label"></label>
+                <input asp-for="xpath" class="form-control" />
+                <span asp-validation-for="xpath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
