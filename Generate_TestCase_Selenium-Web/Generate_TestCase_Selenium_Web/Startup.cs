@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Generate_TestCase_Selenium_Web.Models;
+using Generate_TestCase_Selenium_Web.Models.Contexts;
 
 namespace Generate_TestCase_Selenium_Web
 {
@@ -31,6 +32,7 @@ namespace Generate_TestCase_Selenium_Web
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<ElementDBContext>();
             services.Configure<IdentityOptions>(options =>
             {
                 // Default Lockout settings.

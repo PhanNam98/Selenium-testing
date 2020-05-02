@@ -35,7 +35,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         // GET: TestCase/CrawlElements
         public async Task<IActionResult> Index(int id_url)
         {
-            var elementDBContext = _context.Element.Include(e => e.id_urlNavigation).Where(p=>p.id_url==id_url);
+            var elementDBContext = _context.Element.Include(e => e.id_urlNavigation).Where(p => p.id_url == id_url);
+            ViewData["id_url"] = id_url;
             return View(await elementDBContext.ToListAsync());
         }
         public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed = false)
@@ -56,7 +57,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
         }
-        public int GetElements(string Url,bool IsOnlyDislayed,int id_url)
+        public int GetElements(string Url, bool IsOnlyDislayed, int id_url)
         {
             int flag = 0;
             try
@@ -107,12 +108,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
                 }
                 flag = 1;
-        }
+            }
             catch
             {
                 flag = -1;
             }
-    CloseDriver();
+            CloseDriver();
             return flag;
         }
 
@@ -251,7 +252,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     "return getElementXPath(arguments[0]);", elt);
         }
 
-        public void GetElements(ChromeDriver driver, string TagName, string TypeName,int id_url, List<Form_elements> form_elts = null)
+        public void GetElements(ChromeDriver driver, string TagName, string TypeName, int id_url, List<Form_elements> form_elts = null)
         {
             List<IWebElement> allElements = new List<IWebElement>();
             if (TypeName != "" && TagName.Equals("input"))
@@ -284,7 +285,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             {
 
                                 elt.id_form = form.id_form;
-                                
+
                                 break;
                             }
                         }
