@@ -8,8 +8,9 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="RunTestCase" asp-route-id_url="@ViewBag.id_url">Run test case</a>
 </p>
+<input id="id_url" value="@ViewBag.id_url" hidden readonly />
 <table class="table">
     <thead>
         <tr>
@@ -22,9 +23,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.result)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.is_test)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.CreatedDate)
             </th>
@@ -38,7 +39,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.id_testcase)
@@ -46,12 +48,30 @@
             <td>
                 @Html.DisplayFor(modelItem => item.description)
             </td>
-            <td>
+
+            @if (item.result.Equals("Pass"))
+            {
+                <td style="color:green">
+                    @Html.DisplayFor(modelItem => item.result)
+                </td>
+            }
+            else
+              if (item.result.Equals("Skip"))
+            {
+                <td style="color:blue">
+                    @Html.DisplayFor(modelItem => item.result)
+                </td>
+            }
+            else 
+            {
+            <td style="color:red">
                 @Html.DisplayFor(modelItem => item.result)
             </td>
-            <td>
+            }
+
+            @*<td>
                 @Html.DisplayFor(modelItem => item.is_test)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
@@ -67,6 +87,6 @@
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
