@@ -39,6 +39,22 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             ViewData["id_url"] = id_url;
             return View(await elementDBContext.ToListAsync());
         }
+        [HttpPost]
+        public async Task<IActionResult> DeleteList(int id_url,IEnumerable<string> eltId_Delete)
+        {
+            if (eltId_Delete == null)
+            {
+                return NotFound();
+            }
+            foreach (var id in eltId_Delete)
+            {
+                var element = await _context.Element.Where(p=>p.id_element==id && p.id_url== id_url).FirstOrDefaultAsync();
+                _context.Element.RemoveRange(element);
+            }
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = 1 }));
+        }
         public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed = false)
         {
             //--Code, dont delete
@@ -57,6 +73,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
         }
+        #region Get Element from Web
         public int GetElements(string Url, bool IsOnlyDislayed, int id_url)
         {
             int flag = 0;
@@ -441,7 +458,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
 
 
-
+        #endregion
 
 
 

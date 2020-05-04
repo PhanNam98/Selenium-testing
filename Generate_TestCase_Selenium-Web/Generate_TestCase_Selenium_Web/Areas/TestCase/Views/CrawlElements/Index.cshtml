@@ -1,138 +1,358 @@
 ﻿@model IEnumerable<Generate_TestCase_Selenium_Web.Models.ModelDB.Element>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Element Data";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+<h1>
+    Element obtained from website
+</h1>
+<hr />
+<div class="container">
+    <div class="text-right">
+        <input type="button" name="submit_id" id="btn_id" value="Delete element(s)" onclick="submit_by_id()" />
+        <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url" role="button">Generate test case</a>
 
-<h1>Index</h1>
+    </div>
+</div>
+<br />
+<div class="row">
 
-<p>
-    <a asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url">Generate test case</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.id_element)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.name)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.class_name)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.tag_name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.value)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.href)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.id_form)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.minlength)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.maxlength)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.required)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.read_only)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.max_value)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.min_value)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.multiple)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.xpath)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.id_urlNavigation)
-            </th>*@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.id_element)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.class_name)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.tag_name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.href)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.id_form)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.minlength)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.maxlength)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.required)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.read_only)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.max_value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.min_value)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.multiple)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.xpath)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.id_urlNavigation.name)
-            </td>*@
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    <div class="col-2">
+        <div class="row form-group">
+            <div class="col col-lg-10">Filtered By:</div>
+
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="row form-group">
+            <div class="col col-lg-5">Tag name</div>
+            <div class="col col-lg-6">
+                <select class="form-control" id="tag_name_elt"></select>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="row form-group">
+            <div class="col col-lg-3">Type</div>
+            <div class="col col-lg-9">
+                <select class="form-control" id="type_elt"></select>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="row form-group">
+            <div class="col col-lg-3"> <label>Form</label></div>
+            <div class="col col-lg-9">
+                <select class="form-control" id="form_elt"></select>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm("DeleteList", "CrawlElements", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "elementform", @novalidate = "novalidate", @name = "elementform", @id_url = ViewBag.id_url }))
+{
+    //<input id="id_url" value="@ViewBag.id_url" hidden readonly />
+  
+    <input type="text" name="id_url" class="input-md form-control" id="id_url" required placeholder="Project Name" value="@ViewBag.id_url">
+    <div class="table-responsive">
+        <table id="elttable" class="table table-striped table-condensed table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.id_element)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.name)
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.class_name)
+                        </th>*@
+                    <th>
+                        @Html.DisplayNameFor(model => model.tag_name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.type)
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.value)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.href)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.title)
+                        </th>*@
+                    <th>
+                        @Html.DisplayNameFor(model => model.id_form)
+                    </th>
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.minlength)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.maxlength)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.required)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.read_only)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.max_value)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.min_value)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.multiple)
+                        </th>*@
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.xpath)
+                        </th>*@
+                    @*<th>
+                            @Html.DisplayNameFor(model => model.id_urlNavigation)
+                        </th>*@
+                    <th>@Html.Display("Action")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="eltId_Delete" id="eltId_Delete" value="@item.id_element" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id_element)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.class_name)
+                            </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.tag_name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.type)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.value)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.href)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.title)
+                            </td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id_form)
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.minlength)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.maxlength)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.required)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.read_only)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.max_value)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.min_value)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.multiple)
+                            </td>*@
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.xpath)
+                            </td>*@
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.id_urlNavigation.name)
+                            </td>*@
+                        <td>
+                            @{
+                                string detail = "d" + @item.id_element.ToString();
+                                <button type="button" class="btn btn-custon-rounded-three btn-success btn-xs" data-toggle="modal" data-target="#@detail">Detail</button>
+
+                                <!-- Modal -->
+
+                                <div class="modal fade" id="@detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="center">
+                                        <div class="modal-dialog modal-dialog-center" role="document">
+                                            <div class="modal-content">
+                                                @using (Html.BeginForm("BlockPost", "ManagePostsAdmin", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "blockform", @novalidate = "novalidate", @name = "blockform" }))
+                                                {
+                                                    @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Detail element</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Id elemnet")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="idpost" class="input-md form-control" value="@item.id_element" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Name")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.name" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Class Name")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.class_name" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Value")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.value" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Href")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.href" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Title")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.title" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Xpath")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.xpath" readonly />
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div>
+
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
-    </tbody>
-</table>
+<br />
+<br />
+<hr />
+<script>
+
+
+    $(document).ready(function () {
+        $('#elttable').DataTable(
+            {
+                "lengthMenu": [[10, 25, 50, - 1], [10, 25, 50, "All record"]],
+                //"ordering": false,
+                initComplete: function () {
+                    this.api().columns(2).every(function () {
+                        var column = this;
+                        var select = $('#tag_name_elt')
+                            .appendTo($('#tag_name_elt').empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+                        select.append('<option value="">All</option>')
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                    this.api().columns(3).every(function () {
+                        var column = this;
+                        var select = $('#type_elt')
+                            .appendTo($('#type_elt').empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+                        select.append('<option value="">All</option>')
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                    this.api().columns(4).every(function () {
+                        var column = this;
+                        var select = $('#form_elt')
+                            .appendTo($('#form_elt').empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+                        select.append('<option value="">All</option>')
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                }
+
+            }
+        );
+    });
+    function submit_by_id() {
+
+        //if (validation()) // Calling validation function
+        //{
+        document.getElementById("elementform").submit(); //form submission
+        //alert(" Name : "+ document.getElementById("form_id").getAttribute("id_url").value + "nn Form Submitted Successfully......");
+        //}
+
+    };
+    @*function validation() {
+var name = document.getElementById("name").value;
+var email = document.getElementById("email").value;
+var emailReg = /^([w-.]+@([w-]+.)+[w-]{2,4})?$/;
+if (name === '' || email === '') {
+alert("Please fill all fields...!!!!!!");
+return false;
+} else if (!(email).match(emailReg)) {
+alert("Invalid Email...!!!!!!");
+return false;
+} else {
+return true;
+}
+}*@
+</script>

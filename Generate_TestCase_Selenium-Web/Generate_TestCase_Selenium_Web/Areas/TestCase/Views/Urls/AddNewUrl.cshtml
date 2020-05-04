@@ -1,53 +1,62 @@
 ﻿@model Generate_TestCase_Selenium_Web.Models.ModelDB.Url
 
 @{
-    ViewData["Title"] = "AddNewUrl";
+    ViewData["Title"] = "Add New Url";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Add New Url </h1>
+<h1>New Url</h1>
+<h4>Add a url to test</h4>
 <hr />
 
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
-        <partial name="~/Views/Shared/_StatusMessage.cshtml" for="@TempData["StatusMessage"]" />
-        <form asp-action="AddNewUrl">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label class="control-label">Name Url</label>
-                <input asp-for="name" id="name" class="form-control" required/>
-                <span asp-validation-for="name" class="text-danger"></span>
+        <div class="card">
+            <div class="text-center">
+                <h5 class="card-title">New url</h5>
             </div>
-            <div class="form-group">
-                <label class="control-label">Url</label>
-                <input type="url" asp-for="url1" id="url1" class="form-control" required/>
-                <span asp-validation-for="url1" class="text-danger"></span>
+            <div class="card-body">
+                <partial name="~/Views/Shared/_StatusMessage.cshtml" for="@TempData["StatusMessage"]" />
+                <form asp-action="AddNewUrl">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="control-label">Name Url</label>
+                        <input asp-for="name" id="name" class="form-control" required placeholder="E.g: facebook" />
+                        <span asp-validation-for="name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Url</label>
+                        <input type="url" asp-for="url1" id="url1" class="form-control" required placeholder="E.g: facebook.com" />
+                        <span asp-validation-for="url1" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" hidden>
+                        <label asp-for="project_id" class="control-label"></label>
+                        <input asp-for="project_id" id="project_id" class="form-control" asp-items="ViewBag.project_id" />
+                    </div>
+                    @*<div class="form-group" >
+                            <label asp-for="CreatedDate" class="control-label"></label>
+                            <input asp-for="CreatedDate" class="form-control" value="@DateTime.Now.Date" />
+                            <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" >
+                            <label asp-for="ModifiedDate" class="control-label"></label>
+                            <input asp-for="ModifiedDate" class="form-control" value=@DateTime.Now.Date />
+                            <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+                        </div>*@
+                    <div class="form-group">
+                        <input type="submit" value="Add and Crawl data" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group" hidden>
-                <label asp-for="project_id" class="control-label"></label>
-                <input asp-for="project_id" id="project_id" class="form-control" asp-items="ViewBag.project_id" />
-            </div>
-            @*<div class="form-group" >
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" value="@DateTime.Now.Date" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group" >
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" value=@DateTime.Now.Date />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <input type="submit" value="Add and Crawl data" class="btn btn-primary" />
-            </div>
-        </form>
+
+        </div>
     </div>
 </div>
 
 @*<div>
-    <a asp-action="Index" asp-controller="Projects">Back to List</a>
-</div>*@
+        <a asp-action="Index" asp-controller="Projects">Back to List</a>
+    </div>*@
 
 <script>
 
