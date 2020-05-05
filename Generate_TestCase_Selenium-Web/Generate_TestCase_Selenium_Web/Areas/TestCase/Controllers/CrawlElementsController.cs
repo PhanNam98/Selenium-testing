@@ -53,7 +53,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = 1 }));
+            return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
         }
         public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed = false)
         {

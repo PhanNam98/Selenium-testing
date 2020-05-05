@@ -462,15 +462,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         #endregion
 
 
-
-
+        #region Run test case
+        [HttpPost]
         public async Task<IActionResult> RunTestCase(int id_url, List<string> list_Idtestcase)
         {
             var _context = new ElementDBContext();
             var url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
-            var list_Idtestcase1 = _context.Test_case.Where(p => p.id_url == id_url).ToList();
+            //var list_Idtestcase1 = _context.Test_case.Where(p => p.id_url == id_url).ToList();
             IEnumerable<Task<string>> runTasksQuery =
-                from Id in list_Idtestcase1 select Run_ReturnResult(id_url, url, Id.id_testcase);
+                from Id in list_Idtestcase select Run_ReturnResult(id_url, url, Id);
             List<Task<string>> runTasks = runTasksQuery.ToList();
             while (runTasks.Count > 0)
             {
@@ -958,7 +958,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
 
-
+        #endregion
 
 
 
