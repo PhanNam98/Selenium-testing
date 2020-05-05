@@ -27,7 +27,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private List<List<Input_testcase>> List_ListInputTestcase;
         private List<string> listSpecialCharacter;
         //private ChromeDriver chromedriver;
-
+        [TempData]
+        public string StatusMessage { get; set; }
+       
         private enum Actions
         {
             fill,
@@ -45,8 +47,24 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Index(int id_url)
         {
             ViewData["id_url"] = id_url;
-            var elementDBContext = _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Where(p => p.id_url == id_url);
-            return View(await elementDBContext.ToListAsync());
+            var testcaseDBContext =await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Where(p => p.id_url == id_url).ToListAsync();
+            if (testcaseDBContext.Count() == 0)
+            {
+                ViewData["Message"] = "No element yet";
+            }
+            else
+          if (testcaseDBContext.Count() > 0)
+            {
+                ViewData["Message"] = String.Format( "Success, {0} test case(s) were created", testcaseDBContext.Count());
+            }
+
+            else
+            {
+                ViewData["Message"] = "Error load data";
+            }
+            return View(testcaseDBContext);
+           
+
         }
 
 
@@ -898,7 +916,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //BUL.RedirectUrlBUL.Update_RedirectUrl(Id_testcase, ID_URL, current_url);
             QuitDriver(chromedriver);
             string result = "";
-         
+
             if (isFailure == 0 && isSkip == 0)
             {
                 result = "Pass";
@@ -960,7 +978,58 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         #endregion
 
+        #region Output test case
+        public async Task<IActionResult> TestElement(int id_url, string id_testcase)
+        {
+            ViewData["id_url"] = id_url;
+            ViewData["id_testcase"] = id_testcase;
+            var testelementDBContext =await _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase==id_testcase).ToListAsync();
+            if (testelementDBContext.Count() == 0)
+            {
+                ViewData["Message"] = "No element yet, create a new one";
+            }
+            else
+           if (testelementDBContext.Count() > 0)
+            {
+                ViewData["Message"] = String.Format("{0} test element(s)", testelementDBContext.Count());
+            }
 
+            else
+            {
+                ViewData["Message"] = "Error load data";
+            }
+            return View(testelementDBContext);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTestElt(string xpath,string fullxpath, int id_url,string valuetest,string id_testcase)
+        {
+            var elttest = new Element_test();
+            if (ModelState.IsValid)
+            {
+                if (xpath == null)
+                    xpath = "";
+                if (fullxpath == null)
+                    fullxpath = "";
+                if (valuetest == null)
+                    valuetest = "";
+                Random random = new Random();
+                elttest.xpath = xpath;
+                elttest.xpath_full = fullxpath;
+                elttest.value_test = valuetest;
+                elttest.id_url = id_url;
+                elttest.id_testcase = id_testcase;
+                elttest.id_element = id_testcase + Generate_RandomString(random,5);
+                _context.Add(elttest);
+                await _context.SaveChangesAsync();
+                StatusMessage = String.Format("Success");
+                return RedirectToAction(nameof(TestElement), new RouteValueDictionary(new { id_url = id_url, id_testcase = id_testcase }));
+            }
+
+            return RedirectToAction(nameof(TestElement), new RouteValueDictionary(new { id_url = id_url, id_testcase = id_testcase }));
+        }
+        #endregion
 
 
 

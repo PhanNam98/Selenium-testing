@@ -35,9 +35,23 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         // GET: TestCase/CrawlElements
         public async Task<IActionResult> Index(int id_url)
         {
-            var elementDBContext = _context.Element.Include(e => e.id_urlNavigation).Where(p => p.id_url == id_url);
+            var elementDBContext =await _context.Element.Include(e => e.id_urlNavigation).Where(p => p.id_url == id_url).ToListAsync();
             ViewData["id_url"] = id_url;
-            return View(await elementDBContext.ToListAsync());
+            if (elementDBContext.Count() == 0)
+            {
+                ViewData["Message"] = "No element yet";
+            }
+            else
+         if (elementDBContext.Count() > 0)
+            {
+                ViewData["Message"] = String.Format("Success, {0} element(s) were found", elementDBContext.Count());
+            }
+
+            else
+            {
+                ViewData["Message"] = "Error load data";
+            }
+            return View(elementDBContext);
         }
         [HttpPost]
         public async Task<IActionResult> DeleteList(int id_url,IEnumerable<string> eltId_Delete)

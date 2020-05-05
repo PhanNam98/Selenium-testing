@@ -101,7 +101,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //    await _context.SaveChangesAsync();
             //    return RedirectToAction(nameof(Index));
             //}
-            //StatusMessage = "Error";
+            //ViewData["Message"] = "Error";
             //return View(url);
             return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 1, IsOnlyDislayed=true }));
         }

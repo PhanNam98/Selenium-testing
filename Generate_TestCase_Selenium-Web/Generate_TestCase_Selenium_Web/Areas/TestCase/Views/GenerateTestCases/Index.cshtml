@@ -15,6 +15,7 @@
     </div>
 </div>
 <br />
+<partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
 @using (Html.BeginForm("RunTestCase", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
 {
     <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
@@ -94,11 +95,12 @@
                         @*<td>
                                 @Html.DisplayFor(modelItem => item.id_urlNavigation.name)
                             </td>*@
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-                        </td>
+                    <td>
+                       
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        <a class="btn btn-primary" asp-action="TestElement" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test elements</a>
+                    </td>
                     </tr>
                 }
             </tbody>

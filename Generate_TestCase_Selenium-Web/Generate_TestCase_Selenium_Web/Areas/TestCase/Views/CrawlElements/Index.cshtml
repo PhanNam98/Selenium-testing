@@ -82,6 +82,7 @@
         </div>
     </div>
 </div>
+<partial name="~/Views/Shared/_StatusMessage.cshtml"  model="@ViewBag.Message" />
 @using (Html.BeginForm("DeleteList", "CrawlElements", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "elementform", @novalidate = "novalidate", @name = "elementform", @id_url = ViewBag.id_url }))
 {
     <input type="text" name="id_url" class="input-md form-control" id="id_url" required placeholder="Project Name" hidden readonly value="@ViewBag.id_url">

@@ -34,7 +34,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var elementDBContext =await _context.Project.Include(p => p.Id_UserNavigation).Where(p=>p.Id_User== user.Id).ToListAsync();
             if (elementDBContext.Count() == 0)
             {
-                StatusMessage = "No projects yet, create a new one";
+                ViewData["Message"] = "No projects yet, create a new one";
             }
             else
             if (elementDBContext.Count() > 0)
@@ -44,7 +44,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             
             else
             {
-                StatusMessage = "Error load data";
+                ViewData["Message"] = "Error load data";
             }
             return View(elementDBContext);
         }
