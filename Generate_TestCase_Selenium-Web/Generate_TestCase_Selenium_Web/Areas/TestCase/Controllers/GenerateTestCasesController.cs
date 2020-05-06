@@ -44,28 +44,34 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
 
         //GET: TestCase/GenerateTestCases
-        public async Task<IActionResult> Index(int id_url)
+        public async Task<IActionResult> Index(int id_url,bool isload=false)
         {
             ViewData["id_url"] = id_url;
             var testcaseDBContext =await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Where(p => p.id_url == id_url).ToListAsync();
-            if (testcaseDBContext.Count() == 0)
+            if (!isload)
             {
-                ViewData["Message"] = "No element yet";
-            }
-            else
-          if (testcaseDBContext.Count() > 0)
-            {
-                ViewData["Message"] = String.Format( "Success, {0} test case(s) were created", testcaseDBContext.Count());
-            }
+                if (testcaseDBContext.Count() == 0)
+                {
+                    ViewData["Message"] = "No element yet";
+                }
+                else
+              if (testcaseDBContext.Count() > 0)
+                {
+                    ViewData["Message"] = String.Format("Success, {0} test case(s) were created", testcaseDBContext.Count());
+                }
 
-            else
-            {
-                ViewData["Message"] = "Error load data";
+                else
+                {
+                    ViewData["Message"] = "Error load data";
+                }
             }
+            else
+                ViewData["Message"] = null;
             return View(testcaseDBContext);
            
 
         }
+
 
 
         private void Setup()
@@ -1029,8 +1035,51 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             return RedirectToAction(nameof(TestElement), new RouteValueDictionary(new { id_url = id_url, id_testcase = id_testcase }));
         }
+        [HttpPost, ActionName("DeleteTestElt")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTestElt(string id_testcase, int id_url, string id_elementtest)
+        {
+            try
+            {
+                var test_elt = await _context.Element_test.Where(p => p.id_element == id_elementtest && p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+                _context.Element_test.Remove(test_elt);
+                await _context.SaveChangesAsync();
+                StatusMessage = String.Format("Success");
+                
+            }
+            catch
+            {
+                StatusMessage = String.Format("Error");
+            }
+            return RedirectToAction(nameof(TestElement),new { id_testcase=id_testcase, id_url=id_url });
+        }
         #endregion
+        #region Input test case
 
+        public async Task<IActionResult> TestData(int id_url, string id_testcase)
+        {
+            ViewData["id_url"] = id_url;
+            ViewData["id_testcase"] = id_testcase;
+            var testdataDBContext = await _context.Input_testcase.Include(i=>i.id_).Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p=>p.test_step).ToListAsync();
+            if (testdataDBContext.Count() == 0)
+            {
+                ViewData["Message"] = "No element yet, create a new one";
+            }
+            else
+           if (testdataDBContext.Count() > 0)
+            {
+                ViewData["Message"] = String.Format("{0} test data(s)", testdataDBContext.Count());
+            }
+
+            else
+            {
+                ViewData["Message"] = "Error load data";
+            }
+            return View(testdataDBContext);
+        }
+
+
+        #endregion
 
 
         // GET: TestCase/GenerateTestCases/Details/5

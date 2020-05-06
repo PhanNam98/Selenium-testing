@@ -97,8 +97,8 @@
                             </td>*@
                     <td>
                        
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })*@ 
+                        <a class="btn btn-success" asp-action="TestData" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test data</a>
                         <a class="btn btn-primary" asp-action="TestElement" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test elements</a>
                     </td>
                     </tr>
