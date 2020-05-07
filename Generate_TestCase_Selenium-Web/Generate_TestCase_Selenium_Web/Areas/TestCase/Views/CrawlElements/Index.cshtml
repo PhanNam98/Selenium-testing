@@ -4,7 +4,17 @@
     ViewData["Title"] = "Element Data";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    th {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+</style>
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="http://cdn.datatables.net/fixedheader/2.0.0/js/FixedHeader.min.js" />
 <h1>
     Element obtained from website
 </h1>
@@ -82,7 +92,7 @@
         </div>
     </div>
 </div>
-<partial name="~/Views/Shared/_StatusMessage.cshtml"  model="@ViewBag.Message" />
+<partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
 @using (Html.BeginForm("DeleteList", "CrawlElements", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "elementform", @novalidate = "novalidate", @name = "elementform", @id_url = ViewBag.id_url }))
 {
     <input type="text" name="id_url" class="input-md form-control" id="id_url" required placeholder="Project Name" hidden readonly value="@ViewBag.id_url">
@@ -301,6 +311,7 @@
     $(document).ready(function () {
         $('#elttable').DataTable(
             {
+                fixedHeader: true,
                 "lengthMenu": [[5,10, 25, 50, - 1], [5,10, 25, 50, "All record"]],
                 //"ordering": false,
                 initComplete: function () {
@@ -358,9 +369,11 @@
                             select.append('<option value="' + d + '">' + d + '</option>')
                         });
                     });
-                }
+                },
+                
 
             }
+               
         );
     });
     function Delete_by_id() {

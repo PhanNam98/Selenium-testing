@@ -52,7 +52,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 if (testcaseDBContext.Count() == 0)
                 {
-                    ViewData["Message"] = "No element yet";
+                    ViewData["Message"] = "No test case yet";
                 }
                 else
               if (testcaseDBContext.Count() > 0)
@@ -69,6 +69,33 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 ViewData["Message"] = null;
             return View(testcaseDBContext);
            
+
+        }
+        public async Task<IActionResult> Result(int id_url)
+        {
+            ViewData["id_url"] = id_url;
+            var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Where(p => p.id_url == id_url).ToListAsync();
+
+            //  if (testcaseDBContext.Count() == 0)
+            //  {
+            //      ViewData["Message"] = "No testcase yet";
+            //  }
+            //  else
+            //if (testcaseDBContext.Count() > 0)
+            //  {
+            //      ViewData["Message"] = String.Format("Success, {0} test case(s) were fo", testcaseDBContext.Count());
+            //  }
+
+            //  else
+            //  {
+            //      ViewData["Message"] = "Error load data";
+            //  }
+
+            ViewData["Pass"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("pass")).Count();
+            ViewData["Skip"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("skip")).Count();
+            ViewData["Failure"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("failure")).Count();
+            return View(testcaseDBContext);
+
 
         }
 
@@ -488,6 +515,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         #region Run test case
         [HttpPost]
+        [Route("/TestCase/Result")]
         public async Task<IActionResult> RunTestCase(int id_url, List<string> list_Idtestcase)
         {
             var _context = new ElementDBContext();
@@ -496,20 +524,35 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             IEnumerable<Task<string>> runTasksQuery =
                 from Id in list_Idtestcase select Run_ReturnResult(id_url, url, Id);
             List<Task<string>> runTasks = runTasksQuery.ToList();
-            while (runTasks.Count > 0)
+            try
             {
-                // Identify the first task that completes.
-                Task<string> firstFinishedTask = await Task.WhenAny(runTasks);
+                while (runTasks.Count > 0)
+                {
+                    // Identify the first task that completes.
+                    Task<string> firstFinishedTask = await Task.WhenAny(runTasks);
 
-                // ***Remove the selected task from the list so that you don't
-                // process it more than once.
-                runTasks.Remove(firstFinishedTask);
+                    // ***Remove the selected task from the list so that you don't
+                    // process it more than once.
+                    runTasks.Remove(firstFinishedTask);
 
-                // Await the completed task.
-                string length = await firstFinishedTask;
+                    // Await the completed task.
+                    string length = await firstFinishedTask;
 
+                }
+                ViewData["Message"] = "Run successfully";
             }
-            return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
+            catch
+            {
+                ViewData["Message"] = "Run failed";
+            }
+            ViewData["id_url"] = id_url;
+            var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
+
+            ViewData["Pass"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("pass")).Count();
+            ViewData["Skip"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("skip")).Count();
+            ViewData["Failure"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("failure")).Count();
+            //return RedirectToAction(nameof(Result), new RouteValueDictionary(new { id_url = id_url }));
+            return View("Result", testcaseDBContext);
         }
 
         public async Task<string> Run_ReturnResult(int id_url, string url, string id_testcase)
@@ -695,7 +738,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 }
 
                             }
-                            //isSkip++;
+                          
                         }
                     }
 
@@ -1029,7 +1072,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 elttest.id_element = id_testcase + Generate_RandomString(random,5);
                 _context.Add(elttest);
                 await _context.SaveChangesAsync();
-                StatusMessage = String.Format("Success");
+                ViewData["Message"] = String.Format("Success");
                 return RedirectToAction(nameof(TestElement), new RouteValueDictionary(new { id_url = id_url, id_testcase = id_testcase }));
             }
 
@@ -1044,12 +1087,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 var test_elt = await _context.Element_test.Where(p => p.id_element == id_elementtest && p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
                 _context.Element_test.Remove(test_elt);
                 await _context.SaveChangesAsync();
-                StatusMessage = String.Format("Success");
+                ViewData["Message"] = String.Format("Success");
                 
             }
             catch
             {
-                StatusMessage = String.Format("Error");
+                ViewData["Message"] = String.Format("Error");
             }
             return RedirectToAction(nameof(TestElement),new { id_testcase=id_testcase, id_url=id_url });
         }

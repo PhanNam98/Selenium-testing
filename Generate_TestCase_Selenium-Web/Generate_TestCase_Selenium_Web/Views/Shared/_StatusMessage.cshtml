@@ -4,12 +4,12 @@
 {
     //var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
     string statusMessageClass = "";
-    if (Model.StartsWith("Error"))
+    if (Model.ToLower().Contains("fail") || Model.ToLower().Contains("error"))
     {
         statusMessageClass = "danger";
 
     }
-    else if (Model.StartsWith("Success"))
+    else if (Model.ToLower().Contains("success"))
     {
         statusMessageClass = "success";
        

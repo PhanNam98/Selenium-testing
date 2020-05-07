@@ -5,6 +5,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+<style type="text/css">
+    .modalblock {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: black;
+        z-index: 99;
+        opacity: 0.8;
+        filter: alpha(opacity=80);
+        -moz-opacity: 0.8;
+        min-height: 100%;
+        width: 100%;
+    }
+
+    .loading {
+        font-family: Arial;
+        font-size: 10pt;
+        border: 5px solid #67CFF5;
+        width: 600px;
+        height: 300px;
+        display: none;
+        position: fixed;
+        background-color: White;
+        z-index: 999;
+    }
+</style>
 <h1>Test case</h1>
 <hr />
 <div class="container">
@@ -54,7 +80,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="checkbox" name="list_Idtestcase" id="list_Idtestcase" value="@item.id_testcase" checked/>
+                            <input type="checkbox" name="list_Idtestcase" id="list_Idtestcase" value="@item.id_testcase" checked />
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.id_testcase)
@@ -70,7 +96,7 @@
                             </td>
                         }
                         else
-           if (item.result.Equals("Skip"))
+          if (item.result.Equals("Skip"))
                         {
                             <td style="color:blue">
                                 @Html.DisplayFor(modelItem => item.result)
@@ -95,18 +121,52 @@
                         @*<td>
                                 @Html.DisplayFor(modelItem => item.id_urlNavigation.name)
                             </td>*@
-                    <td>
-                       
-                        @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })*@ 
-                        <a class="btn btn-success" asp-action="TestData" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test data</a>
-                        <a class="btn btn-primary" asp-action="TestElement" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test elements</a>
-                    </td>
+                        <td>
+
+                            @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })*@
+                            <a class="btn btn-success" asp-action="TestData" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test data</a>
+                            <a class="btn btn-primary" asp-action="TestElement" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test elements</a>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 }
+
+<div class="loading" align="center">
+    <h1>Loading. Please wait.</h1> <br />
+    <br />
+    <img src="https://cdn.dribbble.com/users/1867579/screenshots/6580156/loadin_gif.gif" alt="" style="width:100px;height:100px;"/>
+    
+</div>
+<script type="text/javascript">
+    var modal, loading;
+    function ShowProgress() {
+        modal = document.createElement("DIV");
+        modal.className = "modalblock";
+        document.body.appendChild(modal);
+        loading = document.getElementsByClassName("loading")[0];
+        loading.style.display = "block";
+        var top = Math.max(window.innerHeight / 2 - loading.offsetHeight / 2, 0);
+        var left = Math.max(window.innerWidth / 2 - loading.offsetWidth / 2, 0);
+        loading.style.top = top + "px";
+        loading.style.left = left + "px";
+    };
+    
+</script>
+
+<!-- Keep the Page Content Here.-->
+
+<script type="text/javascript">
+    window.onload = function () {
+        setTimeout(function () {
+            document.body.removeChild(modal);
+            loading.style.display = "none";
+        }, 0); //Delay just used for example and must be set to 0.
+    };
+</script>
+
 <script>
 
 
@@ -114,12 +174,18 @@
         $('#testcasetable').DataTable(
             {
                 "lengthMenu": [[10, 25, 50, - 1], [10, 25, 50, "All record"]],
-                
+
             }
         );
     });
-        function Run_by_id() {
+    function Run_by_id() {
+        if (document.getElementById("list_Idtestcase").value == null) {
+            alert("No test casea have been selected");
+        }
+        else {
+            ShowProgress();
             document.getElementById("testcaseform").submit();
-        };
+        }
+    };
 
 </script>
