@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
-<style type="text/css">
+@*<style type="text/css">
     .modalblock {
         position: fixed;
         top: 0;
@@ -30,7 +30,7 @@
         background-color: White;
         z-index: 999;
     }
-</style>
+</style>*@
 <h1>Test case</h1>
 <hr />
 <div class="container">
@@ -133,8 +133,8 @@
         </table>
     </div>
 }
-
-<div class="loading" align="center">
+<partial name="~/Views/Shared/LoadingViewPartial.cshtml" model="@ViewBag.LoadingTitle" />
+@*<div class="loading" align="center">
     <h1>Loading. Please wait.</h1> <br />
     <br />
     <img src="https://cdn.dribbble.com/users/1867579/screenshots/6580156/loadin_gif.gif" alt="" style="width:100px;height:100px;"/>
@@ -156,16 +156,16 @@
     
 </script>
 
-<!-- Keep the Page Content Here.-->
+
 
 <script type="text/javascript">
     window.onload = function () {
         setTimeout(function () {
             document.body.removeChild(modal);
             loading.style.display = "none";
-        }, 0); //Delay just used for example and must be set to 0.
+        }, 0);
     };
-</script>
+</script>*@
 
 <script>
 

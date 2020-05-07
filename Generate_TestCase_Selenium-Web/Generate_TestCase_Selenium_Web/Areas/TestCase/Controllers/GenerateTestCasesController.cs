@@ -67,6 +67,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             else
                 ViewData["Message"] = null;
+            ViewData["LoadingTitle"] = "Running test case. Please wait.";
             return View(testcaseDBContext);
            
 
