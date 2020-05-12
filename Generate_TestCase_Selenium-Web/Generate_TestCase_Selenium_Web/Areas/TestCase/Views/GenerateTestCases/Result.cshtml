@@ -51,9 +51,9 @@
                 @*<th>
                         @Html.DisplayNameFor(model => model.is_test)
                     </th>*@
-                <th>
-                    @Html.DisplayName("CreatedDate")
-                </th>
+                @*<th>
+                        @Html.DisplayName("CreatedDate")
+                    </th>*@
                 <th>
                     @Html.DisplayName("ModifiedDate")
                 </th>
@@ -83,8 +83,7 @@
                             @Html.DisplayFor(modelItem => item.result)
                         </td>
                     }
-                    else
-if (item.result.Equals("Skip"))
+                    else if (item.result.Equals("Skip"))
                     {
                         <td style="color:blue">
                             @Html.DisplayFor(modelItem => item.result)
@@ -100,9 +99,9 @@ if (item.result.Equals("Skip"))
                     @*<td>
                             @Html.DisplayFor(modelItem => item.is_test)
                         </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedDate)
-                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.CreatedDate)
+                        </td>*@
                     <td>
                         @Html.DisplayFor(modelItem => item.ModifiedDate)
                     </td>

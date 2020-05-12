@@ -8,7 +8,7 @@
 <h1>New Url</h1>
 <h4>Add a url to test</h4>
 <hr />
-
+<partial name="~/Views/Shared/LoadingViewPartial.cshtml" model="@ViewBag.LoadingTitle" />
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
@@ -21,12 +21,12 @@
                 <form asp-action="AddNewUrl">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label class="control-label">Name Url</label>
+                        <label class="control-label">Name Url <span style="color:red;">*</span></label>
                         <input asp-for="name" id="name" class="form-control" required placeholder="E.g: facebook" />
                         <span asp-validation-for="name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Url</label>
+                        <label class="control-label">Url <span style="color:red;">*</span></label>
                         <input type="url" asp-for="url1" id="url1" class="form-control" required placeholder="E.g: facebook.com" />
                         <span asp-validation-for="url1" class="text-danger"></span>
                     </div>
@@ -34,18 +34,22 @@
                         <label asp-for="project_id" class="control-label"></label>
                         <input asp-for="project_id" id="project_id" class="form-control" asp-items="ViewBag.project_id" />
                     </div>
-                    @*<div class="form-group" >
+                    <div class="form-group">
+                        <input type="checkbox" id="IsOnlyDislayed" name="IsOnlyDislayed" checked value="true"> <label for="vehicle1">Only element is displayed</label><br>
+                      
+                    </div>
+                    <div class="form-group" hidden>
                             <label asp-for="CreatedDate" class="control-label"></label>
                             <input asp-for="CreatedDate" class="form-control" value="@DateTime.Now.Date" />
                             <span asp-validation-for="CreatedDate" class="text-danger"></span>
                         </div>
-                        <div class="form-group" >
+                        <div class="form-group" hidden>
                             <label asp-for="ModifiedDate" class="control-label"></label>
                             <input asp-for="ModifiedDate" class="form-control" value=@DateTime.Now.Date />
                             <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-                        </div>*@
+                        </div>
                     <div class="form-group">
-                        <input type="submit" value="Add and Crawl data" class="btn btn-primary" />
+                        <input type="submit" value="Add and Crawl data" class="btn btn-primary" onclick="ShowProgress()" />
                     </div>
                 </form>
             </div>
@@ -53,19 +57,22 @@
         </div>
     </div>
 </div>
+@*<div class="loading" align="center">
+    <h1>Loading. Please wait.</h1> <br />
+    <br />
+    <img src="https://cdn.dribbble.com/users/1867579/screenshots/6580156/loadin_gif.gif" alt="" style="width:100px;height:100px;" />
 
-@*<div>
-        <a asp-action="Index" asp-controller="Projects">Back to List</a>
-    </div>*@
+</div>*@
 
 <script>
 
     function IsEmpty() {
-        if (document.getElementById("url1").value === "") {
-            alert("url is required.");
+        if (document.getElementById("url1").value === "" || document.getElementById("name").value === "") {
+          
             return false;
         }
-
+        ShowProgress();;
         return true;
     }
+   
 </script>

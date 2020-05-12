@@ -27,13 +27,22 @@
 </style>
 @if (!String.IsNullOrEmpty(Model))
 {
-    //var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
     <div class="loading" align="center">
         <h1>@Model </h1> <br />
         <br />
         <img src="https://cdn.dribbble.com/users/1867579/screenshots/6580156/loadin_gif.gif" alt="" style="width:100px;height:100px;" />
 
     </div>
+}
+else
+{
+    <div class="loading" align="center">
+        <h2>Loading. Please wait a few minutes</h2> <br />
+        <br />
+        <img src="https://cdn.dribbble.com/users/1867579/screenshots/6580156/loadin_gif.gif" alt="" style="width:100px;height:100px;" />
+
+    </div>
+
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

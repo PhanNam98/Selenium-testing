@@ -25,8 +25,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             _context = new ElementDBContext();
             _userManager = userManager;
         }
-        [TempData]
-        public string StatusMessage { get; set; }
+        
         // GET: TestCase/Projects
         public async Task<IActionResult> Index()
         {

@@ -5,12 +5,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/3.3.0/css/fixedColumns.dataTables.min.css" />
+@*<style type="text/css">
+    th, td {
+        white-space: nowrap;
+    }
+
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+
+    div.container {
+        width: 80%;
+    }
+</style>*@
 <h2>Test Element of test case @ViewBag.id_testcase</h2>
 <h4>The element you want to test</h4>
 <hr />
 <div class="row">
     <div class="col-md-2">
-        <a class="btn btn-secondary" asp-action="Index" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url" asp-route-id_testcase="@ViewBag.id_testcase" asp-route-isload="true" role="button">Back to list</a>
+        <a class="btn btn-secondary" asp-action="Index" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url" asp-route-isload="true" role="button">Back to list</a>
     </div>
     <div class="col-md-6">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
@@ -119,14 +133,76 @@
                             @Html.DisplayFor(modelItem => item.id_.id_testcase)
                         </td>*@
                     <td>
-                        @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+
+                        @{
+
+                            string Edittestelt = "e" + item.id_element.ToString();
+                            <button type="button" class="btn btn-custon-rounded-three btn-primary btn-xs" data-toggle="modal" data-target="#@Edittestelt">Edit</button>
+                            string idxpath = item.id_element + "xpath";
+                            string idfullxpath = item.id_element + "fullxapth";
+                            string idvalue = item.id_element + "testvalue";
+                            <!-- Modal -->
+
+                            <div class="modal fade" id="@Edittestelt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="center">
+                                    <div class="modal-dialog modal-dialog-center" role="document">
+                                        <div class="modal-content">
+                                            @using (Html.BeginForm("EditTestElt", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "editform", @novalidate = "novalidate", @name = "editform" }))
+                                            {
+                                                @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit test element</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <input type="text" name="id_testcase" class="input-md form-control" id="@item.id_element+id_testcase" readonly hidden value="@item.id_testcase" />
+                                                    <input type="text" name="id_url" class="input-md form-control" id="@item.id_element+id_url" readonly hidden value="@item.id_url" />
+                                                    <input type="text" name="id_elementtest" class="input-md form-control" id="@item.id_element+id_elementtest" readonly hidden value="@item.id_element" />
+
+
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Xpath")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" name="xpath" class="input-md form-control" id="@idxpath" value="@item.xpath" placeholder="E.g: //a[name='uid']">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Full Xpath")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" name="fullxpath" class="input-md form-control" id="@idfullxpath+fullxpath" value="@item.xpath_full" placeholder="E.g: /html/div/div/a">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Value test")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" name="valuetest" class="input-md form-control" id="@idvalue" value="@item.value_test" placeholder="E.g: This is a tag a">
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-secondary" onclick="return IsEmptyEdit('@idxpath','@idfullxpath');">Update</button>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                                                </div>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
                         @{
 
                             string deletetestelt = "d" + item.id_element.ToString();
                             <button type="button" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#@deletetestelt">Delete</button>
-                           
+
                             <!-- Modal -->
 
                             <div class="modal fade" id="@deletetestelt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -143,11 +219,11 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
-                                                    <input type="text" name="id_testcase" class="input-md form-control" id="id_testcase" readonly hidden value="@item.id_testcase"/>
-                                                    <input type="text" name="id_url" class="input-md form-control" id="id_url" readonly hidden value="@item.id_url"/>
-                                                    <input type="text" name="id_elementtest" class="input-md form-control" id="id_elementtest" readonly hidden value="@item.id_element"/>
-                                                          
+
+                                                    <input type="text" name="id_testcase" class="input-md form-control" id="id_testcase" readonly hidden value="@item.id_testcase" />
+                                                    <input type="text" name="id_url" class="input-md form-control" id="id_url" readonly hidden value="@item.id_url" />
+                                                    <input type="text" name="id_elementtest" class="input-md form-control" id="id_elementtest" readonly hidden value="@item.id_element" />
+
                                                     <div class="row form-group">
                                                         <div class="col col-md-12">Are you sure?</div>
                                                     </div>
@@ -165,6 +241,7 @@
 
                         }
 
+
                     </td>
                 </tr>
             }
@@ -174,7 +251,14 @@
 <script>
 
     function IsEmpty() {
-        if (document.getElementById("xpath").value === "" || document.getElementById("fullxpath").value === "") {
+        if (document.getElementById("xpath").value === "" && document.getElementById("fullxpath").value === "") {
+            alert("Xpath or fulll xpath is required.");
+            return false;
+        }
+
+        return true;
+    } function IsEmptyEdit() {
+        if (document.getElementById(arguments[0]).value === "" && document.getElementById(arguments[1]).value === "") {
             alert("Xpath or fulll xpath is required.");
             return false;
         }
@@ -184,7 +268,14 @@
     $(document).ready(function () {
         $('#exam').DataTable(
             {
-                "lengthMenu": [[5, 10, - 1], [5, 10, "All record"]]
+                "lengthMenu": [[5, 10, - 1], [5, 10, "All record"]],
+                //"scrollY": "300px",
+                //"scrollX": true,
+                //"scrollCollapse": true,
+                //"columnDefs": [
+                //    { width: 200, targets: 0 }
+                //],
+                //"fixedColumns": true
             }
         );
     });
