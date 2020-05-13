@@ -121,12 +121,75 @@
                         @*<td>
                                 @Html.DisplayFor(modelItem => item.id_urlNavigation.name)
                             </td>*@
-                        <td>
+                    <td>
 
-                            @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ })*@
-                            <a class="btn btn-success" asp-action="TestData" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test data</a>
-                            <a class="btn btn-primary" asp-action="TestElement" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test elements</a>
-                        </td>
+                        @{
+                            string detail = "d" + @item.id_testcase.ToString();
+                            <button type="button" class="btn btn-custon-rounded-three btn-success btn-xs" data-toggle="modal" data-target="#@detail">Detail</button>
+
+                            <!-- Modal -->
+
+                            <div class="modal fade" id="@detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="center">
+                                    <div class="modal-dialog modal-dialog-center" role="document">
+                                        <div class="modal-content">
+                                            @using (Html.BeginForm("UpdateTestcase", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "updatetestcase", @novalidate = "novalidate", @name = "updatetestcase" }))
+                                            {
+                                                @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Detail Test case</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Id testcase")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" name="id_testcase" class="input-md form-control" value="@item.id_testcase" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Description")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" name="description" class="input-md form-control" value="@item.description" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("CreatedDate")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" name="CreatedDate" class="input-md form-control" value="@item.CreatedDate" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("ModifiedDate")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" name="ModifiedDate" class="input-md form-control" value="@item.ModifiedDate" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Result")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" name="result" class="input-md form-control" value="@item.result" readonly />
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success">Update</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <a class="btn btn-success" asp-action="TestData" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test data</a>
+                        <a class="btn btn-primary" asp-action="TestElement" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test elements</a>
+                    </td>
                     </tr>
                 }
             </tbody>

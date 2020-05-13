@@ -16,6 +16,10 @@ using OpenQA.Selenium;
 using Microsoft.AspNetCore.Routing;
 using Generate_TestCase_Selenium_Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Generate_TestCase_Selenium_Web.Areas.TestCase.Models;
+using System.Data;
+using FastMember;
+using OfficeOpenXml;
 
 namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 {
@@ -89,6 +93,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
         }
+        // not use. but not delete
         public async Task<IActionResult> Result(int id_url)
         {
             ViewData["id_url"] = id_url;
@@ -176,20 +181,62 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
 
             _context.Test_case.AddRange(ListTestCase);
-             _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             foreach (var inputtest in List_ListInputTestcase)
             {
                 _context.Input_testcase.AddRange(inputtest);
 
             }
-            if (await _context.SaveChangesAsync() > 0)
+            if (_context.SaveChanges() > 0)
                 return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
 
 
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateTestcase(int id_url, string id_testcase, string description)
+        {
 
+            var id = _userManager.GetUserId(User);
+            int authen = _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).Count();
+            if (authen > 0)
+            {
+                var _context = new ElementDBContext();
+                var testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+                if (testcase == null)
+                {
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        testcase.ModifiedDate = DateTime.Now.Date;
+                        testcase.description = description;
+                        _context.Update(testcase);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!Test_caseExists(testcase.id_testcase))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index), new { id_url = id_url, isload = true });
+                }
+                return RedirectToAction(nameof(Index), new { id_url = id_url, isload = true });
+            }
+            return NotFound();
+
+        }
 
 
         #region Input Type Text
@@ -296,7 +343,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
 
                     List_ListInputTestcase.Add(listInputElt);
-                    
+
                 }
                 return true;
             }
@@ -563,7 +610,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 var url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
                 //var list_Idtestcase1 = _context.Test_case.Where(p => p.id_url == id_url).ToList();
                 IEnumerable<Task<string>> runTasksQuery =
-                    from Id in list_Idtestcase   select Run_ReturnResult(id_url, url, Id);
+                    from Id in list_Idtestcase select Run_ReturnResult(id_url, url, Id);
                 List<Task<string>> runTasks = runTasksQuery.ToList();
                 try
                 {
@@ -608,7 +655,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
             //try
             //{
-            ChromeDriver chromedriver = SetUpDriver(url); 
+            ChromeDriver chromedriver = SetUpDriver(url);
 
             //chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
@@ -710,7 +757,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     string DataResult = "";
                     if (!outputtest.xpath.Equals(""))
                     {
-                        if(chromedriver.FindElementsByXPath(outputtest.xpath).Count()>0)
+                        if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                         {
 
                             testelt = chromedriver.FindElementByXPath(outputtest.xpath);
@@ -745,15 +792,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 if (testDisplayed.Displayed)
                                 {
                                     testDisplayed.Click();
-                                    if(chromedriver.FindElementsByXPath(outputtest.xpath).Count()>0)
+                                    if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                                     {
                                         testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                                        string vt=null;
-                                        if(testelt.Text!=null)
+                                        string vt = null;
+                                        if (testelt.Text != null)
                                         {
                                             vt = testelt.Text;
                                         }
-                                        else if(testelt.GetAttribute("value")!=null)
+                                        else if (testelt.GetAttribute("value") != null)
                                         {
                                             vt = testelt.GetAttribute("value");
                                         }
@@ -771,7 +818,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                         }
                                         break;
                                     }
-                                   
+
                                 }
 
                             }
@@ -782,15 +829,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     if (!outputtest.xpath_full.Equals("") && !WasTested)
                     {
 
-                        if(chromedriver.FindElementsByXPath(outputtest.xpath_full).Count()>0)
+                        if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count() > 0)
                         {
                             testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                            string vt=null;
-                            if(testelt.Text!=null)
+                            string vt = null;
+                            if (testelt.Text != null)
                             {
                                 vt = testelt.Text;
                             }
-                            else if(testelt.GetAttribute("value")!=null)
+                            else if (testelt.GetAttribute("value") != null)
                             {
                                 vt = testelt.GetAttribute("value");
                             }
@@ -817,7 +864,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 if (testDisplayed.Displayed)
                                 {
                                     testDisplayed.Click();
-                                    if(chromedriver.FindElementsByXPath(outputtest.xpath_full).Count>0)
+                                    if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
                                     {
                                         testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
                                         string vt = null;
@@ -844,7 +891,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                         }
                                         break;
                                     }
-                                    
+
                                 }
 
 
@@ -1300,7 +1347,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     _context.Element_test.Update(outputtest);
                     await _context.SaveChangesAsync();
 
-                    #region backup
+#region backup
                     //try
                     //{
 
@@ -1423,7 +1470,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     //    }
                     //}
 
-                    #endregion
+#endregion
 
 
                 }
@@ -1636,6 +1683,84 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
 
 
+        #endregion
+
+        #region Excel
+        public IActionResult CreateExcel(int id_url, List<string> list_Idtestcase)
+        {
+            //var testdataDBContext = await _context.Test_case.Include(i => i.Input_testcase).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
+            var testcaseExcels = _context.Test_case.Include(i => i.Input_testcase).Where(p => p.id_url == 1).ToList();
+            // if (testdataDBContext.Count() == 0)
+            // {
+            //     ViewData["Message"] = "No element yet, create a new one";
+            // }
+            // else
+            //if (testdataDBContext.Count() > 0)
+            // {
+            //     ViewData["Message"] = String.Format("{0} test data(s)", testdataDBContext.Count());
+
+
+            // }
+
+            // else
+            // {
+            //     ViewData["Message"] = "Error load data";
+            // }
+            // return View(testdataDBContext);
+            //List<TestcaseExcel> testcaseExcels = new List<TestcaseExcel>() {
+            //    new TestcaseExcel() { Id_testcase="vhcgh", Description="khvh", Result="hguy", ResultTestElement="bhbh", TestData="hghgh", TestElement="gy" },
+            //        new TestcaseExcel() { Id_testcase="vhcgh", Description="khvh", Result="hguy", ResultTestElement="bhbh", TestData="hghgh", TestElement="gy" }
+
+            //};
+            //DataTable dt = new DataTable();
+            //using (var reader = ObjectReader.Create(testcaseExcels))
+            //{
+            //    dt.Load(reader);
+            //} // if (testdataDBContext.Count() == 0)
+            // {
+            //     ViewData["Message"] = "No element yet, create a new one";
+            // }
+            // else
+            //if (testdataDBContext.Count() > 0)
+            // {
+            //     ViewData["Message"] = String.Format("{0} test data(s)", testdataDBContext.Count());
+
+
+            // }
+
+            // else
+            // {
+            //     ViewData["Message"] = "Error load data";
+            // }
+            // return View(testdataDBContext);
+            //List<TestcaseExcel> testcaseExcels = new List<TestcaseExcel>() {
+            //    new TestcaseExcel() { Id_testcase="vhcgh", Description="khvh", Result="hguy", ResultTestElement="bhbh", TestData="hghgh", TestElement="gy" },
+            //        new TestcaseExcel() { Id_testcase="vhcgh", Description="khvh", Result="hguy", ResultTestElement="bhbh", TestData="hghgh", TestElement="gy" }
+
+            //};
+            //DataTable dt = new DataTable();
+            //using (var reader = ObjectReader.Create(testcaseExcels))
+            //{
+            //    dt.Load(reader);
+            //}
+            byte[] fileContents;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Test case");
+                worksheet.Cells["A2"].LoadFromCollection<Test_case>(testcaseExcels, true);
+                fileContents = package.GetAsByteArray();
+            }
+            if (fileContents == null || fileContents.Length==0)
+            {
+                NotFound();
+            }
+            return File(
+                fileContents:fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName:"test.xlsx"
+                );
+        }
         #endregion
 
         /*
