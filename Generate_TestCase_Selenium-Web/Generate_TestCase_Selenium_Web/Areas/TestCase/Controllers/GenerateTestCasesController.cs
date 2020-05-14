@@ -20,6 +20,7 @@ using Generate_TestCase_Selenium_Web.Areas.TestCase.Models;
 using System.Data;
 using FastMember;
 using OfficeOpenXml;
+using System.IO;
 
 namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 {
@@ -1745,20 +1746,27 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //}
             byte[] fileContents;
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var stream = new MemoryStream();
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("Test case");
                 worksheet.Cells["A2"].LoadFromCollection<Test_case>(testcaseExcels, true);
                 fileContents = package.GetAsByteArray();
+
+                string filePath = "D:\\ExcelDemo.xlsx";
+
+                System.IO.File.WriteAllBytes(filePath, fileContents);// save to dissk
+
             }
-            if (fileContents == null || fileContents.Length==0)
+            if (fileContents == null || fileContents.Length == 0)
             {
                 NotFound();
             }
+
             return File(
-                fileContents:fileContents,
+                fileContents: fileContents,
                 contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                fileDownloadName:"test.xlsx"
+                fileDownloadName: "test.xlsx"
                 );
         }
         #endregion
