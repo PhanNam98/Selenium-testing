@@ -50,7 +50,7 @@
         <table id="testcasetable" class="table table-striped table-condensed table-hover table-bordered">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="checkall"/></th>
+                    <th><input type="checkbox" id="checkall" /></th>
                     <th>
                         @Html.DisplayName("Id test case")
                     </th>
@@ -63,12 +63,12 @@
                     @*<th>
                             @Html.DisplayNameFor(model => model.is_test)
                         </th>*@
-                    <th>
-                        @Html.DisplayName("CreatedDate")
-                    </th>
                     @*<th>
-                        @Html.DisplayName("ModifiedDate")
+                        @Html.DisplayName("CreatedDate")
                     </th>*@
+                    @*<th>
+                            @Html.DisplayName("ModifiedDate")
+                        </th>*@
                     @*<th>
                             @Html.DisplayNameFor(model => model.id_urlNavigation)
                         </th>*@
@@ -96,7 +96,7 @@
                             </td>
                         }
                         else
-        if (item.result.Equals("Skip"))
+       if (item.result.Equals("Skip"))
                         {
                             <td style="color:blue">
                                 @Html.DisplayFor(modelItem => item.result)
@@ -112,84 +112,86 @@
                         @*<td>
                                 @Html.DisplayFor(modelItem => item.is_test)
                             </td>*@
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatedDate)
-                        </td>
                         @*<td>
-                            @Html.DisplayFor(modelItem => item.ModifiedDate)
+                            @Html.DisplayFor(modelItem => item.CreatedDate)
                         </td>*@
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.ModifiedDate)
+                            </td>*@
                         @*<td>
                                 @Html.DisplayFor(modelItem => item.id_urlNavigation.name)
                             </td>*@
-                    <td>
+                        <td>
 
-                        @{
-                            string detail = "d" + @item.id_testcase.ToString();
-                            <button type="button" class="btn btn-custon-rounded-three btn-success btn-xs" data-toggle="modal" data-target="#@detail">Detail</button>
+                            @{
+                                string detail = "d" + @item.id_testcase.ToString();
+                                <button type="button" class="btn btn-custon-rounded-three btn-success btn-xs" data-toggle="modal" data-target="#@detail">Detail</button>
+                                string description = "des" + @item.id_testcase.ToString();
+                                <!-- Modal -->
 
-                            <!-- Modal -->
+                                <div class="modal fade" id="@detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="center">
+                                        <div class="modal-dialog modal-dialog-center" role="document">
+                                            <div class="modal-content">
+                                                @using (Html.BeginForm("UpdateTestcase", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = detail, @novalidate = "novalidate", @name = "updatetestcase" }))
+                                                {
+                                                    @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Detail Test case</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Id testcase")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="id_testcase" class="input-md form-control" value="@item.id_testcase" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Description")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="description" id="@description" class="input-md form-control" value="@item.description" />
 
-                            <div class="modal fade" id="@detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="center">
-                                    <div class="modal-dialog modal-dialog-center" role="document">
-                                        <div class="modal-content">
-                                            @using (Html.BeginForm("UpdateTestcase", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "updatetestcase", @novalidate = "novalidate", @name = "updatetestcase" }))
-                                            {
-                                                @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Detail Test case</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
-                                                    <div class="row form-group">
-                                                        <div class="col col-md-3">@Html.Label("Id testcase")</div>
-                                                        <div class="col-12 col-md-9">
-                                                            <input type="text" name="id_testcase" class="input-md form-control" value="@item.id_testcase" readonly>
+                                                            </div>
                                                         </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("CreatedDate")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="CreatedDate" class="input-md form-control" value="@item.CreatedDate" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("ModifiedDate")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="ModifiedDate" class="input-md form-control" value="@item.ModifiedDate" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-3">@Html.Label("Result")</div>
+                                                            <div class="col-12 col-md-9">
+                                                                <input type="text" name="result" class="input-md form-control" value="@item.result" readonly />
+                                                            </div>
+                                                        </div>
+
                                                     </div>
-                                                    <div class="row form-group">
-                                                        <div class="col col-md-3">@Html.Label("Description")</div>
-                                                        <div class="col-12 col-md-9">
-                                                            <input type="text" name="description" class="input-md form-control" value="@item.description" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col col-md-3">@Html.Label("CreatedDate")</div>
-                                                        <div class="col-12 col-md-9">
-                                                            <input type="text" name="CreatedDate" class="input-md form-control" value="@item.CreatedDate" readonly />
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col col-md-3">@Html.Label("ModifiedDate")</div>
-                                                        <div class="col-12 col-md-9">
-                                                            <input type="text" name="ModifiedDate" class="input-md form-control" value="@item.ModifiedDate" readonly />
-                                                        </div>
-                                                    </div>
-                                                    <div class="row form-group">
-                                                        <div class="col col-md-3">@Html.Label("Result")</div>
-                                                        <div class="col-12 col-md-9">
-                                                            <input type="text" name="result" class="input-md form-control" value="@item.result" readonly />
-                                                        </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success" onclick="UpdateTestcase('@item.id_testcase', @item.id_url, '@description')">Update</button>
+
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                     </div>
 
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-success">Update</button>
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                </div>
-
-                                            }
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
-                        <a class="btn btn-success" asp-action="TestData" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test data</a>
-                        <a class="btn btn-primary" asp-action="TestElement" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test elements</a>
-                    </td>
+                            }
+                            <a class="btn btn-success" asp-action="TestData" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test data</a>
+                            <a class="btn btn-primary" asp-action="TestElement" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test elements</a>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -245,19 +247,44 @@
         "searching": false
             }
         );
-        
+
     });
         function Run_by_id() {
             if (document.getElementById("list_Idtestcase").value == null) {
                 alert("No test case have been selected");
             }
             else {
-       
-          
-        
+
+
+
                 ShowProgress();
                 document.getElementById("testcaseform").submit();
             }
+    };
+    function UpdateTestcase() {
+
+           var idtestcase = arguments[0];
+           var idurl = arguments[1];
+        var des = document.getElementById(arguments[2]).value;
+            $.ajax({
+                //url: '/TestCase/GenerateTestCases/UpdateTestcase',
+                url: '@Url.Action("UpdateTestcase","GenerateTestCases",new { Area="TestCase"})',
+                type: 'POST',
+                data: { id_url:idurl,id_testcase:idtestcase,description: des}
+            }).done(function (data) {
+                //if (data.result == "OK") {
+                //    alert(data.message);
+                //}
+                //else if (data.message) {
+                location.reload();
+                //$('.modal').modal('hide');
+                //alert("Success");
+
+                //}
+            }).fail(function () {
+                alert("Error.");
+            })
+
     };
     $(function () {
         $("#checkall").click(function () {
@@ -275,6 +302,6 @@
         });
 
     });
-    
+
 
 </script>

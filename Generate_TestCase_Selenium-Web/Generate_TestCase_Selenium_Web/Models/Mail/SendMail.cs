@@ -62,31 +62,28 @@ namespace Generate_TestCase_Selenium_Web.Models.Mail
             }
 
         }
-        public static async Task SendMailWithFile(string Message, string email, string subject)
+        public static async Task SendMailWithFile(string Message, string email, string subject,string path)
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("Generate_Testcase_Web Service", "nguoithichduajoker1@gmail.com"));
             message.To.Add(new MailboxAddress(email));
             message.Subject = subject;
-            //message.Body = new TextPart("html")
-            //{
-            //    Text = Message
-            //};
+            
             var body = new TextPart("html")
             {
                 Text = Message
             };
 
-            var attachment = new MimePart("image", "gif")
+            var attachment = new MimePart("application", "gif")
             {
-                Content = new MimeContent(File.OpenRead("")),
+                Content = new MimeContent(File.OpenRead(path)),
                 ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
                 ContentTransferEncoding = ContentEncoding.Base64,
-                FileName = Path.GetFileName("")
+                FileName = Path.GetFileName(path)
             };
 
             // now create the multipart/mixed container to hold the message text and the
-            // image attachment
+
             var multipart = new Multipart("mixed");
             multipart.Add(body);
             multipart.Add(attachment);
