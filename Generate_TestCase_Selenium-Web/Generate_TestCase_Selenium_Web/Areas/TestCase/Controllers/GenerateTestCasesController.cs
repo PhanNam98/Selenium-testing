@@ -56,8 +56,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             Setup();
         }
 
-        //GET: TestCase/GenerateTestCases
-
+        //GET: TestCase/id_url/isload
         [Route("/TestCase/{id_url?}/{isload?}")]
         public async Task<IActionResult> Index(int id_url, bool isload = false)
         {
@@ -92,7 +91,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     else
                         ViewData["Message"] = null;
                 }
-               
+
                 ViewData["LoadingTitle"] = "Running test case. Please wait.";
                 return View(testcaseDBContext);
             }
@@ -164,40 +163,40 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         public async Task<IActionResult> Generate_testcase(int id_url)
         {
-            //Id_Url = id_url;
-            //ListTestCase = new List<Test_case>();
-            //List_ListInputTestcase = new List<List<Input_testcase>>();
-            //List<Form_elements> forms = await _context.Form_elements.Where(p => p.id_url == Id_Url).ToListAsync();
-            //if (forms.Count > 0)
-            //{
-            //    for (int i = 0; i < forms.Count; i++)
-            //    {
-            //        var _context1 = new ElementDBContext();
-            //        List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.id_form == forms[i].id_form && p.type == "submit").ToListAsync();
-            //        for (int j = 0; j < submit.Count; j++)
-            //        {
-            //            //NotFill_ClickSubmit(forms[i].id_form, j, submit[j]);
-            //            await Input_Type_Text(forms[i].id_form, j, submit[j]);
+            Id_Url = id_url;
+            ListTestCase = new List<Test_case>();
+            List_ListInputTestcase = new List<List<Input_testcase>>();
+            List<Form_elements> forms = await _context.Form_elements.Where(p => p.id_url == Id_Url).ToListAsync();
+            if (forms.Count > 0)
+            {
+                for (int i = 0; i < forms.Count; i++)
+                {
+                    var _context1 = new ElementDBContext();
+                    List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.id_form == forms[i].id_form && p.type == "submit").ToListAsync();
+                    for (int j = 0; j < submit.Count; j++)
+                    {
+                        //NotFill_ClickSubmit(forms[i].id_form, j, submit[j]);
+                        await Input_Type_Text(forms[i].id_form, j, submit[j]);
 
-            //            //ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    //not form
-            //}
+                        //ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                    }
+                }
+            }
+            else
+            {
+                //not form
+            }
 
-            //_context.Test_case.AddRange(ListTestCase);
-            //await _context.SaveChangesAsync();
+            _context.Test_case.AddRange(ListTestCase);
+            await _context.SaveChangesAsync();
 
-            //foreach (var inputtest in List_ListInputTestcase)
-            //{
-            //    _context.Input_testcase.AddRange(inputtest);
+            foreach (var inputtest in List_ListInputTestcase)
+            {
+                _context.Input_testcase.AddRange(inputtest);
 
-            //}
-            //if (_context.SaveChanges() > 0)
-            //    return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
+            }
+            if (_context.SaveChanges() > 0)
+                return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
 
 
@@ -325,7 +324,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             var _context = new ElementDBContext();
             var listTypeText = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "text" && p.tag_name == "input").ToListAsync();
-            //var listTypeText = BUL.ElementBUL.get_List_Input_Tag_Type(Id_Url, "text", id_form);
+          
             int number_of_elements = listTypeText.Count;
 
             if (number_of_elements > 0)
@@ -639,6 +638,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
                     }
                     ViewData["Message"] = "Run successfully";
+                    await SendExcel(id_url,list_Idtestcase);
                 }
                 catch
                 {
@@ -1522,6 +1522,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //}
         }
         */
+
+        #region Driver
         private ChromeDriver SetUpDriver(string url)
         {
             ChromeDriverService service = ChromeDriverService.CreateDefaultService();
@@ -1554,6 +1556,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             chromedriver.Close();
 
         }
+        #endregion
 
         #endregion
 
@@ -1698,101 +1701,51 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         #endregion
 
         #region Excel
-        //public IActionResult CreateExcel(int id_url, List<string> list_Idtestcase)
-        public async Task<IActionResult> CreateExcel(int id_url, List<string> list_Idtestcase)
+        // Send excel to mail
+        public async Task SendExcel(int id_url, List<string> list_Idtestcase)
         {
-            //var testdataDBContext = await _context.Test_case.Include(i => i.Input_testcase).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
-            var testcases = _context.Test_case.Include(i => i.Input_testcase).Include(p => p.Element_test).Where(p => p.id_url == 1).ToList();
-            // if (testdataDBContext.Count() == 0)
-            // {
-            //     ViewData["Message"] = "No element yet, create a new one";
-            // }
-            // else
-            //if (testdataDBContext.Count() > 0)
-            // {
-            //     ViewData["Message"] = String.Format("{0} test data(s)", testdataDBContext.Count());
-
-
-            // }
-
-            // else
-            // {
-            //     ViewData["Message"] = "Error load data";
-            // }
-            // return View(testdataDBContext);
-            //List<TestcaseExcel> testcaseExcels = new List<TestcaseExcel>() {
-            //    new TestcaseExcel() { Id_testcase="vhcgh", Description="khvh", Result="hguy", ResultTestElement="bhbh", TestData="hghgh", TestElement="gy" },
-            //        new TestcaseExcel() { Id_testcase="vhcgh", Description="khvh", Result="hguy", ResultTestElement="bhbh", TestData="hghgh", TestElement="gy" }
-
-            //};
-            //DataTable dt = new DataTable();
-            //using (var reader = ObjectReader.Create(testcaseExcels))
-            //{
-            //    dt.Load(reader);
-            //} // if (testdataDBContext.Count() == 0)
-            // {
-            //     ViewData["Message"] = "No element yet, create a new one";
-            // }
-            // else
-            //if (testdataDBContext.Count() > 0)
-            // {
-            //     ViewData["Message"] = String.Format("{0} test data(s)", testdataDBContext.Count());
-
-
-            // }
-
-            // else
-            // {
-            //     ViewData["Message"] = "Error load data";
-            // }
-            // return View(testdataDBContext);
-            //List<TestcaseExcel> testcaseExcels = new List<TestcaseExcel>() {
-            //    new TestcaseExcel() { Id_testcase="vhcgh", Description="khvh", Result="hguy", ResultTestElement="bhbh", TestData="hghgh", TestElement="gy" },
-            //        new TestcaseExcel() { Id_testcase="vhcgh", Description="khvh", Result="hguy", ResultTestElement="bhbh", TestData="hghgh", TestElement="gy" }
-
-            //};
-            //DataTable dt = new DataTable();
-            //using (var reader = ObjectReader.Create(testcaseExcels))
-            //{
-            //    dt.Load(reader);
-            //}
+            var user = await _userManager.GetUserAsync(User);
+            var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
+            var testcases = await _context.Test_case.Include(i => i.Input_testcase).Include(p => p.Element_test).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
             TestcaseExcel testcaseExcel = new TestcaseExcel();
             var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases);
             byte[] fileContents;
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var stream = new MemoryStream();
-            string filename = "ExcelDemo.xlsx";
-            //var path = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/excels/", filename);
+            string filename = "Testcase-" + DateTime.Now.ToString("MM-dd-yyyy") + "-" + Generate_RandomString(5) + ".xlsx";
             var path = Path.Combine(Directory.GetCurrentDirectory(), Constants.EXCEL_FILE, filename);
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("Test case");
-                worksheet.Cells["A2"].LoadFromCollection<TestcaseExcel>(testcaseExcels, true);
+                package.Workbook.Properties.Author = "Genergate testcase web";
+                //worksheet.Cells["A2"].LoadFromCollection<TestcaseExcel>(testcaseExcels, true);
+                worksheet.Cells[1, 1].Value = "Url: " + url.url1;
+                BindingFormatForExcel(worksheet, testcaseExcels);
                 fileContents = package.GetAsByteArray();
-
-                //string filePath = "D:\\ExcelDemo.xlsx";
-
                 System.IO.File.WriteAllBytes(path, fileContents);// save to dissk
 
             }
-            await SendMail.SendMailWithFile("file exel", "16110162@student.hcmute.edu.vn", "Export Excel", path);
-            //await SendMail.SendMailASync("file exel", "16110162@student.hcmute.edu.vn", "Export Excel");
+
+
             if (fileContents == null || fileContents.Length == 0)
             {
                 NotFound();
             }
+            else
+            {
+                string emailcontent = "Thank you for using our service. " +
+                           "The excel file has been attached below.";
+                await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
+                //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
+            }
 
-            return File(
-                fileContents: fileContents,
-                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                fileDownloadName: "test.xlsx"
-                );
+
         }
         [HttpPost]
-        public async Task<IActionResult>  DownloadExcel(List<string> list_Idtestcase, int id_url= 1)
+        public async Task<IActionResult> DownloadExcel(List<string> list_Idtestcase, int id_url)
         {
-            var testcases =await _context.Test_case.Include(i => i.Input_testcase).Include(p => p.Element_test).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
-            var url =await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
+            var testcases = await _context.Test_case.Include(i => i.Input_testcase).Include(p => p.Element_test).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
+            var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
 
             TestcaseExcel testcaseExcel = new TestcaseExcel();
             var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases);
@@ -1849,7 +1802,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 // Set PatternType
                 //range.Style.Fill.PatternType = ExcelFillStyle.;
                 // Set Màu cho Background
-               // range.Style.Fill.BackgroundColor.SetColor(Color.Gray);
+                // range.Style.Fill.BackgroundColor.SetColor(Color.Gray);
                 // Canh giữa cho các text
                 range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 // Set Font cho text  trong Range hiện tại
@@ -1864,17 +1817,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             for (int i = 0; i < listItems.Count; i++)
             {
                 var item = listItems[i];
-                worksheet.Cells[i + 3, 1].Value = i+1;
+                worksheet.Cells[i + 3, 1].Value = i + 1;
                 worksheet.Cells[i + 3, 2].Value = item.Id_testcase;
                 worksheet.Cells[i + 3, 3].Value = item.Description;
                 worksheet.Cells[i + 3, 4].Value = item.Result;
                 worksheet.Cells[i + 3, 5].Value = item.TestData;
                 worksheet.Cells[i + 3, 6].Value = item.TestElement;
                 worksheet.Cells[i + 3, 7].Value = item.ResultTestElement;
-                
-                worksheet.Cells[i + 3, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center; 
-                worksheet.Cells[i + 3, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center; 
-                worksheet.Cells[i + 3, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center; 
+
+                worksheet.Cells[i + 3, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[i + 3, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[i + 3, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells[i + 3, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 worksheet.Cells[i + 3, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 worksheet.Cells[i + 3, 2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;

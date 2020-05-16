@@ -48,6 +48,29 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(elementDBContext);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProject(string projectName, string description)
+        {
+            Project project = new Project();
+            if (ModelState.IsValid)
+            {
+
+                project.description = description;
+                var user = await _userManager.GetUserAsync(User);
+                project.Id_User = user.Id;
+                project.name = projectName;
+                project.CreatedDate = DateTime.Now.Date;
+                project.ModifiedDate = DateTime.Now.Date;
+                _context.Add(project);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("AddNewUrl", "Urls", new RouteValueDictionary(new { project_id = project.id }));
+            }
+            return RedirectToAction(nameof(Index));
+            
+        }
+
+        /*
         // GET: TestCase/Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -92,28 +115,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             ViewData["Id_User"] = new SelectList(_context.AspNetUsers, "Id", "Id", project.Id_User);
             return View(project);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateProject(string projectName, string description)
-        {
-            Project project = new Project();
-            if (ModelState.IsValid)
-            {
-
-                project.description = description;
-                var user = await _userManager.GetUserAsync(User);
-                project.Id_User = user.Id;
-                project.name = projectName;
-                project.CreatedDate = DateTime.Now.Date;
-                project.ModifiedDate = DateTime.Now.Date;
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("AddNewUrl", "Urls", new RouteValueDictionary(new { project_id = project.id }));
-            }
-            return RedirectToAction(nameof(Index));
-            
-        }
-
         // GET: TestCase/Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -196,7 +197,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        */
         private bool ProjectExists(int id)
         {
             return _context.Project.Any(e => e.id == id);
