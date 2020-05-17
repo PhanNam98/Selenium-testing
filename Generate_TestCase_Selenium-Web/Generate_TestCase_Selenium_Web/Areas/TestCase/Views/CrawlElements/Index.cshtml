@@ -164,7 +164,7 @@
                 {
                     <tr>
                         <td>
-                            <input type="checkbox" name="eltId_Delete" id="eltId_Delete" value="@item.id_element" />
+                            <input type="checkbox" name="eltId_Delete" id=@item.id_element value="@item.id_element" />
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.id_element)
@@ -231,7 +231,7 @@
                                     <div class="center">
                                         <div class="modal-dialog modal-dialog-center" role="document">
                                             <div class="modal-content">
-                                                @using (Html.BeginForm("BlockPost", "ManagePostsAdmin", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "blockform", @novalidate = "novalidate", @name = "blockform" }))
+                                                @using (Html.BeginForm("BlockPost", "ManagePostsAdmin", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = detail, @novalidate = "novalidate", @name = "blockform" }))
                                                 {
                                                     @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
                                                     <div class="modal-header">

@@ -74,7 +74,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     project.ModifiedDate = DateTime.Now.Date;
                     _context.Add(project);
                     await _context.SaveChangesAsync();
-                    StatusMessage = "Add successful project";
+                    StatusMessage = "Add successfully";
                 }
                 catch
                 {
@@ -94,7 +94,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Urls(int project_id)
         {
             var user = await _userManager.GetUserAsync(User);
-            var elementDBContext = await _context.Url.Include(p => p.project_).Where(p => p.project_.Id_User == user.Id && p.project_id == project_id).ToListAsync();
+            var elementDBContext = await _context.Url.Include(p => p.project_).Include(p=>p.Test_case).Include(p=>p.Element).Where(p => p.project_.Id_User == user.Id && p.project_id == project_id).OrderByDescending(p=>p.ModifiedDate).ToListAsync();
             if (StatusMessage == null)
             {
                 if (elementDBContext.Count() == 0)
@@ -119,6 +119,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             ViewData["project_id"] = project_id;
             return View(elementDBContext);
         }
+
         [HttpPost]
         public async Task<IActionResult> AddNewUrl(string name, string url1, int project_id, bool IsOnlyDislayed)
         {
@@ -147,6 +148,72 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 1, IsOnlyDislayed = IsOnlyDislayed }));
         }
+        #endregion
+
+        #region
+        [Route("/Manage/Elements/")]
+        public async Task<IActionResult> Elements(int id_url)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var listelt =await _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            if (listelt.Count > 0)
+            {
+                //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();
+                if (StatusMessage == null)
+                {
+                    if (listelt.Count() == 0)
+                    {
+                        ViewData["Message"] = "No elements yet";
+                    }
+                    else
+                    if (listelt.Count() > 0)
+                    {
+                        ViewData["Message"] = String.Format("Found {0} elements", listelt.Count());
+                    }
+                    else
+                    {
+                        ViewData["Message"] = "Error load data";
+                    }
+                }
+                else
+                {
+                    ViewData["Message"] = StatusMessage;
+                    TempData.Remove(StatusMessage);
+                }
+                ViewData["id_url"] = id_url;
+                ViewData["project_id"] = listelt.FirstOrDefault().id_urlNavigation.project_.id;
+                return View(listelt);
+            }
+            return NotFound();
+            
+        }
+        public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete)
+        {
+            if (eltId_Delete == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                foreach (var id in eltId_Delete)
+                {
+                    var element = await _context.Element.Where(p => p.id_element == id && p.id_url == id_url).FirstOrDefaultAsync();
+                    _context.Element.RemoveRange(element);
+                }
+                await _context.SaveChangesAsync();
+                StatusMessage = "Delete successfully";
+            }
+            catch
+            {
+                StatusMessage = "Delete fail";
+            }
+            return RedirectToAction(nameof(Elements), new RouteValueDictionary(new
+            {
+                id_url = id_url
+
+            }));
+        }
+
         #endregion
     }
 }
