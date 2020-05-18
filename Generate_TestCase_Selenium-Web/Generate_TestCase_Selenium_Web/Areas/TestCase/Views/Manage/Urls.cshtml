@@ -5,15 +5,16 @@
     Layout = "~/Views/Shared/_LayoutManage.cshtml";
 }
 
-<h2>Urls</h2>
+    <h2>Urls of project: @ViewBag.project_name</h2>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Projects">Project</a></li>
     <li class="breadcrumb-item active">Url</li>
 </ol>
 
 <partial name="~/Views/Shared/LoadingViewPartial.cshtml" model="@ViewBag.LoadingTitle" />
-<br />
-<br />
+
+<hr />
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -66,12 +67,30 @@
 </div>
 <partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
 <div class="card mb-4">
-    <div class="card-header"><i class="fas fa-table mr-1"></i>Urls list</div>
+    <div class="card-header">
+       
+        <div class="row">
+            <div class="col-2">
+                <i class="fas fa-table mr-1"></i>Urls list
+            </div>
+            <div class="col-10">
+                <div class="container">
+                    <div class="text-right">
+                        <button type="button" name="createbtn" id="btn-create" class="btn btn-custon-rounded-three btn-primary btn-xs" data-toggle="modal" data-target="#exampleModal">Create new url</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-striped table-condensed table-hover table-bordered" id="exam">
                 <thead>
                     <tr>
+                        <th>
+                            @Html.DisplayName("Id")
+                        </th>
                         <th>
                             @Html.DisplayName("Name")
                         </th>
@@ -92,6 +111,9 @@
                     {
                         <tr>
                             <td>
+                                @Html.DisplayFor(modelItem => item.id_url)
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.name)
                             </td>
                             <td>
@@ -107,17 +129,19 @@
                             <td>
                                 @{ if (item.Element.Count() > 0)
                                     {
-                                        <a role="button" class="btn btn-success" asp-area="TestCase" asp-controller="Manage" asp-action="Elements" asp-route-id_url="@item.id_url">View Element(s)</a>
+                                        <a role="button" class="btn btn-success" asp-area="TestCase" asp-controller="Manage" asp-action="Elements" asp-route-id_url="@item.id_url">Element(s)</a>
 
                                     }
 
                                     else
                                     {
-                                        <a role="button" class="btn btn-primary" asp-area="TestCase" asp-controller="CrawlElements" asp-action="CrawlElt" asp-route-id_url="@item.id_url" asp-route-IsOnlyDislayed="true" title="Crawl elements to web" onclick="crawldata()">Crawl Element(s)</a>
+                                        <a role="button" class="btn btn-primary" asp-area="TestCase" asp-controller="CrawlElements" asp-action="CrawlElt" asp-route-id_url="@item.id_url"
+                                           asp-route-IsOnlyDislayed="true" title="Crawl elements to web" onclick="crawldata()"
+                                           asp-route-returnUrl="@Url.Action("Urls", "Manage", new { area = "TestCase",project_id= @ViewBag.project_id })">Crawl Element(s)</a>
                                     }
                                     if (item.Test_case.Count() > 0)
                                     {
-                                        <a role="button" class="btn btn-success" asp-area="TestCase" asp-controller="Manage" asp-action="Testcases" asp-route-id_url="@item.id_url">View Test case(s)</a>
+                                        <a role="button" class="btn btn-success" asp-area="TestCase" asp-controller="Manage" asp-action="Testcases" asp-route-id_url="@item.id_url">Test case(s)</a>
 
                                     }
                                 }
@@ -140,13 +164,13 @@
         }
         return true;
     }
-     function crawldata() {
+    function crawldata() {
         ShowProgress();
     };
     $(document).ready(function () {
         $('#exam').DataTable(
             {
-                "lengthMenu": [[10, 25, 50, - 1], [10, 25, 50, "All record"]],
+                "lengthMenu": [[4, 10, 25, 50, - 1], [4, 10, 25, 50, "All record"]],
                 "ordering": false,
 
 

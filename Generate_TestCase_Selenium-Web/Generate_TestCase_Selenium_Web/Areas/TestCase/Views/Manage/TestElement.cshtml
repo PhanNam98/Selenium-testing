@@ -1,0 +1,274 @@
+﻿@model IEnumerable<Generate_TestCase_Selenium_Web.Models.ModelDB.Element_test>
+
+@{
+    ViewData["Title"] = "Test Elements";
+    Layout = "~/Views/Shared/_LayoutManage.cshtml";
+}
+
+<h2>Test Elements of test case @ViewBag.id_testcase</h2>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Projects">Project</a></li>
+    <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Urls" asp-route-project_id="@ViewBag.project_id">Urls</a></li>
+    <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Testcases" asp-route-id_url = "@ViewBag.id_url">Test case</a></li>
+    <li class="breadcrumb-item active">Test elements</li>
+</ol>
+<partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            @using (Html.BeginForm("CreateTestElt", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "createtesteltform", @novalidate = "novalidate", @name = "createtesteltform" }))
+            {
+                @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color:red">Create Test Element</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="returnUrl" class="input-md form-control" id="returnUrl" readonly hidden value="@Url.Action("TestElement", "Manage", new { area = "TestCase", id_url = @ViewBag.id_url,id_testcase=ViewBag.id_testcase })" />
+                    <div class="row form-group">
+                        <div class="col col-md-3">@Html.Label("Xpath")</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" name="xpath" class="input-md form-control" id="xpath" placeholder="E.g: //a[name='uid']">
+
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3">@Html.Label("Full Xpath")</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" name="fullxpath" class="input-md form-control" id="fullxpath" placeholder="E.g: /html/div/div/a">
+
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3">@Html.Label("Value test")</div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" name="valuetest" class="input-md form-control" id="valuetest" placeholder="E.g: This is a tag a">
+
+                        </div>
+                    </div>
+                    <input id="id_url" name="id_url" value="@ViewBag.id_url" readonly hidden />
+                    <input id="id_testcase" name="id_testcase" value="@ViewBag.id_testcase" readonly hidden />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" onclick="return IsEmpty();">Create</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+
+            }
+
+
+        </div>
+    </div>
+</div>
+<hr />
+<div class="card mb-4">
+    <div class="card-header">
+
+        <div class="row">
+            <div class="col-2">
+                <i class="fas fa-table mr-1"></i>Test elements list
+                </div>
+                <div class="col-10">
+                    <div class="container">
+                        <div class="text-right">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Add new test element
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover table-bordered" id="exam">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayName("Xpath")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Full Xpath")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Value return")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Value test")
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.xpath)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.xpath_full)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.value_return)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.value_test)
+                            </td>
+
+                            <td>
+
+                                @{
+
+                                    string Edittestelt = "e" + item.id_element.ToString();
+                                    <button type="button" class="btn btn-custon-rounded-three btn-primary btn-xs" data-toggle="modal" data-target="#@Edittestelt">Edit</button>
+                                    string idxpath = item.id_element + "xpath";
+                                    string idfullxpath = item.id_element + "fullxapth";
+                                    string idvalue = item.id_element + "testvalue";
+                                    <!-- Modal -->
+
+                                    <div class="modal fade" id="@Edittestelt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="center">
+                                            <div class="modal-dialog modal-dialog-center" role="document">
+                                                <div class="modal-content">
+                                                    @{
+                                                        string a = Url.Action("Urls", "Manage", new { area = "TestCase", project_id = @ViewBag.project_id });
+                                                    }
+                                                    @using (Html.BeginForm("EditTestElt", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "editform", @novalidate = "novalidate", @name = "editform" }))
+                                                    {
+                                                        @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Edit test element</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <input type="text" name="id_testcase" class="input-md form-control" id="@item.id_element+id_testcase" readonly hidden value="@item.id_testcase" />
+                                                            <input type="text" name="id_url" class="input-md form-control" id="@item.id_element+id_url" readonly hidden value="@item.id_url" />
+                                                            <input type="text" name="id_elementtest" class="input-md form-control" id="@item.id_element+id_elementtest" readonly hidden value="@item.id_element" />
+                                                            <input type="text" name="returnUrl" class="input-md form-control" id="@item.id_element+returnUrl" readonly hidden value="@Url.Action("TestElement", "Manage", new { area = "TestCase", id_url = item.id_url,id_testcase=item.id_testcase })" />
+
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Xpath")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="xpath" class="input-md form-control" id="@idxpath" value="@item.xpath" placeholder="E.g: //a[name='uid']">
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Full Xpath")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="fullxpath" class="input-md form-control" id="@idfullxpath+fullxpath" value="@item.xpath_full" placeholder="E.g: /html/div/div/a">
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Value test")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="valuetest" class="input-md form-control" id="@idvalue" value="@item.value_test" placeholder="E.g: This is a tag a">
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-success" onclick="return IsEmptyEdit('@idxpath','@idfullxpath');">Update</button>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        </div>
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+                                @{
+
+                                    string deletetestelt = "d" + item.id_element.ToString();
+                                    <button type="button" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#@deletetestelt">Delete</button>
+
+                                    <!-- Modal -->
+
+                                    <div class="modal fade" id="@deletetestelt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="center">
+                                            <div class="modal-dialog modal-dialog-center" role="document">
+                                                <div class="modal-content">
+                                                    @using (Html.BeginForm("DeleteTestElt", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "deleteform", @novalidate = "novalidate", @name = "deleteform" }))
+                                                    {
+                                                        @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Delete test element</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <input type="text" name="id_testcase" class="input-md form-control" id="id_testcase" readonly hidden value="@item.id_testcase" />
+                                                            <input type="text" name="id_url" class="input-md form-control" id="id_url" readonly hidden value="@item.id_url" />
+                                                            <input type="text" name="id_elementtest" class="input-md form-control" id="id_elementtest" readonly hidden value="@item.id_element" />
+                                                            <input type="text" name="returnUrl" class="input-md form-control" id="returnUrl" readonly hidden value="@Url.Action("TestElement", "Manage", new { area = "TestCase", id_url = @ViewBag.id_url,id_testcase=ViewBag.id_testcase })" />
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-12">Are you sure?</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-secondary">I sure</button>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                                                        </div>
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+
+    function IsEmpty() {
+        if (document.getElementById("xpath").value === "" && document.getElementById("fullxpath").value === "") {
+            alert("Xpath or fulll xpath is required.");
+            return false;
+        }
+
+        return true;
+    } function IsEmptyEdit() {
+        if (document.getElementById(arguments[0]).value === "" && document.getElementById(arguments[1]).value === "") {
+            alert("Xpath or fulll xpath is required.");
+            return false;
+        }
+
+        return true;
+    }
+    $(document).ready(function () {
+        $('#exam').DataTable(
+            {
+                "lengthMenu": [[5, 10, - 1], [5, 10, "All record"]],
+                //"scrollY": "300px",
+                //"scrollX": true,
+                //"scrollCollapse": true,
+                //"columnDefs": [
+                //    { width: 200, targets: 0 }
+                //],
+                //"fixedColumns": true
+            }
+        );
+    });
+</script>

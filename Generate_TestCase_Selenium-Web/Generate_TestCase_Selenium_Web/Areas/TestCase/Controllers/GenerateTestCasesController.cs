@@ -610,7 +610,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         #region Run test case
         [HttpPost]
         [Route("/TestCase/Result")]
-        public async Task<IActionResult> RunTestCase(int id_url, List<string> list_Idtestcase)
+        public async Task<IActionResult> RunTestCase(int id_url, List<string> list_Idtestcase, string returnUrl=null)
         {
             var id = _userManager.GetUserId(User);
             int authen = _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).Count();
@@ -622,8 +622,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 IEnumerable<Task<string>> runTasksQuery =
                     from Id in list_Idtestcase select Run_ReturnResult(id_url, url, Id);
                 List<Task<string>> runTasks = runTasksQuery.ToList();
-                try
-                {
+                //try
+                //{
                     while (runTasks.Count > 0)
                     {
                         // Identify the first task that completes.
@@ -637,21 +637,31 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         string length = await firstFinishedTask;
 
                     }
-                    ViewData["Message"] = "Run successfully";
+                StatusMessage = "Run successfully";
+                ViewData["Message"] = "Run successfully";
                     await SendExcel(id_url,list_Idtestcase);
-                }
-                catch
-                {
-                    ViewData["Message"] = "Run failed";
-                }
+                //}
+                //catch
+                //{
+                //    ViewData["Message"] = "Run failed";
+                //}
                 ViewData["id_url"] = id_url;
                 var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
 
                 ViewData["Pass"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("pass")).Count();
                 ViewData["Skip"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("skip")).Count();
                 ViewData["Failure"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("failure")).Count();
+                StatusMessage = ViewData["Message"].ToString();
                 //return RedirectToAction(nameof(Result), new RouteValueDictionary(new { id_url = id_url }));
-                return View("Result", testcaseDBContext);
+                if (returnUrl != null)
+                {
+                    return RedirectToAction("TestcasesResult","Manage", new RouteValueDictionary(new { id_url = id_url, list_Idtestcase = list_Idtestcase }));
+                }
+                else
+                {
+                    return View("Result", testcaseDBContext);
+                }
+               // return View("Result", testcaseDBContext);
             }
             return NotFound();
         }
@@ -1591,7 +1601,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTestElt(string xpath, string fullxpath, int id_url, string valuetest, string id_testcase)
+        public async Task<IActionResult> CreateTestElt(string xpath, string fullxpath, int id_url, string valuetest, string id_testcase, string returnUrl = null)
         {
             var elttest = new Element_test();
             try
@@ -1621,12 +1631,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 StatusMessage = String.Format("Error");
             }
-
-            return RedirectToAction(nameof(TestElement), new RouteValueDictionary(new { id_url = id_url, id_testcase = id_testcase }));
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(TestElement), new RouteValueDictionary(new { id_url = id_url, id_testcase = id_testcase }));
+            }
+            //return RedirectToAction(nameof(TestElement), new RouteValueDictionary(new { id_url = id_url, id_testcase = id_testcase }));
         }
         [HttpPost, ActionName("DeleteTestElt")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteTestElt(string id_testcase, int id_url, string id_elementtest)
+        public async Task<IActionResult> DeleteTestElt(string id_testcase, int id_url, string id_elementtest, string returnUrl = null)
         {
             try
             {
@@ -1640,11 +1657,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 StatusMessage = String.Format("Error");
             }
-            return RedirectToAction(nameof(TestElement), new { id_testcase = id_testcase, id_url = id_url });
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(TestElement), new { id_testcase = id_testcase, id_url = id_url });
+            }
+            //return RedirectToAction(nameof(TestElement), new { id_testcase = id_testcase, id_url = id_url });
         }
         [HttpPost, ActionName("EditTestElt")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditTestElt(string xpath, string fullxpath, string valuetest, string id_testcase, int id_url, string id_elementtest)
+        public async Task<IActionResult> EditTestElt(string xpath, string fullxpath, string valuetest, string id_testcase, int id_url, string id_elementtest, string returnUrl=null)
         {
             try
             {
@@ -1667,8 +1692,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 StatusMessage = String.Format("Error");
             }
-
-            return RedirectToAction(nameof(TestElement), new { id_testcase = id_testcase, id_url = id_url });
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction(nameof(TestElement), new { id_testcase = id_testcase, id_url = id_url });
+            }
+           // return RedirectToAction(nameof(TestElement), new { id_testcase = id_testcase, id_url = id_url });
             // return View("TestElement", await _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToListAsync());
         }
         #endregion

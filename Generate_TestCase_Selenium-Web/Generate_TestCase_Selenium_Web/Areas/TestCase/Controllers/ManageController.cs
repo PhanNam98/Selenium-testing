@@ -117,6 +117,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 TempData.Remove(StatusMessage);
             }
             ViewData["project_id"] = project_id;
+            ViewData["project_name"] = elementDBContext.FirstOrDefault().project_.name;
             return View(elementDBContext);
         }
 
@@ -140,9 +141,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             catch
             {
 
+                StatusMessage = "Add failed";
             }
 
-            StatusMessage = "Add failed";
             return RedirectToAction(nameof(Urls), new { project_id = project_id });
 
 
@@ -150,7 +151,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         #endregion
 
-        #region
+        #region Elements
         [Route("/Manage/Elements/")]
         public async Task<IActionResult> Elements(int id_url)
         {
@@ -182,10 +183,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 ViewData["id_url"] = id_url;
                 ViewData["project_id"] = listelt.FirstOrDefault().id_urlNavigation.project_.id;
+               
                 return View(listelt);
             }
-            return NotFound();
-            
+            return View(listelt);
+
         }
         public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete)
         {
@@ -205,7 +207,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             catch
             {
-                StatusMessage = "Delete fail";
+                StatusMessage = "Delete failed";
             }
             return RedirectToAction(nameof(Elements), new RouteValueDictionary(new
             {
@@ -214,6 +216,98 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }));
         }
 
+        #endregion
+        #region Test case
+        [Route("/Manage/Testcases/")]
+        public async Task<IActionResult> Testcases(int id_url)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            if (listtestcase.Count > 0)
+            {
+                //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();
+                if (StatusMessage == null)
+                {
+                    if (listtestcase.Count() == 0)
+                    {
+                        ViewData["Message"] = "No test cases yet";
+                    }
+                    else
+                    if (listtestcase.Count() > 0)
+                    {
+                        ViewData["Message"] = String.Format("Found {0} test cases", listtestcase.Count());
+                    }
+                    else
+                    {
+                        ViewData["Message"] = "Error load data";
+                    }
+                }
+                else
+                {
+                    ViewData["Message"] = StatusMessage;
+                    TempData.Remove(StatusMessage);
+                }
+                ViewData["id_url"] = id_url;
+                ViewData["project_id"] = listtestcase.FirstOrDefault().id_urlNavigation.project_.id;
+                ViewData["url_name"] = listtestcase.FirstOrDefault().id_urlNavigation.name;
+                ViewData["LoadingTitle"] = "Running test case. Please wait.";
+                return View(listtestcase);
+            }
+            return View(listtestcase);
+
+        }
+        [Route("/Manage/Testcases/Result")]
+        public async Task<IActionResult> TestcasesResult(int id_url, List<string> list_Idtestcase)
+        {
+            ViewData["id_url"] = id_url;
+            var id = _userManager.GetUserId(User);
+            int authen = _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).Count();
+            if (authen > 0)
+            {
+                var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).ThenInclude(p => p.project_).Include(p => p.Input_testcase).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
+
+                ViewData["Pass"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("pass")).Count();
+                ViewData["Skip"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("skip")).Count();
+                ViewData["Failure"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("failure")).Count();
+                ViewData["id_url"] = id_url;
+                ViewData["project_id"] = testcaseDBContext.FirstOrDefault().id_urlNavigation.project_.id;
+                ViewData["url_name"] = testcaseDBContext.FirstOrDefault().id_urlNavigation.name;
+                ViewData["Message"] = StatusMessage;
+                TempData.Remove(StatusMessage);
+                return View(testcaseDBContext);
+            }
+            return NotFound();
+
+        }
+        #endregion
+        #region test elements
+        [Route("/Manage/Testcases/TestElement")]
+        public async Task<IActionResult> TestElement(int id_url, string id_testcase)
+        {
+            ViewData["Message"] = StatusMessage;
+            TempData.Remove("StatusMessage");
+            ViewData["id_url"] = id_url;
+            ViewData["id_testcase"] = id_testcase;
+            var testelementDBContext = await _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToListAsync();
+            if (ViewData["Message"] == null)
+            {
+                if (testelementDBContext.Count() == 0)
+                {
+                    ViewData["Message"] = "No element yet, create a new one";
+                }
+                else
+                if (testelementDBContext.Count() > 0)
+                {
+                    ViewData["Message"] = String.Format("{0} test element(s)", testelementDBContext.Count());
+                }
+
+                else
+                {
+                    ViewData["Message"] = "Error load data";
+                }
+            }
+            return View(testelementDBContext);
+        }
         #endregion
     }
 }

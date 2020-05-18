@@ -81,7 +81,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             }));
         }
-        public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed)
+        public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed, string returnUrl = null)
         {
             //--Code, dont delete
             string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
@@ -93,10 +93,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 _context.Form_elements.AddRange(listForm);
                 _context.Element.AddRange(listElt);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new RouteValueDictionary(new
+                if (returnUrl != null)
                 {
-                    id_url = id_url
-                }));
+                    return LocalRedirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index), new RouteValueDictionary(new
+                    {
+                        id_url = id_url
+                    }));
+                }
+               
             }
 
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new
