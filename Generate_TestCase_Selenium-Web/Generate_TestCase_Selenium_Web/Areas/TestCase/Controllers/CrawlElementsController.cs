@@ -112,13 +112,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 id_url = id_url
 
             }));
-            //return RedirectToAction(nameof(Index), new RouteValueDictionary(new
-            //{
-            //    id_url = 1
-
-            //}));
-
-
+           
         }
         #region Get Element from Web
         public int GetElements(string Url, bool IsOnlyDislayed, int id_url)

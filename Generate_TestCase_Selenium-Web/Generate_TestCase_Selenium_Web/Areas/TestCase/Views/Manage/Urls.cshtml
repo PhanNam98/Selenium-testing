@@ -144,6 +144,13 @@
                                         <a role="button" class="btn btn-success" asp-area="TestCase" asp-controller="Manage" asp-action="Testcases" asp-route-id_url="@item.id_url">Test case(s)</a>
 
                                     }
+                                    else
+                                         if (item.Test_case.Count() == 0 && item.Element.Count() > 0)
+                                    {
+                                        <a role="button" class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url"
+                                           title="Generate test case" onclick="ShowProgress()"  asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url= item.id_url })">Create Testcase</a>
+
+                                    }
                                 }
 
                             </td>

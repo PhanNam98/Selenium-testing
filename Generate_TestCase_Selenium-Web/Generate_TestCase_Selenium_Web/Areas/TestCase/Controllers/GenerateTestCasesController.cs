@@ -161,7 +161,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
 
-        public async Task<IActionResult> Generate_testcase(int id_url)
+        public async Task<IActionResult> Generate_testcase(int id_url,string returnUrl=null)
         {
             Id_Url = id_url;
             ListTestCase = new List<Test_case>();
@@ -196,7 +196,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             }
             if (_context.SaveChanges() > 0)
-                return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
+            {
+                StatusMessage= String.Format("Success, {0} test case(s) were created", ListTestCase.Count());
+                if (returnUrl != null)
+                {
+                    return LocalRedirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
+                }
+            }
+               
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
 
 
@@ -780,8 +791,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     {
                         if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                         {
-
+                            chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
                             testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                           
                             string vt;
                             try
                             {
@@ -813,8 +825,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 if (testDisplayed.Displayed)
                                 {
                                     testDisplayed.Click();
+                                    chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
                                     if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                                     {
+                                       
                                         testelt = chromedriver.FindElementByXPath(outputtest.xpath);
                                         string vt = null;
                                         if (testelt.Text != null)
@@ -885,6 +899,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 if (testDisplayed.Displayed)
                                 {
                                     testDisplayed.Click();
+                                    chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
                                     if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
                                     {
                                         testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
@@ -1714,7 +1729,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var testdataDBContext = await _context.Input_testcase.Include(i => i.id_).Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToListAsync();
             if (testdataDBContext.Count() == 0)
             {
-                ViewData["Message"] = "No element yet, create a new one";
+                ViewData["Message"] = "No data yet, create a new one";
             }
             else
            if (testdataDBContext.Count() > 0)

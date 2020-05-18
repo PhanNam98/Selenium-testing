@@ -27,6 +27,24 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             _context = new ElementDBContext();
             _userManager = userManager;
         }
+
+        #region Dashboard
+        [Route("/Manage/Dashboard")]
+        public async Task<IActionResult> Dashboard()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var listProject = await _context.Project.Where(p => p.Id_User == user.Id).ToListAsync();
+            var listurl = await _context.Url.Include(p => p.project_).ThenInclude(p=>p.Id_UserNavigation).Where(p => p.project_.Id_User == user.Id).ToListAsync();
+            var listestcase = await _context.Test_case.Include(p => p.id_urlNavigation).ThenInclude(p=>p.project_).Where(p => p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            ViewData["CountProjects"] = listProject.Count();
+            ViewData["CountUrls"] = listurl.Count();
+            ViewData["CountTestcases"] = listestcase.Count();
+            ViewData["CountResult"] = listestcase.Where(p=>p.result!=null && p.result!="").Count();
+            return View();
+        }
+        
+        #endregion
+
         #region Project
         //Get list project
         [Route("/Manage/Projects")]
@@ -217,6 +235,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
 
         #endregion
+
         #region Test case
         [Route("/Manage/Testcases/")]
         public async Task<IActionResult> Testcases(int id_url)
@@ -280,8 +299,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
         #endregion
+
         #region test elements
-        [Route("/Manage/Testcases/TestElement")]
+        [Route("/Manage/Testcase/TestElement")]
         public async Task<IActionResult> TestElement(int id_url, string id_testcase)
         {
             ViewData["Message"] = StatusMessage;
@@ -308,6 +328,37 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             return View(testelementDBContext);
         }
+        #endregion
+
+        #region Test data
+        [Route("/Manage/Testcase/TestDatas")]
+        public async Task<IActionResult> TestDatas(int id_url, string id_testcase)
+        {
+            ViewData["Message"] = StatusMessage;
+            TempData.Remove("StatusMessage");
+            ViewData["id_url"] = id_url;
+            ViewData["id_testcase"] = id_testcase;
+            var testdataDBContext = await _context.Input_testcase.Include(i => i.id_).Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToListAsync();
+            if (ViewData["Message"] == null)
+            {
+                if (testdataDBContext.Count() == 0)
+                {
+                    ViewData["Message"] = "No data yet, create a new one";
+                }
+                else
+                if (testdataDBContext.Count() > 0)
+                {
+                    ViewData["Message"] = String.Format("{0} test data(s)", testdataDBContext.Count());
+                }
+
+                else
+                {
+                    ViewData["Message"] = "Error load data";
+                }
+            }
+            return View(testdataDBContext);
+        }
+
         #endregion
     }
 }
