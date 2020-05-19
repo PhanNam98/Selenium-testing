@@ -17,6 +17,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
         }
 
         public virtual DbSet<A_tag> A_tag { get; set; }
+        public virtual DbSet<Alert_message> Alert_message { get; set; }
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
@@ -33,6 +34,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
         public virtual DbSet<Project> Project { get; set; }
         public virtual DbSet<Redirect_url> Redirect_url { get; set; }
         public virtual DbSet<Select_tag> Select_tag { get; set; }
+        public virtual DbSet<Setting_> Setting_ { get; set; }
         public virtual DbSet<Test_case> Test_case { get; set; }
         public virtual DbSet<Url> Url { get; set; }
 
@@ -56,6 +58,17 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasForeignKey(d => d.id_url)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_A_tag_Url");
+            });
+
+            modelBuilder.Entity<Alert_message>(entity =>
+            {
+                entity.HasKey(e => new { e.id_alert, e.id_testcase, e.id_url });
+
+                entity.HasOne(d => d.id_)
+                    .WithMany(p => p.Alert_message)
+                    .HasForeignKey(d => new { d.id_testcase, d.id_url })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Alert_message_Test_case");
             });
 
             modelBuilder.Entity<AspNetRoleClaims>(entity =>
@@ -106,6 +119,12 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
                 entity.Property(e => e.IsAdmin).HasDefaultValueSql("(CONVERT([bit],(0),0))");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.AspNetUsers)
+                    .HasForeignKey<AspNetUsers>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AspNetUsers_Setting_");
             });
 
             modelBuilder.Entity<Button_tag>(entity =>

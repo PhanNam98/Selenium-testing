@@ -9,6 +9,7 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
     {
         public Test_case()
         {
+            Alert_message = new HashSet<Alert_message>();
             Element_test = new HashSet<Element_test>();
             Input_testcase = new HashSet<Input_testcase>();
         }
@@ -33,6 +34,8 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         public virtual Url id_urlNavigation { get; set; }
         [InverseProperty("id_")]
         public virtual Redirect_url Redirect_url { get; set; }
+        [InverseProperty("id_")]
+        public virtual ICollection<Alert_message> Alert_message { get; set; }
         [InverseProperty("id_")]
         public virtual ICollection<Element_test> Element_test { get; set; }
         [InverseProperty("id_Navigation")]

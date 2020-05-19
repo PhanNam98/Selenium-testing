@@ -39,6 +39,9 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         [Required]
         public bool? IsAdmin { get; set; }
 
+        [ForeignKey(nameof(Id))]
+        [InverseProperty(nameof(Setting_.AspNetUsers))]
+        public virtual Setting_ IdNavigation { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         [InverseProperty("User")]

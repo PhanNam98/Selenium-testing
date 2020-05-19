@@ -650,6 +650,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
                 StatusMessage = "Run successfully";
                 ViewData["Message"] = "Run successfully";
+                
+                if(_context.Setting_.Where(p=>p.Id_User==id).SingleOrDefault().SendResultToMail==true)
                     await SendExcel(id_url,list_Idtestcase);
                 //}
                 //catch

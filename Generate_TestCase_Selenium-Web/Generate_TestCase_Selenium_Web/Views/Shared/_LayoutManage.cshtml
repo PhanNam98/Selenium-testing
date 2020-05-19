@@ -2,7 +2,9 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -42,7 +44,7 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Core</div>
-                        <a class="nav-link"  asp-area="TestCase" asp-controller="Manage" asp-action="Dashboard">
+                        <a class="nav-link" asp-area="TestCase" asp-controller="Manage" asp-action="Dashboard">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
@@ -68,9 +70,13 @@
                         </a>
                         <div class="collapse" id="collapsePages" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="layout-static.html"><div class="sb-nav-link-icon"><i class="fas fa-id-card"></i></div>Profile</a>
-                                <a class="nav-link" href="layout-sidenav-light.html"><div class="sb-nav-link-icon"><i class="fas fa-at"></i></div>Email</a>
-                                <a class="nav-link" href="layout-sidenav-light.html"><div class="sb-nav-link-icon"><i class="fas fa-key"></i></div>Password</a>
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index"><div class="sb-nav-link-icon"><i class="fas fa-id-card"></i></div>Profile</a>
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Email"><div class="sb-nav-link-icon"><i class="fas fa-at"></i></div>Email</a>
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><div class="sb-nav-link-icon"><i class="fas fa-key"></i></div>Change password</a>
+                                @if (hasExternalLogins)
+                                {
+                                    <a id="external-login" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/ExternalLogins">External logins</a>
+                                }
                             </nav>
                         </div>
 

@@ -6,7 +6,9 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Generate_TestCase_Selenium_Web.Models;
+using Generate_TestCase_Selenium_Web.Models.Contexts;
 using Generate_TestCase_Selenium_Web.Models.Mail;
+using Generate_TestCase_Selenium_Web.Models.ModelDB;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +28,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly ElementDBContext _context;
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -38,6 +41,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _context = new ElementDBContext();
         }
 
         [BindProperty]
@@ -80,6 +84,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+            
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
@@ -90,7 +95,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.Identity.Pages.Account
                    
                     await _userManager.AddToRoleAsync(user, "User");
                     _logger.LogInformation("User created a new account user with password.");
-
+                    Setting_ setting = new Setting_();
+                    setting.Id_User = user.Id;
+                    setting.SendResultToMail = false;
+                    setting.Browser = "chrome";
+                    _context.Setting_.Add(setting);
+                    _context.SaveChanges();
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

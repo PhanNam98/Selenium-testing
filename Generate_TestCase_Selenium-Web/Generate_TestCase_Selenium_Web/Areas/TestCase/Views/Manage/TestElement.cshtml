@@ -9,7 +9,7 @@
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Projects">Project</a></li>
     <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Urls" asp-route-project_id="@ViewBag.project_id">Urls</a></li>
-    <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Testcases" asp-route-id_url = "@ViewBag.id_url">Test case</a></li>
+    <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Testcases" asp-route-id_url="@ViewBag.id_url">Test case</a></li>
     <li class="breadcrumb-item active">Test elements</li>
 </ol>
 <partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
@@ -70,18 +70,18 @@
         <div class="row">
             <div class="col-2">
                 <i class="fas fa-table mr-1"></i>Test elements list
-                </div>
-                <div class="col-10">
-                    <div class="container">
-                        <div class="text-right">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                Add new test element
-                            </button>
-                        </div>
+            </div>
+            <div class="col-10">
+                <div class="container">
+                    <div class="text-right">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            Add new test element
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-condensed table-hover table-bordered" id="exam">
