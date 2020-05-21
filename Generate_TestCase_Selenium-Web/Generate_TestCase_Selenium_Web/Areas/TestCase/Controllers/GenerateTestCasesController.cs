@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text;
 using System.Threading;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
 using Microsoft.AspNetCore.Routing;
@@ -38,6 +39,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private List<Test_case> ListTestCase;
         private List<List<Input_testcase>> List_ListInputTestcase;
         private List<string> listSpecialCharacter;
+        private string browserRun;
         //private ChromeDriver chromedriver;
         [TempData]
         public string StatusMessage { get; set; }
@@ -161,7 +163,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
 
-        public async Task<IActionResult> Generate_testcase(int id_url,string returnUrl=null)
+        public async Task<IActionResult> Generate_testcase(int id_url, string returnUrl = null)
         {
             Id_Url = id_url;
             ListTestCase = new List<Test_case>();
@@ -197,7 +199,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             if (_context.SaveChanges() > 0)
             {
-                StatusMessage= String.Format("Success, {0} test case(s) were created", ListTestCase.Count());
+                StatusMessage = String.Format("Success, {0} test case(s) were created", ListTestCase.Count());
                 if (returnUrl != null)
                 {
                     return LocalRedirect(returnUrl);
@@ -207,7 +209,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
                 }
             }
-               
+
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
 
 
@@ -335,7 +337,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             var _context = new ElementDBContext();
             var listTypeText = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "text" && p.tag_name == "input").ToListAsync();
-          
+
             int number_of_elements = listTypeText.Count;
 
             if (number_of_elements > 0)
@@ -621,13 +623,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         #region Run test case
         [HttpPost]
         [Route("/TestCase/Result")]
-        public async Task<IActionResult> RunTestCase(int id_url, List<string> list_Idtestcase, string returnUrl=null)
+        public async Task<IActionResult> RunTestCase(int id_url, List<string> list_Idtestcase, string returnUrl = null)
         {
             var id = _userManager.GetUserId(User);
             int authen = _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).Count();
             if (authen > 0)
             {
                 var _context = new ElementDBContext();
+                browserRun = _context.Setting_.Where(p => p.Id_User == id).SingleOrDefault().Browser;
                 var url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
                 //var list_Idtestcase1 = _context.Test_case.Where(p => p.id_url == id_url).ToList();
                 IEnumerable<Task<string>> runTasksQuery =
@@ -635,24 +638,24 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 List<Task<string>> runTasks = runTasksQuery.ToList();
                 //try
                 //{
-                    while (runTasks.Count > 0)
-                    {
-                        // Identify the first task that completes.
-                        Task<string> firstFinishedTask = await Task.WhenAny(runTasks);
+                while (runTasks.Count > 0)
+                {
+                    // Identify the first task that completes.
+                    Task<string> firstFinishedTask = await Task.WhenAny(runTasks);
 
-                        // ***Remove the selected task from the list so that you don't
-                        // process it more than once.
-                        runTasks.Remove(firstFinishedTask);
-                        // Await the completed task.
+                    // ***Remove the selected task from the list so that you don't
+                    // process it more than once.
+                    runTasks.Remove(firstFinishedTask);
+                    // Await the completed task.
 
-                        string length = await firstFinishedTask;
+                    string length = await firstFinishedTask;
 
-                    }
+                }
                 StatusMessage = "Run successfully";
                 ViewData["Message"] = "Run successfully";
-                
-                if(_context.Setting_.Where(p=>p.Id_User==id).SingleOrDefault().SendResultToMail==true)
-                    await SendExcel(id_url,list_Idtestcase);
+
+                if (_context.Setting_.Where(p => p.Id_User == id).SingleOrDefault().SendResultToMail == true)
+                    await SendExcel(id_url, list_Idtestcase);
                 //}
                 //catch
                 //{
@@ -668,13 +671,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 //return RedirectToAction(nameof(Result), new RouteValueDictionary(new { id_url = id_url }));
                 if (returnUrl != null)
                 {
-                    return RedirectToAction("TestcasesResult","Manage", new RouteValueDictionary(new { id_url = id_url, list_Idtestcase = list_Idtestcase }));
+                    return RedirectToAction("TestcasesResult", "Manage", new RouteValueDictionary(new { id_url = id_url, list_Idtestcase = list_Idtestcase }));
                 }
                 else
                 {
                     return View("Result", testcaseDBContext);
                 }
-               // return View("Result", testcaseDBContext);
+                // return View("Result", testcaseDBContext);
             }
             return NotFound();
         }
@@ -687,428 +690,752 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             int isSkip = 0;
             var _context = new ElementDBContext();
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
-            //try
-            //{
-            ChromeDriver chromedriver = SetUpDriver(url);
-
-            //chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
             var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
-            //run test case
-            foreach (var inputtest in list_inputtest)
-            {
-                switch (inputtest.action)
-                {
-
-                    case "fill":
-                        {
-                            try
-                            {
-                                var fill = chromedriver.FindElementByXPath(inputtest.xpath);
-                                if (fill.Displayed)
-                                {
-                                    fill.Click();
-                                    fill.SendKeys(inputtest.value);
-                                }
-
-                            }
-                            catch (Exception e)
-                            {
-                                //if (e.Message.Equals("element not interactable"))
-                                //{
-
-                                //}
-                            }
-
-
-                            break;
-                        }
-                    case "select":
-                        {
-                            try
-                            {
-                                var select = chromedriver.FindElementByXPath(inputtest.xpath);
-                                var selectElement = new SelectElement(select);
-                                int CountallSelectedOptions = selectElement.AllSelectedOptions.Count();
-                                Random random = new Random();
-                                int index = random.Next(0, CountallSelectedOptions + 1);
-                                //selectElement.SelectByIndex(int.Parse(inputtest.value));
-                                selectElement.SelectByIndex(index);
-                            }
-                            catch (Exception e)
-                            {
-                                if (e.Message.Equals("element not interactable"))
-                                {
-
-                                }
-                            }
-                            break;
-                        }
-                    case "click":
-                        {
-                            try
-                            {
-                                var click = chromedriver.FindElementByXPath(inputtest.xpath);
-                                click.Click();
-                            }
-                            catch (Exception e)
-                            {
-                                if (e.Message.Equals("element not interactable"))
-                                {
-
-                                }
-                            }
-
-                            break;
-                        }
-                    case "submit":
-                        {
-                            try
-                            {
-                                chromedriver.FindElementByXPath(inputtest.xpath).Click();
-
-                            }
-                            catch (Exception e)
-                            {
-                                if (e.Message.Equals("element not interactable"))
-                                {
-
-                                }
-                            }
-
-                            break;
-                        }
-                }
-            }
-
-            //test
-            if (list_output.Count > 0)
-            {
-                foreach (var outputtest in list_output)
-                {
-                    bool WasTested = false;
-                    IWebElement testelt;
-                    string DataResult = "";
-                    if (!outputtest.xpath.Equals(""))
-                    {
-                        if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
-                        {
-                            chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-                            testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                           
-                            string vt;
-                            try
-                            {
-                                vt = testelt.Text;
-                            }
-                            catch
-                            {
-                                vt = testelt.GetAttribute("value");
-                            }
-                            if (vt != null)
-                            {
-                                outputtest.value_return = vt;
-                                if (!vt.Equals(outputtest.value_test))
-                                {
-                                    isFailure++;
-                                }
-                                else
-                                    isPass++;
-                                WasTested = true;
-                                DataResult = vt;
-                            }
-
-                        }
-                        else
-                        {
-                            foreach (var inputtest in list_inputtest)
-                            {
-                                var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
-                                if (testDisplayed.Displayed)
-                                {
-                                    testDisplayed.Click();
-                                    chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-                                    if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
-                                    {
-                                       
-                                        testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                                        string vt = null;
-                                        if (testelt.Text != null)
-                                        {
-                                            vt = testelt.Text;
-                                        }
-                                        else if (testelt.GetAttribute("value") != null)
-                                        {
-                                            vt = testelt.GetAttribute("value");
-                                        }
-                                        if (vt != null)
-                                        {
-                                            outputtest.value_return = vt;
-                                            if (!vt.Equals(outputtest.value_test))
-                                            {
-                                                isFailure++;
-                                            }
-                                            else
-                                                isPass++;
-                                            WasTested = true;
-                                            DataResult = vt;
-                                        }
-                                        break;
-                                    }
-
-                                }
-
-                            }
-
-                        }
-                    }
-
-                    if (!outputtest.xpath_full.Equals("") && !WasTested)
-                    {
-
-                        if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count() > 0)
-                        {
-                            testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                            string vt = null;
-                            if (testelt.Text != null)
-                            {
-                                vt = testelt.Text;
-                            }
-                            else if (testelt.GetAttribute("value") != null)
-                            {
-                                vt = testelt.GetAttribute("value");
-                            }
-                            if (vt != null)
-                            {
-                                outputtest.value_return = vt;
-                                if (!vt.Equals(outputtest.value_test))
-                                {
-                                    isFailure++;
-                                }
-                                else
-                                    isPass++;
-                                WasTested = true;
-                                DataResult = vt;
-                            }
-
-                        }
-                        else
-                        {
-                            foreach (var inputtest in list_inputtest)
-                            {
-
-                                var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
-                                if (testDisplayed.Displayed)
-                                {
-                                    testDisplayed.Click();
-                                    chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-                                    if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
-                                    {
-                                        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                                        string vt = null;
-                                        if (testelt.Text != null)
-                                        {
-                                            vt = testelt.Text;
-                                        }
-                                        else if (testelt.GetAttribute("value") != null)
-                                        {
-                                            vt = testelt.GetAttribute("value");
-                                        }
-                                        if (vt != null)
-                                        {
-                                            outputtest.value_return = vt;
-                                            if (!vt.Equals(outputtest.value_test))
-                                            {
-                                                isFailure++;
-                                            }
-                                            else
-                                                isPass++;
-                                            WasTested = true;
-
-                                            DataResult = vt;
-                                        }
-                                        break;
-                                    }
-
-                                }
-
-
-                            }
-
-
-                        }
-                    }
-                    if (!WasTested)// check skip case
-                    {
-                        isSkip++;
-                    }
-
-                    outputtest.value_return = DataResult;
-                    _context.Element_test.Update(outputtest);
-                    await _context.SaveChangesAsync();
-
-                    #region backup
-                    //try
-                    //{
-
-                    //    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                    //    string vt;
-                    //    try
-                    //    {
-                    //        vt = testelt.Text;
-                    //    }
-                    //    catch
-                    //    {
-                    //        vt = testelt.GetAttribute("value");
-                    //    }
-                    //    if (vt != null)
-                    //    {
-                    //        outputtest.value_return = vt;
-                    //        if (!vt.Equals(outputtest.value_test))
-                    //        {
-                    //            isPass = 0;
-                    //        }
-                    //        BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                    //    }
-
-
-
-                    //}
-                    //catch
-                    //{
-                    //    try
-                    //    {
-                    //        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                    //        string vt;
-                    //        try
-                    //        {
-                    //            vt = testelt.Text;
-                    //        }
-                    //        catch
-                    //        {
-                    //            vt = testelt.GetAttribute("value");
-                    //        }
-                    //        if (vt != null)
-                    //        {
-                    //            outputtest.value_return = vt;
-                    //            if (!vt.Equals(outputtest.value_test))
-                    //            {
-                    //                isPass = 0;
-                    //            }
-                    //            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                    //        }
-
-                    //    }
-                    //    catch
-                    //    {
-                    //        foreach (var inputtest in list_inputtest)
-                    //        {
-
-                    //            var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
-                    //            if (testDisplayed.Displayed)
-                    //            {
-                    //                testDisplayed.Click();
-                    //                try
-                    //                {
-                    //                    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                    //                    string vt;
-                    //                    try
-                    //                    {
-                    //                        vt = testelt.Text;
-                    //                    }
-                    //                    catch
-                    //                    {
-                    //                        vt = testelt.GetAttribute("value");
-                    //                    }
-                    //                    if (vt != null)
-                    //                    {
-                    //                        outputtest.value_return = vt;
-                    //                        if (!vt.Equals(outputtest.value_test))
-                    //                        {
-                    //                            isPass = 0;
-                    //                        }
-                    //                        BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                    //                    }
-                    //                    break;
-                    //                }
-                    //                catch
-                    //                {
-                    //                    try
-                    //                    {
-                    //                        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                    //                        string vt;
-                    //                        try
-                    //                        {
-                    //                            vt = testelt.Text;
-                    //                        }
-                    //                        catch
-                    //                        {
-                    //                            vt = testelt.GetAttribute("value");
-                    //                        }
-                    //                        if (vt != null)
-                    //                        {
-                    //                            outputtest.value_return = vt;
-                    //                            if (!vt.Equals(outputtest.value_test))
-                    //                            {
-                    //                                isPass = 0;
-                    //                            }
-                    //                            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                    //                        }
-                    //                        break;
-                    //                    }
-                    //                    catch
-                    //                    {
-
-                    //                    }
-
-                    //                }
-
-
-                    //            }
-
-                    //        }
-                    //    }
-                    //}
-
-                    #endregion
-
-
-                }
-            }
-            else
-            {
-                isSkip++;
-            }
-            //string current_url = chromedriver.Url;
-            //BUL.RedirectUrlBUL.Update_RedirectUrl(Id_testcase, ID_URL, current_url);
-            QuitDriver(chromedriver);
-            string result = "";
-
-            if (isFailure == 0 && isSkip == 0)
-            {
-                result = "Pass";
-            }
-            else
-            {
-                if (isFailure > 0)
-                {
-
-                    result = "Failure";
-                }
-                else if (isSkip > 0)
-                {
-
-                    result = "Skip";
-                }
-            }
-            Testcase.result = result;
-            await _context.SaveChangesAsync();
-            return result;
-            //}
-            //catch
+            //try
             //{
 
-            //}
+            if (browserRun.Equals("chrome"))
+            {
+
+                ChromeDriver chromedriver = SetUpDriver(url);
+               
+                //chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+                
+                //run test case
+                foreach (var inputtest in list_inputtest)
+                {
+                    switch (inputtest.action)
+                    {
+
+                        case "fill":
+                            {
+                                try
+                                {
+                                    var fill = chromedriver.FindElementByXPath(inputtest.xpath);
+                                    if (fill.Displayed)
+                                    {
+                                        fill.Click();
+                                        fill.SendKeys(inputtest.value);
+                                    }
+
+                                }
+                                catch (Exception e)
+                                {
+                                    //if (e.Message.Equals("element not interactable"))
+                                    //{
+
+                                    //}
+                                }
+
+
+                                break;
+                            }
+                        case "select":
+                            {
+                                try
+                                {
+                                    var select = chromedriver.FindElementByXPath(inputtest.xpath);
+                                    var selectElement = new SelectElement(select);
+                                    int CountallSelectedOptions = selectElement.AllSelectedOptions.Count();
+                                    Random random = new Random();
+                                    int index = random.Next(0, CountallSelectedOptions + 1);
+                                    //selectElement.SelectByIndex(int.Parse(inputtest.value));
+                                    selectElement.SelectByIndex(index);
+                                }
+                                catch (Exception e)
+                                {
+                                    if (e.Message.Equals("element not interactable"))
+                                    {
+
+                                    }
+                                }
+                                break;
+                            }
+                        case "click":
+                            {
+                                try
+                                {
+                                    var click = chromedriver.FindElementByXPath(inputtest.xpath);
+                                    click.Click();
+                                }
+                                catch (Exception e)
+                                {
+                                    if (e.Message.Equals("element not interactable"))
+                                    {
+
+                                    }
+                                }
+
+                                break;
+                            }
+                        case "submit":
+                            {
+                                try
+                                {
+                                    chromedriver.FindElementByXPath(inputtest.xpath).Click();
+
+                                }
+                                catch (Exception e)
+                                {
+                                    if (e.Message.Equals("element not interactable"))
+                                    {
+
+                                    }
+                                }
+
+                                break;
+                            }
+                    }
+                }
+
+                //test
+                if (list_output.Count > 0)
+                {
+                    foreach (var outputtest in list_output)
+                    {
+                        bool WasTested = false;
+                        IWebElement testelt;
+                        string DataResult = "";
+                        if (!outputtest.xpath.Equals(""))
+                        {
+                            if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
+                            {
+                                testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+
+                                string vt;
+                                try
+                                {
+                                    vt = testelt.Text;
+                                }
+                                catch
+                                {
+                                    vt = testelt.GetAttribute("value");
+                                }
+                                if (vt != null)
+                                {
+                                    outputtest.value_return = vt;
+                                    if (!vt.Equals(outputtest.value_test))
+                                    {
+                                        isFailure++;
+                                    }
+                                    else
+                                        isPass++;
+                                    WasTested = true;
+                                    DataResult = vt;
+                                }
+
+                            }
+                            else
+                            {
+                                foreach (var inputtest in list_inputtest)
+                                {
+                                    var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
+                                    if (testDisplayed.Displayed)
+                                    {
+                                        testDisplayed.Click();
+                                        chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                        if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
+                                        {
+
+                                            testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                                            string vt = null;
+                                            if (testelt.Text != null)
+                                            {
+                                                vt = testelt.Text;
+                                            }
+                                            else if (testelt.GetAttribute("value") != null)
+                                            {
+                                                vt = testelt.GetAttribute("value");
+                                            }
+                                            if (vt != null)
+                                            {
+                                                outputtest.value_return = vt;
+                                                if (!vt.Equals(outputtest.value_test))
+                                                {
+                                                    isFailure++;
+                                                }
+                                                else
+                                                    isPass++;
+                                                WasTested = true;
+                                                DataResult = vt;
+                                            }
+                                            break;
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+                        }
+
+                        if (!outputtest.xpath_full.Equals("") && !WasTested)
+                        {
+
+                            if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count() > 0)
+                            {
+                                testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                                string vt = null;
+                                if (testelt.Text != null)
+                                {
+                                    vt = testelt.Text;
+                                }
+                                else if (testelt.GetAttribute("value") != null)
+                                {
+                                    vt = testelt.GetAttribute("value");
+                                }
+                                if (vt != null)
+                                {
+                                    outputtest.value_return = vt;
+                                    if (!vt.Equals(outputtest.value_test))
+                                    {
+                                        isFailure++;
+                                    }
+                                    else
+                                        isPass++;
+                                    WasTested = true;
+                                    DataResult = vt;
+                                }
+
+                            }
+                            else
+                            {
+                                foreach (var inputtest in list_inputtest)
+                                {
+
+                                    var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
+                                    if (testDisplayed.Displayed)
+                                    {
+                                        testDisplayed.Click();
+                                        chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                        if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
+                                        {
+                                            testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                                            string vt = null;
+                                            if (testelt.Text != null)
+                                            {
+                                                vt = testelt.Text;
+                                            }
+                                            else if (testelt.GetAttribute("value") != null)
+                                            {
+                                                vt = testelt.GetAttribute("value");
+                                            }
+                                            if (vt != null)
+                                            {
+                                                outputtest.value_return = vt;
+                                                if (!vt.Equals(outputtest.value_test))
+                                                {
+                                                    isFailure++;
+                                                }
+                                                else
+                                                    isPass++;
+                                                WasTested = true;
+
+                                                DataResult = vt;
+                                            }
+                                            break;
+                                        }
+
+                                    }
+
+
+                                }
+
+
+                            }
+                        }
+                        if (!WasTested)// check skip case
+                        {
+                            isSkip++;
+                        }
+
+                        outputtest.value_return = DataResult;
+                        _context.Element_test.Update(outputtest);
+                        await _context.SaveChangesAsync();
+
+                        #region backup
+                        //try
+                        //{
+
+                        //    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                        //    string vt;
+                        //    try
+                        //    {
+                        //        vt = testelt.Text;
+                        //    }
+                        //    catch
+                        //    {
+                        //        vt = testelt.GetAttribute("value");
+                        //    }
+                        //    if (vt != null)
+                        //    {
+                        //        outputtest.value_return = vt;
+                        //        if (!vt.Equals(outputtest.value_test))
+                        //        {
+                        //            isPass = 0;
+                        //        }
+                        //        BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
+                        //    }
+
+
+
+                        //}
+                        //catch
+                        //{
+                        //    try
+                        //    {
+                        //        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                        //        string vt;
+                        //        try
+                        //        {
+                        //            vt = testelt.Text;
+                        //        }
+                        //        catch
+                        //        {
+                        //            vt = testelt.GetAttribute("value");
+                        //        }
+                        //        if (vt != null)
+                        //        {
+                        //            outputtest.value_return = vt;
+                        //            if (!vt.Equals(outputtest.value_test))
+                        //            {
+                        //                isPass = 0;
+                        //            }
+                        //            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
+                        //        }
+
+                        //    }
+                        //    catch
+                        //    {
+                        //        foreach (var inputtest in list_inputtest)
+                        //        {
+
+                        //            var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
+                        //            if (testDisplayed.Displayed)
+                        //            {
+                        //                testDisplayed.Click();
+                        //                try
+                        //                {
+                        //                    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                        //                    string vt;
+                        //                    try
+                        //                    {
+                        //                        vt = testelt.Text;
+                        //                    }
+                        //                    catch
+                        //                    {
+                        //                        vt = testelt.GetAttribute("value");
+                        //                    }
+                        //                    if (vt != null)
+                        //                    {
+                        //                        outputtest.value_return = vt;
+                        //                        if (!vt.Equals(outputtest.value_test))
+                        //                        {
+                        //                            isPass = 0;
+                        //                        }
+                        //                        BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
+                        //                    }
+                        //                    break;
+                        //                }
+                        //                catch
+                        //                {
+                        //                    try
+                        //                    {
+                        //                        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                        //                        string vt;
+                        //                        try
+                        //                        {
+                        //                            vt = testelt.Text;
+                        //                        }
+                        //                        catch
+                        //                        {
+                        //                            vt = testelt.GetAttribute("value");
+                        //                        }
+                        //                        if (vt != null)
+                        //                        {
+                        //                            outputtest.value_return = vt;
+                        //                            if (!vt.Equals(outputtest.value_test))
+                        //                            {
+                        //                                isPass = 0;
+                        //                            }
+                        //                            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
+                        //                        }
+                        //                        break;
+                        //                    }
+                        //                    catch
+                        //                    {
+
+                        //                    }
+
+                        //                }
+
+
+                        //            }
+
+                        //        }
+                        //    }
+                        //}
+
+                        #endregion
+
+
+                    }
+                }
+                else
+                {
+                    isSkip++;
+                }
+                
+                //BUL.RedirectUrlBUL.Update_RedirectUrl(Id_testcase, ID_URL, current_url);
+                //QuitDriver(chromedriver);
+                var RedirectUrl = _context.Redirect_url.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
+                if(RedirectUrl!=null)
+                {
+                    string current_url = chromedriver.Url;
+                    if(!RedirectUrl.current_url.Equals(current_url))
+                    {
+                        isFailure++;
+                    }
+                    RedirectUrl.current_url = current_url;
+                    _context.Update(RedirectUrl);
+                }
+                chromedriver.Quit();
+                string result = "";
+
+                if (isFailure == 0 && isSkip == 0)
+                {
+                    result = "Pass";
+                }
+                else
+                {
+                    if (isFailure > 0)
+                    {
+
+                        result = "Failure";
+                    }
+                    else if (isSkip > 0)
+                    {
+
+                        result = "Skip";
+                    }
+                }
+                Testcase.result = result;
+                await _context.SaveChangesAsync();
+                return result;
+                //}
+                //catch
+                //{
+
+                //}
+            }
+            else
+            {
+                
+                FirefoxDriver firefoxdriver = SetUpDriverFireFox(url);
+                //run test case
+                foreach (var inputtest in list_inputtest)
+                {
+                    switch (inputtest.action)
+                    {
+
+                        case "fill":
+                            {
+                                try
+                                {
+                                    var fill = firefoxdriver.FindElementByXPath(inputtest.xpath);
+                                    if (fill.Displayed)
+                                    {
+                                        fill.Click();
+                                        fill.SendKeys(inputtest.value);
+                                    }
+
+                                }
+                                catch (Exception e)
+                                {
+                                    //if (e.Message.Equals("element not interactable"))
+                                    //{
+
+                                    //}
+                                }
+
+
+                                break;
+                            }
+                        case "select":
+                            {
+                                try
+                                {
+                                    var select = firefoxdriver.FindElementByXPath(inputtest.xpath);
+                                    var selectElement = new SelectElement(select);
+                                    int CountallSelectedOptions = selectElement.AllSelectedOptions.Count();
+                                    Random random = new Random();
+                                    int index = random.Next(0, CountallSelectedOptions + 1);
+                                    //selectElement.SelectByIndex(int.Parse(inputtest.value));
+                                    selectElement.SelectByIndex(index);
+                                }
+                                catch (Exception e)
+                                {
+                                    if (e.Message.Equals("element not interactable"))
+                                    {
+
+                                    }
+                                }
+                                break;
+                            }
+                        case "click":
+                            {
+                                try
+                                {
+                                    var click = firefoxdriver.FindElementByXPath(inputtest.xpath);
+                                    click.Click();
+                                }
+                                catch (Exception e)
+                                {
+                                    if (e.Message.Equals("element not interactable"))
+                                    {
+
+                                    }
+                                }
+
+                                break;
+                            }
+                        case "submit":
+                            {
+                                try
+                                {
+                                    firefoxdriver.FindElementByXPath(inputtest.xpath).Click();
+
+                                }
+                                catch (Exception e)
+                                {
+                                    if (e.Message.Equals("element not interactable"))
+                                    {
+
+                                    }
+                                }
+
+                                break;
+                            }
+                    }
+                }
+
+                //test
+                if (list_output.Count > 0)
+                {
+                    foreach (var outputtest in list_output)
+                    {
+                        bool WasTested = false;
+                        IWebElement testelt;
+                        string DataResult = "";
+                        if (!outputtest.xpath.Equals(""))
+                        {
+                            if (firefoxdriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
+                            {
+                                testelt = firefoxdriver.FindElementByXPath(outputtest.xpath);
+
+                                string vt;
+                                try
+                                {
+                                    vt = testelt.Text;
+                                }
+                                catch
+                                {
+                                    vt = testelt.GetAttribute("value");
+                                }
+                                if (vt != null)
+                                {
+                                    outputtest.value_return = vt;
+                                    if (!vt.Equals(outputtest.value_test))
+                                    {
+                                        isFailure++;
+                                    }
+                                    else
+                                        isPass++;
+                                    WasTested = true;
+                                    DataResult = vt;
+                                }
+
+                            }
+                            else
+                            {
+                                foreach (var inputtest in list_inputtest)
+                                {
+                                    var testDisplayed = firefoxdriver.FindElementByXPath(inputtest.xpath);
+                                    if (testDisplayed.Displayed)
+                                    {
+                                        testDisplayed.Click();
+                                        firefoxdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                        if (firefoxdriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
+                                        {
+
+                                            testelt = firefoxdriver.FindElementByXPath(outputtest.xpath);
+                                            string vt = null;
+                                            if (testelt.Text != null)
+                                            {
+                                                vt = testelt.Text;
+                                            }
+                                            else if (testelt.GetAttribute("value") != null)
+                                            {
+                                                vt = testelt.GetAttribute("value");
+                                            }
+                                            if (vt != null)
+                                            {
+                                                outputtest.value_return = vt;
+                                                if (!vt.Equals(outputtest.value_test))
+                                                {
+                                                    isFailure++;
+                                                }
+                                                else
+                                                    isPass++;
+                                                WasTested = true;
+                                                DataResult = vt;
+                                            }
+                                            break;
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+                        }
+
+                        if (!outputtest.xpath_full.Equals("") && !WasTested)
+                        {
+
+                            if (firefoxdriver.FindElementsByXPath(outputtest.xpath_full).Count() > 0)
+                            {
+                                testelt = firefoxdriver.FindElementByXPath(outputtest.xpath_full);
+                                string vt = null;
+                                if (testelt.Text != null)
+                                {
+                                    vt = testelt.Text;
+                                }
+                                else if (testelt.GetAttribute("value") != null)
+                                {
+                                    vt = testelt.GetAttribute("value");
+                                }
+                                if (vt != null)
+                                {
+                                    outputtest.value_return = vt;
+                                    if (!vt.Equals(outputtest.value_test))
+                                    {
+                                        isFailure++;
+                                    }
+                                    else
+                                        isPass++;
+                                    WasTested = true;
+                                    DataResult = vt;
+                                }
+
+                            }
+                            else
+                            {
+                                foreach (var inputtest in list_inputtest)
+                                {
+
+                                    var testDisplayed = firefoxdriver.FindElementByXPath(inputtest.xpath);
+                                    if (testDisplayed.Displayed)
+                                    {
+                                        testDisplayed.Click();
+                                        firefoxdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                        if (firefoxdriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
+                                        {
+                                            testelt = firefoxdriver.FindElementByXPath(outputtest.xpath_full);
+                                            string vt = null;
+                                            if (testelt.Text != null)
+                                            {
+                                                vt = testelt.Text;
+                                            }
+                                            else if (testelt.GetAttribute("value") != null)
+                                            {
+                                                vt = testelt.GetAttribute("value");
+                                            }
+                                            if (vt != null)
+                                            {
+                                                outputtest.value_return = vt;
+                                                if (!vt.Equals(outputtest.value_test))
+                                                {
+                                                    isFailure++;
+                                                }
+                                                else
+                                                    isPass++;
+                                                WasTested = true;
+
+                                                DataResult = vt;
+                                            }
+                                            break;
+                                        }
+
+                                    }
+
+
+                                }
+
+
+                            }
+                        }
+                        if (!WasTested)// check skip case
+                        {
+                            isSkip++;
+                        }
+
+                        outputtest.value_return = DataResult;
+                        _context.Element_test.Update(outputtest);
+                        await _context.SaveChangesAsync();
+
+                    
+
+
+                    }
+                }
+                else
+                {
+                    isSkip++;
+                }
+                var RedirectUrl = _context.Redirect_url.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
+                if (RedirectUrl != null)
+                {
+                    string current_url = firefoxdriver.Url;
+                    current_url = current_url.Remove(current_url.Length - 1);
+                    if (RedirectUrl.redirect_url_test!= current_url)
+                    {
+                        isFailure++;
+                    }
+                    RedirectUrl.current_url = current_url;
+                    _context.Update(RedirectUrl);
+                }
+                firefoxdriver.Quit();
+                string result = "";
+
+                if (isFailure == 0 && isSkip == 0)
+                {
+                    result = "Pass";
+                }
+                else
+                {
+                    if (isFailure > 0)
+                    {
+
+                        result = "Failure";
+                    }
+                    else if (isSkip > 0)
+                    {
+
+                        result = "Skip";
+                    }
+                }
+                Testcase.result = result;
+                await _context.SaveChangesAsync();
+                return result;
+                //}
+                //catch
+                //{
+
+                //}
+            }
+           
         }
         /*
         public async Task<string> Run_ReturnResult(int id_url, string url, string id_testcase)
@@ -1570,6 +1897,25 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //The HTTP request to the remote WebDriver server for URL 
             return chromedriver;
         }
+        private FirefoxDriver SetUpDriverFireFox(string url)
+        {
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+
+            var options = new FirefoxOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            //options.AddArgument("no-sandbox");
+            options.AddArgument("proxy-server='direct://'");
+            options.AddArgument("proxy-bypass-list=*");
+            FirefoxDriver firefoxdriver = new FirefoxDriver(service, options);
+            firefoxdriver.Url = url;
+            firefoxdriver.Navigate();
+            //The HTTP request to the remote WebDriver server for URL 
+            return firefoxdriver;
+        }
 
         private void QuitDriver(ChromeDriver chromedriver)
         {
@@ -1596,6 +1942,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             ViewData["id_url"] = id_url;
             ViewData["id_testcase"] = id_testcase;
             var testelementDBContext = await _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToListAsync();
+            var urlRedirectDBContext = await _context.Redirect_url.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefaultAsync();
+            if (urlRedirectDBContext != null)
+            {
+                ViewData["urlRedirecttest"] = urlRedirectDBContext.redirect_url_test;
+                ViewData["current_url"] = urlRedirectDBContext.current_url;
+            }
+            else
+            {
+                ViewData["urlRedirecttest"] ="";
+                ViewData["current_url"] = "";
+            }
             if (ViewData["Message"] == null)
             {
                 if (testelementDBContext.Count() == 0)
@@ -1686,7 +2043,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         [HttpPost, ActionName("EditTestElt")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditTestElt(string xpath, string fullxpath, string valuetest, string id_testcase, int id_url, string id_elementtest, string returnUrl=null)
+        public async Task<IActionResult> EditTestElt(string xpath, string fullxpath, string valuetest, string id_testcase, int id_url, string id_elementtest, string returnUrl = null)
         {
             try
             {
@@ -1717,7 +2074,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 return RedirectToAction(nameof(TestElement), new { id_testcase = id_testcase, id_url = id_url });
             }
-           // return RedirectToAction(nameof(TestElement), new { id_testcase = id_testcase, id_url = id_url });
+            // return RedirectToAction(nameof(TestElement), new { id_testcase = id_testcase, id_url = id_url });
             // return View("TestElement", await _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToListAsync());
         }
         #endregion
@@ -1926,7 +2283,64 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             */
         }
         #endregion
+        #region Url Redirect
+        [HttpPost]
+        public async Task<IActionResult> UrlRedirect(int id_url, string id_testcase, string redirect_url_test,string returnUrl)
+        {
 
+            var id = _userManager.GetUserId(User);
+            int authen = _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).Count();
+            if (authen > 0)
+            {
+                var _context = new ElementDBContext();
+                var urlred = await _context.Redirect_url.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+                if (urlred == null)
+                {
+                    try
+                    {
+                        urlred = new Redirect_url();
+                        urlred.current_url = "";
+                        urlred.id_testcase = id_testcase;
+                        urlred.id_url = id_url;
+                        urlred.redirect_url_test = redirect_url_test;
+                        _context.Redirect_url.Add(urlred);
+                        await _context.SaveChangesAsync();
+                        StatusMessage = "Add successfully";
+                    }
+                    catch
+                    {
+                        StatusMessage = "Update fail";
+
+                    }
+                }
+                else {
+
+
+                    try
+                    {
+                        urlred.redirect_url_test = redirect_url_test;
+                        _context.Update(urlred);
+                        await _context.SaveChangesAsync();
+                        StatusMessage = "Update successfully";
+                    }
+                    catch 
+                    {
+                        StatusMessage = "Update fail";
+                       
+                    }
+                    
+                    //return RedirectToAction(nameof(Index), new { id_url = id_url, isload = true });
+                }
+               if(returnUrl!=null)
+                {
+                    return LocalRedirect(returnUrl);
+                }
+                return RedirectToAction(nameof(TestElement), new { id_url = id_url, id_testcase = id_testcase });
+            }
+            return NotFound();
+
+        }
+        #endregion
         /* temp
 
         // GET: TestCase/GenerateTestCases/Details/5

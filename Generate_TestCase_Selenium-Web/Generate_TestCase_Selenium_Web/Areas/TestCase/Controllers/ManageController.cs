@@ -34,15 +34,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var listProject = await _context.Project.Where(p => p.Id_User == user.Id).ToListAsync();
-            var listurl = await _context.Url.Include(p => p.project_).ThenInclude(p=>p.Id_UserNavigation).Where(p => p.project_.Id_User == user.Id).ToListAsync();
-            var listestcase = await _context.Test_case.Include(p => p.id_urlNavigation).ThenInclude(p=>p.project_).Where(p => p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            var listurl = await _context.Url.Include(p => p.project_).ThenInclude(p => p.Id_UserNavigation).Where(p => p.project_.Id_User == user.Id).ToListAsync();
+            var listestcase = await _context.Test_case.Include(p => p.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
             ViewData["CountProjects"] = listProject.Count();
             ViewData["CountUrls"] = listurl.Count();
             ViewData["CountTestcases"] = listestcase.Count();
-            ViewData["CountResult"] = listestcase.Where(p=>p.result!=null && p.result!="").Count();
+            ViewData["CountResult"] = listestcase.Where(p => p.result != null && p.result != "").Count();
             return View();
         }
-        
+
         #endregion
 
         #region Project
@@ -112,7 +112,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Urls(int project_id)
         {
             var user = await _userManager.GetUserAsync(User);
-            var elementDBContext = await _context.Url.Include(p => p.project_).Include(p=>p.Test_case).Include(p=>p.Element).Where(p => p.project_.Id_User == user.Id && p.project_id == project_id).OrderByDescending(p=>p.ModifiedDate).ToListAsync();
+            var elementDBContext = await _context.Url.Include(p => p.project_).Include(p => p.Test_case).Include(p => p.Element).Where(p => p.project_.Id_User == user.Id && p.project_id == project_id).OrderByDescending(p => p.ModifiedDate).ToListAsync();
             if (StatusMessage == null)
             {
                 if (elementDBContext.Count() == 0)
@@ -174,7 +174,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Elements(int id_url)
         {
             var user = await _userManager.GetUserAsync(User);
-            var listelt =await _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            var listelt = await _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
             if (listelt.Count > 0)
             {
                 //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();
@@ -201,7 +201,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 ViewData["id_url"] = id_url;
                 ViewData["project_id"] = listelt.FirstOrDefault().id_urlNavigation.project_.id;
-               
+
                 return View(listelt);
             }
             return View(listelt);
@@ -309,6 +309,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             ViewData["id_url"] = id_url;
             ViewData["id_testcase"] = id_testcase;
             var testelementDBContext = await _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToListAsync();
+            var urlRedirectDBContext = await _context.Redirect_url.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefaultAsync();
+            if (urlRedirectDBContext != null)
+            {
+                ViewData["urlRedirecttest"] = urlRedirectDBContext.redirect_url_test;
+                ViewData["current_url"] = urlRedirectDBContext.current_url;
+            }
+            else
+            {
+                ViewData["urlRedirecttest"] = "";
+                ViewData["current_url"] = "";
+            }
             if (ViewData["Message"] == null)
             {
                 if (testelementDBContext.Count() == 0)
@@ -360,5 +371,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
 
         #endregion
+       
     }
 }

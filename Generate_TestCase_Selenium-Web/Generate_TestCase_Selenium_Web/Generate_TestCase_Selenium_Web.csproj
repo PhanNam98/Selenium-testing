@@ -16,17 +16,17 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="81.0.4044.6900" />
+    <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.26.0.1" />
   </ItemGroup>
 
 
   <ItemGroup>
     <Folder Include="Areas\Adminitrator\Data\" />
     <Folder Include="Areas\Adminitrator\Models\" />
-    <Folder Include="Areas\User\Controllers\" />
     <Folder Include="Areas\User\Data\" />
     <Folder Include="Areas\User\Models\" />
     <Folder Include="wwwroot\excels\" />
