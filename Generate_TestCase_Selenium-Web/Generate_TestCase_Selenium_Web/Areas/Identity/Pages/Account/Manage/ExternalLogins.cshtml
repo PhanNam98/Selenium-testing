@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Manage your external logins";
     ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
+    Layout = "~/Views/Shared/_LayoutManage.cshtml";
 }
 
 <partial name="_StatusMessage" for="StatusMessage" />
@@ -16,8 +17,8 @@
     </ol>
     <hr />
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
             <div class="card mb-4">
                 <div class="card-header">
 
@@ -62,7 +63,7 @@
                             }
                         </tbody>
                     </table>
-                    }
+                    
                     @if (Model.OtherLogins?.Count > 0)
                     {
                         <h4>Add another service to log in.</h4>

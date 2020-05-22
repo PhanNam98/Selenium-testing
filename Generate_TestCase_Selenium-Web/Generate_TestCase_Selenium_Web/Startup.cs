@@ -52,7 +52,15 @@ namespace Generate_TestCase_Selenium_Web
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAuthentication()
+            .AddGoogle(options =>
+            {
+               IConfigurationSection googleAuthNSection =
+               Configuration.GetSection("Authentication:Google");
 
+                options.ClientId = "880817271081-p0eldkcvuajmt6cfrejdl7kjf3asm5mm.apps.googleusercontent.com";
+                options.ClientSecret = "COW_bCXJVYpjhNpVmpXh6slA";
+             });
 
 
             services.AddSession(options =>
@@ -84,7 +92,7 @@ namespace Generate_TestCase_Selenium_Web
             app.UseStaticFiles();
 
             app.UseRouting();
-           
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCookiePolicy();
@@ -96,7 +104,7 @@ namespace Generate_TestCase_Selenium_Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-               
+
                 endpoints.MapRazorPages();
             });
         }
