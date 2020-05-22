@@ -29,12 +29,10 @@
                     <a id="setting" class="dropdown-item" asp-area="User" asp-controller="Setting_" asp-action="Setting"><i class="fas fa-cog"></i> Settings</a>
                     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="fas fa-id-card"></i> Account</a>
                     <div class="dropdown-divider"></div>
-                    <a id="logout" class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"><i class="fas fa-sign-out-alt"></i>   Logout</a>
-                    
-                        <form class="form-inline" asp-area="identity" asp-page="/account/logout" asp-route-returnurl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                        </form>
-                    
+                    <form class="form-inline" asp-area="identity" asp-page="/account/logout" asp-route-returnurl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </form>
+
                 </div>
 
             </li>

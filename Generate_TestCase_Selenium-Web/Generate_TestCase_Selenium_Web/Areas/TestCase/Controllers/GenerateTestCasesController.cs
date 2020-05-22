@@ -178,11 +178,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     for (int j = 0; j < submit.Count; j++)
                     {
                         //NotFill_ClickSubmit(forms[i].id_form, j, submit[j]);
-                        await Input_Type_Text(forms[i].id_form, j, submit[j]);
-
+                        //await Input_Type_Email(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_Text(forms[i].id_form, j, submit[j]);
                         //ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                       
                     }
                 }
+                await ClickAll_Tag_a();
             }
             else
             {
@@ -476,9 +478,169 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         #endregion
 
+        #region Not Fill, Submit
+        private void NotFill_ClickSubmit(string id_form, int index_submit, Element submit)
+        {
+            var _context = new ElementDBContext();
+            string id_testCase = "NotFill_ClickSubmit_" + id_form + "_" + index_submit;
+
+            Crate_Testcase(id_testCase);
+            List<Input_testcase> listInputElt = new List<Input_testcase>();
+            int step = 1;
+
+            listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+            List_ListInputTestcase.Add(listInputElt);
 
 
+        }
+        #endregion
 
+        #region Input Type Email
+        private async Task Input_Type_Email(string id_form, int index_submit, Element submit)
+        {
+            var a = Fill_Not_Format_Email_TypeEmail(id_form, index_submit, submit);
+            var a1 = Fill_Not_Email_TypeEmail(id_form, index_submit, submit);
+            var a2 = Fill_Format_Email_TypeEmail(id_form, index_submit, submit);
+            var a3 = Fill_Special_characters_TypeEmail_TypeEmail(id_form, index_submit, submit);
+
+            List<Task<bool>> runTasks = new List<Task<bool>>();
+            runTasks.Add(a);
+            runTasks.Add(a1);
+            runTasks.Add(a2);
+            runTasks.Add(a3);
+           
+            while (runTasks.Count > 0)
+            {
+                // Identify the first task that completes.
+                Task<bool> firstFinishedTask = await Task.WhenAny(runTasks);
+                runTasks.Remove(firstFinishedTask);
+                // Await the completed task.
+
+
+            }
+
+        }
+        public async Task<bool> Fill_Not_Format_Email_TypeEmail(string id_form, int index_submit, Element submit)
+        {
+            string id_testCase = "Fill_Not_Format_Email_TypeEmail_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
+            if (listTypeEmail.Count > 0)
+            {
+
+                Crate_Testcase(id_testCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+                int step = 1;
+                for (int i = 0; i < listTypeEmail.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeEmail[i], id_testCase, Generate_RandomString(random,5) + "@" + Generate_RandomString(random,4), Actions.fill.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+
+            return false;
+        }
+        public async Task<bool> Fill_Not_Email_TypeEmail(string id_form, int index_submit, Element submit)
+        {
+            string id_testCase = "Fill_Not_Email_TypeEmail_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
+            if (listTypeEmail.Count > 0)
+            {
+
+                Crate_Testcase(id_testCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+                int step = 1;
+                for (int i = 0; i < listTypeEmail.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeEmail[i], id_testCase, Generate_RandomString(random, 5) +  Generate_RandomNumber(random,0,100)+ Generate_RandomString(random, 2), Actions.fill.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+
+            return false;
+        }
+        public async Task<bool> Fill_Format_Email_TypeEmail(string id_form, int index_submit, Element submit)
+        {
+            var _context = new ElementDBContext();
+            string id_testCase = "Fill_Format_Email_TypeEmail_" + id_form + "_" + index_submit;
+            var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
+            int step = 1;
+            if (listTypeEmail.Count > 0)
+            {
+                Crate_Testcase(id_testCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+                for (int i = 0; i < listTypeEmail.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeEmail[i], id_testCase, Generate_RandomEmail(), Actions.fill.ToString(), step++));
+                   
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_Special_characters_TypeEmail_TypeEmail(string id_form, int index_submit, Element submit)
+        {
+            var _context = new ElementDBContext();
+            string id_testCase = "Fill_Special_characters_TypeEmail_" + id_form + "_" + index_submit;
+            var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
+            int step = 1;
+            if (listTypeEmail.Count > 0)
+            {
+                Crate_Testcase(id_testCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+                for (int i = 0; i < listTypeEmail.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeEmail[i], id_testCase, Generate_RandomString(random,1) + Generate_RandomSpecialString(random,1) + Generate_RandomEmail(), Actions.fill.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
+        #region Tag a
+        public async Task<bool> ClickAll_Tag_a()
+        {
+            var _context = new ElementDBContext();
+            string id_testCase = "Click_Tag_a_";
+            var listTaga  = await _context.Element.Where(p => p.id_url == Id_Url  && p.tag_name == "a").ToListAsync();
+
+            if (listTaga.Count > 0)
+            {
+                for (int i = 0; i < listTaga.Count; i++)
+                {
+                    int step = 1;
+                    string id_Testcase = id_testCase + listTaga[i].id_element.ToString();
+                    Crate_Testcase(id_Testcase);
+                    List<Input_testcase> listInputElt = new List<Input_testcase>();
+                    
+                    listInputElt.Add(Crate_InputTestcase(listTaga[i], id_Testcase, "", Actions.click.ToString(), step++));
+                    List_ListInputTestcase.Add(listInputElt);
+                }
+                return true;
+            }
+            return false;
+
+        }
+        #endregion
         #region Helper Generate
         ///https://www.c-sharpcorner.com/article/generating-random-number-and-string-in-C-Sharp/
 
