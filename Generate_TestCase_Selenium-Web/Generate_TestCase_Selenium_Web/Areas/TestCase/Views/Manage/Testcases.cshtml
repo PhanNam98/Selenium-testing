@@ -37,7 +37,9 @@
             <div class="col-9">
                 <div class="container">
                     <div class="text-right">
-                        <button type="button" class="btn btn-primary" name="submit_id" id="btn_id" onclick="Run_by_id()">Run test case</button>
+                        <button type="button" class="btn btn-warning " name="delete" id="delete" onclick="Delete()">Delete</button>
+                        <button type="button" class="btn btn-success" name="submit_id" id="btn_id" onclick="Run_by_id()">Run selected</button>
+                        <button type="button" class="btn btn-primary" name="runall" id="runall">Run All</button>
                     </div>
                 </div>
             </div>
@@ -45,7 +47,8 @@
 
     </div>
     <div class="card-body">
-        @using (Html.BeginForm("RunTestCase", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
+       @* @using (Html.BeginForm("RunTestCase", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))*@
+        @using (Html.BeginForm("RunTestCasesJob", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
         {
             <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
             <input type="text" name="returnUrl" class="input-md form-control" id="returnUrl" readonly hidden value="return" />
@@ -171,7 +174,7 @@
                                         </div>
                                     }
                                     <a class="btn btn-success" asp-action="TestDatas" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Test data">Data</a>
-                                    <a class="btn btn-primary" asp-action="TestElement" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Test elements">Test elements</a>
+                                    <a class="btn btn-primary" asp-action="TestElement" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Validate items">Validate items</a>
                                 </td>
                             </tr>
                         }
@@ -234,6 +237,32 @@
                 alert("Error.");
             })
 
+    };
+    function Delete() {
+
+        
+        var selectedIDs = new Array();
+      
+        $("input:checked").each(function () {
+           // console.log($(this).val()); //works fine
+            selectedIDs.push($(this).val());
+        });
+        var idurl = @ViewBag.id_url;
+            $.ajax({
+                //url: '/TestCase/GenerateTestCases/DeleteTestcases',
+                url: '@Url.Action("DeleteTestcases","GenerateTestCases",new { Area="TestCase"})',
+                type: 'POST',
+                data: { id_url:idurl,List_id_testcase: selectedIDs}
+            }).done(function (data) {
+               
+                location.reload();
+                
+                alert("Success");
+
+                //}
+            }).fail(function () {
+                alert("Error.");
+            })
     };
     $(function () {
         $("#checkall").click(function () {

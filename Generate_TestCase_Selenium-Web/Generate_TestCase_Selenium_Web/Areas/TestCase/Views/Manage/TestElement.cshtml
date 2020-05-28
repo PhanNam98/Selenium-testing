@@ -4,8 +4,7 @@
     ViewData["Title"] = "Test Elements";
     Layout = "~/Views/Shared/_LayoutManage.cshtml";
 }
-
-<h2>Test Elements of test case @ViewBag.id_testcase</h2>
+<h2>Validate items of test case @ViewBag.id_testcase</h2>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Projects">Project</a></li>
     <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Urls" asp-route-project_id="@ViewBag.project_id">Urls</a></li>
@@ -100,7 +99,7 @@
 
                         </div>
                     </div>
-                   
+
                     <input id="id_url" name="id_url" value="@ViewBag.id_url" readonly hidden />
                     <input id="id_testcase" name="id_testcase" value="@ViewBag.id_testcase" readonly hidden />
                 </div>
@@ -127,23 +126,32 @@
                 <div class="container">
                     <div class="text-right">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Add new test element
+                            Add element
                         </button>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
-                            @{
-                                if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                                {
+
+                        @{
+                            if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+                            {
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
                                     <i class="fas fa-check" style="color:green"></i>
-                                }
-                                else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                                {
-                                    <i class="fa fa-close" style="color:white"></i>
-                                }
-
-
+                                </button>
                             }
-                            Url redirect
-                        </button>
+                            else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+                            {
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
+                                    <i class="fa fa-close" style="color:white"></i>Url redirect
+                                </button>
+                            }
+                            else
+                            { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
+                                    Add url redirect
+                                </button>
+                            }
+
+
+                        }
+
+
                     </div>
                 </div>
             </div>

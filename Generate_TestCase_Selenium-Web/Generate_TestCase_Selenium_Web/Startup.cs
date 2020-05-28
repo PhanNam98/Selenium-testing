@@ -14,6 +14,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Generate_TestCase_Selenium_Web.Models;
 using Generate_TestCase_Selenium_Web.Models.Contexts;
+using Quartz.Spi;
+using Generate_TestCase_Selenium_Web.Factories;
+using Quartz;
+using Quartz.Impl;
+using Coravel;
+using Generate_TestCase_Selenium_Web.Jobs;
+using Generate_TestCase_Selenium_Web.Services;
 
 namespace Generate_TestCase_Selenium_Web
 {
@@ -22,6 +29,7 @@ namespace Generate_TestCase_Selenium_Web
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+           
         }
 
         public IConfiguration Configuration { get; }
@@ -71,6 +79,16 @@ namespace Generate_TestCase_Selenium_Web
             });
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddSignalR();
+            services.AddQueue();
+            // Add our job
+            services.AddSingleton<HelloWorldJob>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(HelloWorldJob),
+                cronExpression: "0/5 * * * * ?")); // run every 5 seconds
+            services.AddHostedService<QuartzHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,10 +110,13 @@ namespace Generate_TestCase_Selenium_Web
             app.UseStaticFiles();
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCookiePolicy();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<JobProgressHub>("/jobProgress");
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

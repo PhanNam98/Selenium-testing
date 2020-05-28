@@ -135,7 +135,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 TempData.Remove(StatusMessage);
             }
             ViewData["project_id"] = project_id;
-            ViewData["project_name"] = elementDBContext.FirstOrDefault().project_.name;
+            ViewData["project_name"] = _context.Project.Find(project_id).name;
             return View(elementDBContext);
         }
 

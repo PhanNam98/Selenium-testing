@@ -270,5 +270,15 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\TestCase\Views\Manage\Dashboard.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Setting_\Setting.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.Google.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\Coravel.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Connections.Abstractions.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Http.Features.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.SignalR.Common.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\System.IO.Pipelines.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\Quartz.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Generate_TestCase_Selenium_Web.MvcApplicationPartsAssemblyInfo.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Generate_TestCase_Selenium_Web.MvcApplicationPartsAssemblyInfo.cache
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\TestCase\Views\GenerateTestCases\Progress.cshtml.g.cs
