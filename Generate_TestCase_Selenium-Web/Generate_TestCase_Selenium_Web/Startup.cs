@@ -21,15 +21,17 @@ using Quartz.Impl;
 using Coravel;
 using Generate_TestCase_Selenium_Web.Jobs;
 using Generate_TestCase_Selenium_Web.Services;
+using System.Collections.Specialized;
 
 namespace Generate_TestCase_Selenium_Web
 {
     public class Startup
     {
+        private IScheduler _quartzScheduler;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-           
+            _quartzScheduler = ConfigureQuartz();
         }
 
         public IConfiguration Configuration { get; }
@@ -48,6 +50,8 @@ namespace Generate_TestCase_Selenium_Web
                 options.Lockout.MaxFailedAccessAttempts = 3;
                 options.Lockout.AllowedForNewUsers = true;
             });
+            services.AddSingleton(provider => _quartzScheduler);
+            services.AddTransient<RunTestcaseJob>();
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
             services.ConfigureApplicationCookie(options =>
@@ -90,7 +94,11 @@ namespace Generate_TestCase_Selenium_Web
             //    cronExpression: "0/5 * * * * ?")); // run every 5 seconds
             services.AddHostedService<QuartzHostedService>();
         }
-
+        private void OnShutdown()
+        {
+            //shutdown quartz is not shutdown already
+            if (!_quartzScheduler.IsShutdown) _quartzScheduler.Shutdown();
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context, RoleManager<ApplicationRole> roleManager,
             UserManager<ApplicationUser> userManager)
@@ -106,6 +114,8 @@ namespace Generate_TestCase_Selenium_Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            _quartzScheduler.JobFactory = new SingletonJobFactory(app.ApplicationServices);
+            _quartzScheduler.Start().Wait();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -128,6 +138,24 @@ namespace Generate_TestCase_Selenium_Web
 
                 endpoints.MapRazorPages();
             });
+        }
+        public IScheduler ConfigureQuartz()
+        {
+            NameValueCollection props = new NameValueCollection
+             {
+              { "quartz.serializer.type", "binary" },
+              //{ "quartz.serializer.type", "json" },
+              // { "quartz.jobStore.type", "Quartz.Impl.AdoJobStore.JobStoreTX, Quartz" },
+              //   { "quartz.jobStore.dataSource", "default" },
+              //   { "quartz.dataSource.default.provider", "SqlServer" },
+              //    { "quartz.dataSource.default.connectionString", "Server=.;Integrated Security=true;Initial Catalog = Quartz" },
+              //    {"quartz.jobStore.clustered","true" },
+              //    { "quartz.jobStore.driverDelegateType", "Quartz.Impl.AdoJobStore.SqlServerDelegate, Quartz" }
+              };
+            StdSchedulerFactory factory = new StdSchedulerFactory(props);
+            var scheduler = factory.GetScheduler().Result;
+
+            return scheduler;
         }
     }
 }

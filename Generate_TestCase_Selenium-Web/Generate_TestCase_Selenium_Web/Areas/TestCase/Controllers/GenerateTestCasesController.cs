@@ -908,7 +908,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             return RedirectToAction("Progress", new { jobId });
         }
-        [Route("/TestCase/Run/Progress")]
+        [Route("/TestCase/Run/Process")]
         public IActionResult Progress(string jobId)
         {
             ViewBag.JobId = jobId;
