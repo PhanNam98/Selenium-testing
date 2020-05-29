@@ -37,7 +37,10 @@
     <div class="text-right">
 
         @*<a class="btn btn-primary" asp-action="RunTestCase" asp-route-id_url="@ViewBag.id_url" role="button">Run test case</a>*@
-        <button type="button" class="btn btn-warning" name="delete" id="delete" onclick="Delete()">Delete</button>
+        @*<button type="button" class="btn btn-warning" name="delete" id="delete" onclick="Delete()">Delete</button>*@
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteModal">
+            Delete
+        </button>
         <button type="button" class="btn btn-success" name="submit_id" id="btn_id" onclick="Run_by_id()">Run selected</button>
         <button type="button" class="btn btn-primary" name="runall" id="runall">Run All</button>
     </div>
@@ -203,6 +206,25 @@
 <partial name="~/Views/Shared/LoadingViewPartial.cshtml" model="@ViewBag.LoadingTitle" />
 <br />
 <br />
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete test case</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete these test cases?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-warning " name="delete" id="delete" onclick="Delete()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 @*<div class="loading" align="center">
         <h1>Loading. Please wait.</h1> <br />
         <br />

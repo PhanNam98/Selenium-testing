@@ -903,7 +903,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> RunTestCasesJob(int id_url, List<string> list_Idtestcase, string returnUrl = null)
         {
             string jobId = Guid.NewGuid().ToString("N");
-            _queue.QueueAsyncTask(() => RunTestCaseJob(jobId, id_url, list_Idtestcase, returnUrl));
+            string id = _userManager.GetUserId(User);
+            _queue.QueueAsyncTask(() => RunTestCaseJob(id,jobId, id_url, list_Idtestcase, returnUrl));
 
             return RedirectToAction("Progress", new { jobId });
         }
@@ -914,9 +915,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             return View();
         }
-        public async Task RunTestCaseJob(string jobId,int id_url, List<string> list_Idtestcase, string returnUrl = null)
+        public async Task RunTestCaseJob(string id_user,string jobId,int id_url, List<string> list_Idtestcase, string returnUrl = null)
         {
-            var id = _userManager.GetUserId(User);
+            string id = id_user;
+            //string id = _userManager.GetUserId(User);
             int authen = _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).Count();
             if (authen > 0)
             {
@@ -933,6 +935,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 while (runTasks.Count > 0)
                 {
                     // Identify the first task that completes.
+                    
                     Task<string> firstFinishedTask = await Task.WhenAny(runTasks);
                    
                     // ***Remove the selected task from the list so that you don't
@@ -2923,7 +2926,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             ChromeDriverService service = ChromeDriverService.CreateDefaultService();
             service.HideCommandPromptWindow = true;//hide commandPromptWindow
-
+            
             var options = new ChromeOptions();
             //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
             //options.AddArgument("headless");

@@ -4,9 +4,29 @@
     Layout = "~/Views/Shared/_LayoutManage.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2>Process is running test case</h2>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Progress</li>
+</ol>
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-5"><i class="fas fa-tasks"></i>Run ID: @ViewBag.JobId</div>
+            <div class="col-7">
+                <div class="container">
+                    <div class="text-right">
 
-<p>Status of run test case: <strong><span id="job-status">Job status will go here...</span></strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <p>Status of run test case: <strong><span id="job-status">Wating...</span></strong></p>
+    </div>
+</div>
+
 @section Scripts
 {
     <script src="~/lib/signalr/signalr.js"></script>
@@ -16,17 +36,20 @@
             .withUrl("/jobprogress")
             .configureLogging(signalR.LogLevel.Information)
             .build();
-    
+
          connection.on("@ViewBag.JobId",
             (message) => {
-               
-                    document.getElementById("job-status").innerText = message;
+
+                document.getElementById("job-status").innerText = message;
+                if (message === "Finished!") {
+                    alert("Result");
+                }
             });
         connection.start()
             .then(_ => connection.invoke("AssociateJob", "@ViewBag.JobId"))
             .catch(err => console.error(err.toString()));
-       
-        
+
+
     </script>
 }
 

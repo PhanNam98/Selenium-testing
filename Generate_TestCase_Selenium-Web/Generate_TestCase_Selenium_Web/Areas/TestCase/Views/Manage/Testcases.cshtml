@@ -29,6 +29,26 @@
         </div>
     </div>
     <br />*@
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete test case</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete these test cases?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-warning " name="delete" id="delete" onclick="Delete()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 <partial name="~/Views/Shared/LoadingViewPartial.cshtml" model="@ViewBag.LoadingTitle" />
 <div class="card mb-4">
     <div class="card-header">
@@ -37,7 +57,10 @@
             <div class="col-9">
                 <div class="container">
                     <div class="text-right">
-                        <button type="button" class="btn btn-warning " name="delete" id="delete" onclick="Delete()">Delete</button>
+                        @*<button type="button" class="btn btn-warning " name="delete" id="delete" onclick="Delete()">Delete</button>*@
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteModal">
+                            Delete
+                        </button>
                         <button type="button" class="btn btn-success" name="submit_id" id="btn_id" onclick="Run_by_id()">Run selected</button>
                         <button type="button" class="btn btn-primary" name="runall" id="runall">Run All</button>
                     </div>
@@ -47,7 +70,7 @@
 
     </div>
     <div class="card-body">
-       @* @using (Html.BeginForm("RunTestCase", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))*@
+        @* @using (Html.BeginForm("RunTestCase", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))*@
         @using (Html.BeginForm("RunTestCasesJob", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
         {
             <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
@@ -91,7 +114,7 @@
                                     </td>
                                 }
                                 else
-                             if (item.result.Equals("Skip"))
+                            if (item.result.Equals("Skip"))
                                 {
                                     <td style="color:blue">
                                         @Html.DisplayFor(modelItem => item.result)
@@ -240,9 +263,9 @@
     };
     function Delete() {
 
-        
+
         var selectedIDs = new Array();
-      
+
         $("input:checked").each(function () {
            // console.log($(this).val()); //works fine
             selectedIDs.push($(this).val());
@@ -254,9 +277,9 @@
                 type: 'POST',
                 data: { id_url:idurl,List_id_testcase: selectedIDs}
             }).done(function (data) {
-               
+
                 location.reload();
-                
+
                 alert("Success");
 
                 //}
