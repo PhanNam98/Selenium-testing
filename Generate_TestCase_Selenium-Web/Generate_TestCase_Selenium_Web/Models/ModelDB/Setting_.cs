@@ -13,7 +13,8 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         public string Browser { get; set; }
         public bool? SendResultToMail { get; set; }
 
-        [InverseProperty("IdNavigation")]
-        public virtual AspNetUsers AspNetUsers { get; set; }
+        [ForeignKey(nameof(Id_User))]
+        [InverseProperty(nameof(AspNetUsers.Setting_))]
+        public virtual AspNetUsers Id_UserNavigation { get; set; }
     }
 }

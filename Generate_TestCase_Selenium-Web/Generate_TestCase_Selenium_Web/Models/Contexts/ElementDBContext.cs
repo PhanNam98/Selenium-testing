@@ -29,13 +29,19 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
         public virtual DbSet<Element> Element { get; set; }
         public virtual DbSet<Element_test> Element_test { get; set; }
         public virtual DbSet<Form_elements> Form_elements { get; set; }
+        public virtual DbSet<Input_Result_test> Input_Result_test { get; set; }
         public virtual DbSet<Input_elements> Input_elements { get; set; }
         public virtual DbSet<Input_testcase> Input_testcase { get; set; }
         public virtual DbSet<Project> Project { get; set; }
         public virtual DbSet<Redirect_url> Redirect_url { get; set; }
+        public virtual DbSet<Result_testcase> Result_testcase { get; set; }
+        public virtual DbSet<Running_process> Running_process { get; set; }
         public virtual DbSet<Select_tag> Select_tag { get; set; }
         public virtual DbSet<Setting_> Setting_ { get; set; }
         public virtual DbSet<Test_case> Test_case { get; set; }
+        public virtual DbSet<Test_element_Result_test> Test_element_Result_test { get; set; }
+        public virtual DbSet<Test_schedule> Test_schedule { get; set; }
+        public virtual DbSet<Testcase_scheduled> Testcase_scheduled { get; set; }
         public virtual DbSet<Url> Url { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -119,12 +125,6 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
                 entity.Property(e => e.IsAdmin).HasDefaultValueSql("(CONVERT([bit],(0),0))");
-
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.AspNetUsers)
-                    .HasForeignKey<AspNetUsers>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_AspNetUsers_Setting_");
             });
 
             modelBuilder.Entity<Button_tag>(entity =>
@@ -170,6 +170,23 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasForeignKey(d => d.id_url)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Form_elements_Url");
+            });
+
+            modelBuilder.Entity<Input_Result_test>(entity =>
+            {
+                entity.HasKey(e => new { e.id_result, e.id_testcase, e.id_element })
+                    .HasName("PK_Input_Result_test_1");
+
+                entity.HasOne(d => d.id_)
+                    .WithMany(p => p.Input_Result_test)
+                    .HasForeignKey(d => new { d.id_element, d.id_url })
+                    .HasConstraintName("FK_Input_Result_test_Element");
+
+                entity.HasOne(d => d.id_Navigation)
+                    .WithMany(p => p.Input_Result_test)
+                    .HasForeignKey(d => new { d.id_result, d.id_testcase })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Input_Result_test_Result_testcase");
             });
 
             modelBuilder.Entity<Input_elements>(entity =>
@@ -222,6 +239,36 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasConstraintName("FK_Redirect_url_Test_case");
             });
 
+            modelBuilder.Entity<Result_testcase>(entity =>
+            {
+                entity.HasKey(e => new { e.id_result, e.id_testcase });
+
+                entity.HasOne(d => d.id_resultNavigation)
+                    .WithMany(p => p.Result_testcase)
+                    .HasForeignKey(d => d.id_result)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Result_testcase_Running_process");
+
+                entity.HasOne(d => d.id_)
+                    .WithMany(p => p.Result_testcase)
+                    .HasForeignKey(d => new { d.id_testcase, d.id_url })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Result_test_Test_case");
+            });
+
+            modelBuilder.Entity<Running_process>(entity =>
+            {
+                entity.HasOne(d => d.id_scheduleNavigation)
+                    .WithMany(p => p.Running_process)
+                    .HasForeignKey(d => d.id_schedule)
+                    .HasConstraintName("FK_Running_process_Test_schedule");
+
+                entity.HasOne(d => d.id_userNavigation)
+                    .WithMany(p => p.Running_process)
+                    .HasForeignKey(d => d.id_user)
+                    .HasConstraintName("FK_Running_process_AspNetUsers");
+            });
+
             modelBuilder.Entity<Select_tag>(entity =>
             {
                 entity.HasKey(e => new { e.id_select, e.id_url });
@@ -231,6 +278,15 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasForeignKey(d => d.id_url)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Select_tag_Url");
+            });
+
+            modelBuilder.Entity<Setting_>(entity =>
+            {
+                entity.HasOne(d => d.Id_UserNavigation)
+                    .WithOne(p => p.Setting_)
+                    .HasForeignKey<Setting_>(d => d.Id_User)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Setting__AspNetUsers");
             });
 
             modelBuilder.Entity<Test_case>(entity =>
@@ -243,6 +299,34 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasForeignKey(d => d.id_url)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Test_case_Url");
+            });
+
+            modelBuilder.Entity<Test_element_Result_test>(entity =>
+            {
+                entity.HasKey(e => new { e.id_test_elements, e.id_testcase, e.id_result })
+                    .HasName("PK_Test_element_Result_test_1");
+
+                entity.HasOne(d => d.id_)
+                    .WithMany(p => p.Test_element_Result_test)
+                    .HasForeignKey(d => new { d.id_result, d.id_testcase })
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Test_element_Result_test_Result_testcase");
+            });
+
+            modelBuilder.Entity<Testcase_scheduled>(entity =>
+            {
+                entity.HasKey(e => new { e.id_schedule, e.id_testcase });
+
+                entity.HasOne(d => d.id_scheduleNavigation)
+                    .WithMany(p => p.Testcase_scheduled)
+                    .HasForeignKey(d => d.id_schedule)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Testcase_scheduled_Test_schedule");
+
+                entity.HasOne(d => d.id_)
+                    .WithMany(p => p.Testcase_scheduled)
+                    .HasForeignKey(d => new { d.id_testcase, d.id_url })
+                    .HasConstraintName("FK_Testcase_scheduled_Test_case");
             });
 
             modelBuilder.Entity<Url>(entity =>

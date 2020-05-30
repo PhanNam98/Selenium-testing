@@ -9,6 +9,7 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
     {
         public Element()
         {
+            Input_Result_test = new HashSet<Input_Result_test>();
             Input_testcase = new HashSet<Input_testcase>();
         }
 
@@ -47,6 +48,8 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         [ForeignKey(nameof(id_url))]
         [InverseProperty(nameof(Url.Element))]
         public virtual Url id_urlNavigation { get; set; }
+        [InverseProperty("id_")]
+        public virtual ICollection<Input_Result_test> Input_Result_test { get; set; }
         [InverseProperty("id_")]
         public virtual ICollection<Input_testcase> Input_testcase { get; set; }
     }

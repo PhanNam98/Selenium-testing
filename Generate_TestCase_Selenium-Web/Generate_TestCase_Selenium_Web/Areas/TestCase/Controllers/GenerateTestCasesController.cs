@@ -904,6 +904,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             string jobId = Guid.NewGuid().ToString("N");
             string id = _userManager.GetUserId(User);
+            Running_process running_Process = new Running_process();
+            running_Process.id_process = jobId;
+            running_Process.id_user = id;
+            running_Process.start_time = DateTime.Now;
+            running_Process.end_time = null;
+            running_Process.status = "waiting";
+            _context.Running_process.Add(running_Process);
+            await _context.SaveChangesAsync();
             _queue.QueueAsyncTask(() => RunTestCaseJob(id,jobId, id_url, list_Idtestcase, returnUrl));
 
             return RedirectToAction("Progress", new { jobId });
@@ -1734,19 +1742,36 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
             var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
             await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running test case "+id_testcase);
+            var running_Process = _context.Running_process.Find(jobId);
+            running_Process.status = "running";
+
             //try
             //{
-
+            Result_testcase result_Testcase = new Result_testcase();
+            result_Testcase.id_result = running_Process.id_process;
+            result_Testcase.id_testcase = id_testcase;
+            result_Testcase.id_url = id_url;
+            result_Testcase.Result = "";
+            result_Testcase.TestDate = DateTime.Now;
+            _context.Result_testcase.Add(result_Testcase);
+            await _context.SaveChangesAsync();
             if (browserRun.Equals("chrome"))
             {
 
                 ChromeDriver chromedriver = SetUpDriver(url);
 
                 //chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-
+               
                 //run test case
                 foreach (var inputtest in list_inputtest)
                 {
+                    Input_Result_test input_Result_Test = new Input_Result_test();
+                    input_Result_Test.id_element = inputtest.id_element;
+                    input_Result_Test.id_result = jobId;
+                    input_Result_Test.id_testcase = id_testcase;
+                    input_Result_Test.id_url = id_url;
+                    input_Result_Test.value = inputtest.value;
+                    input_Result_Test.action = inputtest.action;
                     switch (inputtest.action)
                     {
 
@@ -1829,13 +1854,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 break;
                             }
                     }
+                    _context.Input_Result_test.Add(input_Result_Test);
                 }
-
+                await _context.SaveChangesAsync();
                 //test
                 if (list_output.Count > 0)
                 {
                     foreach (var outputtest in list_output)
                     {
+                        Test_element_Result_test test_Element_Result_Test = new Test_element_Result_test();
+                        test_Element_Result_Test.id_result = jobId;
+                        test_Element_Result_Test.id_test_elements = outputtest.id_element;
+                        test_Element_Result_Test.id_testcase = id_testcase;
+                        test_Element_Result_Test.value_test = outputtest.value_test;
                         bool WasTested = false;
                         IWebElement testelt;
                         string DataResult = "";
@@ -1844,7 +1875,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                             {
                                 testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-
+                                test_Element_Result_Test.xpath = outputtest.xpath;
                                 string vt;
                                 try
                                 {
@@ -1857,6 +1888,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 if (vt != null)
                                 {
                                     outputtest.value_return = vt;
+
                                     if (!vt.Equals(outputtest.value_test))
                                     {
                                         isFailure++;
@@ -1881,6 +1913,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                         {
 
                                             testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                                            test_Element_Result_Test.xpath = outputtest.xpath;
                                             string vt = null;
                                             if (testelt.Text != null)
                                             {
@@ -1918,6 +1951,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count() > 0)
                             {
                                 testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                                test_Element_Result_Test.xpath = outputtest.xpath_full;
                                 string vt = null;
                                 if (testelt.Text != null)
                                 {
@@ -1954,6 +1988,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                         if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
                                         {
                                             testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                                            test_Element_Result_Test.xpath = outputtest.xpath_full;
                                             string vt = null;
                                             if (testelt.Text != null)
                                             {
@@ -1991,135 +2026,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         {
                             isSkip++;
                         }
-
+                        test_Element_Result_Test.value = DataResult;
+                        _context.Test_element_Result_test.Add(test_Element_Result_Test);
                         outputtest.value_return = DataResult;
                         _context.Element_test.Update(outputtest);
                         await _context.SaveChangesAsync();
 
-                        #region backup
-                        //try
-                        //{
-
-                        //    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                        //    string vt;
-                        //    try
-                        //    {
-                        //        vt = testelt.Text;
-                        //    }
-                        //    catch
-                        //    {
-                        //        vt = testelt.GetAttribute("value");
-                        //    }
-                        //    if (vt != null)
-                        //    {
-                        //        outputtest.value_return = vt;
-                        //        if (!vt.Equals(outputtest.value_test))
-                        //        {
-                        //            isPass = 0;
-                        //        }
-                        //        BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                        //    }
-
-
-
-                        //}
-                        //catch
-                        //{
-                        //    try
-                        //    {
-                        //        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                        //        string vt;
-                        //        try
-                        //        {
-                        //            vt = testelt.Text;
-                        //        }
-                        //        catch
-                        //        {
-                        //            vt = testelt.GetAttribute("value");
-                        //        }
-                        //        if (vt != null)
-                        //        {
-                        //            outputtest.value_return = vt;
-                        //            if (!vt.Equals(outputtest.value_test))
-                        //            {
-                        //                isPass = 0;
-                        //            }
-                        //            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                        //        }
-
-                        //    }
-                        //    catch
-                        //    {
-                        //        foreach (var inputtest in list_inputtest)
-                        //        {
-
-                        //            var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
-                        //            if (testDisplayed.Displayed)
-                        //            {
-                        //                testDisplayed.Click();
-                        //                try
-                        //                {
-                        //                    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                        //                    string vt;
-                        //                    try
-                        //                    {
-                        //                        vt = testelt.Text;
-                        //                    }
-                        //                    catch
-                        //                    {
-                        //                        vt = testelt.GetAttribute("value");
-                        //                    }
-                        //                    if (vt != null)
-                        //                    {
-                        //                        outputtest.value_return = vt;
-                        //                        if (!vt.Equals(outputtest.value_test))
-                        //                        {
-                        //                            isPass = 0;
-                        //                        }
-                        //                        BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                        //                    }
-                        //                    break;
-                        //                }
-                        //                catch
-                        //                {
-                        //                    try
-                        //                    {
-                        //                        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                        //                        string vt;
-                        //                        try
-                        //                        {
-                        //                            vt = testelt.Text;
-                        //                        }
-                        //                        catch
-                        //                        {
-                        //                            vt = testelt.GetAttribute("value");
-                        //                        }
-                        //                        if (vt != null)
-                        //                        {
-                        //                            outputtest.value_return = vt;
-                        //                            if (!vt.Equals(outputtest.value_test))
-                        //                            {
-                        //                                isPass = 0;
-                        //                            }
-                        //                            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                        //                        }
-                        //                        break;
-                        //                    }
-                        //                    catch
-                        //                    {
-
-                        //                    }
-
-                        //                }
-
-
-                        //            }
-
-                        //        }
-                        //    }
-                        //}
-
-                        #endregion
+                        
 
 
                     }
@@ -2163,6 +2076,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
                 }
                 Testcase.result = result;
+                result_Testcase.Result = result;
                 await _context.SaveChangesAsync();
                 return result;
                 //}
@@ -2178,6 +2092,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 //run test case
                 foreach (var inputtest in list_inputtest)
                 {
+                    Input_Result_test input_Result_Test = new Input_Result_test();
+                    input_Result_Test.id_element = inputtest.id_element;
+                    input_Result_Test.id_result = jobId;
+                    input_Result_Test.id_testcase = id_testcase;
+                    input_Result_Test.id_url = id_url;
+                    input_Result_Test.value = inputtest.value;
+                    input_Result_Test.action = inputtest.action;
                     switch (inputtest.action)
                     {
 
@@ -2185,11 +2106,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             {
                                 try
                                 {
+
                                     var fill = firefoxdriver.FindElementByXPath(inputtest.xpath);
                                     if (fill.Displayed)
                                     {
                                         fill.Click();
                                         fill.SendKeys(inputtest.value);
+                                       
+
                                     }
 
                                 }
@@ -2215,6 +2139,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                     int index = random.Next(0, CountallSelectedOptions + 1);
                                     //selectElement.SelectByIndex(int.Parse(inputtest.value));
                                     selectElement.SelectByIndex(index);
+
                                 }
                                 catch (Exception e)
                                 {
@@ -2260,13 +2185,20 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 break;
                             }
                     }
+                    _context.Input_Result_test.Add(input_Result_Test);
                 }
-
+                await _context.SaveChangesAsync();
                 //test
                 if (list_output.Count > 0)
                 {
                     foreach (var outputtest in list_output)
                     {
+                        Test_element_Result_test test_Element_Result_Test = new Test_element_Result_test();
+                        test_Element_Result_Test.id_result = jobId;
+                        test_Element_Result_Test.id_test_elements = outputtest.id_element;
+                        test_Element_Result_Test.id_testcase = id_testcase;
+                        test_Element_Result_Test.value_test = outputtest.value_test;
+                       
                         bool WasTested = false;
                         IWebElement testelt;
                         string DataResult = "";
@@ -2275,7 +2207,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             if (firefoxdriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                             {
                                 testelt = firefoxdriver.FindElementByXPath(outputtest.xpath);
-
+                                test_Element_Result_Test.xpath = outputtest.xpath;
                                 string vt;
                                 try
                                 {
@@ -2288,6 +2220,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 if (vt != null)
                                 {
                                     outputtest.value_return = vt;
+                                    test_Element_Result_Test.value = vt;
                                     if (!vt.Equals(outputtest.value_test))
                                     {
                                         isFailure++;
@@ -2312,6 +2245,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                         {
 
                                             testelt = firefoxdriver.FindElementByXPath(outputtest.xpath);
+                                            test_Element_Result_Test.xpath = outputtest.xpath;
                                             string vt = null;
                                             if (testelt.Text != null)
                                             {
@@ -2324,6 +2258,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                             if (vt != null)
                                             {
                                                 outputtest.value_return = vt;
+                                                test_Element_Result_Test.value = vt;
                                                 if (!vt.Equals(outputtest.value_test))
                                                 {
                                                     isFailure++;
@@ -2349,6 +2284,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             if (firefoxdriver.FindElementsByXPath(outputtest.xpath_full).Count() > 0)
                             {
                                 testelt = firefoxdriver.FindElementByXPath(outputtest.xpath_full);
+                                test_Element_Result_Test.xpath = outputtest.xpath_full;
                                 string vt = null;
                                 if (testelt.Text != null)
                                 {
@@ -2361,6 +2297,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 if (vt != null)
                                 {
                                     outputtest.value_return = vt;
+                                    test_Element_Result_Test.value = vt;
                                     if (!vt.Equals(outputtest.value_test))
                                     {
                                         isFailure++;
@@ -2378,6 +2315,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
 
                                     var testDisplayed = firefoxdriver.FindElementByXPath(inputtest.xpath);
+
                                     if (testDisplayed.Displayed)
                                     {
                                         testDisplayed.Click();
@@ -2385,6 +2323,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                         if (firefoxdriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
                                         {
                                             testelt = firefoxdriver.FindElementByXPath(outputtest.xpath_full);
+                                            test_Element_Result_Test.xpath = outputtest.xpath_full;
                                             string vt = null;
                                             if (testelt.Text != null)
                                             {
@@ -2397,6 +2336,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                             if (vt != null)
                                             {
                                                 outputtest.value_return = vt;
+                                                test_Element_Result_Test.value = vt;
                                                 if (!vt.Equals(outputtest.value_test))
                                                 {
                                                     isFailure++;
@@ -2422,7 +2362,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         {
                             isSkip++;
                         }
-
+                        _context.Test_element_Result_test.Add(test_Element_Result_Test);
                         outputtest.value_return = DataResult;
                         _context.Element_test.Update(outputtest);
                         await _context.SaveChangesAsync();
@@ -2469,6 +2409,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
                 }
                 Testcase.result = result;
+                result_Testcase.Result = result;
                 await _context.SaveChangesAsync();
                 await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running finished test case: " + id_testcase);
                 return result;

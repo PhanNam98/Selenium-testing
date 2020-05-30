@@ -12,6 +12,8 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
             Alert_message = new HashSet<Alert_message>();
             Element_test = new HashSet<Element_test>();
             Input_testcase = new HashSet<Input_testcase>();
+            Result_testcase = new HashSet<Result_testcase>();
+            Testcase_scheduled = new HashSet<Testcase_scheduled>();
         }
 
         [Key]
@@ -40,5 +42,9 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         public virtual ICollection<Element_test> Element_test { get; set; }
         [InverseProperty("id_Navigation")]
         public virtual ICollection<Input_testcase> Input_testcase { get; set; }
+        [InverseProperty("id_")]
+        public virtual ICollection<Result_testcase> Result_testcase { get; set; }
+        [InverseProperty("id_")]
+        public virtual ICollection<Testcase_scheduled> Testcase_scheduled { get; set; }
     }
 }

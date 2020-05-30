@@ -14,6 +14,7 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
             Project = new HashSet<Project>();
+            Running_process = new HashSet<Running_process>();
         }
 
         [Key]
@@ -39,9 +40,8 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         [Required]
         public bool? IsAdmin { get; set; }
 
-        [ForeignKey(nameof(Id))]
-        [InverseProperty(nameof(Setting_.AspNetUsers))]
-        public virtual Setting_ IdNavigation { get; set; }
+        [InverseProperty("Id_UserNavigation")]
+        public virtual Setting_ Setting_ { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         [InverseProperty("User")]
@@ -52,5 +52,7 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
         [InverseProperty("Id_UserNavigation")]
         public virtual ICollection<Project> Project { get; set; }
+        [InverseProperty("id_userNavigation")]
+        public virtual ICollection<Running_process> Running_process { get; set; }
     }
 }
