@@ -2057,7 +2057,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 chromedriver.Quit();
                 string result = "";
-
+                running_Process.status = "finished";
+                running_Process.end_time = DateTime.Now;
+                _context.Running_process.Update(running_Process);
                 if (isFailure == 0 && isSkip == 0)
                 {
                     result = "Pass";
@@ -2390,7 +2392,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 firefoxdriver.Quit();
                 string result = "";
-
+                running_Process.status = "finished";
+                running_Process.end_time = DateTime.Now;
+                _context.Running_process.Update(running_Process);
                 if (isFailure == 0 && isSkip == 0)
                 {
                     result = "Pass";
@@ -2410,6 +2414,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 Testcase.result = result;
                 result_Testcase.Result = result;
+                
                 await _context.SaveChangesAsync();
                 await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running finished test case: " + id_testcase);
                 return result;

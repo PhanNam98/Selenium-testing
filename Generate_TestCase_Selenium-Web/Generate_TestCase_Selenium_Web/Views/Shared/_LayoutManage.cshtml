@@ -13,6 +13,7 @@
     <link href="~/css/styles.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 </head>
 <body class="sb-nav-fixed">
 
@@ -80,6 +81,12 @@
                             </nav>
                         </div>
 
+                        <div class="sb-sidenav-menu-heading">Process</div>
+                        <a class="nav-link" asp-area="User" asp-controller="Process" asp-action="Index">
+                            <div class="sb-nav-link-icon"><i class="fa fa-spinner fa-spin"></i></div>
+                            Running process
+                        </a>
+
                     </div>
 
                 </div>
@@ -114,7 +121,7 @@
                 &copy; 2020 - Generate_TestCase_Selenium_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div> *@
     </footer>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+   
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="~/js/scripts.js"></script>
     @*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>*@

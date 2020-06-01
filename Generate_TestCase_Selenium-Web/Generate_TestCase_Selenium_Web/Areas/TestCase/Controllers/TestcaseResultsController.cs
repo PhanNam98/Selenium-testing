@@ -8,23 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using Generate_TestCase_Selenium_Web.Models.Contexts;
 using Generate_TestCase_Selenium_Web.Models.ModelDB;
 using Microsoft.AspNetCore.Authorization;
+using Generate_TestCase_Selenium_Web.Models;
+using Microsoft.AspNetCore.Identity;
 
-namespace Generate_TestCase_Selenium_Web.Areas.TestCase
+namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 {
     [Area("TestCase")]
     [Authorize]
     public class TestcaseResultsController : Controller
     {
         private readonly ElementDBContext _context;
-
-        public TestcaseResultsController()
+        private readonly UserManager<ApplicationUser> _userManager;
+        public TestcaseResultsController(UserManager<ApplicationUser> userManager)
         {
             _context = new ElementDBContext();
+            _userManager = userManager;
         }
 
         // GET: TestCase/TestcaseResults
         public async Task<IActionResult> Index()
         {
+            string id = _userManager.GetUserId(User);
             var elementDBContext = _context.Result_testcase.Include(r => r.id_).Include(r => r.id_resultNavigation);
             return View(await elementDBContext.ToListAsync());
         }
