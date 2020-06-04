@@ -920,7 +920,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public IActionResult Progress(string jobId)
         {
             ViewBag.JobId = jobId;
-
+            ViewBag.Message = _context.Running_process.Find(jobId).message;
             return View();
         }
         public async Task RunTestCaseJob(string id_user,string jobId,int id_url, List<string> list_Idtestcase, string returnUrl = null)
@@ -964,13 +964,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 //{
                 //    ViewData["Message"] = "Run failed";
                 //}
-                ViewData["id_url"] = id_url;
-                var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
-
-                ViewData["Pass"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("pass")).Count();
-                ViewData["Skip"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("skip")).Count();
-                ViewData["Failure"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("failure")).Count();
-                StatusMessage = ViewData["Message"].ToString();
+                //ViewData["id_url"] = id_url;
+                //var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
+                var running_Process = _context.Running_process.Find(jobId);
+                running_Process.status = "finished";
+                _context.Running_process.Update(running_Process);
+                await _context.SaveChangesAsync();
+                //ViewData["Pass"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("pass")).Count();
+                //ViewData["Skip"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("skip")).Count();
+                //ViewData["Failure"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("failure")).Count();
+                //StatusMessage = ViewData["Message"].ToString();
                 await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Finished!");
             }
         }
@@ -1744,7 +1747,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running test case "+id_testcase);
             var running_Process = _context.Running_process.Find(jobId);
             running_Process.status = "running";
-
+            running_Process.message = "Running test case "+id_testcase;
+            _context.Running_process.Update(running_Process);
             //try
             //{
             Result_testcase result_Testcase = new Result_testcase();
@@ -1772,6 +1776,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     input_Result_Test.id_url = id_url;
                     input_Result_Test.value = inputtest.value;
                     input_Result_Test.action = inputtest.action;
+                    input_Result_Test.step = inputtest.test_step;
                     switch (inputtest.action)
                     {
 
@@ -2058,6 +2063,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 chromedriver.Quit();
                 string result = "";
                 running_Process.status = "finished";
+                running_Process.message = "Running finished test case " + id_testcase;
                 running_Process.end_time = DateTime.Now;
                 _context.Running_process.Update(running_Process);
                 if (isFailure == 0 && isSkip == 0)
@@ -2392,9 +2398,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 firefoxdriver.Quit();
                 string result = "";
-                running_Process.status = "finished";
+                await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running finished test case: " + id_testcase);
+                running_Process.message = "Running finished test case " + id_testcase;
                 running_Process.end_time = DateTime.Now;
                 _context.Running_process.Update(running_Process);
+               
                 if (isFailure == 0 && isSkip == 0)
                 {
                     result = "Pass";
@@ -2416,7 +2424,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 result_Testcase.Result = result;
                 
                 await _context.SaveChangesAsync();
-                await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running finished test case: " + id_testcase);
+              
                 return result;
                 //}
                 //catch

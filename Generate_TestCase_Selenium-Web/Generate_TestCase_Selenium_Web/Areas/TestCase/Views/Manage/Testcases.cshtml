@@ -86,9 +86,9 @@
                             <th>
                                 @Html.DisplayName("Description")
                             </th>
-                            <th>
+                            @*<th>
                                 @Html.DisplayName("Result")
-                            </th>
+                            </th>*@
 
                             <th></th>
                         </tr>
@@ -107,7 +107,7 @@
                                     @Html.DisplayFor(modelItem => item.description)
                                 </td>
 
-                                @if (item.result.Equals("Pass"))
+                                @*@if (item.result.Equals("Pass"))
                                 {
                                     <td style="color:green">
                                         @Html.DisplayFor(modelItem => item.result)
@@ -125,7 +125,7 @@
                                     <td style="color:red">
                                         @Html.DisplayFor(modelItem => item.result)
                                     </td>
-                                }
+                                }*@
 
                                 @*  *@
                                 <td>

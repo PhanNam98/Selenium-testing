@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Generate_TestCase_Selenium_Web.Models.ModelDB.Element_test>
 
 @{
-    ViewData["Title"] = "Test Elements";
+    ViewData["Title"] = "Validate items";
     Layout = "~/Views/Shared/_LayoutManage.cshtml";
 }
 <h2>Validate items of test case @ViewBag.id_testcase</h2>
@@ -9,7 +9,7 @@
     <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Projects">Project</a></li>
     <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Urls" asp-route-project_id="@ViewBag.project_id">Urls</a></li>
     <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Testcases" asp-route-id_url="@ViewBag.id_url">Test case</a></li>
-    <li class="breadcrumb-item active">Test elements</li>
+    <li class="breadcrumb-item active">Validate items</li>
 </ol>
 <hr />
 <partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />

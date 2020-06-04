@@ -1,0 +1,55 @@
+﻿@model Generate_TestCase_Selenium_Web.Models.ModelDB.Running_process
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutManage.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Running_process</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.status)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.start_time)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.start_time)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.end_time)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.end_time)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.message)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.message)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_scheduleNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.id_scheduleNavigation.id_schedule)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_userNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.id_userNavigation.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id_process">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

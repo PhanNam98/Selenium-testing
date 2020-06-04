@@ -47,7 +47,7 @@
 </div>
 <br />
 <partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
-@using (Html.BeginForm("RunTestCase", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
+@using (Html.BeginForm("RunTestCasesJob", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
 {
     <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
     <div class="table-responsive">
@@ -62,9 +62,9 @@
                     <th>
                         @Html.DisplayName("Description")
                     </th>
-                    <th>
+                    @*<th>
                         @Html.DisplayName("Result")
-                    </th>
+                    </th>*@
                     @*<th>
                             @Html.DisplayNameFor(model => model.is_test)
                         </th>*@
@@ -94,25 +94,25 @@
                             @Html.DisplayFor(modelItem => item.description)
                         </td>
 
-                        @if (item.result.Equals("Pass"))
-                        {
-                            <td style="color:green">
-                                @Html.DisplayFor(modelItem => item.result)
-                            </td>
-                        }
-                        else
-       if (item.result.Equals("Skip"))
-                        {
-                            <td style="color:blue">
-                                @Html.DisplayFor(modelItem => item.result)
-                            </td>
-                        }
-                        else
-                        {
-                            <td style="color:red">
-                                @Html.DisplayFor(modelItem => item.result)
-                            </td>
-                        }
+                            @*@if (item.result.Equals("Pass"))
+                            {
+                                <td style="color:green">
+                                    @Html.DisplayFor(modelItem => item.result)
+                                </td>
+                            }
+                            else
+           if (item.result.Equals("Skip"))
+                            {
+                                <td style="color:blue">
+                                    @Html.DisplayFor(modelItem => item.result)
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="color:red">
+                                    @Html.DisplayFor(modelItem => item.result)
+                                </td>
+                            }*@
 
                         @*<td>
                                 @Html.DisplayFor(modelItem => item.is_test)

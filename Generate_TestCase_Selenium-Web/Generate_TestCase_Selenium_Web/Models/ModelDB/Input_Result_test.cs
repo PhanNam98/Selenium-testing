@@ -20,6 +20,7 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         public string value { get; set; }
         [StringLength(50)]
         public string action { get; set; }
+        public int? step { get; set; }
 
         [ForeignKey("id_element,id_url")]
         [InverseProperty(nameof(Element.Input_Result_test))]

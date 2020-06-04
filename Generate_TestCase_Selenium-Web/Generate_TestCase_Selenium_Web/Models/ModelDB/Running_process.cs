@@ -25,6 +25,8 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         public DateTime? start_time { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? end_time { get; set; }
+        [StringLength(200)]
+        public string message { get; set; }
 
         [ForeignKey(nameof(id_schedule))]
         [InverseProperty(nameof(Test_schedule.Running_process))]

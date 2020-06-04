@@ -282,7 +282,6 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Generate_TestCase_Selenium_Web.MvcApplicationPartsAssemblyInfo.cache
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\TestCase\Views\GenerateTestCases\Progress.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\TestCase\Views\Schedule\Index.cshtml.g.cs
-D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Generate_TestCase_Selenium_Web.csprojAssemblyReference.cache
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\TestCase\Views\TestcaseResults\Create.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\TestCase\Views\TestcaseResults\Delete.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\TestCase\Views\TestcaseResults\Details.cshtml.g.cs
@@ -293,3 +292,12 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Process\Details.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Process\Edit.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Process\Index.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Results\Create.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Results\Delete.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Results\Details.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Results\Edit.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Results\Index.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Results\ResultDetail.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Results\TestData.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\User\Views\Results\TestElement.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Generate_TestCase_Selenium_Web.csprojAssemblyReference.cache
