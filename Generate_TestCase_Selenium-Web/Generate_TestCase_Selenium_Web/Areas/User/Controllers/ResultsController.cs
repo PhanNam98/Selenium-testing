@@ -21,7 +21,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         [TempData]
         public string StatusMessage { get; set; }
-        public ResultsController(ElementDBContext context, UserManager<ApplicationUser> userManager)
+        public ResultsController( UserManager<ApplicationUser> userManager)
         {
             _context = new ElementDBContext();
             _userManager = userManager;
@@ -53,6 +53,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             {
                 return NotFound();
             }
+            ViewData["Pass"] = results.Where(p => p.Result.ToLower().Equals("pass")).Count();
+            ViewData["Skip"] = results.Where(p => p.Result.ToLower().Equals("skip")).Count();
+            ViewData["Failure"] = results.Where(p => p.Result.ToLower().Equals("failure")).Count();
             ViewData["id_result"] = id;
             return View(results);
         }

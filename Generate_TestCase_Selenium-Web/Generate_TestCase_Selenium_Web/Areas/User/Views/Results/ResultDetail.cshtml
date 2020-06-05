@@ -10,6 +10,21 @@
     <li class="breadcrumb-item"><a asp-area="User" asp-controller="Results" asp-action="Index">Results</a></li>
     <li class="breadcrumb-item active">Result detail</li>
 </ol>
+<div class="row">
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-4"><p style="color:green">Pass: @ViewBag.Pass</p></div>
+            <div class="col-4"><p style="color:red">Failure: @ViewBag.Failure</p></div>
+            <div class="col-4"><p style="color:blue">Skip: @ViewBag.Skip</p></div>
+        </div>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+</div>
 <div class="card mb-4">
     <div class="card-header">
         <div class="row">

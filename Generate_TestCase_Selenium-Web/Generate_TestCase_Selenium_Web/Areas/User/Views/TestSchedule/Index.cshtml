@@ -1,0 +1,104 @@
+﻿@model IEnumerable<Generate_TestCase_Selenium_Web.Models.ModelDB.Test_schedule>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutManage.cshtml";
+}
+
+<h2>Test schedule</h2>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Test schedule</li>
+</ol>
+
+<hr />
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-3"><i class="fas fa-table mr-1"></i>Test cases list</div>
+            <div class="col-9">
+                <div class="container">
+                    <div class="text-right">
+                        <a role="button" class="btn btn-primary" name="newSchedule" id="newSchedule" asp-action="LoadProject" >New Schedule</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="scheduletable" class="table table-striped table-condensed table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayName("Schedule id")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Status")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Created Date")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Job repeat time")
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id_schedule)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.status)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.job_repeat_time)
+                            </td>
+                            <td>
+                                @*<a asp-action="Edit" asp-route-id="@item.id_schedule" role="button" class="btn btn-primary">Edit time</a>*@
+                                <a asp-action="DetailSchedule" asp-route-scheduleId="@item.id_schedule" role="button" class="btn btn-success">Details</a>
+                                @{
+                                    if (item.status.Equals("running"))
+                                    {
+                                        <a asp-action="Stop_schedule" asp-route-scheduleId="@item.id_schedule" role="button" class="btn btn-warning">Stop</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Start_schedule" asp-route-scheduleId="@item.id_schedule" role="button" class="btn btn-success">Start</a>
+                                    }
+
+                                }
+
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        var table = $('#scheduletable').DataTable(
+            {
+                "lengthMenu": [[10, 25, 50, - 1], [10, 25, 50, "All record"]],
+              
+                
+            }
+        );
+
+    });
+</script>
