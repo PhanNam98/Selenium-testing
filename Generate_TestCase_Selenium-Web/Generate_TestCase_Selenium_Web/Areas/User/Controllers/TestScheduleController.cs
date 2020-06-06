@@ -34,16 +34,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
         {
             var id_user = _userManager.GetUserId(User);
             var listSchedule = _context.Test_schedule.Where(s => s.id_user == id_user);
+            ViewData["Message"] = StatusMessage;
+            if(StatusMessage!=null)
+            TempData.Remove(StatusMessage);
             return View(await listSchedule.ToListAsync());
         }
 
-        public async Task<IActionResult> Create_schedule(string time,List<string> list_Idtestcase, int id_url)
+        public async Task<IActionResult> Create_schedule(string time, List<string> list_Idtestcase, int id_url)
         {
             Test_schedule test_Schedule = new Test_schedule();
             test_Schedule.CreatedDate = DateTime.Now;
             string scheduleId = Guid.NewGuid().ToString("N");
             test_Schedule.id_schedule = scheduleId;
-            var id_user= _userManager.GetUserId(User);
+            var id_user = _userManager.GetUserId(User);
             test_Schedule.id_user = id_user;
             test_Schedule.job_repeat_time = time;
             test_Schedule.status = "running";
@@ -55,44 +58,34 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                 testcase_Scheduled.id_schedule = scheduleId;
                 testcase_Scheduled.id_url = id_url;
                 testcase_Scheduled.id_testcase = id;
+
                 _context.Testcase_scheduled.Add(testcase_Scheduled);
             }
-             _context.SaveChanges();
-            IJobDetail job = JobBuilder.Create<RunTestcaseJob>()
-                                         .UsingJobData("scheduleid", scheduleId)
-                                         .WithIdentity(scheduleId, id_user)
-                                         .StoreDurably()
-                                         .RequestRecovery()
-                                         .Build();
-         
-            await _scheduler.AddJob(job, true);
+            _context.SaveChanges();
+            //IJobDetail job = JobBuilder.Create<RunTestcaseJob>()
+            //                             .UsingJobData("scheduleid", scheduleId)
+            //                             .WithIdentity(scheduleId, id_user)
+            //                             .StoreDurably()
+            //                             .RequestRecovery()
+            //                             .Build();
 
-            ITrigger trigger = TriggerBuilder.Create()
-                                             .ForJob(job)
-                                             //.UsingJobData("triggerparam", "Simple trigger 1 Parameter")
-                                             .WithIdentity(scheduleId+"trigger", id_user)
-                                             .StartNow()
-                                             .WithSimpleSchedule(z => z.WithIntervalInSeconds(600).RepeatForever())
-                                             .Build();
-            
+            //await _scheduler.AddJob(job, true);
 
-            await _scheduler.ScheduleJob(trigger);
-           
+            //ITrigger trigger = TriggerBuilder.Create()
+            //                                 .ForJob(job)
+            //                                 //.UsingJobData("triggerparam", "Simple trigger 1 Parameter")
+            //                                 .WithIdentity(scheduleId + "trigger", id_user)
+            //                                 .StartNow()
+            //                                 .WithSimpleSchedule(z => z.WithIntervalInSeconds(600).RepeatForever())
+            //                                 .Build();
+
+
+            //await _scheduler.ScheduleJob(trigger);
+            StatusMessage = "Create schedule successfully";
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Stop_schedule(string scheduleId)
-        {
-            var id_user = _userManager.GetUserId(User);
-            await _scheduler.DeleteJob(new JobKey(scheduleId, id_user));
-            TriggerKey triggerKey = new TriggerKey("trigger"+ scheduleId, id_user);
-            await _scheduler.UnscheduleJob(triggerKey);
-            var schedule = _context.Test_schedule.Find(scheduleId);
-            schedule.status = "stop";
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        public async Task<IActionResult> Start_schedule(string scheduleId)
         {
             var id_user = _userManager.GetUserId(User);
             await _scheduler.DeleteJob(new JobKey(scheduleId, id_user));
@@ -101,11 +94,79 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             var schedule = _context.Test_schedule.Find(scheduleId);
             schedule.status = "stop";
             await _context.SaveChangesAsync();
+            StatusMessage = "Stop schedule successfully";
             return RedirectToAction("Index");
         }
+        public async Task<IActionResult> Start_schedule(string scheduleId)
+        {
+            var id_user = _userManager.GetUserId(User);
+            Test_schedule test_Schedule = _context.Test_schedule.Find(scheduleId);
+            test_Schedule.status = "running";
+            _context.Test_schedule.Update(test_Schedule);
+            await _context.SaveChangesAsync();
+            IJobDetail job = JobBuilder.Create<RunTestcaseJob>()
+                                          .UsingJobData("scheduleid", scheduleId)
+                                          .WithIdentity(scheduleId, id_user)
+                                          .StoreDurably()
+                                          .RequestRecovery()
+                                          .Build();
+
+            await _scheduler.AddJob(job, true);
+
+            ITrigger trigger = TriggerBuilder.Create()
+                                             .ForJob(job)
+                                             //.UsingJobData("triggerparam", "Simple trigger 1 Parameter")
+                                             .WithIdentity(scheduleId + "trigger", id_user)
+                                             .StartNow()
+                                             .WithSimpleSchedule(z => z.WithIntervalInSeconds(600).RepeatForever())
+                                             .Build();
+
+
+            await _scheduler.ScheduleJob(trigger);
+            StatusMessage = "Start schedule successfully";
+            return RedirectToAction("Index");
+        }
+        [Route("/Schedule/Detail")]
         public async Task<IActionResult> DetailSchedule(string scheduleId)
         {
-            return View();
+            var listTestcase = await _context.Testcase_scheduled.Include(p => p.id_).Where(p => p.id_schedule == scheduleId).ToListAsync();
+            ViewData["scheduleId"] = scheduleId;
+            ViewData["id_url"] = listTestcase.FirstOrDefault().id_url;
+            return View(listTestcase);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteTestcasesSchedule(string scheduleId, List<string> list_Idtestcase)
+        {
+
+            var id = _userManager.GetUserId(User);
+            var testcase = await _context.Testcase_scheduled.Include(p => p.id_).Where(p => list_Idtestcase.Contains(p.id_testcase) && p.id_schedule == scheduleId).ToListAsync();
+            if (testcase == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    _context.Testcase_scheduled.RemoveRange(testcase);
+                    await _context.SaveChangesAsync();
+                    StatusMessage = "Delete successfully";
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    StatusMessage = "Delete fail";
+                    return RedirectToAction(nameof(DetailSchedule), new { scheduleId = scheduleId });
+                }
+                //return Json(new { Result = "OK", Message = "Success" });
+                return RedirectToAction(nameof(DetailSchedule), new { scheduleId = scheduleId });
+                //return RedirectToAction(nameof(Index), new { id_url = id_url, isload = true });
+            }
+            StatusMessage = "Delete fail";
+            return RedirectToAction(nameof(DetailSchedule), new { scheduleId = scheduleId });
+
+
         }
         [Route("/Schedule/ChooseProject")]
         public async Task<IActionResult> LoadProject()
@@ -202,5 +263,67 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             }
             return View(listtestcase);
         }
+        [Route("/Schedule/Project/Url/AddMoreTestcase")]
+        [HttpGet]
+        public async Task<IActionResult> AddMoreTestCase(int id_url, string scheduleId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var list_Idtestcase = _context.Testcase_scheduled.Where(p => p.id_schedule == scheduleId).Select(t => t.id_testcase).ToList();
+            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id && !list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
+            if (listtestcase.Count > 0)
+            {
+                //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();
+                if (StatusMessage == null)
+                {
+                    if (listtestcase.Count() == 0)
+                    {
+                        ViewData["Message"] = "No test cases yet";
+                    }
+                    else
+                    if (listtestcase.Count() > 0)
+                    {
+                        ViewData["Message"] = String.Format("Found {0} test cases", listtestcase.Count());
+                    }
+                    else
+                    {
+                        ViewData["Message"] = "Error load data";
+                    }
+                }
+                else
+                {
+                    ViewData["Message"] = StatusMessage;
+                    TempData.Remove(StatusMessage);
+                }
+                ViewData["id_url"] = id_url;
+                ViewData["project_id"] = listtestcase.FirstOrDefault().id_urlNavigation.project_.id;
+                ViewData["url_name"] = listtestcase.FirstOrDefault().id_urlNavigation.name;
+                ViewData["scheduleId"] = scheduleId;
+
+                return View(listtestcase);
+            }
+            return View(listtestcase);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddMoreTestCases(int id_url, string scheduleId, List<string> list_Idtestcase)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            foreach (var id in list_Idtestcase)
+            {
+                Testcase_scheduled testcase_Scheduled = new Testcase_scheduled();
+                testcase_Scheduled.id_schedule = scheduleId;
+                testcase_Scheduled.id_url = id_url;
+                testcase_Scheduled.id_testcase = id;
+
+                _context.Testcase_scheduled.Add(testcase_Scheduled);
+            }
+            _context.SaveChanges();
+            ViewData["id_url"] = id_url;
+
+            ViewData["scheduleId"] = scheduleId;
+
+            return RedirectToAction(nameof(DetailSchedule), new { scheduleId = scheduleId });
+        }
+
+
     }
 }
