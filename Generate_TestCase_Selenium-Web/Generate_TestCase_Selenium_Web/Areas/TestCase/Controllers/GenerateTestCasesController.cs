@@ -977,51 +977,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Finished!");
             }
         }
-        public async Task RunTestCaseJobFunc(string id_user, string jobId, int id_url, List<string> list_Idtestcase, string returnUrl = null)
-        {
-            string id = id_user;
-            //string id = _userManager.GetUserId(User);
-            int authen = _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).Count();
-            if (authen > 0)
-            {
-                var _context = new ElementDBContext();
-                browserRun = _context.Setting_.Where(p => p.Id_User == id).SingleOrDefault().Browser;
-                var url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
-                //var list_Idtestcase1 = _context.Test_case.Where(p => p.id_url == id_url).ToList();
-                IEnumerable<Task<string>> runTasksQuery =
-                    from Id in list_Idtestcase select Run_ReturnResultJob(jobId, id_url, url, Id);
-                List<Task<string>> runTasks = runTasksQuery.ToList();
-                await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running test case");
-                //try
-                //{
-                while (runTasks.Count > 0)
-                {
-                    // Identify the first task that completes.
-
-                    Task<string> firstFinishedTask = await Task.WhenAny(runTasks);
-
-                    // ***Remove the selected task from the list so that you don't
-                    // process it more than once.
-                    runTasks.Remove(firstFinishedTask);
-                    // Await the completed task.
-
-                    string length = await firstFinishedTask;
-
-                }
-                StatusMessage = "Run successfully";
-                ViewData["Message"] = "Run successfully";
-
-                if (_context.Setting_.Where(p => p.Id_User == id).SingleOrDefault().SendResultToMail == true)
-                    await SendExcel(id_url, list_Idtestcase);
-                
-                var running_Process = _context.Running_process.Find(jobId);
-                running_Process.status = "finished";
-                _context.Running_process.Update(running_Process);
-                await _context.SaveChangesAsync();
-              
-                await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Finished!");
-            }
-        }
+        
 
         public async Task<string> Run_ReturnResult(int id_url, string url, string id_testcase)
         {

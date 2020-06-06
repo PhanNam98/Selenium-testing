@@ -72,7 +72,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                                              //.UsingJobData("triggerparam", "Simple trigger 1 Parameter")
                                              .WithIdentity(scheduleId+"trigger", id_user)
                                              .StartNow()
-                                             .WithSimpleSchedule(z => z.WithIntervalInSeconds(5).RepeatForever())
+                                             .WithSimpleSchedule(z => z.WithIntervalInSeconds(600).RepeatForever())
                                              .Build();
             
 

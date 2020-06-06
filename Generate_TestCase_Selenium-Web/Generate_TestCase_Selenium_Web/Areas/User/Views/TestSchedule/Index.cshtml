@@ -59,7 +59,8 @@
                                 @Html.DisplayFor(modelItem => item.CreatedDate)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.job_repeat_time)
+                                @*@Html.Display(item.job_repeat_time)*@
+                                <p>@item.job_repeat_time o'clock every day</p>
                             </td>
                             <td>
                                 @*<a asp-action="Edit" asp-route-id="@item.id_schedule" role="button" class="btn btn-primary">Edit time</a>*@
