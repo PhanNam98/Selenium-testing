@@ -24,7 +24,7 @@
     <PackageReference Include="Quartz" Version="3.0.7" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="81.0.4044.6900" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="83.0.4103.3900" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.26.0.1" />
   </ItemGroup>
 

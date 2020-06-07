@@ -41,7 +41,7 @@
           "Quartz": "3.0.7",
           "Selenium.Support": "3.141.0",
           "Selenium.WebDriver": "3.141.0",
-          "Selenium.WebDriver.ChromeDriver": "81.0.4044.6900",
+          "Selenium.WebDriver.ChromeDriver": "83.0.4103.3900",
           "Selenium.WebDriver.GeckoDriver": "0.26.0.1",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "3.1.0.0",
@@ -1670,7 +1670,7 @@
           "lib/netstandard2.0/WebDriver.dll": {}
         }
       },
-      "Selenium.WebDriver.ChromeDriver/81.0.4044.6900": {},
+      "Selenium.WebDriver.ChromeDriver/83.0.4103.3900": {},
       "Selenium.WebDriver.GeckoDriver/0.26.0.1": {},
       "SQLitePCLRaw.bundle_e_sqlite3/2.0.2": {
         "dependencies": {
@@ -5228,12 +5228,12 @@
       "path": "selenium.webdriver/3.141.0",
       "hashPath": "selenium.webdriver.3.141.0.nupkg.sha512"
     },
-    "Selenium.WebDriver.ChromeDriver/81.0.4044.6900": {
+    "Selenium.WebDriver.ChromeDriver/83.0.4103.3900": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-UQ1BIbA+XkjwsX9j8bDDtucNgMRdpnxuxjer37SuOpztjpgVA/5dOAPfGePjm36kT+NNb4mDsxqhKcKM6b14ow==",
-      "path": "selenium.webdriver.chromedriver/81.0.4044.6900",
-      "hashPath": "selenium.webdriver.chromedriver.81.0.4044.6900.nupkg.sha512"
+      "sha512": "sha512-lbVAHeSPf5E0IJNtsO5sf1rQhaA1ePoHfaA3o2XZBMsQVDOkM1WpDeTe9KyuPKabdluUvVbt7vkufxlZLCGJ6w==",
+      "path": "selenium.webdriver.chromedriver/83.0.4103.3900",
+      "hashPath": "selenium.webdriver.chromedriver.83.0.4103.3900.nupkg.sha512"
     },
     "Selenium.WebDriver.GeckoDriver/0.26.0.1": {
       "type": "package",

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Routing;
 using Generate_TestCase_Selenium_Web.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Threading;
+using OpenQA.Selenium.Support.UI;
 
 namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 {
@@ -104,7 +105,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         id_url = id_url
                     }));
                 }
-               
+
             }
 
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new
@@ -112,7 +113,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 id_url = id_url
 
             }));
-           
+
         }
         #region Get Element from Web
         public int GetElements(string Url, bool IsOnlyDislayed, int id_url)
@@ -200,14 +201,21 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         private void SetUpDriver(string url)
         {
-            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
-            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+            try
+            {
+                ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+                service.HideCommandPromptWindow = true;//hide commandPromptWindow
 
-            var options = new ChromeOptions();
-            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
-            chromedriver = new ChromeDriver(service, options);
-            chromedriver.Url = url;
-            chromedriver.Navigate();
+                var options = new ChromeOptions();
+                //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+                chromedriver = new ChromeDriver(service, options);
+                chromedriver.Url = url;
+                chromedriver.Navigate();
+            }
+            catch(Exception e)
+            {
+                var a = e.Message;
+            }
         }
 
         private void QuitDriver()
@@ -511,6 +519,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                    
                     if (item.GetAttribute("value")!=null)
                     {
+                        if(item.TagName=="select")
+                        {
+                         
+                            var listOption= item.FindElements(By.TagName("option")).ToList();
+                            Random random = new Random();
+                            int index = random.Next(0, listOption.Count() -1 );
+                            elt.value = listOption[index].GetAttribute("value");
+                        }
+                       else
                         elt.value = item.GetAttribute("value");
                     }
                     else
@@ -537,49 +554,51 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     {
                         elt.href = item.GetAttribute("href");
                     }
-                   
-                    if(item.GetAttribute("required")!=null)
-                    {
-                        elt.required = item.GetAttribute("required").Equals("true") ? true : false;
-                    }
-                  
-                    if(item.GetAttribute("class")!=null)
+                    if (item.GetAttribute("class") != null)
                     {
                         elt.class_name = item.GetAttribute("class");
                     }
-                    
-                    if(item.GetAttribute("maxlength")!=null)
-                    {
-                        elt.maxlength = Double.Parse(item.GetAttribute("maxlength"));
-                    }
-                   
-                    if(item.GetAttribute("minlength")!=null)
-                    {
-                        elt.minlength = Double.Parse(item.GetAttribute("minlength"));
-                    }
-                    
-                    if(item.GetAttribute("max")!=null)
-                    {
-                        elt.max_value = item.GetAttribute("max");
-                    }
-                    
-                    if(item.GetAttribute("min")!=null)
-                    {
-                        elt.min_value = item.GetAttribute("min");
-                    }
-                    
 
-                    //}
-                    if(item.GetAttribute("readonly")!=null)
+                    if ((item.TagName != "a") )
                     {
-                        elt.read_only = item.GetAttribute("readonly").Equals("true") ? true : false;
+                        if (item.GetAttribute("required") != null)
+                        {
+                            elt.required = item.GetAttribute("required").Equals("true") ? true : false;
+                        }
+
+                      
+                        if (item.GetAttribute("maxlength") != null)
+                        {
+                            elt.maxlength = Double.Parse(item.GetAttribute("maxlength"));
+                        }
+
+                        if (item.GetAttribute("minlength") != null)
+                        {
+                            elt.minlength = Double.Parse(item.GetAttribute("minlength"));
+                        }
+
+                        if (item.GetAttribute("max") != null)
+                        {
+                            elt.max_value = item.GetAttribute("max");
+                        }
+
+                        if (item.GetAttribute("min") != null)
+                        {
+                            elt.min_value = item.GetAttribute("min");
+                        }
+
+
+                        //}
+                        if (item.GetAttribute("readonly") != null)
+                        {
+                            elt.read_only = item.GetAttribute("readonly").Equals("true") ? true : false;
+                        }
+
+                        if (item.GetAttribute("multiple") != null)
+                        {
+                            elt.multiple = item.GetAttribute("multiple").Equals("true") ? true : false;
+                        }
                     }
-                   
-                    if(item.GetAttribute("multiple")!=null)
-                    {
-                        elt.multiple = item.GetAttribute("multiple").Equals("true") ? true : false;
-                    }
-                    
 
                     if (IsOnlyDislayed == false)
                     {

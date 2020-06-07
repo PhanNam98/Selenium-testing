@@ -62,26 +62,26 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                 _context.Testcase_scheduled.Add(testcase_Scheduled);
             }
             _context.SaveChanges();
-            //IJobDetail job = JobBuilder.Create<RunTestcaseJob>()
-            //                             .UsingJobData("scheduleid", scheduleId)
-            //                             .WithIdentity(scheduleId, id_user)
-            //                             .StoreDurably()
-            //                             .RequestRecovery()
-            //                             .Build();
+            IJobDetail job = JobBuilder.Create<RunTestcaseJob>()
+                                         .UsingJobData("scheduleid", scheduleId)
+                                         .WithIdentity(scheduleId, id_user)
+                                         .StoreDurably()
+                                         .RequestRecovery()
+                                         .Build();
 
-            //await _scheduler.AddJob(job, true);
+            await _scheduler.AddJob(job, true);
 
-            //ITrigger trigger = TriggerBuilder.Create()
-            //                                 .ForJob(job)
-            //                                 //.UsingJobData("triggerparam", "Simple trigger 1 Parameter")
-            //                                 .WithIdentity(scheduleId + "trigger", id_user)
-                                               //.WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(int.Parse(time), 0))
-            ////                                 .StartNow()
-            ////                                 .WithSimpleSchedule(z => z.WithIntervalInSeconds(600).RepeatForever())
-            //                                 .Build();
+            ITrigger trigger = TriggerBuilder.Create()
+                                             .ForJob(job)
+                                             //.UsingJobData("triggerparam", "Simple trigger 1 Parameter")
+                                             .WithIdentity(scheduleId + "trigger", id_user)
+                                               .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(int.Parse(time), 0))
+            //                                 .StartNow()
+            //                                 .WithSimpleSchedule(z => z.WithIntervalInSeconds(600).RepeatForever())
+                                             .Build();
 
 
-            //await _scheduler.ScheduleJob(trigger);
+            await _scheduler.ScheduleJob(trigger);
             StatusMessage = "Create schedule successfully";
             return RedirectToAction("Index");
         }
@@ -132,7 +132,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
         {
             var listTestcase = await _context.Testcase_scheduled.Include(p => p.id_).Where(p => p.id_schedule == scheduleId).ToListAsync();
             ViewData["scheduleId"] = scheduleId;
+            ViewData["TimeScheduleId"] = _context.Test_schedule.Find(scheduleId).job_repeat_time;
             ViewData["id_url"] = listTestcase.FirstOrDefault().id_url;
+            ViewData["Message"] = StatusMessage;
+            if (StatusMessage != null)
+                TempData.Remove(StatusMessage);
             return View(listTestcase);
         }
         [HttpPost]
@@ -324,7 +328,25 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
 
             return RedirectToAction(nameof(DetailSchedule), new { scheduleId = scheduleId });
         }
-
+        [HttpPost]
+        public async Task<IActionResult> ChangeTimeSchedule(int time, string scheduleId)
+        {
+            try
+            {
+                var schedule = _context.Test_schedule.Find(scheduleId);
+                schedule.job_repeat_time = time.ToString();
+                _context.Test_schedule.Update(schedule);
+                _context.SaveChanges();
+                StatusMessage = "Update successfully";
+               
+            }
+            catch
+            {
+                StatusMessage = "Update fail";
+            }
+            return RedirectToAction(nameof(DetailSchedule), new { scheduleId = scheduleId });
+        }
+        
 
     }
 }

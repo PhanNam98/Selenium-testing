@@ -39,6 +39,7 @@
         </div>
     </div>
 </div>
+<partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
 <div class="card mb-4">
     <div class="card-header">
         <div class="row">
@@ -50,7 +51,7 @@
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteModal">
                             Delete
                         </button>
-                        <a role="button" class="btn btn-primary" name="moretescase" id="moretescase" asp-action="AddMoreTestCase" asp-route-scheduleId="@ViewBag.scheduleId" 
+                        <a role="button" class="btn btn-primary" name="moretescase" id="moretescase" asp-action="AddMoreTestCase" asp-route-scheduleId="@ViewBag.scheduleId"
                            asp-route-id_url="@ViewBag.id_url">Add more</a>
                     </div>
                 </div>
@@ -59,6 +60,23 @@
 
     </div>
     <div class="card-body">
+
+        @using (Html.BeginForm("ChangeTimeSchedule", "TestSchedule", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "timeform", @novalidate = "novalidate", @name = "timeform", @id_url = ViewBag.id_url }))
+        {
+
+            <div class="row">
+                <div class="col-5">
+                    <input id="scheduleId" name="scheduleId" value="@ViewBag.scheduleId" hidden readonly />
+                    <label for="time">Job repeat time (between 0h and 23h):</label>
+                    <input type="number" id="time" name="time" min="0" max="23" value="@ViewBag.TimeScheduleId"><br><br>
+                </div>
+                <div class="col-2">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+            </div>
+
+
+        }
         @using (Html.BeginForm("DeleteTestcasesSchedule", "TestSchedule", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
         {
             <input id="scheduleId" name="scheduleId" value="@ViewBag.scheduleId" hidden readonly />
@@ -169,8 +187,8 @@
         var table = $('#testcasetable').DataTable(
             {
                 "lengthMenu": [[10, 25, 50, - 1], [10, 25, 50, "All record"]],
-                "scrollY":        "500px",
-        "scrollCollapse": true,
+                "scrollY": "500px",
+                "scrollCollapse": true,
                 "paging": false,
                 "searching": false,
 
@@ -178,18 +196,18 @@
         );
 
     });
-     function submitDelete() {
-        if (document.getElementsByName("list_Idtestcase").length <=0) {
-                alert("No test case have been selected");
-            }
-            else {
+    function submitDelete() {
+        if (document.getElementsByName("list_Idtestcase").length <= 0) {
+            alert("No test case have been selected");
+        }
+        else {
 
-              
-                document.getElementById("testcaseform").submit();
-            }
+
+            document.getElementById("testcaseform").submit();
+        }
     };
 
-     
+
     $(function () {
         $("#checkall").click(function () {
             $("input[name='list_Idtestcase']").prop("checked", this.checked);
@@ -199,7 +217,7 @@
                     $("#checkall").prop("checked", "checked");
                 }
                 else {
-                    $("#checkall").prop("checked",false);
+                    $("#checkall").prop("checked", false);
                 }
             });
 

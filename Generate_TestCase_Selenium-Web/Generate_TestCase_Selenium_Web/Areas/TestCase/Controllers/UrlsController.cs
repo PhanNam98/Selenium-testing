@@ -59,6 +59,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 ViewData["LoadingTitle"] = "Crawling data, please wait.";
 
                 return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = url.id_url, IsOnlyDislayed = IsOnlyDislayed }));
+                //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 32, IsOnlyDislayed = IsOnlyDislayed }));
 
             }
             ViewData["Message"] = "Error";

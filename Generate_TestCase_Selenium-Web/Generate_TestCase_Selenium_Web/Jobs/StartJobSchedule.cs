@@ -40,7 +40,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                 ITrigger trigger = TriggerBuilder.Create()
                                                  .ForJob(job)
                                                  .WithIdentity(schedule.id_schedule + "trigger", schedule.id_user)
-                                                 .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(16, 32))
+                                                 .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(int.Parse(schedule.job_repeat_time), 0))
                                                  //.StartNow()
                                                  //.WithSimpleSchedule(z => z.WithIntervalInSeconds(10).RepeatForever())
                                                  .Build();
