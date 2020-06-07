@@ -31,10 +31,10 @@ namespace Generate_TestCase_Selenium_Web.Jobs
         {
             JobDataMap dataMap = context.JobDetail.JobDataMap;
             string scheduleid = dataMap.GetString("scheduleid");
-            _logger.LogInformation("Hello Job is running!-" + DateTime.Now.ToString()+ dataMap.GetString("scheduleid"));
+            _logger.LogInformation($"Job: {scheduleid} is running!-" + DateTime.Now.ToString());
             var list_testcase_id = _context.Testcase_scheduled.Where(t => t.id_schedule == scheduleid).Select(p => p.id_testcase).ToList();
             var url_id = _context.Testcase_scheduled.Where(t => t.id_schedule == scheduleid).FirstOrDefault().id_url;
-            var schedule = _context.Test_schedule.Where(s => s.id_schedule == scheduleid).SingleOrDefault() ;
+            var schedule = _context.Test_schedule.Where(s => s.id_schedule == scheduleid).SingleOrDefault();
 
             RunTestCaseBackGround runTestCaseBackGround = new RunTestCaseBackGround(_queue, _hubContext);
             await runTestCaseBackGround.RunTestCasesJob((int)url_id, list_testcase_id, schedule.id_user, scheduleid);

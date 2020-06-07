@@ -75,8 +75,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             //                                 .ForJob(job)
             //                                 //.UsingJobData("triggerparam", "Simple trigger 1 Parameter")
             //                                 .WithIdentity(scheduleId + "trigger", id_user)
-            //                                 .StartNow()
-            //                                 .WithSimpleSchedule(z => z.WithIntervalInSeconds(600).RepeatForever())
+                                               //.WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(int.Parse(time), 0))
+            ////                                 .StartNow()
+            ////                                 .WithSimpleSchedule(z => z.WithIntervalInSeconds(600).RepeatForever())
             //                                 .Build();
 
 

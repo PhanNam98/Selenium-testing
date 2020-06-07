@@ -35,7 +35,11 @@ namespace Generate_TestCase_Selenium_Web.Services
             foreach (var jobSchedule in _jobSchedules)
             {
                 var job = CreateJob(jobSchedule);
-                var trigger = CreateTrigger(jobSchedule);
+                ITrigger trigger=null;
+                if (jobSchedule.CronExpression!="")
+                    trigger = CreateTrigger(jobSchedule);
+                else
+                    trigger = CreateTriggerOnlyRun(jobSchedule);
 
                 await Scheduler.ScheduleJob(job, trigger, cancellationToken);
             }
@@ -64,6 +68,13 @@ namespace Generate_TestCase_Selenium_Web.Services
                 .Create()
                 .WithIdentity($"{schedule.JobType.FullName}.trigger")
                 .WithCronSchedule(schedule.CronExpression)
+                .WithDescription(schedule.CronExpression)
+                .Build();
+        } private static ITrigger CreateTriggerOnlyRun(JobSchedule schedule)
+        {
+            return TriggerBuilder
+                .Create()
+                .WithIdentity($"{schedule.JobType.FullName}.trigger")
                 .WithDescription(schedule.CronExpression)
                 .Build();
         }

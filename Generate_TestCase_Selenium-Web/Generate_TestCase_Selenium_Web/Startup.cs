@@ -89,9 +89,11 @@ namespace Generate_TestCase_Selenium_Web
             services.AddQueue();
             // Add our job
             //services.AddSingleton<HelloWorldJob>();
-            //services.AddSingleton(new JobSchedule(
-            //    jobType: typeof(HelloWorldJob),
-            //    cronExpression: "0/5 * * * * ?")); // run every 5 seconds
+            services.AddSingleton<StartJobSchedule>();
+            services.AddSingleton(new JobSchedule(
+                jobType: typeof(StartJobSchedule),
+                //cronExpression: "0/5 * * * * ?")); // run every 5 seconds
+                cronExpression: "")); // run every 5 seconds
             services.AddHostedService<QuartzHostedService>();
         }
         private void OnShutdown()

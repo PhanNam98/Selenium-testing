@@ -1,4 +1,5 @@
-﻿using Generate_TestCase_Selenium_Web.Models.Contexts;
+﻿using Coravel.Scheduling.Schedule.Interfaces;
+using Generate_TestCase_Selenium_Web.Models.Contexts;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using System;
@@ -8,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Generate_TestCase_Selenium_Web.Jobs
 {
-    public class HelloWorldJob : IJob
+    public class StartJobSchedule:IJob
     {
-        private readonly ILogger<HelloWorldJob> _logger;
+        private readonly ILogger<StartJobSchedule> _logger;
         private readonly ElementDBContext _context;
-        IScheduler _scheduler;
-        public HelloWorldJob(ILogger<HelloWorldJob> logger, IScheduler scheduler)
+        Quartz.IScheduler _scheduler;
+        public StartJobSchedule(ILogger<StartJobSchedule> logger, Quartz.IScheduler scheduler)
         {
             _logger = logger;
             _context = new ElementDBContext();
@@ -23,8 +24,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            _logger.LogInformation("Hello world!");
-            //Console.WriteLine("Hello world!");
+            _logger.LogInformation("Start JobSchedule!");
             var listSchedule = _context.Test_schedule.Where(p => p.status.ToLower().Equals("running")).ToList();
             foreach (var schedule in listSchedule)
             {
@@ -39,17 +39,15 @@ namespace Generate_TestCase_Selenium_Web.Jobs
 
                 ITrigger trigger = TriggerBuilder.Create()
                                                  .ForJob(job)
-                                                 //.UsingJobData("triggerparam", "Simple trigger 1 Parameter")
                                                  .WithIdentity(schedule.id_schedule + "trigger", schedule.id_user)
-                                                 .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(16,25))
+                                                 .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(16, 32))
                                                  //.StartNow()
                                                  //.WithSimpleSchedule(z => z.WithIntervalInSeconds(10).RepeatForever())
                                                  .Build();
 
-
                 await _scheduler.ScheduleJob(trigger);
             }
-            
+
         }
     }
 }
