@@ -36,10 +36,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var listProject = await _context.Project.Where(p => p.Id_User == user.Id).ToListAsync();
             var listurl = await _context.Url.Include(p => p.project_).ThenInclude(p => p.Id_UserNavigation).Where(p => p.project_.Id_User == user.Id).ToListAsync();
             var listestcase = await _context.Test_case.Include(p => p.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            var listresult = await _context.Result_testcase.Include(i => i.id_resultNavigation).Where(p => p.id_resultNavigation.id_user == user.Id).ToListAsync();
             ViewData["CountProjects"] = listProject.Count();
             ViewData["CountUrls"] = listurl.Count();
             ViewData["CountTestcases"] = listestcase.Count();
-            ViewData["CountResult"] = listestcase.Where(p => p.result != null && p.result != "").Count();
+            ViewData["CountResult"] = listresult.Count();
             return View();
         }
 

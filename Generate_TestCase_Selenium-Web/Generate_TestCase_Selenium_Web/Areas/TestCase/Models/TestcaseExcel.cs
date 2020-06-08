@@ -55,6 +55,35 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Models
             }
             return testcaseExcels;
         }
+        public List<TestcaseExcel> ConvertToTestcaseExcel(List<Result_testcase> listtest_Cases)
+        {
+            List<TestcaseExcel> testcaseExcels = new List<TestcaseExcel>();
+            foreach (var testcase in listtest_Cases)
+            {
+                TestcaseExcel testcaseExcel = new TestcaseExcel();
+                testcaseExcel.Id_testcase = testcase.id_testcase;
+                testcaseExcel.Description = testcase.id_.description;
+                string testdata = "";
+                string testelement = "";
+                string resulttestelement = "";
+                foreach (var data in testcase.Input_Result_test.OrderBy(p=>p.step))
+                {
+                    testdata += data.id_element + ": (" + data.action + ") " + data.value + "\n";
+                }
+                testcaseExcel.TestData = testdata;
+                foreach (var data in testcase.Test_element_Result_test)
+                {
+                    testelement += data.xpath + ": " + data.value_test + "\n";
+                    resulttestelement += data.xpath + ": " + data.value + "\n";
+                }
+                testcaseExcel.Result = testcase.Result;
+                testcaseExcel.ResultTestElement = resulttestelement;
+                testcaseExcel.TestElement = testelement;
+
+                testcaseExcels.Add(testcaseExcel);
+            }
+            return testcaseExcels;
+        }
 
 
     }

@@ -57,6 +57,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             ViewData["Skip"] = results.Where(p => p.Result.ToLower().Equals("skip")).Count();
             ViewData["Failure"] = results.Where(p => p.Result.ToLower().Equals("failure")).Count();
             ViewData["id_result"] = id;
+            ViewData["id_url"] = results.FirstOrDefault().id_url ;
             return View(results);
         }
 

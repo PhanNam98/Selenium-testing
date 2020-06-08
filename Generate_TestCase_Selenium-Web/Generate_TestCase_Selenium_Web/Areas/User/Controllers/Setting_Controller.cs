@@ -89,6 +89,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                 return View(setting_);
             }
             StatusMessage = "Update failed";
+            ViewData["Message"] = StatusMessage;
+            TempData.Remove(StatusMessage);
             return View(setting_);
         }
 

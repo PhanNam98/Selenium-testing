@@ -194,12 +194,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         //await Input_Type_Email(forms[i].id_form, j, submit[j]);
                         //await Input_Type_Text(forms[i].id_form, j, submit[j]);
                         //ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
-                        await SelectAllElement_TypeSelect(forms[i].id_form, j, submit[j]);
-
-
+                        //await SelectAllElement_TypeSelect(forms[i].id_form, j, submit[j]);
+                        //await SkipOneSelect_TypeSelect(forms[i].id_form, j, submit[j]);
+                        //await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_Password(forms[i].id_form, j, submit[j]);
+                        //await Click_Any_CheckBox_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        //await ClickAll_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        //await  Input_Type_TypeDate(forms[i].id_form, j, submit[j]);
                     }
                 }
-                await ClickAll_Tag_a();
+                //await ClickAll_Tag_a();
+                //await ClickAll_Tag_Button();
             }
             else
             {
@@ -399,7 +404,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             int number_of_elements = listTypeText.Count;
 
-            if (number_of_elements > 0)
+            if (number_of_elements > 1)
             {
 
                 for (int i = 0; i < number_of_elements; i++)
@@ -673,6 +678,578 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         #endregion
 
+        #region Input Type Radio
+        public async Task<bool> ClickAll_TypeRadio(string id_form, int index_submit, Element submit)
+        {
+            string DescriptiontestCase = "Click All element TypeRadio_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeRadio = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type=="radio").ToListAsync();
+
+
+          
+            //for (int i = 0; i < listTypeRadio.Count; i++)
+            //{
+            //    Input_testcase newinput = new Input_testcase();
+            //    newinput.id_element = listTypeRadio[i].id_element;
+            //    newinput.id_testcase = id_testCase;
+            //    newinput.id_url = Id_Url;
+            //    newinput.value = "";
+            //    newinput.action = "select";
+            //    newinput.xpath = listTypeRadio[i].xpath;
+            //    listInputElt.Add(newinput);
+            //}
+
+            if (listTypeRadio.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                List<List<Element>> listRadio = new List<List<Element>>();
+                List<Element> listEltRadio = new List<Element>();
+                var groupedRadioList = listTypeRadio
+                .GroupBy(u => u.name)
+                .Select(grp => grp.ToList())
+                .ToList();
+                foreach (var group in groupedRadioList)
+                {
+
+                    Input_testcase newinput = new Input_testcase();
+                    Random random = new Random();
+                    Element radio = group[random.Next(0, group.Count + 1)];
+                  
+
+                    listInputElt.Add(Crate_InputTestcase(radio, id_testCase, "", Actions.click.ToString(), step++));
+
+                }
+               
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+           
+        }
+
+        #endregion
+
+        #region Input Type Password
+        private async Task Input_Type_Password(string id_form, int index_submit, Element submit)
+        {
+            var a = Fill_1000_character_TypePassword_ClickSubmit(id_form, index_submit, submit);
+            var a1 = Fill_Less_Than_8_character_TypePassword_ClickSubmit(id_form, index_submit, submit);
+            var a2 = Fill__Special_character_TypePassword_ClickSubmit(id_form, index_submit, submit);
+            var a3 = Fill__Capital_Number_Special_character_TypePassword_ClickSubmit(id_form, index_submit, submit);
+
+            List<Task<bool>> runTasks = new List<Task<bool>>();
+            runTasks.Add(a);
+            runTasks.Add(a1);
+            runTasks.Add(a2);
+            runTasks.Add(a3);
+
+            while (runTasks.Count > 0)
+            {
+                // Identify the first task that completes.
+                Task<bool> firstFinishedTask = await Task.WhenAny(runTasks);
+                runTasks.Remove(firstFinishedTask);
+                // Await the completed task.
+
+
+            }
+
+        }
+        public async Task<bool> Fill_1000_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
+        {
+           
+            string DescriptiontestCase = "Fill 1000 character for all element TypePassword_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type=="password").ToListAsync();
+
+            if (listTypePass.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypePass.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypePass[i], id_testCase, Generate_RandomString(random,1000), Actions.fill.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_Less_Than_8_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
+        {
+           
+            string DescriptiontestCase = "Fill less 8 character for all element TypePassword_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
+            if (listTypePass.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypePass.Count; i++)
+                {
+                    Random random = new Random();
+                    int num = random.Next(6, 8);
+                    listInputElt.Add(Crate_InputTestcase(listTypePass[i], id_testCase, Generate_RandomString(random, num), Actions.fill.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill__Special_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
+        {
+          
+            string DescriptiontestCase = "Fill data Contains Special character for all element TypePassword_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
+            if (listTypePass.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypePass.Count; i++)
+                {
+                    Random random = new Random();
+                    int num = random.Next(6, 8);
+                    listInputElt.Add(Crate_InputTestcase(listTypePass[i], id_testCase, Generate_RandomString(random,num) + Generate_RandomSpecialString(random,1) + Generate_RandomString(random, 2), Actions.fill.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill__Number_Special_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
+        {
+            string DescriptiontestCase = "Fill data Contains number, special character for all element TypePassword_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
+            if (listTypePass.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypePass.Count; i++)
+                {
+                    Random random = new Random();
+                    int num = random.Next(6, 8);
+                    listInputElt.Add(Crate_InputTestcase(listTypePass[i], id_testCase, Generate_RandomString(random,num) + Generate_RandomNumber(0, 100) +
+                        Generate_RandomSpecialString(random,1)+ Generate_RandomString(random, 2), Actions.fill.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill__Capital_Number_Special_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
+        {
+           
+            string DescriptiontestCase = "Fill data Contains number, special, Capital character for all element TypePassword_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
+            if (listTypePass.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypePass.Count; i++)
+                {
+                    Random random = new Random();
+                    int num = random.Next(6, 8);
+                    listInputElt.Add(Crate_InputTestcase(listTypePass[i], id_testCase, Generate_RandomPassword(), Actions.fill.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
+        #region Input CheckBox
+        public async Task<bool> Click_Any_CheckBox_TypeCheckBox(string id_form, int index_submit, Element submit)
+        {
+           
+
+            string DescriptiontestCase = "Click some CheckBox element TypeCkeckBox_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeCheckbox = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "checkbox").ToListAsync();
+            if (listTypeCheckbox.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeCheckbox.Count; i++)
+                {
+                    Random random = new Random();
+                    int ramdomnumber=random.Next(0,2);
+                    if(ramdomnumber==1)
+                    listInputElt.Add(Crate_InputTestcase(listTypeCheckbox[i], id_testCase, "true", Actions.check.ToString(), step++));
+                    else
+                        listInputElt.Add(Crate_InputTestcase(listTypeCheckbox[i], id_testCase, "false", Actions.check.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> ClickAll_TypeCheckBox(string id_form, int index_submit, Element submit)
+        {
+            string DescriptiontestCase = "Click all element TypeCkeckBox_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeCheckbox = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "checkbox").ToListAsync();
+            if (listTypeCheckbox.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeCheckbox.Count; i++)
+                {
+                    
+                    listInputElt.Add(Crate_InputTestcase(listTypeCheckbox[i], id_testCase, "true", Actions.check.ToString(), step++));
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
+        #region Input Type Date
+        private async Task Input_Type_TypeDate(string id_form, int index_submit, Element submit)
+        {
+            var a = Fill_Only_Day_TypeDate(id_form, index_submit, submit);
+            var a1 = Fill_Only_Month_TypeDate(id_form, index_submit, submit);
+            var a2 = Fill_Only_Year_TypeDate(id_form, index_submit, submit);
+            var a3 = Fill_Incorrect_format_TypeDate(id_form, index_submit, submit);
+            var a4 = Fill_OverDayInMonth_TypeDate(id_form, index_submit, submit);
+            var a5 = Fill_OverMonthInYear_TypeDate(id_form, index_submit, submit);
+            var a6 = Fill_LeapYear_TypeDate(id_form, index_submit, submit);
+            var a7 = Fill_No_profitYear_TypeDate(id_form, index_submit, submit);
+            var a8 = Fill_Day31InMonth_TypeDate(id_form, index_submit, submit);
+            var a9 = Fill_NotDay31InMonth_TypeDate(id_form, index_submit, submit);
+
+            List<Task<bool>> runTasks = new List<Task<bool>>();
+            runTasks.Add(a);
+            runTasks.Add(a1);
+            runTasks.Add(a2);
+            runTasks.Add(a3);
+            runTasks.Add(a4);
+            runTasks.Add(a5);
+            runTasks.Add(a6);
+            runTasks.Add(a7);
+            runTasks.Add(a8);
+            runTasks.Add(a9);
+
+
+            while (runTasks.Count > 0)
+            {
+                // Identify the first task that completes.
+                Task<bool> firstFinishedTask = await Task.WhenAny(runTasks);
+                runTasks.Remove(firstFinishedTask);
+                // Await the completed task.
+
+
+            }
+
+        }
+        public async Task<bool> Fill_Only_Day_TypeDate(string id_form, int index_submit, Element submit)
+        {
+            
+
+            string DescriptiontestCase = "Only fill day of element TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                        listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, "0000-00" + Generate_RandomNumber(random,1, 32).ToString(), Actions.fill.ToString(), step++));
+                   
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_Only_Month_TypeDate(string id_form, int index_submit, Element submit)
+        {
+            
+            string DescriptiontestCase = "Only fill month of element TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, "0000-" + Generate_RandomNumber(random,1, 13).ToString() + "-00", Actions.fill.ToString(), step++));
+
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_Only_Year_TypeDate(string id_form, int index_submit, Element submit)
+        {
+           
+            string DescriptiontestCase = "Only fill year of element TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, Generate_RandomNumber(random,1900, (int)DateTime.Now.Year+1).ToString() + "-00-00", Actions.fill.ToString(), step++));
+
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_Incorrect_format_TypeDate(string id_form, int index_submit, Element submit)
+        {
+            string DescriptiontestCase = "Fill the wrong format TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, Generate_RandomNumber(random,1990, (int)DateTime.Now.Year) + "," + Generate_RandomNumber(random,1, 32).ToString() + "," + Generate_RandomNumber(random,1, 13), Actions.fill.ToString(), step++));
+
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_OverDayInMonth_TypeDate(string id_form, int index_submit, Element submit)
+        {
+            
+
+            string DescriptiontestCase = "Fill Over Day In Month - TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, Generate_RandomNumber(1990, (int)DateTime.Now.Year) + "-" + Generate_RandomNumber(1, 12) + "-" + 32, Actions.fill.ToString(), step++));
+
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_OverMonthInYear_TypeDate(string id_form, int index_submit, Element submit)
+        {
+
+            string DescriptiontestCase = "Fill Over Day In Year - TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, Generate_RandomNumber(1990, (int)DateTime.Now.Year) + "-" + 13 + "-" + Generate_RandomNumber(1, 32), Actions.fill.ToString(), step++));
+
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_LeapYear_TypeDate(string id_form, int index_submit, Element submit)
+        {
+            
+
+            string DescriptiontestCase = "Fill LeapYear - TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, "1996-02-29", Actions.fill.ToString(), step++));
+
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_No_profitYear_TypeDate(string id_form, int index_submit, Element submit)
+        {
+      
+
+            string DescriptiontestCase = "Fill  No profit year - TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, "1998-11-05", Actions.fill.ToString(), step++));
+
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_Day31InMonth_TypeDate(string id_form, int index_submit, Element submit)
+        {
+
+            string DescriptiontestCase = "Fill Day 31 In Month - TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, Generate_RandomNumber(random,1990, DateTime.Now.Year) + "-05-31", Actions.fill.ToString(), step++));
+
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        public async Task<bool> Fill_NotDay31InMonth_TypeDate(string id_form, int index_submit, Element submit)
+        {
+            string DescriptiontestCase = "Fill Day 31 In Month have 30 day - TypeDate_" + id_form + "_" + index_submit;
+            var _context = new ElementDBContext();
+            var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (listTypeDate.Count > 0)
+            {
+                int step = 1;
+                var id_testCase = Create_Testcase(DescriptiontestCase);
+                List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                for (int i = 0; i < listTypeDate.Count; i++)
+                {
+                    Random random = new Random();
+                    listInputElt.Add(Crate_InputTestcase(listTypeDate[i], id_testCase, Generate_RandomNumber(random, 1990, DateTime.Now.Year) + "-04-31", Actions.fill.ToString(), step++));
+
+
+                }
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                List_ListInputTestcase.Add(listInputElt);
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
         #region Tag a
         public async Task<bool> ClickAll_Tag_a()
         {
@@ -698,6 +1275,33 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
         #endregion
+
+        #region Tag Button
+        public async Task<bool> ClickAll_Tag_Button()
+        {
+            var _context = new ElementDBContext();
+            string DescriptionScript = "Click  element tag button: ";
+            var listTaga = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "button" && p.type!="submit").ToListAsync();
+
+            if (listTaga.Count > 0)
+            {
+                for (int i = 0; i < listTaga.Count; i++)
+                {
+                    int step = 1;
+                    string DescriptiontestCase = DescriptionScript + listTaga[i].id_element.ToString();
+                    var id_testCase = Create_Testcase(DescriptiontestCase);
+                    List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                    listInputElt.Add(Crate_InputTestcase(listTaga[i], id_testCase, "", Actions.click.ToString(), step++));
+                    List_ListInputTestcase.Add(listInputElt);
+                }
+                return true;
+            }
+            return false;
+
+        }
+        #endregion
+
         #region Select
         //public async Task<bool> NotSelect_TypeSelect(string id_form, int index_submit, Element submit)
         //{
@@ -761,6 +1365,41 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         //    }
         //    return false;
         //}
+        public async Task<bool> SkipOneSelect_TypeSelect(string id_form, int index_submit, Element submit)
+        {
+            
+            var _context = new ElementDBContext();
+            var listTypeSelect = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "select").ToListAsync();
+
+            if (listTypeSelect.Count > 1)
+            {
+                int number_of_elements = listTypeSelect.Count;
+                for (int i = 0; i < number_of_elements; i++)
+                {
+                    string DescriptiontestCase = $"Skip {listTypeSelect[i].id_element} element _TypeSelect_" + id_form + "_" + index_submit;
+                    int step = 1;
+                    var id_testCase = Create_Testcase(DescriptiontestCase);
+                    List<Input_testcase> listInputElt = new List<Input_testcase>();
+
+                    for (int j = 0; j < listTypeSelect.Count; j++)
+                    {
+                        if (i != j)
+                        {
+                            Random random = new Random();
+                            listInputElt.Add(Crate_InputTestcase(listTypeSelect[j], id_testCase, listTypeSelect[j].value, Actions.select.ToString(), step++));
+                        }
+                        
+                    }
+                    listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+
+                    List_ListInputTestcase.Add(listInputElt);
+
+                }
+              
+                return true;
+            }
+            return false;
+        }
         public async Task<bool> SelectAllElement_TypeSelect(string id_form, int index_submit, Element submit)
         {
             string DescriptiontestCase = "Select All Element_TypeSelect_" + id_form + "_" + index_submit;
@@ -908,8 +1547,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public string Create_Testcase(string description)
         {
             Test_case newTestCase = new Test_case();
-            var id_testcase = Guid.NewGuid().ToString("N");
-            id_testcase = id_testcase.Substring(10, id_testcase.Length - 1);
+            var id_testcase= Guid.NewGuid().ToString("N").Substring(10);
             newTestCase.id_testcase = id_testcase;
             newTestCase.id_url = Id_Url;
             newTestCase.result = "";
@@ -1066,8 +1704,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 StatusMessage = "Run successfully";
                 ViewData["Message"] = "Run successfully";
 
-                if (_context.Setting_.Where(p => p.Id_User == id).SingleOrDefault().SendResultToMail == true)
-                    await SendExcel(id_url, list_Idtestcase);
                 //}
                 //catch
                 //{
@@ -1084,6 +1720,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 //ViewData["Failure"] = testcaseDBContext.Where(p => p.result.ToLower().Equals("failure")).Count();
                 //StatusMessage = ViewData["Message"].ToString();
                 await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Finished!");
+
+                if (_context.Setting_.Where(p => p.Id_User == id).SingleOrDefault().SendResultToMail == true)
+                    await SendExcelBackground(id_url, list_Idtestcase, jobId, id_user);
             }
         }
 
@@ -3259,6 +3898,45 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
         }
+        public async Task SendExcelBackground(int id_url, List<string> list_Idtestcase, string id_result,string id_user)
+        {
+            var user = _context.AspNetUsers.Find(id_user);
+            var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
+            var testcases = await _context.Result_testcase.Include(d=>d.id_).Include(i => i.Input_Result_test).Include(p => p.Test_element_Result_test).Where(p => p.id_url == id_url && p.id_result==id_result).ToListAsync();
+            TestcaseExcel testcaseExcel = new TestcaseExcel();
+            var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases);
+            byte[] fileContents;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var stream = new MemoryStream();
+            string filename = "Testcase-" + DateTime.Now.ToString("MM-dd-yyyy") + "-" + Generate_RandomString(5) + ".xlsx";
+            var path = Path.Combine(Directory.GetCurrentDirectory(), Constants.EXCEL_FILE, filename);
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Test case");
+                package.Workbook.Properties.Author = "Genergate testcase web";
+                //worksheet.Cells["A2"].LoadFromCollection<TestcaseExcel>(testcaseExcels, true);
+                worksheet.Cells[1, 1].Value = "Url: " + url.url1;
+                BindingFormatForExcel(worksheet, testcaseExcels);
+                fileContents = package.GetAsByteArray();
+                System.IO.File.WriteAllBytes(path, fileContents);// save to dissk
+
+            }
+
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                NotFound();
+            }
+            else
+            {
+                string emailcontent = "Thank you for using our service. " +
+                           "The excel file has been attached below.";
+                await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
+                //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
+            }
+
+
+        }
         [HttpPost]
         public async Task<IActionResult> DownloadExcel(List<string> list_Idtestcase, int id_url)
         {
@@ -3290,6 +3968,38 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 fileDownloadName: "Testcase.xlsx"
                 );
         }
+        [HttpPost]
+        public async Task<IActionResult> DownloadExcel2(List<string> list_Idtestcase, int id_url,string id_result)
+        {
+            var testcases = await _context.Result_testcase.Include(d => d.id_).Include(i => i.Input_Result_test).Include(p => p.Test_element_Result_test).Where(p => p.id_url == id_url && p.id_result == id_result).ToListAsync();
+            var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
+
+            TestcaseExcel testcaseExcel = new TestcaseExcel();
+            var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases);
+            byte[] fileContents;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Test case");
+                package.Workbook.Properties.Author = "Genergate testcase web";
+                //worksheet.Cells["A2"].LoadFromCollection<TestcaseExcel>(testcaseExcels, true);
+                worksheet.Cells[1, 1].Value = "Url: " + url.url1;
+                BindingFormatForExcel(worksheet, testcaseExcels);
+                fileContents = package.GetAsByteArray();
+            }
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "Testcase.xlsx"
+                );
+        }
+
         private void BindingFormatForExcel(ExcelWorksheet worksheet, List<TestcaseExcel> listItems)
         {
             // Set default width cho tất cả column
@@ -3306,9 +4016,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             worksheet.Cells[2, 1].Value = "No.";
             worksheet.Cells[2, 2].Value = "Test case";
             worksheet.Cells[2, 3].Value = "Description";
-            worksheet.Cells[2, 4].Value = "Result";
-            worksheet.Cells[2, 5].Value = "Test Data";
-            worksheet.Cells[2, 6].Value = "Test Elements";
+            worksheet.Cells[2, 4].Value = "Actural results";
+            //worksheet.Cells[2, 5].Value = "Test Data";
+            worksheet.Cells[2, 5].Value = "Test steps";
+            //worksheet.Cells[2, 6].Value = "Test Elements";
+            worksheet.Cells[2, 6].Value = "Expected results";
             worksheet.Cells[2, 7].Value = "Result Test Elements";
             // Tự động xuống hàng khi text quá dài
             worksheet.Cells.Style.WrapText = true;
