@@ -332,6 +332,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
 
+        #region Test case 
 
         #region Input Type Text
         private async Task<bool> Input_Type_Text(string id_form, int index_submit, Element submit)
@@ -593,7 +594,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_Not_Format_Email_TypeEmail(string id_form, int index_submit, Element submit)
         {
-            
+
             string DescriptiontestCase = "Fill incorrect email format TypeEmail_form:" + id_form + "_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
@@ -1744,6 +1745,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         #endregion
 
+        #endregion
+
         #region Helper Generate
         ///https://www.c-sharpcorner.com/article/generating-random-number-and-string-in-C-Sharp/
 
@@ -2841,6 +2844,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 result_Testcase.TestDate = DateTime.Now;
                 _context.Result_testcase.Add(result_Testcase);
                 await _context.SaveChangesAsync();
+
+
+                //ChromeDriver driver = SetUpDriver();
+                //var r_url = await RunPrerequesiteTestcase(driver, id_url, url, id_testcase);
+
                 if (browserRun.Equals("chrome"))
                 {
 
@@ -3194,6 +3202,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
                     FirefoxDriver firefoxdriver = SetUpDriverFireFox(url);
                     //run test case
+
                     foreach (var inputtest in list_inputtest)
                     {
                         Input_Result_test input_Result_Test = new Input_Result_test();
@@ -3558,6 +3567,109 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return "Error";
         }
 
+        public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, int id_url, string url, string id_testcase)
+        {
+            string return_url = "";
+            var _context = new ElementDBContext();
+            var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
+            var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
+            driver.Url=url;
+            driver.Navigate();
+            foreach (var inputtest in list_inputtest)
+            {
+                switch (inputtest.action)
+                {
+
+                    case "fill":
+                        {
+                            try
+                            {
+                                var fill = driver.FindElementByXPath(inputtest.xpath);
+                                if (fill.Displayed)
+                                {
+                                    fill.Click();
+                                    fill.SendKeys(inputtest.value);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+
+                            break;
+                        }
+                    case "select":
+                        {
+                            try
+                            {
+                                var select = driver.FindElementByXPath(inputtest.xpath);
+                                var selectElement = new SelectElement(select);
+                               
+                                selectElement.SelectByValue(inputtest.value);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            break;
+                        }
+                    case "click":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.Message.Equals("element not interactable"))
+                                {
+
+                                }
+                            }
+
+                            break;
+                        }
+                    case "check":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                    case "submit":
+                        {
+                            try
+                            {
+                                driver.FindElementByXPath(inputtest.xpath).Click();
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                }
+
+            }
+
+            return_url = driver.Url;
+
+
+            return return_url;
+        }
         /*
         public async Task<string> Run_ReturnResult(int id_url, string url, string id_testcase)
         {
@@ -4037,7 +4149,41 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //The HTTP request to the remote WebDriver server for URL 
             return firefoxdriver;
         }
+        private ChromeDriver SetUpDriver()
+        {
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
 
+            var options = new ChromeOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            options.AddArgument("no-sandbox");
+            options.AddArgument("proxy-server='direct://'");
+            options.AddArgument("proxy-bypass-list=*");
+            ChromeDriver chromedriver = new ChromeDriver(service, options);
+            //The HTTP request to the remote WebDriver server for URL 
+            return chromedriver;
+        }
+        private FirefoxDriver SetUpDriverFireFox()
+        {
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+
+            var options = new FirefoxOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            //options.AddArgument("no-sandbox");
+            //options.AddArgument("proxy-server='direct://'");
+            //options.AddArgument("proxy-bypass-list=*");
+            FirefoxDriver firefoxdriver = new FirefoxDriver(service, options);
+
+            //The HTTP request to the remote WebDriver server for URL 
+            return firefoxdriver;
+        }
         private void QuitDriver(ChromeDriver chromedriver)
         {
 

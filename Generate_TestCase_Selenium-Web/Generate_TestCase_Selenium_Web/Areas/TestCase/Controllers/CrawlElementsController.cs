@@ -15,6 +15,7 @@ using Generate_TestCase_Selenium_Web.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Firefox;
 
 namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 {
@@ -121,7 +122,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             int flag = 0;
             try
             {
-
+                // usertesstvf
                 SetUpDriver(Url);
                 var form = chromedriver.FindElementsByXPath("//form");
                 if (form != null)// have at least one form
@@ -614,7 +615,109 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
 
         }
+        public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, int id_url, string url, string id_testcase)
+        {
+            string return_url = "";
+            var _context = new ElementDBContext();
+            var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
+            var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
+            driver.Url = url;
+            driver.Navigate();
+            foreach (var inputtest in list_inputtest)
+            {
+                switch (inputtest.action)
+                {
 
+                    case "fill":
+                        {
+                            try
+                            {
+                                var fill = driver.FindElementByXPath(inputtest.xpath);
+                                if (fill.Displayed)
+                                {
+                                    fill.Click();
+                                    fill.SendKeys(inputtest.value);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+
+                            break;
+                        }
+                    case "select":
+                        {
+                            try
+                            {
+                                var select = driver.FindElementByXPath(inputtest.xpath);
+                                var selectElement = new SelectElement(select);
+
+                                selectElement.SelectByValue(inputtest.value);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            break;
+                        }
+                    case "click":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.Message.Equals("element not interactable"))
+                                {
+
+                                }
+                            }
+
+                            break;
+                        }
+                    case "check":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                    case "submit":
+                        {
+                            try
+                            {
+                                driver.FindElementByXPath(inputtest.xpath).Click();
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                }
+
+            }
+
+            return_url = driver.Url;
+
+
+            return return_url;
+        }
         /*
         public void GetElementsOnlyDisplay(ChromeDriver driver, string TagName, string TypeName, int id_url, List<Form_elements> form_elts = null)
         {
@@ -806,7 +909,43 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         #endregion
 
+        #region Driver
+        private ChromeDriver SetUpDriver()
+        {
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
 
+            var options = new ChromeOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            options.AddArgument("no-sandbox");
+            options.AddArgument("proxy-server='direct://'");
+            options.AddArgument("proxy-bypass-list=*");
+            ChromeDriver chromedriver = new ChromeDriver(service, options);
+            //The HTTP request to the remote WebDriver server for URL 
+            return chromedriver;
+        }
+        private FirefoxDriver SetUpDriverFireFox()
+        {
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+
+            var options = new FirefoxOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            //options.AddArgument("no-sandbox");
+            //options.AddArgument("proxy-server='direct://'");
+            //options.AddArgument("proxy-bypass-list=*");
+            FirefoxDriver firefoxdriver = new FirefoxDriver(service, options);
+
+            //The HTTP request to the remote WebDriver server for URL 
+            return firefoxdriver;
+        }
+        #endregion
 
         // GET: TestCase/CrawlElements/Details/5
         public async Task<IActionResult> Details(string id)
