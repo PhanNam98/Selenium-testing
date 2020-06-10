@@ -85,8 +85,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed, string returnUrl = null)
         {
             //--Code, dont delete
-            //string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
-            //this.IsOnlyDislayed = IsOnlyDislayed;
+            string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
+            this.IsOnlyDislayed = IsOnlyDislayed;
             //SetUp(Url);
             //int isSuccess = GetElements(Url, IsOnlyDislayed, id_url);
             //if (isSuccess == 1)

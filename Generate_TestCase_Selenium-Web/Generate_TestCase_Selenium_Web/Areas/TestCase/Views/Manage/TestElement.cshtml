@@ -162,16 +162,16 @@
             <table class="table table-condensed table-hover table-bordered" id="exam">
                 <thead>
                     <tr>
-                        <td></td>
+                        @*<td></td>*@
                         <th>
                             @Html.DisplayName("Xpath")
                         </th>
                         <th>
                             @Html.DisplayName("Full Xpath")
                         </th>
-                        <th>
+                        @*<th>
                             @Html.DisplayName("Value return")
-                        </th>
+                        </th>*@
                         <th>
                             @Html.DisplayName("Value test")
                         </th>
@@ -182,7 +182,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>
+                            @*<td>
                                 @{
                                     if (item.value_return == item.value_test && (item.value_return != null && item.value_test != null))
                                     {
@@ -195,16 +195,16 @@
 
 
                                 }
-                            </td>
+                            </td>*@
                             <td>
                                 @Html.DisplayFor(modelItem => item.xpath)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.xpath_full)
                             </td>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.value_return)
-                            </td>
+                            </td>*@
                             <td>
                                 @Html.DisplayFor(modelItem => item.value_test)
                             </td>

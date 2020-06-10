@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <label class="control-label">Broswer run test case: </label>
                         <select asp-for="Browser" asp-items="@ViewBag.Browsers">
-                            <option>Please select one</option>
+                            <option disabled>Please select one</option>
                         </select>
                         @*<input asp-for="Browser" class="form-control" />*@
                         <span asp-validation-for="Browser" class="text-danger"></span>

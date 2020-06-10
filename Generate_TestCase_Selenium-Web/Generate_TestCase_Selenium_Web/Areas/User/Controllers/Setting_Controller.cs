@@ -63,7 +63,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             if (ModelState.IsValid)
             {
                 ViewData["Browsers"] = new List<SelectListItem>
-            {
+                {
                  new SelectListItem {Text = "Chrome", Value = "chrome"},
                 new SelectListItem {Text = "FireFox", Value = "firefox"}
                 };
@@ -72,6 +72,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                     _context.Update(setting_);
                     await _context.SaveChangesAsync();
                     StatusMessage = "Update successfully";
+                    return View(setting_);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -86,7 +87,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                     StatusMessage = "Update failed";
                 }
                 //return RedirectToAction(nameof(Index));
-                return View(setting_);
+                
             }
             StatusMessage = "Update failed";
             ViewData["Message"] = StatusMessage;
