@@ -100,9 +100,9 @@
                         <th>
                             @Html.DisplayName("Created Date")
                         </th>
-                        <th>
+                        @*<th>
                             @Html.DisplayName("Modified Date")
-                        </th>
+                        </th>*@
                         <th></th>
                     </tr>
                 </thead>
@@ -122,9 +122,9 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.CreatedDate)
                             </td>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.ModifiedDate)
-                            </td>
+                            </td>*@
 
                             <td>
                                 @{ if (item.Element.Count() > 0)

@@ -88,26 +88,26 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //--Code, dont delete
             string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
             this.IsOnlyDislayed = IsOnlyDislayed;
-            //SetUp(Url);
-            //int isSuccess = GetElements(Url, IsOnlyDislayed, id_url);
-            //if (isSuccess == 1)
-            //{
-            //    _context.Form_elements.AddRange(listForm);
-            //    _context.Element.AddRange(listElt);
-            //    await _context.SaveChangesAsync();
-            //    if (returnUrl != null)
-            //    {
-            //        return LocalRedirect(returnUrl);
-            //    }
-            //    else
-            //    {
-            //        return RedirectToAction(nameof(Index), new RouteValueDictionary(new
-            //        {
-            //            id_url = id_url
-            //        }));
-            //    }
+            SetUp(Url);
+            int isSuccess = GetElements(Url, IsOnlyDislayed, id_url);
+            if (isSuccess == 1)
+            {
+                _context.Form_elements.AddRange(listForm);
+                _context.Element.AddRange(listElt);
+                await _context.SaveChangesAsync();
+                if (returnUrl != null)
+                {
+                    return LocalRedirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index), new RouteValueDictionary(new
+                    {
+                        id_url = id_url
+                    }));
+                }
 
-            //}
+            }
 
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new
             {
@@ -307,7 +307,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
             string url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
-            //var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
+            if (Testcase.id_prerequisite_testcase != null)
+            {
+                return_url = await RunPrerequesiteTestcase(driver, Testcase.id_prerequisite_testcase,(int) Testcase.id_prerequisite_url);
+            }
             driver.Url = url;
             driver.Navigate();
             foreach (var inputtest in list_inputtest)

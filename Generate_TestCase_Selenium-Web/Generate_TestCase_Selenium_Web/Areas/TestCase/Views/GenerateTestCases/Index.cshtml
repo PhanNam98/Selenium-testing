@@ -63,9 +63,9 @@
                     <th>
                         @Html.DisplayName("Description")
                     </th>
-                    <td>
+                    @*<td>
                         @Html.DisplayName("Created Date")
-                    </td>
+                    </td>*@
                     @*<th>
                             @Html.DisplayName("Result")
                         </th>*@
@@ -99,9 +99,9 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.description)
                         </td>
-                        <td>
+                        @*<td>
                             @Html.DisplayFor(modelItem => item.CreatedDate)
-                        </td>
+                        </td>*@
 
                         @*@if (item.result.Equals("Pass"))
                                              {
@@ -183,12 +183,24 @@
                                                                 <input type="text" name="ModifiedDate" class="input-md form-control" value="@item.ModifiedDate" readonly />
                                                             </div>
                                                         </div>
+                                                        @{
+                                                            if (item.id_prerequisite_testcase != null)
+                                                            {
+                                                                <div class="row form-group">
+                                                                    <div class="col col-md-3">@Html.Label("Prerequisite test case")</div>
+                                                                    <div class="col-12 col-md-9">
+                                                                        <input type="text" name="CreatedDate" class="input-md form-control" value="@item.id_prerequisite_testcase" readonly />
+                                                                    </div>
+                                                                </div>
+                                                            
+                                                            }
+                                                        }
                                                         @*<div class="row form-group">
-                                                            <div class="col col-md-3">@Html.Label("Result")</div>
-                                                            <div class="col-12 col-md-9">
-                                                                <input type="text" name="result" class="input-md form-control" value="@item.result" readonly />
-                                                            </div>
-                                                        </div>*@
+            <div class="col col-md-3">@Html.Label("Result")</div>
+            <div class="col-12 col-md-9">
+                <input type="text" name="result" class="input-md form-control" value="@item.result" readonly />
+            </div>
+        </div>*@
 
                                                     </div>
                                                     <div class="modal-footer">
