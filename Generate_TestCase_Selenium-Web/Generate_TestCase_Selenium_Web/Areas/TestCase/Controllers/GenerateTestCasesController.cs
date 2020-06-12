@@ -1579,14 +1579,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             string DescriptiontestCase = "Fill form:" + id_form + "_" + index_submit;
             var _context = new ElementDBContext();
-            var listElt = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type != "submit" && p.tag_name != "a").ToListAsync();
-
+            var listElt = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type != "submit" && p.type!="radio" && p.tag_name != "a").ToListAsync();
+            int step = 1;
+           
+            List<Input_testcase> listInputElt = new List<Input_testcase>();
             if (listElt.Count > 0)
             {
-                int step = 1;
                 var id_testCase = Create_Testcase(DescriptiontestCase);
-                List<Input_testcase> listInputElt = new List<Input_testcase>();
-
                 for (int i = 0; i < listElt.Count; i++)
                 {
                     switch (listElt[i].tag_name)
@@ -1679,19 +1678,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                                 }
                                                 break;
                                             }
-                                        case "radio":
-                                            {
-                                                try
-                                                {
+                                        //case "radio":
+                                        //    {
+                                        //        try
+                                        //        {
 
-                                                    listInputElt.Add(Crate_InputTestcase(listElt[i], id_testCase, "", Actions.click.ToString(), step++));
-                                                }
-                                                catch (Exception e)
-                                                {
+                                        //            listInputElt.Add(Crate_InputTestcase(listElt[i], id_testCase, "", Actions.click.ToString(), step++));
+                                        //        }
+                                        //        catch (Exception e)
+                                        //        {
 
-                                                }
-                                                break;
-                                            }
+                                        //        }
+                                        //        break;
+                                        //    }
                                         case "date":
                                             {
                                                 try
@@ -1737,9 +1736,34 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
 
+                var listTypeRadio = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "radio").ToListAsync();
+
+                if (listTypeRadio.Count > 0)
+                {
+                    List<List<Element>> listRadio = new List<List<Element>>();
+                    List<Element> listEltRadio = new List<Element>();
+                    var groupedRadioList = listTypeRadio
+                    .GroupBy(u => u.name)
+                    .Select(grp => grp.ToList())
+                    .ToList();
+                    foreach (var group in groupedRadioList)
+                    {
+
+                        Input_testcase newinput = new Input_testcase();
+                        Random random = new Random();
+                        Element radio = group[random.Next(0, group.Count + 1)];
+
+
+                        listInputElt.Add(Crate_InputTestcase(radio, id_testCase, "", Actions.click.ToString(), step++));
+
+                    }
+                }
+
                 List_ListInputTestcase.Add(listInputElt);
                 return true;
             }
+
+            
             return false;
         }
 

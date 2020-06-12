@@ -93,7 +93,7 @@ namespace Generate_TestCase_Selenium_Web
             services.AddSingleton(new JobSchedule(
                 jobType: typeof(StartJobSchedule),
                 //cronExpression: "0/5 * * * * ?")); // run every 5 seconds
-                cronExpression: "")); // run every 5 seconds
+                cronExpression: "")); // run after web start
             services.AddHostedService<QuartzHostedService>();
         }
         private void OnShutdown()
