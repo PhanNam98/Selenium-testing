@@ -47,6 +47,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private readonly IQueue _queue;
         private readonly ILogger<GenerateTestCasesController> _logger;
         private readonly IHubContext<JobProgressHub> _hubContext;
+        private int Prerequisite_url = -1;
+        private string Prerequisite_testcase = null;
         IScheduler _scheduler;
         //private ChromeDriver chromedriver;
         [TempData]
@@ -203,7 +205,71 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         //await ClickAll_TypeCheckBox(forms[i].id_form, j, submit[j]);
                         //await  Input_Type_TypeDate(forms[i].id_form, j, submit[j]);
                         //await  Input_Type_TypeNumber(forms[i].id_form, j, submit[j]);
-                        //await Fill_Form(forms[i].id_form, j, submit[j]);
+                        await Fill_Form(forms[i].id_form, j, submit[j]);
+                    }
+                }
+                //await ClickAll_Tag_a();
+                //await ClickAll_Tag_Button();
+            }
+            else
+            {
+                //not form
+            }
+
+            _context.Test_case.AddRange(ListTestCase);
+            await _context.SaveChangesAsync();
+
+            foreach (var inputtest in List_ListInputTestcase)
+            {
+                _context.Input_testcase.AddRange(inputtest);
+
+            }
+            if (_context.SaveChanges() > 0)
+            {
+                StatusMessage = String.Format("Success, {0} test case(s) were created", ListTestCase.Count());
+                if (returnUrl != null)
+                {
+                    return LocalRedirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
+                }
+            }
+
+            return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
+
+
+        }
+        public async Task<IActionResult> Generate_Subtestcase(int id_url, int prerequisite_url, string prerequisite_testcase, string returnUrl = null)
+        {
+            Id_Url = id_url;
+            ListTestCase = new List<Test_case>();
+            List_ListInputTestcase = new List<List<Input_testcase>>();
+            List<Form_elements> forms = await _context.Form_elements.Where(p => p.id_url == Id_Url).ToListAsync();
+            this.Prerequisite_url = prerequisite_url;
+            this.Prerequisite_testcase = prerequisite_testcase;
+            if (forms.Count > 0)
+            {
+                for (int i = 0; i < forms.Count; i++)
+                {
+                    var _context1 = new ElementDBContext();
+                    List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.id_form == forms[i].id_form && p.type == "submit").ToListAsync();
+                    for (int j = 0; j < submit.Count; j++)
+                    {
+                        //await NotFill_ClickSubmit(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_Email(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_Text(forms[i].id_form, j, submit[j]);
+                        //await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                        //await SelectAllElement_TypeSelect(forms[i].id_form, j, submit[j]);
+                        //await SkipOneSelect_TypeSelect(forms[i].id_form, j, submit[j]);
+                        //await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_Password(forms[i].id_form, j, submit[j]);
+                        //await Click_Any_CheckBox_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        //await ClickAll_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        //await  Input_Type_TypeDate(forms[i].id_form, j, submit[j]);
+                        //await  Input_Type_TypeNumber(forms[i].id_form, j, submit[j]);
+                        await Fill_Form(forms[i].id_form, j, submit[j]);
                     }
                 }
                 //await ClickAll_Tag_a();
@@ -1579,9 +1645,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             string DescriptiontestCase = "Fill form:" + id_form + "_" + index_submit;
             var _context = new ElementDBContext();
-            var listElt = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type != "submit" && p.type!="radio" && p.tag_name != "a").ToListAsync();
+            var listElt = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type != "submit" && p.type != "radio" && p.tag_name != "a").ToListAsync();
             int step = 1;
-           
+
             List<Input_testcase> listInputElt = new List<Input_testcase>();
             if (listElt.Count > 0)
             {
@@ -1763,7 +1829,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 return true;
             }
 
-            
+
             return false;
         }
 
@@ -1899,6 +1965,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             newTestCase.description = description;
             newTestCase.CreatedDate = DateTime.Now.Date;
             newTestCase.ModifiedDate = DateTime.Now.Date;
+            if (this.Prerequisite_testcase != null && this.Prerequisite_url != -1)
+            {
+                newTestCase.id_prerequisite_testcase = Prerequisite_testcase;
+                newTestCase.id_prerequisite_url = Prerequisite_url;
+            }
             ListTestCase.Add(newTestCase);
             //return BUL.TestCaseBUL.InsertTestcase(newTestCase);
             return id_testcase;
@@ -1916,6 +1987,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 newinput.action = action;
                 newinput.xpath = testElt.xpath;
                 newinput.test_step = step;
+
             }
             catch
             {
@@ -2851,6 +2923,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             int isSkip = 0;
             var _context = new ElementDBContext();
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            var URL = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
             var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
             await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running test case " + id_testcase);
@@ -2869,14 +2942,24 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 _context.Result_testcase.Add(result_Testcase);
                 await _context.SaveChangesAsync();
 
-
-                //ChromeDriver driver = SetUpDriver();
-                //var r_url = await RunPrerequesiteTestcase(driver, id_url, url, id_testcase);
-
                 if (browserRun.Equals("chrome"))
                 {
-
-                    ChromeDriver chromedriver = SetUpDriver(url);
+                    ChromeDriver chromedriver = null;
+                    if(Testcase.id_prerequisite_testcase!=null)
+                    {
+                        chromedriver = SetUpDriver();
+                        var r_url = await RunPrerequesiteTestcase(chromedriver,(int) Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
+                        if (URL.IsChange == false)
+                        {
+                            chromedriver.Url = URL.url1;
+                            chromedriver.Navigate();
+                        }
+                    }
+                    else
+                    {
+                        chromedriver = SetUpDriver(url);
+                    }
+                  
 
                     //chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
@@ -3224,7 +3307,23 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 else if (browserRun.Equals("firefox"))
                 {
 
-                    FirefoxDriver firefoxdriver = SetUpDriverFireFox(url);
+                    //FirefoxDriver firefoxdriver = SetUpDriverFireFox(url);
+
+                    FirefoxDriver firefoxdriver = null;
+                    if (Testcase.id_prerequisite_testcase != null)
+                    {
+                        firefoxdriver = SetUpDriverFireFox();
+                        var r_url = await RunPrerequesiteTestcase(firefoxdriver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
+                        if (URL.IsChange == false)
+                        {
+                            firefoxdriver.Url = URL.url1;
+                            firefoxdriver.Navigate();
+                        }
+                    }
+                    else
+                    {
+                        firefoxdriver = SetUpDriverFireFox(url);
+                    }
                     //run test case
 
                     foreach (var inputtest in list_inputtest)
@@ -3591,14 +3690,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return "Error";
         }
 
-        public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, int id_url, string url, string id_testcase)
+        public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, int id_url, string id_testcase)
         {
             string return_url = "";
             var _context = new ElementDBContext();
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            string url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
             var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
-            driver.Url=url;
+            driver.Url = url;
             driver.Navigate();
             foreach (var inputtest in list_inputtest)
             {
@@ -3631,7 +3731,111 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             {
                                 var select = driver.FindElementByXPath(inputtest.xpath);
                                 var selectElement = new SelectElement(select);
-                               
+
+                                selectElement.SelectByValue(inputtest.value);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            break;
+                        }
+                    case "click":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.Message.Equals("element not interactable"))
+                                {
+
+                                }
+                            }
+
+                            break;
+                        }
+                    case "check":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                    case "submit":
+                        {
+                            try
+                            {
+                                driver.FindElementByXPath(inputtest.xpath).Click();
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                }
+
+            }
+
+            return_url = driver.Url;
+
+
+            return return_url;
+        }
+        public async Task<string> RunPrerequesiteTestcase(FirefoxDriver driver, int id_url, string id_testcase)
+        {
+            string return_url = "";
+            var _context = new ElementDBContext();
+            var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            string url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
+            var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
+            var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
+            driver.Url = url;
+            driver.Navigate();
+            foreach (var inputtest in list_inputtest)
+            {
+                switch (inputtest.action)
+                {
+
+                    case "fill":
+                        {
+                            try
+                            {
+                                var fill = driver.FindElementByXPath(inputtest.xpath);
+                                if (fill.Displayed)
+                                {
+                                    fill.Click();
+                                    fill.SendKeys(inputtest.value);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+
+                            break;
+                        }
+                    case "select":
+                        {
+                            try
+                            {
+                                var select = driver.FindElementByXPath(inputtest.xpath);
+                                var selectElement = new SelectElement(select);
+
                                 selectElement.SelectByValue(inputtest.value);
                             }
                             catch (Exception e)
@@ -4190,6 +4394,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //The HTTP request to the remote WebDriver server for URL 
             return chromedriver;
         }
+       
         private FirefoxDriver SetUpDriverFireFox()
         {
             FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();

@@ -31,6 +31,7 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         public DateTime? CreatedDate { get; set; }
         [Column(TypeName = "date")]
         public DateTime? ModifiedDate { get; set; }
+        public bool? IsChange { get; set; }
 
         [ForeignKey(nameof(project_id))]
         [InverseProperty(nameof(Project.Url))]

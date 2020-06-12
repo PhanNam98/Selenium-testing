@@ -116,6 +116,44 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }));
 
         }
+        public async Task<IActionResult> CrawlEltSubUrl(int id_url, bool IsOnlyDislayed, string prerequisite_testcase,int prerequisite_url)
+        {
+            //--Code, dont delete
+            string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
+            this.IsOnlyDislayed = IsOnlyDislayed;
+            SetUp(Url);
+            int isSuccess = await GetSubElements(Url, IsOnlyDislayed, id_url, prerequisite_testcase, prerequisite_url);
+            if (isSuccess == 1)
+            {
+                _context.Form_elements.AddRange(listForm);
+                _context.Element.AddRange(listElt);
+                await _context.SaveChangesAsync();
+                //if (returnUrl != null)
+                //{
+                //    return LocalRedirect(returnUrl);
+                //}
+                //else
+                //{
+                //    return RedirectToAction(nameof(Index), new RouteValueDictionary(new
+                //    {
+                //        id_url = id_url
+                //    }));
+                //}
+                return RedirectToAction("Elements_SubTestcase", "Manage", new RouteValueDictionary(new
+                {
+                    id_url = id_url,
+                    prerequisite_testcase = prerequisite_testcase,
+                    prerequisite_url = prerequisite_url
+                }));
+            }
+
+            return RedirectToAction(nameof(Index), new RouteValueDictionary(new
+            {
+                id_url = id_url
+
+            }));
+
+        }
         #region Get Element from Web
         public int GetElements(string Url, bool IsOnlyDislayed, int id_url)
         {
@@ -178,7 +216,194 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             CloseDriver();
             return flag;
         }
+        public async Task<int> GetSubElements(string Url, bool IsOnlyDislayed, int id_url,string prerequisite_testcase,int prerequisite_url)
+        {
+            var URL = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
+            int flag = 0;
+            ChromeDriver Chromedriver = null;
+            try
+            {
+               
+                try
+                {
+                    ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+                    service.HideCommandPromptWindow = true;//hide commandPromptWindow
 
+                    var options = new ChromeOptions();
+                    //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+                    Chromedriver = new ChromeDriver(service, options);
+              
+                }
+                catch (Exception e)
+                {
+                    var a = e.Message;
+                }
+                var returnUrl=await RunPrerequesiteTestcase(Chromedriver, prerequisite_testcase, prerequisite_url);
+                if (URL.IsChange == false)
+                {
+                    Chromedriver.Url = Url;
+                    Chromedriver.Navigate();
+                }
+                   
+                
+                var form = Chromedriver.FindElementsByXPath("//form");
+                if (form != null)// have at least one form
+                {
+                    listForm = new List<Form_elements>();
+                    for (int i = 0; i < form.Count; i++)
+                    {
+                        Form_elements form_ = new Form_elements();
+                        form_.id_form = form[i].GetAttribute("id");
+
+                        form_.id_url = id_url;
+                        try
+                        {
+                            form_.name = form[i].GetAttribute("name");
+                        }
+                        catch { }
+                        try
+                        {
+                            form_.xpath = getAbsoluteXPath(Chromedriver, form[i]);
+                        }
+                        catch { }
+                        listForm.Add(form_);
+
+
+                    }
+                    foreach (string tag in tag_elts)
+                    {
+                        if (this.IsOnlyDislayed)
+                            GetElementsOnlyDisplay(Chromedriver, tag, "", id_url, listForm);
+                        else
+                            GetElements(Chromedriver, tag, "", id_url, listForm);
+                    }
+                    //GetElements(chromedriver, id_Url, "a", "", listForm);
+
+
+
+                }
+                else //no form found
+                {
+                    foreach (string tag in tag_elts)
+                    {
+                        Thread thread = new Thread(() => GetElements(Chromedriver, tag, "", id_url));
+                        thread.Start();
+                        //GetElements(chromedriver, tag, "", id_url);
+                    }
+                }
+                flag = 1;
+            }
+            catch
+            {
+                flag = -1;
+            }
+            Chromedriver.Close();
+            return flag;
+        }
+        public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, string id_testcase,int id_url)
+        {
+            string return_url = "";
+            var _context = new ElementDBContext();
+            var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            string url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
+            var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
+            //var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
+            driver.Url = url;
+            driver.Navigate();
+            foreach (var inputtest in list_inputtest)
+            {
+                switch (inputtest.action)
+                {
+
+                    case "fill":
+                        {
+                            try
+                            {
+                                var fill = driver.FindElementByXPath(inputtest.xpath);
+                                if (fill.Displayed)
+                                {
+                                    fill.Click();
+                                    fill.SendKeys(inputtest.value);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+
+                            break;
+                        }
+                    case "select":
+                        {
+                            try
+                            {
+                                var select = driver.FindElementByXPath(inputtest.xpath);
+                                var selectElement = new SelectElement(select);
+
+                                selectElement.SelectByValue(inputtest.value);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            break;
+                        }
+                    case "click":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.Message.Equals("element not interactable"))
+                                {
+
+                                }
+                            }
+
+                            break;
+                        }
+                    case "check":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                    case "submit":
+                        {
+                            try
+                            {
+                                driver.FindElementByXPath(inputtest.xpath).Click();
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                }
+
+            }
+
+            return_url = driver.Url;
+
+
+            return return_url;
+        }
         private void SetUp(string url)
         {
             Url = url;

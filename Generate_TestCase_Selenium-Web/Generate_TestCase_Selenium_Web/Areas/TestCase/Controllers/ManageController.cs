@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Generate_TestCase_Selenium_Web.Models;
 using Microsoft.AspNetCore.Routing;
+using OpenQA.Selenium.Chrome;
 
 namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 {
@@ -168,6 +169,52 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 1, IsOnlyDislayed = IsOnlyDislayed }));
         }
+
+        public async Task<IActionResult> AddNewSubUrl(int project_id,string id_testcase,int id_url)
+        {
+            ViewData["project_id"] = project_id;
+            ViewData["id_url"] = id_url;
+            ViewData["id_testcase"] = id_testcase;
+            ViewData["project_name"] = _context.Project.Find(project_id).name;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddNewSubUrl(string name,string url1,bool IsChange, string id_testcase,bool IsOnlyDislayed,int project_id,int id_url)
+        {
+            Url url = new Url();
+            try
+            {
+                url.name = name;
+                url.project_id = project_id;
+                url.url1 = url1;
+                url.CreatedDate = DateTime.Now.Date;
+                url.ModifiedDate = DateTime.Now.Date;
+                url.IsChange = IsChange;
+                _context.Add(url);
+                await _context.SaveChangesAsync();
+                StatusMessage = "Add successful url";
+
+            }
+            catch
+            {
+
+                StatusMessage = "Add failed";
+            }
+
+            return RedirectToAction("CrawlEltSubUrl", "CrawlElements", new
+            {
+                area = "TestCase",
+                project_id = project_id,
+                id_url = url.id_url,
+                IsOnlyDislayed = IsOnlyDislayed,
+                prerequisite_url = id_url,
+                prerequisite_testcase = id_testcase
+            });
+            //return RedirectToAction("CrawlEltSubUrl", "CrawlElements", new { area="TestCase",project_id = project_id, id_url = 41, IsOnlyDislayed = IsOnlyDislayed , prerequisite_url =id_url,
+            //    prerequisite_testcase= id_testcase
+            //});
+        }
+       
         #endregion
 
         #region Elements
@@ -207,6 +254,45 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             return View(listelt);
 
+        }       
+        [Route("/SubTestCase/Elements/")]
+        public async Task<IActionResult> Elements_SubTestcase(int id_url,string prerequisite_testcase, int prerequisite_url)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var listelt = await _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            if (listelt.Count > 0)
+            {
+                //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();
+                if (StatusMessage == null)
+                {
+                    if (listelt.Count() == 0)
+                    {
+                        ViewData["Message"] = "No elements yet";
+                    }
+                    else
+                    if (listelt.Count() > 0)
+                    {
+                        ViewData["Message"] = String.Format("Found {0} elements", listelt.Count());
+                    }
+                    else
+                    {
+                        ViewData["Message"] = "Error load data";
+                    }
+                }
+                else
+                {
+                    ViewData["Message"] = StatusMessage;
+                    TempData.Remove(StatusMessage);
+                }
+                ViewData["id_url"] = id_url;
+                ViewData["prerequisite_testcase"] = prerequisite_testcase;
+                ViewData["prerequisite_url"] = prerequisite_url;
+                ViewData["project_id"] = listelt.FirstOrDefault().id_urlNavigation.project_.id;
+
+                return View(listelt);
+            }
+            return View(listelt);
+
         }
         public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete)
         {
@@ -229,6 +315,32 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 StatusMessage = "Delete failed";
             }
             return RedirectToAction(nameof(Elements), new RouteValueDictionary(new
+            {
+                id_url = id_url
+
+            }));
+        }
+        public async Task<IActionResult> DeleteElt(int id_url, IEnumerable<string> eltId_Delete)
+        {
+            if (eltId_Delete == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                foreach (var id in eltId_Delete)
+                {
+                    var element = await _context.Element.Where(p => p.id_element == id && p.id_url == id_url).FirstOrDefaultAsync();
+                    _context.Element.RemoveRange(element);
+                }
+                await _context.SaveChangesAsync();
+                StatusMessage = "Delete successfully";
+            }
+            catch
+            {
+                StatusMessage = "Delete failed";
+            }
+            return RedirectToAction(nameof(Elements_SubTestcase), new RouteValueDictionary(new
             {
                 id_url = id_url
 
