@@ -203,7 +203,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         //await ClickAll_TypeCheckBox(forms[i].id_form, j, submit[j]);
                         //await  Input_Type_TypeDate(forms[i].id_form, j, submit[j]);
                         //await  Input_Type_TypeNumber(forms[i].id_form, j, submit[j]);
-                        await Fill_Form(forms[i].id_form, j, submit[j]);
+                        //await Fill_Form(forms[i].id_form, j, submit[j]);
                     }
                 }
                 //await ClickAll_Tag_a();
@@ -2027,7 +2027,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             if (authen > 0)
             {
                 var _context = new ElementDBContext();
-                int runsize = 2;
+                int runsize = _context.ConfigWeb.ToList().FirstOrDefault().number_of_test_cases_running_concurrently;
                 int sizeList = list_Idtestcase.Count();
                 int cont = 0;
                 browserRun = _context.Setting_.Where(p => p.Id_User == id).SingleOrDefault().Browser;
@@ -4394,7 +4394,90 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(testdataDBContext);
         }
 
+        [Route("/Testcase/TestDatas/ChangeOption")]
+        public async Task<IActionResult> ChaneOptionRadio(int id_url, string id_testcase, string id_element, string name_element)
+        {
+            ViewData["Message"] = StatusMessage;
+            TempData.Remove("StatusMessage");
+            ViewData["id_url"] = id_url;
+            ViewData["id_testcase"] = id_testcase;
+            ViewData["id_element"] = id_element;
+            var elt = await _context.Element.Where(p => p.id_url == id_url && p.type == "radio" && p.name == name_element).ToListAsync();
+            if (ViewData["Message"] == null)
+            {
+                if (elt.Count() == 0)
+                {
+                    ViewData["Message"] = "No data yet, create a new one";
+                }
+                else
+                if (elt.Count() > 0)
+                {
+                    ViewData["Message"] = String.Format("{0} test data(s)", elt.Count());
+                }
 
+                else
+                {
+                    ViewData["Message"] = "Error load data";
+                }
+            }
+            return View(elt);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangeValueDataTest(int id_url, string id_testcase, string id_element, string testvalue)
+        {
+            try
+            {
+                var testdata = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase && p.id_element == id_element).SingleOrDefault();
+                testdata.value = testvalue;
+                if ((testvalue.ToLower().Equals("true") || testvalue.ToLower().Equals("false")) && (testdata.action.ToLower().Equals("check") || testdata.action.ToLower().Equals("nocheck")))
+                {
+                    if (testvalue.ToLower().Equals("true"))
+                    {
+                        testdata.action = "check";
+                    }
+                    else
+                    {
+                        testdata.action = "nocheck";
+                    }
+                }
+                _context.Input_testcase.Update(testdata);
+                await _context.SaveChangesAsync();
+                StatusMessage = "Update successfully";
+            }
+            catch
+            {
+                StatusMessage = "Update failed";
+            }
+            return RedirectToAction("TestData", new { id_url = id_url, id_testcase = id_testcase });
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveValueOption(int id_url, string id_testcase, string id_element, string id_elementchange)
+        {
+            try
+            {
+                var testdata = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase && p.id_element == id_element).SingleOrDefault();
+                var elt = _context.Element.Where(p => p.id_url == id_url && p.id_element == id_elementchange).SingleOrDefault();
+                //testdata.id_element = id_elementchange;
+                Input_testcase input_Testcase = new Input_testcase();
+                input_Testcase.id_element = id_elementchange;
+                input_Testcase.id_testcase = id_testcase;
+                input_Testcase.id_url = id_url;
+                input_Testcase.test_step = testdata.test_step;
+                input_Testcase.value = testdata.value;
+                input_Testcase.action = testdata.action;
+                input_Testcase.xpath = elt.xpath;
+                _context.Input_testcase.Remove(testdata);
+                _context.Input_testcase.Add(input_Testcase);
+                //_context.Input_testcase.Update(testdata);
+                await _context.SaveChangesAsync();
+                StatusMessage = "Update successfully";
+            }
+            catch
+            {
+                StatusMessage = "Update failed";
+            }
+            return RedirectToAction("TestData", new { id_url = id_url, id_testcase = id_testcase });
+        }
         #endregion
 
         #region Excel

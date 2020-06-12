@@ -1,0 +1,172 @@
+﻿@model IEnumerable<Generate_TestCase_Selenium_Web.Models.ModelDB.Element>
+
+@{
+    ViewData["Title"] = "ChaneOptionRadio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    ul.breadcrumb {
+        padding: 10px 16px;
+        list-style: none;
+        background-color: #eee;
+    }
+
+        ul.breadcrumb li {
+            display: inline;
+            font-size: 18px;
+        }
+
+            ul.breadcrumb li + li:before {
+                padding: 8px;
+                color: black;
+                content: "/\00a0";
+            }
+
+            ul.breadcrumb li a {
+                color: #0275d8;
+                text-decoration: none;
+            }
+
+                ul.breadcrumb li a:hover {
+                    color: #01447e;
+                    text-decoration: underline;
+                }
+</style>
+<h1>Change Option Radio Elemnet</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="GenerateTestCases" asp-action="TestData" asp-route-id_url="@ViewBag.id_url" asp-route-id_testcase="@ViewBag.id_testcase">Test data</a></li>
+    <li class="breadcrumb-item active">Radio element</li>
+</ol>
+<partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
+<hr />
+<div class="card mb-4">
+    <div class="card-header">
+
+        <div class="row">
+            <div class="col-6">
+                <i class="fas fa-table mr-1"></i>Option Radio Element
+            </div>
+            <div class="col-6">
+                <div class="container">
+                    <div class="text-right">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("SaveValueOption", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "valueoptionform", @novalidate = "novalidate", @name = "valueoptionform" }))
+        {
+            <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
+            <input id="id_testcase" name="id_testcase" value="@ViewBag.id_testcase" hidden readonly />
+            <input id="id_element" name="id_element" value="@ViewBag.id_element" hidden readonly />
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover table-bordered" id="inputtable" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th>
+                                @Html.DisplayName("Element id")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Name")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Class name")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Type")
+                            </th>
+
+                            <th>
+                                @Html.DisplayName("Value")
+                            </th>
+
+                            <th>
+                                @Html.DisplayName("Title")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Form id")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @{
+                                        if (item.id_element == ViewBag.id_element)
+                                        {
+                                            <input type="radio" name="id_elementchange" id="@item.id_element" value="@item.id_element" checked="checked" />
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" name="id_elementchange" id="@item.id_element" value="@item.id_element" />
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.id_element)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.class_name)
+                                </td>
+                                @*<td>
+                                        @Html.DisplayFor(modelItem => item.tag_name)
+                                    </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.type)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.value)
+                                </td>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.title)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(modelItem => item.id_form)
+                                </th>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+    <div class="card-footer">
+        <div class="text-right">
+            <button type="button" class="btn btn-primary" id="submitform" onclick="Submitform()">Save</button>
+            <button type="button" class="btn btn-secondary">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    $(document).ready(function () {
+        $('#inputtable').DataTable(
+            {
+                "lengthMenu": [[10, 20, - 1], [10, 20, "All record"]]
+            }
+        );
+    });
+    //$('#modal').on('show.bs.modal', function () {
+    //    $(this).find('.modal-body').css({
+    //        width: 'auto', //probably not needed
+    //        height: 'auto', //probably not needed
+    //        'max-height': '100%'
+    //    });
+    //});
+    function Submitform() {
+
+        document.getElementById("valueoptionform").submit();
+    };
+</script>

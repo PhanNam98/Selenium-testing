@@ -16,7 +16,7 @@
             <div class="col-7">
                 <div class="container">
                     <div class="text-right">
-
+                        <a role="button" class="btn btn-primary" asp-area="User" asp-controller="Results" asp-action="ResultDetail" asp-route-id="@ViewBag.JobId">Result</a>
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
 
                 document.getElementById("job-status").innerText = message;
                 if (message === "Finished!") {
-                    alert("Result");
+                    alert("Run Finished!");
                 }
             });
         connection.start()

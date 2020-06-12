@@ -22,7 +22,12 @@
                 <th>
                     @Html.DisplayName("Id element")
                 </th>
-
+                <th>
+                    @Html.DisplayName("Tag name")
+                </th>
+                <th>
+                    @Html.DisplayName("Type")
+                </th>
                 <th>
                     @Html.DisplayName("Action")
                 </th>
@@ -65,7 +70,7 @@
                                                 <div class="row form-group">
                                                     <div class="col col-md-3">@Html.Label("Name")</div>
                                                     <div class="col-12 col-md-9">
-                                                        <input type="text"  class="input-md form-control" value="@item.id_.name" readonly />
+                                                        <input type="text" class="input-md form-control" value="@item.id_.name" readonly />
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
@@ -77,7 +82,7 @@
                                                 <div class="row form-group">
                                                     <div class="col col-md-3">@Html.Label("Tag name")</div>
                                                     <div class="col-12 col-md-9">
-                                                        <input type="text"  class="input-md form-control" value="@item.id_.tag_name" readonly />
+                                                        <input type="text" class="input-md form-control" value="@item.id_.tag_name" readonly />
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
@@ -89,19 +94,19 @@
                                                 <div class="row form-group">
                                                     <div class="col col-md-3">@Html.Label("Href")</div>
                                                     <div class="col-12 col-md-9">
-                                                        <input type="text"  class="input-md form-control" value="@item.id_.href" readonly />
+                                                        <input type="text" class="input-md form-control" value="@item.id_.href" readonly />
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
                                                     <div class="col col-md-3">@Html.Label("Title")</div>
                                                     <div class="col-12 col-md-9">
-                                                        <input type="text"  class="input-md form-control" value="@item.id_.title" readonly />
+                                                        <input type="text" class="input-md form-control" value="@item.id_.title" readonly />
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
                                                     <div class="col col-md-3">@Html.Label("Xpath")</div>
                                                     <div class="col-12 col-md-9">
-                                                        <input type="text"  class="input-md form-control" value="@item.id_.xpath" readonly />
+                                                        <input type="text" class="input-md form-control" value="@item.id_.xpath" readonly />
                                                     </div>
                                                 </div>
 
@@ -119,7 +124,12 @@
                             </div>
                         }
                     </td>
-
+                    <td>
+                        @item.id_.tag_name.ToString()
+                    </td>
+                    <td>
+                        @item.id_.type.ToString()
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.action)
                     </td>
@@ -134,31 +144,58 @@
                                 <div class="center">
                                     <div class="modal-dialog modal-dialog-center" role="document">
                                         <div class="modal-content">
-
-                                            @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Input Value</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="row form-group">
-                                                    <div class="col col-md-12">@Html.Label("Input value")</div>
-
+                                            @using (Html.BeginForm("ChangeValueDataTest", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "valuetestcaseform", @novalidate = "novalidate", @name = "valuetestcaseform", @id_url = ViewBag.id_url }))
+                                            {
+                                                <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
+                                                <input id="id_testcase" name="id_testcase" value="@ViewBag.id_testcase" hidden readonly />
+                                                <input id="id_element" name="id_element" value="@item.id_element" hidden readonly />
+                                                @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Input Value</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
                                                 </div>
-                                                <div class="row form-group">
+                                                <div class="modal-body">
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-12">@Html.Label("Input value")</div>
 
-                                                    <div class="col-12 col-md-12">
-                                                        <input type="text" name="idpost" class="input-md form-control" value="@item.value" readonly>
+                                                    </div>
+                                                    <div class="row form-group">
+
+                                                        <div class="col-12 col-md-12">
+                                                            @*<input type="text" name="idpost" class="input-md form-control" value="@item.value" readonly>*@
+                                                            @{if (item.action.ToLower().Equals("check") || item.action.ToLower().Equals("notcheck"))
+                                                                {
+                                                                    <input type="checkbox" name="testvalue" class="input-md form-control" checked="@item.value">
+                                                                    <label>Is checked</label><br>
+                                                                }
+                                                                else
+                                                                             if (item.id_.type == "radio")
+                                                                {
+                                                                    <input type="text" name="testvalue" class="input-md form-control" value="@item.id_.value" readonly="readonly">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="text" name="testvalue" class="input-md form-control" value="@item.value">
+                                                                } }
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
+                                                <div class="modal-footer">
+                                                    @{if (item.id_.type.ToLower().Equals("radio"))
+                                                        {
+                                                            <a role="button" class="btn btn-primary" asp-area="TestCase" asp-controller="GenerateTestCases" asp-action="ChaneOptionRadio" asp-route-id_url="@ViewBag.id_url" asp-route-id_testcase="@ViewBag.id_testcase"
+                                                               asp-route-id_element="@item.id_element" asp-route-name_element="@item.id_.name">Change</a>
+                                                        }
 
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div>
-
+                                                        else
+                                                        {
+                                                            <button type="submit" class="btn btn-success">Update</button>
+                                                        } }
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            }
 
                                         </div>
                                     </div>
@@ -184,11 +221,11 @@
             }
         );
     });
-    $('#modal').on('show.bs.modal', function () {
-        $(this).find('.modal-body').css({
-            width: 'auto', //probably not needed
-            height: 'auto', //probably not needed
-            'max-height': '100%'
-        });
-    });
+    //$('#modal').on('show.bs.modal', function () {
+    //    $(this).find('.modal-body').css({
+    //        width: 'auto', //probably not needed
+    //        height: 'auto', //probably not needed
+    //        'max-height': '100%'
+    //    });
+    //});
 </script>

@@ -84,7 +84,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
         private async Task RunTestCaseJob(string id_user, string jobId, int id_url, List<string> list_Idtestcase)
         {
             string id = id_user;
-            int runsize = 2;
+            int runsize = _context.ConfigWeb.ToList().FirstOrDefault().number_of_test_cases_running_concurrently; ;
             int sizeList = list_Idtestcase.Count();
             int cont = 0;
             int authen = _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).Count();

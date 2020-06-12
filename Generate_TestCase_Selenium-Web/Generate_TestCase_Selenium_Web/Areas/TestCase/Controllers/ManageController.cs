@@ -424,7 +424,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 StatusMessage = "Update failed";
             }
-            return RedirectToAction("TestDatas");
+            return RedirectToAction("TestDatas", new { id_url = id_url, id_testcase = id_testcase });
         }
         [HttpPost]
         public async Task<IActionResult> SaveValueOption(int id_url, string id_testcase, string id_element,string id_elementchange)

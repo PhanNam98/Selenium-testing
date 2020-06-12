@@ -308,3 +308,4 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Generate_TestCase_Selenium_Web.MvcApplicationPartsAssemblyInfo.cache
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Generate_TestCase_Selenium_Web.csprojAssemblyReference.cache
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\TestCase\Views\Manage\ChaneOptionRadio.cshtml.g.cs
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\TestCase\Views\GenerateTestCases\ChaneOptionRadio.cshtml.g.cs

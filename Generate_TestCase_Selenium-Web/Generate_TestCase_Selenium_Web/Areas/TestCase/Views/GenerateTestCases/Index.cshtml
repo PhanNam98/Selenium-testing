@@ -63,21 +63,26 @@
                     <th>
                         @Html.DisplayName("Description")
                     </th>
+                    <td>
+                        @Html.DisplayName("Created Date")
+                    </td>
                     @*<th>
-                        @Html.DisplayName("Result")
-                    </th>*@
+                            @Html.DisplayName("Result")
+                        </th>*@
                     @*<th>
                             @Html.DisplayNameFor(model => model.is_test)
                         </th>*@
                     @*<th>
-                        @Html.DisplayName("CreatedDate")
-                    </th>*@
+                            @Html.DisplayName("CreatedDate")
+                        </th>*@
                     @*<th>
                             @Html.DisplayName("ModifiedDate")
                         </th>*@
                     @*<th>
                             @Html.DisplayNameFor(model => model.id_urlNavigation)
                         </th>*@
+                    <th></th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -94,33 +99,36 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.description)
                         </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedDate)
+                        </td>
 
-                            @*@if (item.result.Equals("Pass"))
-                            {
-                                <td style="color:green">
-                                    @Html.DisplayFor(modelItem => item.result)
-                                </td>
-                            }
-                            else
-           if (item.result.Equals("Skip"))
-                            {
-                                <td style="color:blue">
-                                    @Html.DisplayFor(modelItem => item.result)
-                                </td>
-                            }
-                            else
-                            {
-                                <td style="color:red">
-                                    @Html.DisplayFor(modelItem => item.result)
-                                </td>
-                            }*@
+                        @*@if (item.result.Equals("Pass"))
+                                             {
+                                                 <td style="color:green">
+                                                     @Html.DisplayFor(modelItem => item.result)
+                                                 </td>
+                                             }
+                                             else
+                            if (item.result.Equals("Skip"))
+                                             {
+                                                 <td style="color:blue">
+                                                     @Html.DisplayFor(modelItem => item.result)
+                                                 </td>
+                                             }
+                                             else
+                                             {
+                                                 <td style="color:red">
+                                                     @Html.DisplayFor(modelItem => item.result)
+                                                 </td>
+                                             }*@
 
                         @*<td>
                                 @Html.DisplayFor(modelItem => item.is_test)
                             </td>*@
                         @*<td>
-                            @Html.DisplayFor(modelItem => item.CreatedDate)
-                        </td>*@
+                                @Html.DisplayFor(modelItem => item.CreatedDate)
+                            </td>*@
                         @*<td>
                                 @Html.DisplayFor(modelItem => item.ModifiedDate)
                             </td>*@
@@ -195,7 +203,11 @@
                                     </div>
                                 </div>
                             }
+                        </td>
+                        <td>
                             <a class="btn btn-success" asp-action="TestData" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Test data</a>
+                        </td>
+                        <td>
                             <a class="btn btn-primary" asp-action="TestElement" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button">Validate items</a>
                         </td>
                     </tr>
@@ -269,7 +281,7 @@
                 "scrollY":        "500px",
         "scrollCollapse": true,
                 "paging": false,
-        "searching": false
+        //"searching": false
             }
         );
 
@@ -287,12 +299,12 @@
             }
     };
     function Run_All() {
-          
+
 
                 document.getElementById("runall").value = "true";
                 ShowProgress();
                 document.getElementById("testcaseform").submit();
-            
+
     };
     function UpdateTestcase() {
 
@@ -322,7 +334,7 @@
     function Delete() {
 
         var selectedIDs = new Array();
-      
+
         $("input:checked").each(function () {
            // console.log($(this).val()); //works fine
             selectedIDs.push($(this).val());
@@ -334,9 +346,9 @@
                 type: 'POST',
                 data: { id_url:idurl,List_id_testcase: selectedIDs}
             }).done(function (data) {
-               
+
                 location.reload();
-                
+
                 alert("Success");
 
                 //}

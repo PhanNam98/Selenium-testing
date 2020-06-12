@@ -26,6 +26,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Button_tag> Button_tag { get; set; }
+        public virtual DbSet<ConfigWeb> ConfigWeb { get; set; }
         public virtual DbSet<Element> Element { get; set; }
         public virtual DbSet<Element_test> Element_test { get; set; }
         public virtual DbSet<Form_elements> Form_elements { get; set; }
@@ -299,6 +300,11 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasForeignKey(d => d.id_url)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Test_case_Url");
+
+                entity.HasOne(d => d.id_prerequisite_)
+                    .WithMany(p => p.Inverseid_prerequisite_)
+                    .HasForeignKey(d => new { d.id_prerequisite_testcase, d.id_prerequisite_url })
+                    .HasConstraintName("FK_Test_case_Test_case");
             });
 
             modelBuilder.Entity<Test_element_Result_test>(entity =>
