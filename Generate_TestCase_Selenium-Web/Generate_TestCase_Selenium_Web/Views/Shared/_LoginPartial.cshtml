@@ -1,31 +1,49 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+    <ul class="navbar-nav">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            if (User.IsInRole("Adminitrator"))
+            {
+                <li>
+                    @*<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello Admin @User.Identity.Name!</a>*@
+                    <a class="nav-link text-dark" asp-area="Adminitrator" asp-controller="Admin" asp-action="Dashboard" title="Dashboard">Admin @User.Identity.Name</a>
+                </li>
+                <li class="nav-item">
+                    <form class="form-inline" asp-area="identity" asp-page="/account/logout" asp-route-returnurl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"></i></button>
+                    </form>
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-area="identity" asp-page="/account/logout" asp-route-returnurl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"></i></button>
-            </form>
+                </li>
+                <li class="nav-item">
+                    <a id="config" class="nav-link text-dark" asp-area="Adminitrator" asp-controller="Admin" asp-action="Config"><i class="fas fa-cog"></i></a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+                </li>
+                <li class="nav-item">
+                    <form class="form-inline" asp-area="identity" asp-page="/account/logout" asp-route-returnurl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-sign-out-alt"></i></button>
+                    </form>
 
-        </li>
-        <li class="nav-item">
-            <a id="setting" class="nav-link text-dark" asp-area="User" asp-controller="Setting_" asp-action="Setting"><i class="fas fa-cog"></i></a>
-        </li>
+                </li>
+                <li class="nav-item">
+                    <a id="setting" class="nav-link text-dark" asp-area="User" asp-controller="Setting_" asp-action="Setting"><i class="fas fa-cog"></i></a>
+                </li>
+            }
 
-    }
-    else
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        </li>
-    }
-</ul>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </li>
+        }
+    </ul>

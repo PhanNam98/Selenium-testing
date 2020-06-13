@@ -1,9 +1,18 @@
 ﻿@page "/ManageAccount/Email"
 @model EmailModel
+
 @{
     ViewData["Title"] = "Manage Email";
     ViewData["ActivePage"] = ManageNavPages.Email;
-    Layout = "~/Views/Shared/_LayoutManage.cshtml";
+    if (User.IsInRole("Adminitrator"))
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutManage.cshtml";
+    }
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -63,7 +72,7 @@
                             <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary">Change email</button>
                         </div>
                     </div>
-                    
+
                 </form>
             </div>
         </div>

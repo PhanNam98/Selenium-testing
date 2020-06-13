@@ -1,0 +1,84 @@
+﻿@model Generate_TestCase_Selenium_Web.Models.ModelDB.ConfigWeb
+
+@{
+    ViewData["Title"] = "Config";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Config</h2>
+
+<ol class="breadcrumb mb-4">
+
+    <li class="breadcrumb-item active">Config web</li>
+</ol>
+<hr />
+<partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
+<div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+
+                <div class="row">
+                    <div class="col-4">
+                        <i class="fas fa-cog"></i> Setting
+                    </div>
+                    <div class="col-8">
+                        <div class="container">
+                            <div class="text-right">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form asp-action="Configweb" method="post" id="config">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="id" />
+                    <div class="form-group" hidden>
+                        <label asp-for="number_of_urls_per_user"></label>
+                        <input asp-for="number_of_urls_per_user" class="form-control" />
+                        <span asp-validation-for="number_of_urls_per_user" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+
+
+                            <div class="text-left">
+                                <label class="control-label"> Number of test cases running concurrently: </label>
+                            </div>
+                            <div class="text-right">
+                                <input asp-for="number_of_test_cases_running_concurrently" type="number" max="5" min="2" />
+                            </div>
+
+                            <span asp-validation-for="number_of_test_cases_running_concurrently" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>*@
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="container">
+                    <div class="text-right">
+                        <a role="button" value="Update" class="btn btn-primary" onclick="Submit()">Update</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+  
+    function Submit() {
+        document.getElementById("config").submit();
+    };
+</script>
+
+
