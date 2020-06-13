@@ -53,11 +53,23 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             {
                 return NotFound();
             }
+            var result_url = await _context.Result_Url.Where(p => p.id_result == id).FirstOrDefaultAsync();
+            if(result_url!=null)
+            {
+                ViewData["test_url"] = result_url.test_url;
+                ViewData["return_url"] = result_url.return_url;
+            }
+            else
+            {
+                ViewData["test_url"] = null;
+                ViewData["return_url"] = null;
+            }
             ViewData["Pass"] = results.Where(p => p.Result.ToLower().Equals("pass")).Count();
             ViewData["Skip"] = results.Where(p => p.Result.ToLower().Equals("skip")).Count();
             ViewData["Failure"] = results.Where(p => p.Result.ToLower().Equals("failure")).Count();
             ViewData["id_result"] = id;
             ViewData["id_url"] = results.FirstOrDefault().id_url ;
+           
             return View(results);
         }
 

@@ -40,7 +40,12 @@
                         <th>
                             @Html.DisplayName("Id element")
                         </th>
-
+                        <th>
+                            @Html.DisplayName("Tag name")
+                        </th>
+                        <th>
+                            @Html.DisplayName("Type")
+                        </th>
                         <th>
                             @Html.DisplayName("Action")
                         </th>
@@ -50,142 +55,147 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.step)
-                            </td>
-                            <td>
-                                @{
-                                    string detail = "d" + @item.id_element.ToString();
-                                    <button type="button" class="btn btn-custon-rounded-three btn-primary btn-xs" data-toggle="modal" data-target="#@detail">@item.id_element</button>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.step)
+                        </td>
+                        <td>
+                            @{
+                                string detail = "d" + @item.id_element.ToString();
+                                <button type="button" class="btn btn-custon-rounded-three btn-primary btn-xs" data-toggle="modal" data-target="#@detail">@item.id_element</button>
 
-                                    <!-- Modal -->
+                                <!-- Modal -->
 
-                                    <div class="modal fade" id="@detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="center">
-                                            <div class="modal-dialog modal-dialog-center" role="document">
-                                                <div class="modal-content">
+                                <div class="modal fade" id="@detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="center">
+                                        <div class="modal-dialog modal-dialog-center" role="document">
+                                            <div class="modal-content">
 
-                                                    @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Detail element</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
+                                                @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Detail element</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Id elemnet")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" class="input-md form-control" value="@item.id_element" readonly>
+                                                        </div>
                                                     </div>
-                                                    <div class="modal-body">
-                                                        <div class="row form-group">
-                                                            <div class="col col-md-3">@Html.Label("Id elemnet")</div>
-                                                            <div class="col-12 col-md-9">
-                                                                <input type="text" class="input-md form-control" value="@item.id_element" readonly>
-                                                            </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Name")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" class="input-md form-control" value="@item.id_.name" readonly />
                                                         </div>
-                                                        <div class="row form-group">
-                                                            <div class="col col-md-3">@Html.Label("Name")</div>
-                                                            <div class="col-12 col-md-9">
-                                                                <input type="text" class="input-md form-control" value="@item.id_.name" readonly />
-                                                            </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col col-md-3">@Html.Label("Class Name")</div>
-                                                            <div class="col-12 col-md-9">
-                                                                <input type="text" class="input-md form-control" value="@item.id_.class_name" readonly />
-                                                            </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col col-md-3">@Html.Label("Tag name")</div>
-                                                            <div class="col-12 col-md-9">
-                                                                <input type="text" class="input-md form-control" value="@item.id_.tag_name" readonly />
-                                                            </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col col-md-3">@Html.Label("Type")</div>
-                                                            <div class="col-12 col-md-9">
-                                                                <input type="text" class="input-md form-control" value="@item.id_.type" readonly />
-                                                            </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col col-md-3">@Html.Label("Href")</div>
-                                                            <div class="col-12 col-md-9">
-                                                                <input type="text" class="input-md form-control" value="@item.id_.href" readonly />
-                                                            </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col col-md-3">@Html.Label("Title")</div>
-                                                            <div class="col-12 col-md-9">
-                                                                <input type="text" class="input-md form-control" value="@item.id_.title" readonly />
-                                                            </div>
-                                                        </div>
-                                                        <div class="row form-group">
-                                                            <div class="col col-md-3">@Html.Label("Xpath")</div>
-                                                            <div class="col-12 col-md-9">
-                                                                <input type="text" class="input-md form-control" value="@item.id_.xpath" readonly />
-                                                            </div>
-                                                        </div>
-
                                                     </div>
-                                                    <hr />
-                                                    <div class="modal-footer">
-
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Class Name")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" class="input-md form-control" value="@item.id_.class_name" readonly />
+                                                        </div>
                                                     </div>
-
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Tag name")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" class="input-md form-control" value="@item.id_.tag_name" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Type")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" class="input-md form-control" value="@item.id_.type" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Href")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" class="input-md form-control" value="@item.id_.href" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Title")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" class="input-md form-control" value="@item.id_.title" readonly />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-3">@Html.Label("Xpath")</div>
+                                                        <div class="col-12 col-md-9">
+                                                            <input type="text" class="input-md form-control" value="@item.id_.xpath" readonly />
+                                                        </div>
+                                                    </div>
 
                                                 </div>
+                                                <hr />
+                                                <div class="modal-footer">
+
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+
+
                                             </div>
                                         </div>
                                     </div>
-                                }
-                            </td>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @item.id_.tag_name.ToString()
+                        </td>
+                        <td>
+                            @item.id_.type.ToString()
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.action)
+                        </td>
+                        <td>
+                            @{
+                                string showvalue = "dv" + @item.id_element.ToString();
+                                <button type="button" class="btn btn-custon-rounded-three btn-success btn-xs" data-toggle="modal" data-target="#@showvalue">Value</button>
 
-                            <td>
-                                @Html.DisplayFor(modelItem => item.action)
-                            </td>
-                            <td>
-                                @{
-                                    string showvalue = "dv" + @item.id_element.ToString();
-                                    <button type="button" class="btn btn-custon-rounded-three btn-success btn-xs" data-toggle="modal" data-target="#@showvalue">Value</button>
+                                <!-- Modal -->
 
-                                    <!-- Modal -->
+                                <div class="modal fade" id="@showvalue" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="center">
+                                        <div class="modal-dialog modal-dialog-center" role="document">
+                                            <div class="modal-content">
 
-                                    <div class="modal fade" id="@showvalue" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="center">
-                                            <div class="modal-dialog modal-dialog-center" role="document">
-                                                <div class="modal-content">
-
-                                                    @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Input Value</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="row form-group">
-                                                            <div class="col col-md-12">@Html.Label("Input value")</div>
-
-                                                        </div>
-                                                        <div class="row form-group">
-
-                                                            <div class="col-12 col-md-12">
-                                                                <input type="text" name="idpost" class="input-md form-control" value="@item.value" readonly>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    </div>
-
-
+                                                @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Input Value</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
                                                 </div>
+                                                <div class="modal-body">
+                                                    <div class="row form-group">
+                                                        <div class="col col-md-12">@Html.Label("Input value")</div>
+
+                                                    </div>
+                                                    <div class="row form-group">
+
+                                                        <div class="col-12 col-md-12">
+                                                            <input type="text" name="idpost" class="input-md form-control" value="@item.value" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+
+
                                             </div>
                                         </div>
                                     </div>
-                                }
+                                </div>
+                            }
 
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>

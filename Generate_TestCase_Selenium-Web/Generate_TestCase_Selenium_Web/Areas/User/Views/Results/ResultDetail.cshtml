@@ -40,7 +40,68 @@
 
     </div>
     <div class="card-body">
-        @using (Html.BeginForm("DownloadExcel2", "GenerateTestCases",new { area = "TestCase" },FormMethod.Post,false, htmlAttributes: new { @area = "TestCase", enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
+        <div class="card mb-4">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-3"><i class="fas fa-table mr-1"></i>Url</div>
+                    <div class="col-9">
+                        <div class="container">
+                            <div class="text-right">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body">
+                
+                    <div class="row form-group">
+                        <div class="col-2">@Html.Label("Test-return url:")</div>
+                        <div class="col-4">
+                            @{
+                                if (ViewBag.test_url != ViewBag.return_url)
+                                {
+                                    <input style="color:red;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_url" readonly>
+                                }
+                                else
+                                {
+                                    <input type="text" name="test_url" class="input form-control" value="@ViewBag.test_url" readonly>
+                                }
+                            }
+
+                        </div>
+                    @*</div>
+                    <div class="row form-group">*@
+                        <div class="col-2">@Html.Label("Return url:")</div>
+                        <div class="col-4">
+                           
+                            @{
+                                if (ViewBag.test_url != ViewBag.return_url)
+                                {
+                                    <input style="color:red;" type="text" name="return_url" class="input form-control" value="@ViewBag.return_url" readonly>
+                                }
+                                else
+                                {
+                                    <input type="text" name="return_url" class="input form-control" value="@ViewBag.return_url" readonly>
+                                }
+                            }
+                        
+                        </div>
+                    </div>
+                    @*<div class="form-control" class="col-6">
+                        <label>Test-return url:</label>
+                        <input id="test_url" name="test_url" value="@ViewBag.test_url" readonly class="form-control" />
+                    </div>
+                    <div class="col-6">
+                        <label class="form-control">Return url:</label>
+                        <input id="return_url" name="return_url" value="@ViewBag.return_url" readonly class="form-control" />
+                    </div>*@
+               
+            </div>
+        </div>
+
+        @using (Html.BeginForm("DownloadExcel2", "GenerateTestCases", new { area = "TestCase" }, FormMethod.Post, false, htmlAttributes: new { @area = "TestCase", enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
         {
             <input id="id_result" name="id_result" value="@ViewBag.id_result" hidden readonly />
             <input id="id_url" name="id_url" value="@ViewBag.id_url" hidden readonly />
@@ -154,7 +215,7 @@ if (item.Result.Equals("Skip"))
                                         </div>
                                     }
                                     <a class="btn btn-success" asp-action="TestData" asp-controller="Results" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" asp-route-id_result="@item.id_result" role="button" title="Test data">Data</a>
-                                    <a class="btn btn-success   " asp-action="TestElement" asp-controller="Results" asp-route-id_testcase="@item.id_testcase" asp-route-id_result="@item.id_result" role="button" title="Validate items">Validate items</a>
+                                    <a class="btn btn-success" asp-action="TestElement" asp-controller="Results" asp-route-id_testcase="@item.id_testcase" asp-route-id_result="@item.id_result" role="button" title="Validate items">Validate items</a>
                                 </td>
                             </tr>
                         }
@@ -164,6 +225,7 @@ if (item.Result.Equals("Skip"))
         }
     </div>
 </div>
+
 <script>
 
     $(document).ready(function () {

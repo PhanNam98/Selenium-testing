@@ -35,6 +35,8 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         [InverseProperty(nameof(AspNetUsers.Running_process))]
         public virtual AspNetUsers id_userNavigation { get; set; }
         [InverseProperty("id_resultNavigation")]
+        public virtual Result_Url Result_Url { get; set; }
+        [InverseProperty("id_resultNavigation")]
         public virtual ICollection<Result_testcase> Result_testcase { get; set; }
     }
 }

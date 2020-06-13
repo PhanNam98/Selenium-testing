@@ -193,18 +193,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.id_form == forms[i].id_form && p.type == "submit").ToListAsync();
                     for (int j = 0; j < submit.Count; j++)
                     {
-                        await notfill_clicksubmit(forms[i].id_form, j, submit[j]);
-                        await input_type_email(forms[i].id_form, j, submit[j]);
-                        await input_type_text(forms[i].id_form, j, submit[j]);
-                        await clickall_typeradio(forms[i].id_form, j, submit[j]);
-                        await selectallelement_typeselect(forms[i].id_form, j, submit[j]);
-                        await skiponeselect_typeselect(forms[i].id_form, j, submit[j]);
-                        await clickall_typeradio(forms[i].id_form, j, submit[j]);
-                        await input_type_password(forms[i].id_form, j, submit[j]);
-                        await click_any_checkbox_typecheckbox(forms[i].id_form, j, submit[j]);
-                        await clickall_typecheckbox(forms[i].id_form, j, submit[j]);
-                        await input_type_typedate(forms[i].id_form, j, submit[j]);
-                        await input_type_typenumber(forms[i].id_form, j, submit[j]);
+
+                        await NotFill_ClickSubmit(forms[i].id_form, j, submit[j]);
+                        await Input_Type_Email(forms[i].id_form, j, submit[j]);
+                        await Input_Type_Text(forms[i].id_form, j, submit[j]);
+                        await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                        await SelectAllElement_TypeSelect(forms[i].id_form, j, submit[j]);
+                        await SkipOneSelect_TypeSelect(forms[i].id_form, j, submit[j]);
+                        await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                        await Input_Type_Password(forms[i].id_form, j, submit[j]);
+                        await Click_Any_CheckBox_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        await ClickAll_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        await Input_Type_TypeDate(forms[i].id_form, j, submit[j]);
+                        await Input_Type_TypeNumber(forms[i].id_form, j, submit[j]);
                         await Fill_Form(forms[i].id_form, j, submit[j]);
                     }
                 }
@@ -3274,6 +3275,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         }
                         RedirectUrl.current_url = current_url;
                         _context.Update(RedirectUrl);
+                        RedirectUrl.current_url = current_url;
+                        _context.Update(RedirectUrl);
+                        Result_Url result_Url = new Result_Url();
+                        result_Url.id_result = jobId;
+                        result_Url.return_url = current_url;
+                        result_Url.TestDate = DateTime.Now;
+                        result_Url.test_url = RedirectUrl.redirect_url_test;
+                        _context.Result_Url.Add(result_Url);
                     }
                     chromedriver.Quit();
                     string result = "";
@@ -3644,6 +3653,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         }
                         RedirectUrl.current_url = current_url;
                         _context.Update(RedirectUrl);
+                        Result_Url result_Url = new Result_Url();
+                        result_Url.id_result = jobId;
+                        result_Url.return_url = current_url;
+                        result_Url.TestDate = DateTime.Now;
+                        result_Url.test_url = RedirectUrl.redirect_url_test;
+                        _context.Result_Url.Add(result_Url);
                     }
                     firefoxdriver.Quit();
                     string result = "";

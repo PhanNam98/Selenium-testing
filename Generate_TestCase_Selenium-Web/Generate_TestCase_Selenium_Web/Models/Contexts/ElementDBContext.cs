@@ -35,6 +35,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
         public virtual DbSet<Input_testcase> Input_testcase { get; set; }
         public virtual DbSet<Project> Project { get; set; }
         public virtual DbSet<Redirect_url> Redirect_url { get; set; }
+        public virtual DbSet<Result_Url> Result_Url { get; set; }
         public virtual DbSet<Result_testcase> Result_testcase { get; set; }
         public virtual DbSet<Running_process> Running_process { get; set; }
         public virtual DbSet<Select_tag> Select_tag { get; set; }
@@ -238,6 +239,15 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasForeignKey<Redirect_url>(d => new { d.id_testcase, d.id_url })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Redirect_url_Test_case");
+            });
+
+            modelBuilder.Entity<Result_Url>(entity =>
+            {
+                entity.HasOne(d => d.id_resultNavigation)
+                    .WithOne(p => p.Result_Url)
+                    .HasForeignKey<Result_Url>(d => d.id_result)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Result_Url_Running_process");
             });
 
             modelBuilder.Entity<Result_testcase>(entity =>

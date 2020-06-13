@@ -92,13 +92,13 @@
 
                         </div>
                     </div>
-                    <div class="row form-group">
+                    @*<div class="row form-group">
                         <div class="col col-md-3">@Html.Label("Result url")</div>
                         <div class="col-12 col-md-9">
                             <input type="text" name="redirect_url" class="input-md form-control" id="redirect_url" disabled value="@ViewBag.current_url">
 
                         </div>
-                    </div>
+                    </div>*@
 
                     <input id="id_url" name="id_url" value="@ViewBag.id_url" readonly hidden />
                     <input id="id_testcase" name="id_testcase" value="@ViewBag.id_testcase" readonly hidden />
@@ -139,7 +139,7 @@
                             else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
                             {
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
-                                    <i class="fa fa-close" style="color:white"></i>Url redirect
+                                    <i class="fa fa-times" style="color:white"></i>Url redirect
                                 </button>
                             }
                             else
