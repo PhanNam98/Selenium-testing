@@ -23,7 +23,7 @@
                 <div class="container">
                     <div class="text-right">
                         <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#Delete">Delete Element(s)</button>
-                        <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
+                        <a class="btn btn-primary" asp-action="Generate_Subtestcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
                            asp-route-prerequisite_testcase="@ViewBag.prerequisite_testcase" asp-route-prerequisite_url="@ViewBag.prerequisite_url"
                            asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Generate test case</a>
                     </div>
@@ -31,6 +31,8 @@
             </div>
         </div>
     </div>
+    <input value="@ViewBag.prerequisite_testcase" hidden/>
+    <input value="@ViewBag.prerequisite_url" hidden/>
     <div class="card-body">
         <div class="row">
 

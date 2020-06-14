@@ -208,6 +208,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 area = "TestCase",
                 project_id = project_id,
                 id_url = url.id_url,
+                //id_url = 46,
                 IsOnlyDislayed = IsOnlyDislayed,
                 prerequisite_url = id_url,
                 prerequisite_testcase = id_testcase

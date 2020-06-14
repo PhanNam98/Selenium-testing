@@ -49,18 +49,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             Url url = new Url();
             if (ModelState.IsValid)
             {
-                //url.name = name;
-                //url.project_id = project_id;
-                //url.url1 = url1;
-                //url.trigger_element = trigger_element;
-                //url.CreatedDate = DateTime.Now.Date;
-                //url.ModifiedDate = DateTime.Now.Date;
-                //_context.Add(url);
-                //await _context.SaveChangesAsync();
-                //ViewData["LoadingTitle"] = "Crawling data, please wait.";
+                url.name = name;
+                url.project_id = project_id;
+                url.url1 = url1;
+                url.trigger_element = trigger_element;
+                url.CreatedDate = DateTime.Now.Date;
+                url.ModifiedDate = DateTime.Now.Date;
+                _context.Add(url);
+                await _context.SaveChangesAsync();
+                ViewData["LoadingTitle"] = "Crawling data, please wait.";
 
-                //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = url.id_url, IsOnlyDislayed = IsOnlyDislayed }));
-                 return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 32, IsOnlyDislayed = IsOnlyDislayed }));
+                return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = url.id_url, IsOnlyDislayed = IsOnlyDislayed }));
+                //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 32, IsOnlyDislayed = IsOnlyDislayed }));
 
             }
             ViewData["Message"] = "Error";

@@ -88,26 +88,26 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //--Code, dont delete
             string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
             this.IsOnlyDislayed = IsOnlyDislayed;
-            //SetUp(Url);
-            //int isSuccess = GetElements(Url, IsOnlyDislayed, id_url);
-            //if (isSuccess == 1)
-            //{
-            //    _context.Form_elements.AddRange(listForm);
-            //    _context.Element.AddRange(listElt);
-            //    await _context.SaveChangesAsync();
-            //    if (returnUrl != null)
-            //    {
-            //        return LocalRedirect(returnUrl);
-            //    }
-            //    else
-            //    {
-            //        return RedirectToAction(nameof(Index), new RouteValueDictionary(new
-            //        {
-            //            id_url = id_url
-            //        }));
-            //    }
+            SetUp(Url);
+            int isSuccess = GetElements(Url, IsOnlyDislayed, id_url);
+            if (isSuccess == 1)
+            {
+                _context.Form_elements.AddRange(listForm);
+                _context.Element.AddRange(listElt);
+                await _context.SaveChangesAsync();
+                if (returnUrl != null)
+                {
+                    return LocalRedirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index), new RouteValueDictionary(new
+                    {
+                        id_url = id_url
+                    }));
+                }
 
-            //}
+            }
 
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new
             {
@@ -147,10 +147,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }));
             }
 
-            return RedirectToAction(nameof(Index), new RouteValueDictionary(new
+            return RedirectToAction("Elements_SubTestcase", "Manage", new RouteValueDictionary(new
             {
-                id_url = id_url
-
+                id_url = id_url,
+                prerequisite_testcase = prerequisite_testcase,
+                prerequisite_url = prerequisite_url
             }));
 
         }
