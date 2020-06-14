@@ -10,6 +10,9 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         [Key]
         [StringLength(100)]
         public string id_result { get; set; }
+        [Key]
+        [StringLength(100)]
+        public string id_testcase { get; set; }
         public string test_url { get; set; }
         public string return_url { get; set; }
         [Column(TypeName = "datetime")]

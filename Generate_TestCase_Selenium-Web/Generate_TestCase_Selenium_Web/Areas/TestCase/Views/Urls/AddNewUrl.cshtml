@@ -10,11 +10,13 @@
 <hr />
 <partial name="~/Views/Shared/LoadingViewPartial.cshtml" model="@ViewBag.LoadingTitle" />
 <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
         <div class="card">
-            <div class="text-center">
+            <div class="card-header">
+                @*<div class="text-center">*@
                 <h5 class="card-title">New url</h5>
+                @*  *@
             </div>
             <div class="card-body">
                 <partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
@@ -36,18 +38,23 @@
                     </div>
                     <div class="form-group">
                         <input type="checkbox" id="IsOnlyDislayed" name="IsOnlyDislayed" checked value="true"> <label for="vehicle1">Only element is displayed</label><br>
-                      
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Trigger element</label>
+                        <input class="form-control" id="trigger_element" name="trigger_element" placeholder="E.g: /html/div/div/a"> <br>
+
                     </div>
                     <div class="form-group" hidden>
-                            <label asp-for="CreatedDate" class="control-label"></label>
-                            <input asp-for="CreatedDate" class="form-control" value="@DateTime.Now.Date" />
-                            <span asp-validation-for="CreatedDate" class="text-danger"></span>
-                        </div>
-                        <div class="form-group" hidden>
-                            <label asp-for="ModifiedDate" class="control-label"></label>
-                            <input asp-for="ModifiedDate" class="form-control" value=@DateTime.Now.Date />
-                            <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-                        </div>
+                        <label asp-for="CreatedDate" class="control-label"></label>
+                        <input asp-for="CreatedDate" class="form-control" value="@DateTime.Now.Date" />
+                        <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" hidden>
+                        <label asp-for="ModifiedDate" class="control-label"></label>
+                        <input asp-for="ModifiedDate" class="form-control" value=@DateTime.Now.Date />
+                        <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+                    </div>
                     <div class="form-group">
                         <input type="submit" value="Add and Crawl data" class="btn btn-primary" onclick="ShowProgress()" />
                     </div>
@@ -57,22 +64,23 @@
         </div>
     </div>
 </div>
+<hr />
 @*<div class="loading" align="center">
-    <h1>Loading. Please wait.</h1> <br />
-    <br />
-    <img src="https://cdn.dribbble.com/users/1867579/screenshots/6580156/loadin_gif.gif" alt="" style="width:100px;height:100px;" />
+        <h1>Loading. Please wait.</h1> <br />
+        <br />
+        <img src="https://cdn.dribbble.com/users/1867579/screenshots/6580156/loadin_gif.gif" alt="" style="width:100px;height:100px;" />
 
-</div>*@
+    </div>*@
 
 <script>
 
     function IsEmpty() {
         if (document.getElementById("url1").value === "" || document.getElementById("name").value === "") {
-          
+
             return false;
         }
         ShowProgress();;
         return true;
     }
-   
+
 </script>

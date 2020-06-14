@@ -29,38 +29,50 @@
     <div class="col-md-6">
         <div class="row">
             @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Add new test element
-                </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
-                    @{
-                        if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                        {
-                            <i class="fas fa-check" style="color:green"></i>
-                        }
-                        else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                        {
-                            <i class="fa fa-close" style="color:white"></i>
-                        }
+            Add new test element
+        </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
+            @{
+                if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+                {
+                    <i class="fas fa-check" style="color:green"></i>
+                }
+                else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+                {
+                    <i class="fa fa-close" style="color:white"></i>
+                }
 
 
-                    }
-                    Url redirect
-                </button>*@
+            }
+            Url redirect
+        </button>*@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 Add element
             </button>
 
             @{
-                if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+                @*if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+            {
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
+                    <i class="fas fa-check" style="color:green"></i>
+                </button>
+            }
+            else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+            {
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
+                    <i class="fa fa-times" style="color:white"></i>Url redirect
+                </button>
+            }
+            else
+            { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
+                    Add url redirect
+                </button>
+            }*@
+                if ((ViewBag.current_url != null))
                 {
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
-                        <i class="fas fa-check" style="color:green"></i>
-                    </button>
-                }
-                else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                {
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
-                        <i class="fa fa-times" style="color:white"></i>Url redirect
+                        @*<i class="fas fa-check" style="color:green"></i>Url redirect*@
+                        Url redirect
                     </button>
                 }
                 else

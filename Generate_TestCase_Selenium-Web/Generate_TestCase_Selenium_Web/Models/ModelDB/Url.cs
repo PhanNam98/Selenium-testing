@@ -32,6 +32,7 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         [Column(TypeName = "date")]
         public DateTime? ModifiedDate { get; set; }
         public bool? IsChange { get; set; }
+        public string trigger_element { get; set; }
 
         [ForeignKey(nameof(project_id))]
         [InverseProperty(nameof(Project.Url))]

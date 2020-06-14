@@ -130,17 +130,24 @@
                         </button>
 
                         @{
-                            if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                            {
-                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
-                                                    <i class="fas fa-check" style="color:green"></i>Url redirect
-                                                </button>
-                            }
-                            else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                            {
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
-                                    <i class="fa fa-times" style="color:white"></i>Url redirect
+                            @*if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+            {
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
+                                    <i class="fas fa-check" style="color:green"></i>Url redirect
                                 </button>
+            }
+            else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+            {
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
+                    <i class="fa fa-times" style="color:white"></i>Url redirect
+                </button>
+            }*@
+                            if ((ViewBag.current_url != null))
+                            {
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
+                        @*<i class="fas fa-check" style="color:green"></i>Url redirect*@
+                        Url redirect
+                    </button>
                             }
                             else
                             { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">

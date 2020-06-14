@@ -53,17 +53,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             {
                 return NotFound();
             }
-            var result_url = await _context.Result_Url.Where(p => p.id_result == id).FirstOrDefaultAsync();
-            if(result_url!=null)
-            {
-                ViewData["test_url"] = result_url.test_url;
-                ViewData["return_url"] = result_url.return_url;
-            }
-            else
-            {
-                ViewData["test_url"] = null;
-                ViewData["return_url"] = null;
-            }
+           
             ViewData["Pass"] = results.Where(p => p.Result.ToLower().Equals("pass")).Count();
             ViewData["Skip"] = results.Where(p => p.Result.ToLower().Equals("skip")).Count();
             ViewData["Failure"] = results.Where(p => p.Result.ToLower().Equals("failure")).Count();
@@ -109,17 +99,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             ViewData["id_testcase"] = id_testcase;
             ViewData["id_result"] = id_result;
             var testelementDBContext = await _context.Test_element_Result_test.Where(p => p.id_result == id_result && p.id_testcase == id_testcase).ToListAsync();
-            //var urlRedirectDBContext = await _context.Redirect_url.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefaultAsync();
-            //if (urlRedirectDBContext != null)
-            //{
-            //    ViewData["urlRedirecttest"] = urlRedirectDBContext.redirect_url_test;
-            //    ViewData["current_url"] = urlRedirectDBContext.current_url;
-            //}
-            //else
-            //{
-            //    ViewData["urlRedirecttest"] = "";
-            //    ViewData["current_url"] = "";
-            //}
+
+            var result_url = await _context.Result_Url.Where(p => p.id_result == id_result && p.id_testcase == id_testcase).FirstOrDefaultAsync();
+            if (result_url != null)
+            {
+                ViewData["test_url"] = result_url.test_url;
+                ViewData["return_url"] = result_url.return_url;
+            }
+            else
+            {
+                ViewData["test_url"] = null;
+                ViewData["return_url"] = null;
+            }
             if (ViewData["Message"] == null)
             {
                 if (testelementDBContext.Count() == 0)

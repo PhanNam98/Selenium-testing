@@ -9,6 +9,8 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
     {
         public Running_process()
         {
+            Result_AlertMessage = new HashSet<Result_AlertMessage>();
+            Result_Url = new HashSet<Result_Url>();
             Result_testcase = new HashSet<Result_testcase>();
         }
 
@@ -35,7 +37,9 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         [InverseProperty(nameof(AspNetUsers.Running_process))]
         public virtual AspNetUsers id_userNavigation { get; set; }
         [InverseProperty("id_resultNavigation")]
-        public virtual Result_Url Result_Url { get; set; }
+        public virtual ICollection<Result_AlertMessage> Result_AlertMessage { get; set; }
+        [InverseProperty("id_resultNavigation")]
+        public virtual ICollection<Result_Url> Result_Url { get; set; }
         [InverseProperty("id_resultNavigation")]
         public virtual ICollection<Result_testcase> Result_testcase { get; set; }
     }

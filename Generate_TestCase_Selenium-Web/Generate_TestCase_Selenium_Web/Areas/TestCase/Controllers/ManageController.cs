@@ -142,7 +142,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewUrl(string name, string url1, int project_id, bool IsOnlyDislayed)
+        public async Task<IActionResult> AddNewUrl(string name, string url1, int project_id, bool IsOnlyDislayed,string trigger_element)
         {
             Url url = new Url();
             try
@@ -150,6 +150,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 url.name = name;
                 url.project_id = project_id;
                 url.url1 = url1;
+                url.trigger_element = trigger_element;
                 url.CreatedDate = DateTime.Now.Date;
                 url.ModifiedDate = DateTime.Now.Date;
                 _context.Add(url);
@@ -179,7 +180,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddNewSubUrl(string name,string url1,bool IsChange, string id_testcase,bool IsOnlyDislayed,int project_id,int id_url)
+        public async Task<IActionResult> AddNewSubUrl(string name,string url1,bool IsChange, string id_testcase,bool IsOnlyDislayed,int project_id,int id_url,string trigger_element)
         {
             Url url = new Url();
             try
@@ -187,6 +188,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 url.name = name;
                 url.project_id = project_id;
                 url.url1 = url1;
+                url.trigger_element = trigger_element;
                 url.CreatedDate = DateTime.Now.Date;
                 url.ModifiedDate = DateTime.Now.Date;
                 url.IsChange = IsChange;
@@ -431,7 +433,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             else
             {
                 ViewData["urlRedirecttest"] = "";
-                ViewData["current_url"] = "";
+                ViewData["current_url"] = null;
             }
             if (ViewData["Message"] == null)
             {

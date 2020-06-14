@@ -469,12 +469,20 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                 if (RedirectUrl != null)
                 {
                     string current_url = chromedriver.Url;
-                    if (!RedirectUrl.current_url.Equals(current_url))
+                    current_url = current_url.Remove(current_url.Length - 1);
+                    if (RedirectUrl.redirect_url_test != current_url)
                     {
                         isFailure++;
                     }
                     RedirectUrl.current_url = current_url;
                     _context.Update(RedirectUrl);
+                    Result_Url result_Url = new Result_Url();
+                    result_Url.id_result = jobId;
+                    result_Url.return_url = current_url;
+                    result_Url.TestDate = DateTime.Now;
+                    result_Url.test_url = RedirectUrl.redirect_url_test;
+                    result_Url.id_testcase = id_testcase;
+                    _context.Result_Url.Add(result_Url);
                 }
                 chromedriver.Quit();
                 string result = "";
@@ -813,6 +821,13 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                     }
                     RedirectUrl.current_url = current_url;
                     _context.Update(RedirectUrl);
+                    Result_Url result_Url = new Result_Url();
+                    result_Url.id_result = jobId;
+                    result_Url.return_url = current_url;
+                    result_Url.TestDate = DateTime.Now;
+                    result_Url.test_url = RedirectUrl.redirect_url_test;
+                    result_Url.id_testcase = id_testcase;
+                    _context.Result_Url.Add(result_Url);
                 }
                 firefoxdriver.Quit();
                 string result = "";

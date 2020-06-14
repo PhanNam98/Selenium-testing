@@ -3282,6 +3282,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         result_Url.return_url = current_url;
                         result_Url.TestDate = DateTime.Now;
                         result_Url.test_url = RedirectUrl.redirect_url_test;
+                        result_Url.id_testcase = id_testcase;
                         _context.Result_Url.Add(result_Url);
                     }
                     chromedriver.Quit();
@@ -3658,6 +3659,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         result_Url.return_url = current_url;
                         result_Url.TestDate = DateTime.Now;
                         result_Url.test_url = RedirectUrl.redirect_url_test;
+                        result_Url.id_testcase = id_testcase;
                         _context.Result_Url.Add(result_Url);
                     }
                     firefoxdriver.Quit();
@@ -4470,7 +4472,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             else
             {
                 ViewData["urlRedirecttest"] = "";
-                ViewData["current_url"] = "";
+                ViewData["current_url"] = null;
             }
             if (ViewData["Message"] == null)
             {

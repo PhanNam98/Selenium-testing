@@ -24,29 +24,29 @@
             <div class="col-10">
                 <div class="container">
                     <div class="text-right">
-                       
+
 
                         @*@{
-                            if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                            {
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
-                                    <i class="fas fa-check" style="color:green"></i>Url redirect
-                                </button>
-                            }
-                            else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                            {
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
-                                    <i class="fa fa-close" style="color:white"></i>Url redirect
-                                </button>
-                            }
-                            else
-                            { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
-                                    Add url redirect
-                                </button>
-                            }
+                                if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+                                {
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
+                                        <i class="fas fa-check" style="color:green"></i>Url redirect
+                                    </button>
+                                }
+                                else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+                                {
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
+                                        <i class="fa fa-close" style="color:white"></i>Url redirect
+                                    </button>
+                                }
+                                else
+                                { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
+                                        Add url redirect
+                                    </button>
+                                }
 
 
-                        }*@
+                            }*@
 
 
                     </div>
@@ -54,7 +54,68 @@
             </div>
         </div>
     </div>
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-3"><i class="fas fa-table mr-1"></i>Url</div>
+                <div class="col-9">
+                    <div class="container">
+                        <div class="text-right">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body">
+
+            <div class="row form-group">
+                <div class="col-2">@Html.Label("Test-return url:")</div>
+                <div class="col-4">
+                    @{
+                        if (ViewBag.test_url != ViewBag.return_url)
+                        {
+                            <input style="color:red;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_url" readonly>
+                        }
+                        else
+                        {
+                            <input type="text" name="test_url" class="input form-control" value="@ViewBag.test_url" readonly>
+                        }
+                    }
+
+                </div>
+                @*</div>
+                    <div class="row form-group">*@
+                <div class="col-2">@Html.Label("Return url:")</div>
+                <div class="col-4">
+
+                    @{
+                        if (ViewBag.test_url != ViewBag.return_url)
+                        {
+                            <input style="color:red;" type="text" name="return_url" class="input form-control" value="@ViewBag.return_url" readonly>
+                        }
+                        else
+                        {
+                            <input type="text" name="return_url" class="input form-control" value="@ViewBag.return_url" readonly>
+                        }
+                    }
+
+                </div>
+            </div>
+            @*<div class="form-control" class="col-6">
+                    <label>Test-return url:</label>
+                    <input id="test_url" name="test_url" value="@ViewBag.test_url" readonly class="form-control" />
+                </div>
+                <div class="col-6">
+                    <label class="form-control">Return url:</label>
+                    <input id="return_url" name="return_url" value="@ViewBag.return_url" readonly class="form-control" />
+                </div>*@
+
+        </div>
+    </div>
     <div class="card-body">
+
         <div class="table-responsive">
             <table class="table table-condensed table-hover table-bordered" id="exam">
                 <thead>
@@ -63,14 +124,14 @@
                         <th>
                             @Html.DisplayName("Xpath")
                         </th>
-                      
+
                         <th>
                             @Html.DisplayName("Return value")
                         </th>
                         <th>
                             @Html.DisplayName("Test value")
                         </th>
-                       
+
                     </tr>
                 </thead>
                 <tbody>
@@ -94,7 +155,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.xpath)
                             </td>
-                          
+
                             <td>
                                 @Html.DisplayFor(modelItem => item.value)
                             </td>

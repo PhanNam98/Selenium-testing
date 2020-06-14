@@ -35,6 +35,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
         public virtual DbSet<Input_testcase> Input_testcase { get; set; }
         public virtual DbSet<Project> Project { get; set; }
         public virtual DbSet<Redirect_url> Redirect_url { get; set; }
+        public virtual DbSet<Result_AlertMessage> Result_AlertMessage { get; set; }
         public virtual DbSet<Result_Url> Result_Url { get; set; }
         public virtual DbSet<Result_testcase> Result_testcase { get; set; }
         public virtual DbSet<Running_process> Running_process { get; set; }
@@ -241,13 +242,28 @@ namespace Generate_TestCase_Selenium_Web.Models.Contexts
                     .HasConstraintName("FK_Redirect_url_Test_case");
             });
 
+            modelBuilder.Entity<Result_AlertMessage>(entity =>
+            {
+                entity.HasKey(e => new { e.id_result, e.id_testcase })
+                    .HasName("PK_Result_AlertMessage_1");
+
+                entity.HasOne(d => d.id_resultNavigation)
+                    .WithMany(p => p.Result_AlertMessage)
+                    .HasForeignKey(d => d.id_result)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Result_AlertMessage_Running_process1");
+            });
+
             modelBuilder.Entity<Result_Url>(entity =>
             {
+                entity.HasKey(e => new { e.id_result, e.id_testcase })
+                    .HasName("PK_Result_Url_1");
+
                 entity.HasOne(d => d.id_resultNavigation)
-                    .WithOne(p => p.Result_Url)
-                    .HasForeignKey<Result_Url>(d => d.id_result)
+                    .WithMany(p => p.Result_Url)
+                    .HasForeignKey(d => d.id_result)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Result_Url_Running_process");
+                    .HasConstraintName("FK_Result_Url_Running_process1");
             });
 
             modelBuilder.Entity<Result_testcase>(entity =>
