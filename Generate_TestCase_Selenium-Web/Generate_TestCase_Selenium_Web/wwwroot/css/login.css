@@ -1,0 +1,33 @@
+﻿.login .row {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.login {
+    width: 100%;
+    background-image: url("../assets/img/brg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+   
+}
+.login h1{
+    text-align:center;
+    color:white;
+
+}
+    .login .row .col-md-5 {
+        padding: 20px;
+        margin-bottom: 30px;
+        background-color: white;
+        opacity: 0.9;
+        border-radius: 3px;
+        box-shadow: 0 5px 20px #67757c;
+    }
+.login .center-item{
+    text-align:center;
+}
+.login .center-item .btn{
+    width:50%;
+
+}

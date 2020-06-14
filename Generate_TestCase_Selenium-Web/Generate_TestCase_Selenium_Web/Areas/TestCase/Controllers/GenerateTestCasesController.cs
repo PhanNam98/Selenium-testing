@@ -194,23 +194,23 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     for (int j = 0; j < submit.Count; j++)
                     {
 
-                        await NotFill_ClickSubmit(forms[i].id_form, j, submit[j]);
-                        await Input_Type_Email(forms[i].id_form, j, submit[j]);
-                        await Input_Type_Text(forms[i].id_form, j, submit[j]);
-                        await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
-                        await SelectAllElement_TypeSelect(forms[i].id_form, j, submit[j]);
-                        await SkipOneSelect_TypeSelect(forms[i].id_form, j, submit[j]);
-                        await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
-                        await Input_Type_Password(forms[i].id_form, j, submit[j]);
-                        await Click_Any_CheckBox_TypeCheckBox(forms[i].id_form, j, submit[j]);
-                        await ClickAll_TypeCheckBox(forms[i].id_form, j, submit[j]);
-                        await Input_Type_TypeDate(forms[i].id_form, j, submit[j]);
-                        await Input_Type_TypeNumber(forms[i].id_form, j, submit[j]);
-                        await Fill_Form(forms[i].id_form, j, submit[j]);
+                        //await NotFill_ClickSubmit(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_Email(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_Text(forms[i].id_form, j, submit[j]);
+                        //await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                        //await SelectAllElement_TypeSelect(forms[i].id_form, j, submit[j]);
+                        //await SkipOneSelect_TypeSelect(forms[i].id_form, j, submit[j]);
+                        //await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_Password(forms[i].id_form, j, submit[j]);
+                        //await Click_Any_CheckBox_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        //await ClickAll_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_TypeDate(forms[i].id_form, j, submit[j]);
+                        //await Input_Type_TypeNumber(forms[i].id_form, j, submit[j]);
+                        //await Fill_Form(forms[i].id_form, j, submit[j]);
                     }
                 }
-                await ClickAll_Tag_a();
-                await ClickAll_Tag_Button();
+                //await ClickAll_Tag_a();
+                //await ClickAll_Tag_Button();
             }
             else
             {

@@ -1,8 +1,149 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<link rel="stylesheet" href="~/css/slick.css" />
+<link rel="stylesheet" href="~/css/style_home.css" />
+<!-- Top banner -->
+<div class="">
+    <section class="fh5co-top-banner">
+        <div class="top-banner__inner site-container">
+            <div class="top-banner__image">
+                <img src="~/assets/images/8867.jpg" alt="author image">
+            </div>
+            <div class="top-banner__text">
+                <div class="top-banner__text-up">
+                    <span class="brand-span">Hello! I'm</span>
+                    <h2 class="top-banner__h2">Jhone</h2>
+                </div>
+                <div class="top-banner__text-down">
+                    <h2 class="top-banner__h2">Smith</h2>
+                    <span class="brand-span">Author, Writer, Traveler</span>
+                </div>
+                <p>One Man. One Mission. Can He Go Beyond?One Man. One Mission. Can He Go Beyond?</p>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Web Generate test case</h1>
-   
+            </div>
+        </div>
+    </section>
+    <!-- Top banner end -->
+    <!-- About me -->
+    <section class="fh5co-about-me">
+        <div class="about-me-inner site-container">
+            <article class="portfolio-wrapper">
+                <div class="portfolio__img">
+                    <img src="~/assets/images/selenium.jpg" class="about-me__profile" alt="about me profile picture">
+                </div>
+                <div class="portfolio__bottom">
+                    <div class="portfolio__name">
+                        <h2 class="universal-h2">Selenium Webdriver</h2>
+                    </div>
+                    <p>Automation test with too selenium </p>
+                </div>
+            </article>
+            <div class="about-me__text">
+                <div class="about-me-slider">
+                    <div class="about-me-single-slide">
+                        <h2 class="universal-h2 universal-h2-bckg">What is Selenium?</h2>
+                        <p><span>S</span> elenium is a free (open-source) automated testing framework used to validate web applications across different browsers and platforms. You can use multiple programming languages like Java, C#, Python etc to create Selenium Test Scripts. Testing done using the Selenium tool is usually referred to as Selenium Testing.</p>
+                    </div>
+                    <div class="about-me-single-slide">
+                        <h2 class="universal-h2 universal-h2-bckg">Built-in platform support</h2>
+                        <p>
+                            <span>S</span> implify test automation with a tool that supports all the technologies you need.
+                            Selenium WebDriver was developed as a handy tool to automate web browsers, but it was never intended as a solution for testing desktop or mobile applications. As a complete testing framework, Ranorex Studio includes built-in support for testing desktop, web and mobile applications. In addition, some web applications include non-HTML/HTML5 components like Flash, embedded Java, and MS Silverlight controls, which Selenium may not be able to recognize. Ranorex supports all of these technologies, even when these technologies are mixed with standard HTML pages.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="about-me-bckg"></div>
+    </section>
+    <!-- About me end -->
+    <!-- Books and CD -->
+    <section class="fh5co-books">
+        <div class="site-container">
+            <h2 class="universal-h2 universal-h2-bckg">The list of tools Selenium</h2>
+            <div class="books">
+                <div class="single-book">
+                    <a href="#" class="single-book__img">
+                        <img src="~/assets/images/Selenium_Logo.png" alt="single book and cd">
+                    </a>
+                    <h4 class="single-book__title">Selenium WebDriver</h4>
+                </div>
+                <div class="single-book">
+                    <a href="#" class="single-book__img">
+                        <img src="~/assets/images/se.jpg" alt="single book and cd">
+                    </a>
+                    <h4 class="single-book__title">Selenium IDE</h4>
+                </div>
+                <div class="single-book">
+                    <a href="#" class="single-book__img">
+                        <img src="~/assets/images/SELENIUMGrid.png" alt="single book and cd">
+                    </a>
+                    <h4 class="single-book__title">Selenium Grid</h4>
+                </div>
+
+            </div>
+    </section>
+    <div class="fh5co-counter counters">
+        <div class="counter-inner site-container">
+            <div class="single-count">
+                <div class="single-count__text">
+                    <img src="~/assets/images/toolselenium.png" alt="counter icon">
+                </div>
+            </div>
+            <div class="single-count">
+                <div class="single-count__text">
+                    <img src="~/assets/images/junit5.png" alt="counter icon">
+                </div>
+            </div>
+            <div class="single-count">
+                <div class="single-count__text">
+                    <img src="~/assets/images/docker.png" alt="counter icon">
+                </div>
+            </div>
+            <div class="single-count">
+
+                <div class="single-count__text">
+                    <img src="~/assets/images/git.png" alt="counter icon">
+                </div>
+            </div>
+            <div class="single-count">
+
+
+            </div>
+        </div>
+    </div>
+    <section class="fh5co-quotes">
+        <div class="site-container">
+            <div class="about-me-slider">
+                <div>
+                    <h2 class="universal-h2 universal-h2-bckg">Manual Test</h2>
+                    <p>“MANUAL TESTING is a type of Software Testing where Testers manually execute test cases without using any automation tools. Manual Testing is the most primitive of all testing types and helps find bugs in the software system.”</p>
+                    <p>Any new application must be manually tested before its testing can be automated. Manual Testing requires more effort but is necessary to check automation feasibility.”</p>
+                    <img src="~/assets/images/quotes.svg" alt="quotes svg">
+
+                </div>
+                <div>
+                    <h2 class="universal-h2 universal-h2-bckg">Automation Testing</h2>
+                    <p>“AUTOMATION TESTING means using an automation tool to execute your test case suite. On the contrary, Manual Testing is performed by a human sitting in front of a computer carefully executing the test steps.</p>
+                    <p>The automation software can also enter test data into the System Under Test, compare expected and actual results and generate detailed test reports. Test Automation demands considerable investments of money and resources.”</p>
+                    <img src="~/assets/images/quotes.svg" alt="quotes svg">
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Quotes end -->
+    <!-- Social -->
+    <!-- Social -->
+    <!-- Scripts -->
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/slick.min.js"></script>
+    <script src="~/js/main.js"></script>
+
 </div>
+<br />
+<br />
+<br />
+<br />
