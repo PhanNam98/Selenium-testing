@@ -263,6 +263,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var listelt = await _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            
             if (listelt.Count > 0)
             {
                 //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();
@@ -323,7 +324,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             }));
         }
-        public async Task<IActionResult> DeleteElt(int id_url, IEnumerable<string> eltId_Delete)
+        public async Task<IActionResult> DeleteElt(int id_url, IEnumerable<string> eltId_Delete, string prerequisite_testcase, int prerequisite_url)
         {
             if (eltId_Delete == null)
             {
@@ -345,7 +346,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             return RedirectToAction(nameof(Elements_SubTestcase), new RouteValueDictionary(new
             {
-                id_url = id_url
+                id_url = id_url,
+                prerequisite_testcase= prerequisite_testcase,
+                prerequisite_url= prerequisite_url
 
             }));
         }

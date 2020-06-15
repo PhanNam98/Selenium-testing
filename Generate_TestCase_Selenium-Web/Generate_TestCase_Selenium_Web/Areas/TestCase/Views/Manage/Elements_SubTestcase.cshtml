@@ -31,8 +31,7 @@
             </div>
         </div>
     </div>
-    <input value="@ViewBag.prerequisite_testcase" hidden/>
-    <input value="@ViewBag.prerequisite_url" hidden/>
+   
     <div class="card-body">
         <div class="row">
 
@@ -73,7 +72,7 @@
                     }
                 }
                 <div class="row form-group">
-                    
+
                     <!-- Modal -->
                     <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="center">
@@ -112,6 +111,8 @@
         @using (Html.BeginForm("DeleteElt", "Manage", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "elementform", @novalidate = "novalidate", @name = "elementform", @id_url = ViewBag.id_url }))
         {
             <input type="text" name="id_url" class="input-md form-control" id="id_url" hidden readonly value="@ViewBag.id_url">
+            <input id="prerequisite_testcase"  name="prerequisite_testcase" value="@ViewBag.prerequisite_testcase" hidden />
+            <input id="prerequisite_url" name="prerequisite_url" value="@ViewBag.prerequisite_url" hidden />
             <div class="table-responsive">
                 <table id="elttable" class="table table-striped table-condensed table-hover table-bordered">
                     <thead>
