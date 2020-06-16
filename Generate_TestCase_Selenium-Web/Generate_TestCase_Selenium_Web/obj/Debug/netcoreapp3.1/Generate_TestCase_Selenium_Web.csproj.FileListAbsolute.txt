@@ -290,7 +290,6 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\LoadingViewPartial.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
-D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LayoutCustom.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LayoutManage.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LoginPartial.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_StatusMessage.cshtml.g.cs
@@ -313,3 +312,4 @@ D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\Adminitrator\Views\Admin\Dashboard.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Areas\Adminitrator\Views\Admin\Config.cshtml.g.cs
 D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Generate_TestCase_Selenium_Web.csprojAssemblyReference.cache
+D:\downloads\Programing\Selenium\Selenium-testing\Generate_TestCase_Selenium-Web\Generate_TestCase_Selenium_Web\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_LayoutLogin.cshtml.g.cs

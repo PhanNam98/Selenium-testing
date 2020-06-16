@@ -11,6 +11,31 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="bg-primary">
+        <div>
+            <header>
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                    <div class="container">
+                       
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </li>
+        
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="TestCase" asp-controller="Projects" asp-action="Index">New TestCase</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="TestCase" asp-controller="Manage" asp-action="Projects">TestCase management</a>
+                                        </li>
+        
+                                    
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+        </div>
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>

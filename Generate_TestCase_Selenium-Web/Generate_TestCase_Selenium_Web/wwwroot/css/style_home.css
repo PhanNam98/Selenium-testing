@@ -171,7 +171,7 @@
         margin-left: 0; } }
     .top-banner__inner .top-banner__text p {
       margin-bottom: 42px;
-      color: #777; }
+      color: #000; }
       @media (max-width: 768px) {
         .top-banner__inner .top-banner__text p {
           margin-bottom: 25px;
@@ -179,7 +179,7 @@
   .top-banner__inner .top-banner__h2 {
     font-size: 74px;
     letter-spacing: 3px;
-    color: #fff;
+    color: #000;
     font-family: "Calisto-MT-Bold"; }
     @media (max-width: 1250px) {
       .top-banner__inner .top-banner__h2 {
