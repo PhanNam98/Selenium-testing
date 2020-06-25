@@ -157,6 +157,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
             int isFailure = 0;
             int isSkip = 0;
             var _context = new ElementDBContext();
+            var URL = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
             var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
@@ -178,8 +179,31 @@ namespace Generate_TestCase_Selenium_Web.Jobs
             if (browserRun.Equals("chrome"))
             {
 
-                ChromeDriver chromedriver = SetUpDriver(url);
+                //ChromeDriver chromedriver = SetUpDriver(url);
+                ChromeDriver chromedriver = null;
+                if (Testcase.id_prerequisite_testcase != null)
+                {
+                    chromedriver = SetUpDriver();
+                    var r_url = await RunPrerequesiteTestcase(chromedriver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
+                    if (URL.IsChange == false)
+                    {
+                        chromedriver.Url = URL.url1;
+                        chromedriver.Navigate();
+                    }
+                }
+                else
+                {
+                    chromedriver = SetUpDriver(url);
+                }
 
+                if (URL.trigger_element != null || URL.trigger_element != "")
+                {
+                    var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
+                    if (trigger.Displayed)
+                    {
+                        trigger.Click();
+                    }
+                }
                 //chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
                 //run test case
@@ -278,6 +302,27 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                     _context.Input_Result_test.Add(input_Result_Test);
                 }
                 await _context.SaveChangesAsync();
+                //alert
+                var AlertMessage = _context.Alert_message.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
+                if (AlertMessage != null)
+                {
+                    var alert_win = chromedriver.SwitchTo().Alert();
+
+
+
+                    if (AlertMessage.message != alert_win.Text)
+                    {
+                        isFailure++;
+                    }
+                    Result_AlertMessage result_Alert = new Result_AlertMessage();
+                    result_Alert.id_result = jobId;
+                    result_Alert.test_message = AlertMessage.message;
+                    result_Alert.message = alert_win.Text;
+                    result_Alert.id_testcase = id_testcase;
+                    alert_win.Accept();
+                    _context.Result_AlertMessage.Add(result_Alert);
+                    await _context.SaveChangesAsync();
+                }
                 //test
                 if (list_output.Count > 0)
                 {
@@ -521,7 +566,30 @@ namespace Generate_TestCase_Selenium_Web.Jobs
             else
             {
 
-                FirefoxDriver firefoxdriver = SetUpDriverFireFox(url);
+                //FirefoxDriver firefoxdriver = SetUpDriverFireFox(url);
+                FirefoxDriver firefoxdriver = null;
+                if (Testcase.id_prerequisite_testcase != null)
+                {
+                    firefoxdriver = SetUpDriverFireFox();
+                    var r_url = await RunPrerequesiteTestcase(firefoxdriver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
+                    if (URL.IsChange == false)
+                    {
+                        firefoxdriver.Url = URL.url1;
+                        firefoxdriver.Navigate();
+                    }
+                }
+                else
+                {
+                    firefoxdriver = SetUpDriverFireFox(url);
+                }
+                if (URL.trigger_element != null || URL.trigger_element != "")
+                {
+                    var trigger = firefoxdriver.FindElementByXPath(URL.trigger_element);
+                    if (trigger.Displayed)
+                    {
+                        trigger.Click();
+                    }
+                }
                 //run test case
                 foreach (var inputtest in list_inputtest)
                 {
@@ -622,6 +690,27 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                     _context.Input_Result_test.Add(input_Result_Test);
                 }
                 await _context.SaveChangesAsync();
+                //alert
+                var AlertMessage = _context.Alert_message.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
+                if (AlertMessage != null)
+                {
+                    var alert_win = firefoxdriver.SwitchTo().Alert();
+
+
+
+                    if (AlertMessage.message != alert_win.Text)
+                    {
+                        isFailure++;
+                    }
+                    Result_AlertMessage result_Alert = new Result_AlertMessage();
+                    result_Alert.id_result = jobId;
+                    result_Alert.test_message = AlertMessage.message;
+                    result_Alert.message = alert_win.Text;
+                    result_Alert.id_testcase = id_testcase;
+                    alert_win.Accept();
+                    _context.Result_AlertMessage.Add(result_Alert);
+                    await _context.SaveChangesAsync();
+                }
                 //test
                 if (list_output.Count > 0)
                 {
@@ -919,6 +1008,275 @@ namespace Generate_TestCase_Selenium_Web.Jobs
 
         }
 
+        public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, int id_url, string id_testcase)
+        {
+            string return_url = "";
+            var _context = new ElementDBContext();
+            var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            Url URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
+            string url = URL.url1;
+            var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
+
+            if (Testcase.id_prerequisite_testcase != null)
+            {
+                return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
+            }
+            driver.Url = url;
+            driver.Navigate();
+            if (URL.trigger_element != null || URL.trigger_element != "")
+            {
+                var trigger = driver.FindElementByXPath(URL.trigger_element);
+                if (trigger.Displayed)
+                {
+                    trigger.Click();
+                }
+            }
+            foreach (var inputtest in list_inputtest)
+            {
+                switch (inputtest.action)
+                {
+
+                    case "fill":
+                        {
+                            try
+                            {
+                                var fill = driver.FindElementByXPath(inputtest.xpath);
+                                if (fill.Displayed)
+                                {
+                                    fill.Click();
+                                    fill.SendKeys(inputtest.value);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+
+                            break;
+                        }
+                    case "select":
+                        {
+                            try
+                            {
+                                var select = driver.FindElementByXPath(inputtest.xpath);
+                                var selectElement = new SelectElement(select);
+
+                                selectElement.SelectByValue(inputtest.value);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            break;
+                        }
+                    case "click":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.Message.Equals("element not interactable"))
+                                {
+
+                                }
+                            }
+
+                            break;
+                        }
+                    case "check":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                    case "submit":
+                        {
+                            try
+                            {
+                                driver.FindElementByXPath(inputtest.xpath).Click();
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                }
+
+            }
+
+            return_url = driver.Url;
+
+
+            return return_url;
+        }
+        public async Task<string> RunPrerequesiteTestcase(FirefoxDriver driver, int id_url, string id_testcase)
+        {
+            string return_url = "";
+            var _context = new ElementDBContext();
+            var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            Url URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
+            string url = URL.url1;
+            var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
+
+            if (Testcase.id_prerequisite_testcase != null)
+            {
+                return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
+            }
+            driver.Url = url;
+            driver.Navigate();
+            if (URL.trigger_element != null || URL.trigger_element != "")
+            {
+                var trigger = driver.FindElementByXPath(URL.trigger_element);
+                if (trigger.Displayed)
+                {
+                    trigger.Click();
+                }
+            }
+            foreach (var inputtest in list_inputtest)
+            {
+                switch (inputtest.action)
+                {
+
+                    case "fill":
+                        {
+                            try
+                            {
+                                var fill = driver.FindElementByXPath(inputtest.xpath);
+                                if (fill.Displayed)
+                                {
+                                    fill.Click();
+                                    fill.SendKeys(inputtest.value);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+
+                            break;
+                        }
+                    case "select":
+                        {
+                            try
+                            {
+                                var select = driver.FindElementByXPath(inputtest.xpath);
+                                var selectElement = new SelectElement(select);
+
+                                selectElement.SelectByValue(inputtest.value);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            break;
+                        }
+                    case "click":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.Message.Equals("element not interactable"))
+                                {
+
+                                }
+                            }
+
+                            break;
+                        }
+                    case "check":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                    case "submit":
+                        {
+                            try
+                            {
+                                driver.FindElementByXPath(inputtest.xpath).Click();
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                }
+
+            }
+
+            return_url = driver.Url;
+
+
+            return return_url;
+        }
+        private ChromeDriver SetUpDriver()
+        {
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+
+            var options = new ChromeOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            options.AddArgument("no-sandbox");
+            options.AddArgument("proxy-server='direct://'");
+            options.AddArgument("proxy-bypass-list=*");
+            ChromeDriver chromedriver = new ChromeDriver(service, options);
+            //The HTTP request to the remote WebDriver server for URL 
+            return chromedriver;
+        }
+        private FirefoxDriver SetUpDriverFireFox()
+        {
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+
+            var options = new FirefoxOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            //options.AddArgument("no-sandbox");
+            //options.AddArgument("proxy-server='direct://'");
+            //options.AddArgument("proxy-bypass-list=*");
+            FirefoxDriver firefoxdriver = new FirefoxDriver(service, options);
+
+            //The HTTP request to the remote WebDriver server for URL 
+            return firefoxdriver;
+        }
         #region Excel
         // Send excel to mail
         private async Task SendExcel(int id_url, List<string> list_Idtestcase,string id_user)

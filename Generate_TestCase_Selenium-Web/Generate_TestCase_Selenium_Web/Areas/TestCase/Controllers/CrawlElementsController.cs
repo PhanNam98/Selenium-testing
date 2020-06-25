@@ -83,13 +83,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             }));
         }
-        public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed, string returnUrl = null)
+        public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed,bool IsGetTagA, string returnUrl = null)
         {
             //--Code, dont delete
             string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
             this.IsOnlyDislayed = IsOnlyDislayed;
             SetUp(Url);
-            int isSuccess = GetElements(Url, IsOnlyDislayed, id_url);
+            int isSuccess = GetElements(Url, IsOnlyDislayed, id_url, IsGetTagA);
             if (isSuccess == 1)
             {
                 _context.Form_elements.AddRange(listForm);
@@ -116,13 +116,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }));
 
         }
-        public async Task<IActionResult> CrawlEltSubUrl(int id_url, bool IsOnlyDislayed, string prerequisite_testcase,int prerequisite_url)
+        public async Task<IActionResult> CrawlEltSubUrl(int id_url, bool IsOnlyDislayed,bool IsGetTagA, string prerequisite_testcase,int prerequisite_url)
         {
             //--Code, dont delete
             string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
             this.IsOnlyDislayed = IsOnlyDislayed;
             SetUp(Url);
-            int isSuccess = await GetSubElements(Url, IsOnlyDislayed, id_url, prerequisite_testcase, prerequisite_url);
+            int isSuccess = await GetSubElements(Url, IsOnlyDislayed, id_url, prerequisite_testcase, prerequisite_url, IsGetTagA);
             if (isSuccess == 1)
             {
                 _context.Form_elements.AddRange(listForm);
@@ -156,13 +156,22 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
         #region Get Element from Web
-        public int GetElements(string Url, bool IsOnlyDislayed, int id_url)
+        public int GetElements(string Url, bool IsOnlyDislayed, int id_url,bool IsGetTagA)
         {
             int flag = 0;
+            var URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
             try
             {
                 // usertesstvf
                 SetUpDriver(Url);
+                if (URL.trigger_element != null || URL.trigger_element != "")
+                {
+                    var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
+                    if (trigger.Displayed)
+                    {
+                        trigger.Click();
+                    }
+                }
                 var form = chromedriver.FindElementsByXPath("//form");
                 if (form != null)// have at least one form
                 {
@@ -187,6 +196,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
                     }
+                    if (IsGetTagA == false)
+                    {
+                        tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
+                    }
                     foreach (string tag in tag_elts)
                     {
                         if (this.IsOnlyDislayed)
@@ -201,6 +214,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 else //no form found
                 {
+                    if (IsGetTagA == false)
+                    {
+                        tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
+                    }
                     foreach (string tag in tag_elts)
                     {
                         Thread thread = new Thread(() => GetElements(chromedriver, tag, "", id_url));
@@ -217,7 +234,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             CloseDriver();
             return flag;
         }
-        public async Task<int> GetSubElements(string Url, bool IsOnlyDislayed, int id_url,string prerequisite_testcase,int prerequisite_url)
+        public async Task<int> GetSubElements(string Url, bool IsOnlyDislayed, int id_url,string prerequisite_testcase,int prerequisite_url,bool IsGetTagA)
         {
             var URL = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
             int flag = 0;
@@ -246,7 +263,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     Chromedriver.Navigate();
                 }
                    
-                
+                if(URL.trigger_element!=null || URL.trigger_element!="")
+                {
+                    var trigger = Chromedriver.FindElementByXPath(URL.trigger_element);
+                    if (trigger.Displayed)
+                    {
+                        trigger.Click();
+                    }
+                }
                 var form = Chromedriver.FindElementsByXPath("//form");
                 if (form != null)// have at least one form
                 {
@@ -270,6 +294,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         listForm.Add(form_);
 
 
+                    }
+                    if(IsGetTagA==false)
+                    {
+                        tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
                     }
                     foreach (string tag in tag_elts)
                     {

@@ -1801,7 +1801,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
 
                 }
-                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
+                
 
                 var listTypeRadio = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "radio").ToListAsync();
 
@@ -1825,7 +1825,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
                     }
                 }
-
+                listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
                 List_ListInputTestcase.Add(listInputElt);
                 return true;
             }
@@ -2159,7 +2159,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
         }
 
-
+        // no used
         public async Task<string> Run_ReturnResult(int id_url, string url, string id_testcase)
         {
 
@@ -2170,6 +2170,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
             var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
+            var URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
             //try
             //{
 
@@ -2177,7 +2178,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
 
                 ChromeDriver chromedriver = SetUpDriver(url);
-
+                if (URL.trigger_element != null || URL.trigger_element != "")
+                {
+                    var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
+                    if (trigger.Displayed)
+                    {
+                        trigger.Click();
+                    }
+                }
                 //chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
                 //run test case
@@ -2433,128 +2441,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         await _context.SaveChangesAsync();
 
                         #region backup
-                        //try
-                        //{
-
-                        //    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                        //    string vt;
-                        //    try
-                        //    {
-                        //        vt = testelt.Text;
-                        //    }
-                        //    catch
-                        //    {
-                        //        vt = testelt.GetAttribute("value");
-                        //    }
-                        //    if (vt != null)
-                        //    {
-                        //        outputtest.value_return = vt;
-                        //        if (!vt.Equals(outputtest.value_test))
-                        //        {
-                        //            isPass = 0;
-                        //        }
-                        //        BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                        //    }
-
-
-
-                        //}
-                        //catch
-                        //{
-                        //    try
-                        //    {
-                        //        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                        //        string vt;
-                        //        try
-                        //        {
-                        //            vt = testelt.Text;
-                        //        }
-                        //        catch
-                        //        {
-                        //            vt = testelt.GetAttribute("value");
-                        //        }
-                        //        if (vt != null)
-                        //        {
-                        //            outputtest.value_return = vt;
-                        //            if (!vt.Equals(outputtest.value_test))
-                        //            {
-                        //                isPass = 0;
-                        //            }
-                        //            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                        //        }
-
-                        //    }
-                        //    catch
-                        //    {
-                        //        foreach (var inputtest in list_inputtest)
-                        //        {
-
-                        //            var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
-                        //            if (testDisplayed.Displayed)
-                        //            {
-                        //                testDisplayed.Click();
-                        //                try
-                        //                {
-                        //                    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                        //                    string vt;
-                        //                    try
-                        //                    {
-                        //                        vt = testelt.Text;
-                        //                    }
-                        //                    catch
-                        //                    {
-                        //                        vt = testelt.GetAttribute("value");
-                        //                    }
-                        //                    if (vt != null)
-                        //                    {
-                        //                        outputtest.value_return = vt;
-                        //                        if (!vt.Equals(outputtest.value_test))
-                        //                        {
-                        //                            isPass = 0;
-                        //                        }
-                        //                        BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                        //                    }
-                        //                    break;
-                        //                }
-                        //                catch
-                        //                {
-                        //                    try
-                        //                    {
-                        //                        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                        //                        string vt;
-                        //                        try
-                        //                        {
-                        //                            vt = testelt.Text;
-                        //                        }
-                        //                        catch
-                        //                        {
-                        //                            vt = testelt.GetAttribute("value");
-                        //                        }
-                        //                        if (vt != null)
-                        //                        {
-                        //                            outputtest.value_return = vt;
-                        //                            if (!vt.Equals(outputtest.value_test))
-                        //                            {
-                        //                                isPass = 0;
-                        //                            }
-                        //                            BUL.TestElementBUL.Update_ValueResult_Testcase(ID_URL, Id_testcase, vt);
-                        //                        }
-                        //                        break;
-                        //                    }
-                        //                    catch
-                        //                    {
-
-                        //                    }
-
-                        //                }
-
-
-                        //            }
-
-                        //        }
-                        //    }
-                        //}
-
+                       
                         #endregion
 
 
@@ -2565,8 +2452,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     isSkip++;
                 }
 
-                //BUL.RedirectUrlBUL.Update_RedirectUrl(Id_testcase, ID_URL, current_url);
-                //QuitDriver(chromedriver);
+               
                 var RedirectUrl = _context.Redirect_url.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
                 if (RedirectUrl != null)
                 {
@@ -2611,6 +2497,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
 
                 FirefoxDriver firefoxdriver = SetUpDriverFireFox(url);
+                if (URL.trigger_element != null || URL.trigger_element != "")
+                {
+                    var trigger = firefoxdriver.FindElementByXPath(URL.trigger_element);
+                    if (trigger.Displayed)
+                    {
+                        trigger.Click();
+                    }
+                }
                 //run test case
                 foreach (var inputtest in list_inputtest)
                 {
@@ -2918,7 +2812,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         public async Task<string> Run_ReturnResultJob(string jobId, int id_url, string url, string id_testcase)
         {
-
+            bool testobj = false;
             int isPass = 0;
             int isFailure = 0;
             int isSkip = 0;
@@ -2960,8 +2854,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     {
                         chromedriver = SetUpDriver(url);
                     }
-                  
 
+                    if (URL.trigger_element != null || URL.trigger_element != "")
+                    {
+                        var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
+                        if (trigger.Displayed)
+                        {
+                            trigger.Click();
+                        }
+                    }
                     //chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
                     //run test case
@@ -3077,6 +2978,25 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         _context.Input_Result_test.Add(input_Result_Test);
                     }
                     await _context.SaveChangesAsync();
+                    //alert
+                    var AlertMessage = _context.Alert_message.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
+                    if (AlertMessage != null)
+                    {
+                        var alert_win = chromedriver.SwitchTo().Alert();
+                        if (AlertMessage.message != alert_win.Text)
+                        {
+                            isFailure++;
+                        }
+                        Result_AlertMessage result_Alert = new Result_AlertMessage();
+                        result_Alert.id_result = jobId;
+                        result_Alert.test_message = AlertMessage.message;
+                        result_Alert.message = alert_win.Text;
+                        result_Alert.id_testcase = id_testcase;
+                        alert_win.Accept();
+                        _context.Result_AlertMessage.Add(result_Alert);
+                        await _context.SaveChangesAsync();
+                        testobj = true;
+                    }
                     //test
                     if (list_output.Count > 0)
                     {
@@ -3257,10 +3177,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
                         }
                     }
-                    else
-                    {
-                        isSkip++;
-                    }
+                    //else
+                    //{
+                    //    isSkip++;
+                    //}
 
                     //BUL.RedirectUrlBUL.Update_RedirectUrl(Id_testcase, ID_URL, current_url);
                     //QuitDriver(chromedriver);
@@ -3284,6 +3204,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         result_Url.test_url = RedirectUrl.redirect_url_test;
                         result_Url.id_testcase = id_testcase;
                         _context.Result_Url.Add(result_Url);
+                        testobj = true;
+                    }
+                    if(!testobj)
+                    {
+                        isSkip++;
                     }
                     chromedriver.Quit();
                     string result = "";
@@ -3333,6 +3258,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     else
                     {
                         firefoxdriver = SetUpDriverFireFox(url);
+                    }
+                    if (URL.trigger_element != null || URL.trigger_element != "")
+                    {
+                        var trigger = firefoxdriver.FindElementByXPath(URL.trigger_element);
+                        if (trigger.Displayed)
+                        {
+                            trigger.Click();
+                        }
                     }
                     //run test case
 
@@ -3455,6 +3388,25 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         _context.Input_Result_test.Add(input_Result_Test);
                     }
                     await _context.SaveChangesAsync();
+                    //alert
+                    var AlertMessage = _context.Alert_message.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
+                    if (AlertMessage != null)
+                    {
+                        testobj = true;
+                        var alert_win = firefoxdriver.SwitchTo().Alert();
+                        if (AlertMessage.message != alert_win.Text)
+                        {
+                            isFailure++;
+                        }
+                        Result_AlertMessage result_Alert = new Result_AlertMessage();
+                        result_Alert.id_result = jobId;
+                        result_Alert.test_message = AlertMessage.message;
+                        result_Alert.message = alert_win.Text;
+                        result_Alert.id_testcase = id_testcase;
+                        alert_win.Accept();
+                        _context.Result_AlertMessage.Add(result_Alert);
+                        await _context.SaveChangesAsync();
+                    }
                     //test
                     if (list_output.Count > 0)
                     {
@@ -3639,13 +3591,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
                         }
                     }
-                    else
-                    {
-                        isSkip++;
-                    }
+                    //else
+                    //{
+                    //    isSkip++;
+                    //}
                     var RedirectUrl = _context.Redirect_url.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
                     if (RedirectUrl != null)
                     {
+                        testobj = true;
                         string current_url = firefoxdriver.Url;
                         current_url = current_url.Remove(current_url.Length - 1);
                         if (RedirectUrl.redirect_url_test != current_url)
@@ -3661,6 +3614,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         result_Url.test_url = RedirectUrl.redirect_url_test;
                         result_Url.id_testcase = id_testcase;
                         _context.Result_Url.Add(result_Url);
+                    }
+                    if (!testobj)
+                    {
+                        isSkip++;
                     }
                     firefoxdriver.Quit();
                     string result = "";
@@ -3712,7 +3669,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             string return_url = "";
             var _context = new ElementDBContext();
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
-            string url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
+            Url URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
+            string url = URL.url1;
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
            
             if (Testcase.id_prerequisite_testcase != null)
@@ -3721,6 +3679,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             driver.Url = url;
             driver.Navigate();
+            if (URL.trigger_element != null || URL.trigger_element != "")
+            {
+                var trigger = driver.FindElementByXPath(URL.trigger_element);
+                if (trigger.Displayed)
+                {
+                    trigger.Click();
+                }
+            }
             foreach (var inputtest in list_inputtest)
             {
                 switch (inputtest.action)
@@ -3820,7 +3786,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             string return_url = "";
             var _context = new ElementDBContext();
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
-            string url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
+            Url URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
+            string url = URL.url1;
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
         
             if(Testcase.id_prerequisite_testcase!=null)
@@ -3829,6 +3796,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             driver.Url = url;
             driver.Navigate();
+            if (URL.trigger_element != null || URL.trigger_element != "")
+            {
+                var trigger = driver.FindElementByXPath(URL.trigger_element);
+                if (trigger.Displayed)
+                {
+                    trigger.Click();
+                }
+            }
             foreach (var inputtest in list_inputtest)
             {
                 switch (inputtest.action)
@@ -4464,6 +4439,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             ViewData["id_testcase"] = id_testcase;
             var testelementDBContext = await _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToListAsync();
             var urlRedirectDBContext = await _context.Redirect_url.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefaultAsync();
+            var alertDBContext = await _context.Alert_message.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefaultAsync();
             if (urlRedirectDBContext != null)
             {
                 ViewData["urlRedirecttest"] = urlRedirectDBContext.redirect_url_test;
@@ -4473,6 +4449,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 ViewData["urlRedirecttest"] = "";
                 ViewData["current_url"] = null;
+            }
+            if (alertDBContext != null)
+            {
+                ViewData["alertMessage"] = alertDBContext.message;
+               
+            }
+            else
+            {
+                ViewData["alertMessage"] = "";
+                
             }
             if (ViewData["Message"] == null)
             {
@@ -5004,6 +4990,65 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     catch
                     {
                         StatusMessage = "Update fail";
+
+                    }
+
+                    //return RedirectToAction(nameof(Index), new { id_url = id_url, isload = true });
+                }
+                if (returnUrl != null)
+                {
+                    return LocalRedirect(returnUrl);
+                }
+                return RedirectToAction(nameof(TestElement), new { id_url = id_url, id_testcase = id_testcase });
+            }
+            return NotFound();
+
+        }
+        #endregion
+        #region Alert Message alertMessage
+        [HttpPost]
+        public async Task<IActionResult> AlertMessage(int id_url, string id_testcase, string alertMessage, string returnUrl)
+        {
+
+            var id = _userManager.GetUserId(User);
+            int authen = _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).Count();
+            if (authen > 0)
+            {
+                var _context = new ElementDBContext();
+                var alert_Message = await _context.Alert_message.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+                if (alert_Message == null)
+                {
+                    try
+                    {
+                        alert_Message = new Alert_message();
+                        alert_Message.message = alertMessage;
+                        alert_Message.id_testcase = id_testcase;
+                        alert_Message.id_url = id_url;
+                        alert_Message.id_alert = Guid.NewGuid().ToString("N").Substring(10);
+                        _context.Alert_message.Add(alert_Message);
+                        await _context.SaveChangesAsync();
+                        StatusMessage = "Add successfully";
+                    }
+                    catch
+                    {
+                        StatusMessage = "Update failed";
+
+                    }
+                }
+                else
+                {
+
+
+                    try
+                    {
+                        alert_Message.message = alertMessage;
+                        _context.Update(alert_Message);
+                        await _context.SaveChangesAsync();
+                        StatusMessage = "Update successfully";
+                    }
+                    catch
+                    {
+                        StatusMessage = "Update failed";
 
                     }
 

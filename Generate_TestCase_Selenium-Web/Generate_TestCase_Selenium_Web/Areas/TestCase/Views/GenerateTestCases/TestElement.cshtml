@@ -28,61 +28,61 @@
     </div>
     <div class="col-md-6">
         <div class="row">
-            @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Add new test element
-        </button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
-            @{
-                if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                {
-                    <i class="fas fa-check" style="color:green"></i>
-                }
-                else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-                {
-                    <i class="fa fa-close" style="color:white"></i>
-                }
+            <div class="container">
+                <div class="text-right">
 
 
-            }
-            Url redirect
-        </button>*@
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Add element
-            </button>
-
-            @{
-                @*if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-            {
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
-                    <i class="fas fa-check" style="color:green"></i>
-                </button>
-            }
-            else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
-            {
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
-                    <i class="fa fa-times" style="color:white"></i>Url redirect
-                </button>
-            }
-            else
-            { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
-                    Add url redirect
-                </button>
-            }*@
-                if ((ViewBag.current_url != null))
-                {
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
-                        @*<i class="fas fa-check" style="color:green"></i>Url redirect*@
-                        Url redirect
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        Add element
                     </button>
-                }
-                else
-                { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
-                        Add url redirect
-                    </button>
-                }
 
+                    @{
+                        @*if (ViewBag.urlRedirecttest == ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+                            {
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
+                                    <i class="fas fa-check" style="color:green"></i>
+                                </button>
+                            }
+                            else if (ViewBag.urlRedirecttest != ViewBag.current_url && (ViewBag.urlRedirecttest != "" && ViewBag.current_url != ""))
+                            {
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urlredirect">
+                                    <i class="fa fa-times" style="color:white"></i>Url redirect
+                                </button>
+                            }
+                            else
+                            { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
+                                    Add url redirect
+                                </button>
+                            }*@
+                        if ((ViewBag.current_url != null))
+                        {
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#urlredirect">
+                                @*<i class="fas fa-check" style="color:green"></i>Url redirect*@
+                                Url redirect
+                            </button>
+                        }
+                        else
+                        { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#urlredirect">
+                                Add url redirect
+                            </button>
+                        }
+                        if ((ViewBag.alertMessage != null))
+                        {
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#alertMessage">
+                                @*<i class="fas fa-check" style="color:green"></i>Url redirect*@
+                                Alert message
+                            </button>
+                        }
+                        else
+                        { <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#alertMessage">
+                                Add alert message
+                            </button>
+                        }
 
-            }
+                    }
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -160,12 +160,56 @@
                         </div>
                     </div>
                     @*<div class="row form-group">
-                        <div class="col col-md-3">@Html.Label("Result url")</div>
+                            <div class="col col-md-3">@Html.Label("Result url")</div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" name="redirect_url" class="input-md form-control" id="redirect_url" disabled value="@ViewBag.current_url">
+
+                            </div>
+                        </div>*@
+
+                    <input id="id_url" name="id_url" value="@ViewBag.id_url" readonly hidden />
+                    <input id="id_testcase" name="id_testcase" value="@ViewBag.id_testcase" readonly hidden />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+
+            }
+
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="alertMessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            @using (Html.BeginForm("AlertMessage", "GenerateTestCases", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "alertMessageform", @novalidate = "novalidate", @name = "alertMessageform" }))
+            {
+                @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color:red">Alert message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row form-group">
+                        <div class="col col-md-3">@Html.Label("Alert message")</div>
                         <div class="col-12 col-md-9">
-                            <input type="text" name="redirect_url" class="input-md form-control" id="redirect_url" disabled value="@ViewBag.current_url">
+                            <input type="text" name="alertMessage" class="input-md form-control" id="alertMessage" value="@ViewBag.alertMessage">
 
                         </div>
-                    </div>*@
+                    </div>
+                    @*<div class="row form-group">
+                            <div class="col col-md-3">@Html.Label("Result url")</div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" name="redirect_url" class="input-md form-control" id="redirect_url" disabled value="@ViewBag.current_url">
+
+                            </div>
+                        </div>*@
 
                     <input id="id_url" name="id_url" value="@ViewBag.id_url" readonly hidden />
                     <input id="id_testcase" name="id_testcase" value="@ViewBag.id_testcase" readonly hidden />
@@ -194,8 +238,8 @@
                     @Html.DisplayName("Full Xpath")
                 </th>
                 @*<th>
-                    @Html.DisplayName("Value return")
-                </th>*@
+                        @Html.DisplayName("Value return")
+                    </th>*@
                 <th>
                     @Html.DisplayName("Value test")
                 </th>
@@ -219,8 +263,8 @@
                         @Html.DisplayFor(modelItem => item.xpath_full)
                     </td>
                     @*<td>
-                        @Html.DisplayFor(modelItem => item.value_return)
-                    </td>*@
+                            @Html.DisplayFor(modelItem => item.value_return)
+                        </td>*@
                     <td>
                         @Html.DisplayFor(modelItem => item.value_test)
                     </td>

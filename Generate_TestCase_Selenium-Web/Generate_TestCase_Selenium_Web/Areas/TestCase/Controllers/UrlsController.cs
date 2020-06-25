@@ -44,7 +44,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddNewUrl(string name, string url1, int project_id, bool IsOnlyDislayed,string trigger_element)
+        public async Task<IActionResult> AddNewUrl(string name, string url1, int project_id, bool IsOnlyDislayed,string trigger_element,bool IsGetTagA)
         {
             Url url = new Url();
             if (ModelState.IsValid)
@@ -59,17 +59,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 await _context.SaveChangesAsync();
                 ViewData["LoadingTitle"] = "Crawling data, please wait.";
 
-                return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = url.id_url, IsOnlyDislayed = IsOnlyDislayed }));
-                //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 32, IsOnlyDislayed = IsOnlyDislayed }));
+                return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = url.id_url, IsOnlyDislayed = IsOnlyDislayed, IsGetTagA = IsGetTagA }));
+                //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 32, IsOnlyDislayed = IsOnlyDislayed,IsGetTagA=IsGetTagA }));
 
             }
             ViewData["Message"] = "Error";
             return View(url);
 
 
-            //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 1, IsOnlyDislayed = IsOnlyDislayed }));
+            //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 50, IsOnlyDislayed = IsOnlyDislayed ,IsGetTagA=IsGetTagA}));
         }
-      
+
 
 
 

@@ -30,7 +30,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            var elementDBContext =await _context.Project.Include(p => p.Id_UserNavigation).Where(p=>p.Id_User== user.Id).ToListAsync();
+            var elementDBContext =await _context.Project.Include(p => p.Id_UserNavigation).Where(p=>p.Id_User== user.Id).OrderByDescending(d=>d.ModifiedDate).ToListAsync();
             if (elementDBContext.Count() == 0)
             {
                 ViewData["Message"] = "No projects yet, create a new one";

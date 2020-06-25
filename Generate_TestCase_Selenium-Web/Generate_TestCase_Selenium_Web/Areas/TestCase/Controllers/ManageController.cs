@@ -53,7 +53,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Projects()
         {
             var user = await _userManager.GetUserAsync(User);
-            var elementDBContext = await _context.Project.Include(p => p.Id_UserNavigation).Where(p => p.Id_User == user.Id).ToListAsync();
+            var elementDBContext = await _context.Project.Include(p => p.Id_UserNavigation).Where(p => p.Id_User == user.Id).OrderByDescending(d=>d.ModifiedDate).ToListAsync();
             if (StatusMessage == null)
             {
                 if (elementDBContext.Count() == 0)
@@ -142,7 +142,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewUrl(string name, string url1, int project_id, bool IsOnlyDislayed,string trigger_element)
+        public async Task<IActionResult> AddNewUrl(string name, string url1, int project_id, bool IsOnlyDislayed,string trigger_element, bool IsGetTagA)
         {
             Url url = new Url();
             try
@@ -180,7 +180,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddNewSubUrl(string name,string url1,bool IsChange, string id_testcase,bool IsOnlyDislayed,int project_id,int id_url,string trigger_element)
+        public async Task<IActionResult> AddNewSubUrl(string name,string url1,bool IsChange, string id_testcase,bool IsOnlyDislayed,int project_id,int id_url,string trigger_element,bool IsGetTagA)
         {
             Url url = new Url();
             try
@@ -211,7 +211,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 //id_url = 46,
                 IsOnlyDislayed = IsOnlyDislayed,
                 prerequisite_url = id_url,
-                prerequisite_testcase = id_testcase
+                prerequisite_testcase = id_testcase,
+                IsGetTagA= IsGetTagA
             });
             //return RedirectToAction("CrawlEltSubUrl", "CrawlElements", new { area="TestCase",project_id = project_id, id_url = 41, IsOnlyDislayed = IsOnlyDislayed , prerequisite_url =id_url,
             //    prerequisite_testcase= id_testcase
@@ -429,6 +430,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             ViewData["id_testcase"] = id_testcase;
             var testelementDBContext = await _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToListAsync();
             var urlRedirectDBContext = await _context.Redirect_url.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefaultAsync();
+            var alertDBContext = await _context.Alert_message.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefaultAsync();
             if (urlRedirectDBContext != null)
             {
                 ViewData["urlRedirecttest"] = urlRedirectDBContext.redirect_url_test;
@@ -438,6 +440,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 ViewData["urlRedirecttest"] = "";
                 ViewData["current_url"] = null;
+            }
+            if (alertDBContext != null)
+            {
+                ViewData["alertMessage"] = alertDBContext.message;
+
+            }
+            else
+            {
+                ViewData["alertMessage"] = "";
+
             }
             if (ViewData["Message"] == null)
             {

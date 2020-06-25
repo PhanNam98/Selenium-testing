@@ -99,7 +99,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             ViewData["id_testcase"] = id_testcase;
             ViewData["id_result"] = id_result;
             var testelementDBContext = await _context.Test_element_Result_test.Where(p => p.id_result == id_result && p.id_testcase == id_testcase).ToListAsync();
-
+            var AlertDBContext = await _context.Result_AlertMessage.Where(p => p.id_result == id_result && p.id_testcase == id_testcase).FirstOrDefaultAsync();
             var result_url = await _context.Result_Url.Where(p => p.id_result == id_result && p.id_testcase == id_testcase).FirstOrDefaultAsync();
             if (result_url != null)
             {
@@ -110,6 +110,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             {
                 ViewData["test_url"] = null;
                 ViewData["return_url"] = null;
+            }
+            if (AlertDBContext != null)
+            {
+                ViewData["test_alert"] = AlertDBContext.test_message;
+                ViewData["return_alert"] = AlertDBContext.message;
+            }
+            else
+            {
+                ViewData["test_alert"] = null;
+                ViewData["return_alert"] = null;
             }
             if (ViewData["Message"] == null)
             {
