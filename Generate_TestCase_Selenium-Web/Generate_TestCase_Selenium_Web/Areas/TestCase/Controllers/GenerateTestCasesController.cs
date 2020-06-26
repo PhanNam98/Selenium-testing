@@ -793,7 +793,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
                     Input_testcase newinput = new Input_testcase();
                     Random random = new Random();
-                    Element radio = group[random.Next(0, group.Count + 1)];
+                    Element radio = group[random.Next(0, group.Count)];
 
 
                     listInputElt.Add(Crate_InputTestcase(radio, id_testCase, "", Actions.click.ToString(), step++));
@@ -1818,7 +1818,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
                         Input_testcase newinput = new Input_testcase();
                         Random random = new Random();
-                        Element radio = group[random.Next(0, group.Count + 1)];
+                        Element radio = group[random.Next(0, group.Count)];
 
 
                         listInputElt.Add(Crate_InputTestcase(radio, id_testCase, "", Actions.click.ToString(), step++));
@@ -2855,7 +2855,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         chromedriver = SetUpDriver(url);
                     }
 
-                    if (URL.trigger_element != null || URL.trigger_element != "")
+                    if (URL.trigger_element != null && URL.trigger_element != "")
                     {
                         var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
                         if (trigger.Displayed)
@@ -2982,24 +2982,39 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     var AlertMessage = _context.Alert_message.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
                     if (AlertMessage != null)
                     {
-                        var alert_win = chromedriver.SwitchTo().Alert();
-                        if (AlertMessage.message != alert_win.Text)
+                        try
                         {
-                            isFailure++;
+                            var alert_win = chromedriver.SwitchTo().Alert();
+                            if (AlertMessage.message != alert_win.Text)
+                            {
+                                isFailure++;
+                            }
+                            Result_AlertMessage result_Alert = new Result_AlertMessage();
+                            result_Alert.id_result = jobId;
+                            result_Alert.test_message = AlertMessage.message;
+                            result_Alert.message = alert_win.Text;
+                            result_Alert.id_testcase = id_testcase;
+                            alert_win.Accept();
+                            _context.Result_AlertMessage.Add(result_Alert);
+                            await _context.SaveChangesAsync();
                         }
-                        Result_AlertMessage result_Alert = new Result_AlertMessage();
-                        result_Alert.id_result = jobId;
-                        result_Alert.test_message = AlertMessage.message;
-                        result_Alert.message = alert_win.Text;
-                        result_Alert.id_testcase = id_testcase;
-                        alert_win.Accept();
-                        _context.Result_AlertMessage.Add(result_Alert);
-                        await _context.SaveChangesAsync();
+                        catch
+                        {
+                            isSkip++;
+                            Result_AlertMessage result_Alert = new Result_AlertMessage();
+                            result_Alert.id_result = jobId;
+                            result_Alert.test_message = AlertMessage.message;
+                            result_Alert.message ="";
+                            result_Alert.id_testcase = id_testcase;
+                            _context.Result_AlertMessage.Add(result_Alert);
+                            await _context.SaveChangesAsync();
+                        }
                         testobj = true;
                     }
                     //test
                     if (list_output.Count > 0)
                     {
+                        testobj = true;
                         foreach (var outputtest in list_output)
                         {
                             Test_element_Result_test test_Element_Result_Test = new Test_element_Result_test();
@@ -3008,161 +3023,169 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             test_Element_Result_Test.id_testcase = id_testcase;
                             test_Element_Result_Test.value_test = outputtest.value_test;
                             bool WasTested = false;
+                            
                             IWebElement testelt;
                             string DataResult = "";
-                            if (!outputtest.xpath.Equals(""))
+                            try
                             {
-                                if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
+                                if (!outputtest.xpath.Equals(""))
                                 {
-                                    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                                    test_Element_Result_Test.xpath = outputtest.xpath;
-                                    string vt;
-                                    try
+                                    if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                                     {
-                                        vt = testelt.Text;
-                                    }
-                                    catch
-                                    {
-                                        vt = testelt.GetAttribute("value");
-                                    }
-                                    if (vt != null)
-                                    {
-                                        outputtest.value_return = vt;
-
-                                        if (!vt.Equals(outputtest.value_test))
+                                        testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                                        test_Element_Result_Test.xpath = outputtest.xpath;
+                                        string vt;
+                                        try
                                         {
-                                            isFailure++;
+                                            vt = testelt.Text;
                                         }
-                                        else
-                                            isPass++;
-                                        WasTested = true;
-                                        DataResult = vt;
-                                    }
-
-                                }
-                                else
-                                {
-                                    foreach (var inputtest in list_inputtest)
-                                    {
-                                        var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
-                                        if (testDisplayed.Displayed)
+                                        catch
                                         {
-                                            testDisplayed.Click();
-                                            chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
-                                            if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
-                                            {
+                                            vt = testelt.GetAttribute("value");
+                                        }
+                                        if (vt != null)
+                                        {
+                                            outputtest.value_return = vt;
 
-                                                testelt = chromedriver.FindElementByXPath(outputtest.xpath);
-                                                test_Element_Result_Test.xpath = outputtest.xpath;
-                                                string vt = null;
-                                                if (testelt.Text != null)
+                                            if (!vt.Equals(outputtest.value_test))
+                                            {
+                                                isFailure++;
+                                            }
+                                            else
+                                                isPass++;
+                                            WasTested = true;
+                                            DataResult = vt;
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        foreach (var inputtest in list_inputtest)
+                                        {
+                                            var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
+                                            if (testDisplayed.Displayed)
+                                            {
+                                                testDisplayed.Click();
+                                                chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                                if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                                                 {
-                                                    vt = testelt.Text;
-                                                }
-                                                else if (testelt.GetAttribute("value") != null)
-                                                {
-                                                    vt = testelt.GetAttribute("value");
-                                                }
-                                                if (vt != null)
-                                                {
-                                                    outputtest.value_return = vt;
-                                                    if (!vt.Equals(outputtest.value_test))
+
+                                                    testelt = chromedriver.FindElementByXPath(outputtest.xpath);
+                                                    test_Element_Result_Test.xpath = outputtest.xpath;
+                                                    string vt = null;
+                                                    if (testelt.Text != null)
                                                     {
-                                                        isFailure++;
+                                                        vt = testelt.Text;
                                                     }
-                                                    else
-                                                        isPass++;
-                                                    WasTested = true;
-                                                    DataResult = vt;
+                                                    else if (testelt.GetAttribute("value") != null)
+                                                    {
+                                                        vt = testelt.GetAttribute("value");
+                                                    }
+                                                    if (vt != null)
+                                                    {
+                                                        outputtest.value_return = vt;
+                                                        if (!vt.Equals(outputtest.value_test))
+                                                        {
+                                                            isFailure++;
+                                                        }
+                                                        else
+                                                            isPass++;
+                                                        WasTested = true;
+                                                        DataResult = vt;
+                                                    }
+                                                    break;
                                                 }
-                                                break;
+
                                             }
 
                                         }
 
                                     }
-
                                 }
-                            }
 
-                            if (!outputtest.xpath_full.Equals("") && !WasTested)
-                            {
-
-                                if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count() > 0)
+                                if (!outputtest.xpath_full.Equals("") && !WasTested)
                                 {
-                                    testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                                    test_Element_Result_Test.xpath = outputtest.xpath_full;
-                                    string vt = null;
-                                    if (testelt.Text != null)
+
+                                    if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count() > 0)
                                     {
-                                        vt = testelt.Text;
-                                    }
-                                    else if (testelt.GetAttribute("value") != null)
-                                    {
-                                        vt = testelt.GetAttribute("value");
-                                    }
-                                    if (vt != null)
-                                    {
-                                        outputtest.value_return = vt;
-                                        if (!vt.Equals(outputtest.value_test))
+                                        testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                                        test_Element_Result_Test.xpath = outputtest.xpath_full;
+                                        string vt = null;
+                                        if (testelt.Text != null)
                                         {
-                                            isFailure++;
+                                            vt = testelt.Text;
                                         }
-                                        else
-                                            isPass++;
-                                        WasTested = true;
-                                        DataResult = vt;
-                                    }
-
-                                }
-                                else
-                                {
-                                    foreach (var inputtest in list_inputtest)
-                                    {
-
-                                        var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
-                                        if (testDisplayed.Displayed)
+                                        else if (testelt.GetAttribute("value") != null)
                                         {
-                                            testDisplayed.Click();
-                                            chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
-                                            if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
+                                            vt = testelt.GetAttribute("value");
+                                        }
+                                        if (vt != null)
+                                        {
+                                            outputtest.value_return = vt;
+                                            if (!vt.Equals(outputtest.value_test))
                                             {
-                                                testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
-                                                test_Element_Result_Test.xpath = outputtest.xpath_full;
-                                                string vt = null;
-                                                if (testelt.Text != null)
-                                                {
-                                                    vt = testelt.Text;
-                                                }
-                                                else if (testelt.GetAttribute("value") != null)
-                                                {
-                                                    vt = testelt.GetAttribute("value");
-                                                }
-                                                if (vt != null)
-                                                {
-                                                    outputtest.value_return = vt;
-                                                    if (!vt.Equals(outputtest.value_test))
-                                                    {
-                                                        isFailure++;
-                                                    }
-                                                    else
-                                                        isPass++;
-                                                    WasTested = true;
+                                                isFailure++;
+                                            }
+                                            else
+                                                isPass++;
+                                            WasTested = true;
+                                            DataResult = vt;
+                                        }
 
-                                                    DataResult = vt;
+                                    }
+                                    else
+                                    {
+                                        foreach (var inputtest in list_inputtest)
+                                        {
+
+                                            var testDisplayed = chromedriver.FindElementByXPath(inputtest.xpath);
+                                            if (testDisplayed.Displayed)
+                                            {
+                                                testDisplayed.Click();
+                                                chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                                if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
+                                                {
+                                                    testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
+                                                    test_Element_Result_Test.xpath = outputtest.xpath_full;
+                                                    string vt = null;
+                                                    if (testelt.Text != null)
+                                                    {
+                                                        vt = testelt.Text;
+                                                    }
+                                                    else if (testelt.GetAttribute("value") != null)
+                                                    {
+                                                        vt = testelt.GetAttribute("value");
+                                                    }
+                                                    if (vt != null)
+                                                    {
+                                                        outputtest.value_return = vt;
+                                                        if (!vt.Equals(outputtest.value_test))
+                                                        {
+                                                            isFailure++;
+                                                        }
+                                                        else
+                                                            isPass++;
+                                                        WasTested = true;
+
+                                                        DataResult = vt;
+                                                    }
+                                                    break;
                                                 }
-                                                break;
+
                                             }
 
+
                                         }
 
 
                                     }
-
-
+                                }
+                                if (!WasTested)// check skip case
+                                {
+                                    isSkip++;
                                 }
                             }
-                            if (!WasTested)// check skip case
+                            catch
                             {
                                 isSkip++;
                             }
@@ -3171,9 +3194,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             outputtest.value_return = DataResult;
                             _context.Element_test.Update(outputtest);
                             await _context.SaveChangesAsync();
-
-
-
 
                         }
                     }
@@ -3259,7 +3279,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     {
                         firefoxdriver = SetUpDriverFireFox(url);
                     }
-                    if (URL.trigger_element != null || URL.trigger_element != "")
+                    if (URL.trigger_element != null && URL.trigger_element != "")
                     {
                         var trigger = firefoxdriver.FindElementByXPath(URL.trigger_element);
                         if (trigger.Displayed)
@@ -3679,7 +3699,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             driver.Url = url;
             driver.Navigate();
-            if (URL.trigger_element != null || URL.trigger_element != "")
+            if (URL.trigger_element != null && URL.trigger_element != "")
             {
                 var trigger = driver.FindElementByXPath(URL.trigger_element);
                 if (trigger.Displayed)
@@ -3796,7 +3816,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             driver.Url = url;
             driver.Navigate();
-            if (URL.trigger_element != null || URL.trigger_element != "")
+            if (URL.trigger_element != null && URL.trigger_element != "")
             {
                 var trigger = driver.FindElementByXPath(URL.trigger_element);
                 if (trigger.Displayed)
@@ -4457,7 +4477,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             else
             {
-                ViewData["alertMessage"] = "";
+                ViewData["alertMessage"] = null;
                 
             }
             if (ViewData["Message"] == null)

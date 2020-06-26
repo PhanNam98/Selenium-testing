@@ -196,7 +196,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                     chromedriver = SetUpDriver(url);
                 }
 
-                if (URL.trigger_element != null || URL.trigger_element != "")
+                if (URL.trigger_element != null && URL.trigger_element != "")
                 {
                     var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
                     if (trigger.Displayed)
@@ -582,7 +582,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                 {
                     firefoxdriver = SetUpDriverFireFox(url);
                 }
-                if (URL.trigger_element != null || URL.trigger_element != "")
+                if (URL.trigger_element != null && URL.trigger_element != "")
                 {
                     var trigger = firefoxdriver.FindElementByXPath(URL.trigger_element);
                     if (trigger.Displayed)
@@ -1023,7 +1023,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
             }
             driver.Url = url;
             driver.Navigate();
-            if (URL.trigger_element != null || URL.trigger_element != "")
+            if (URL.trigger_element != null && URL.trigger_element != "")
             {
                 var trigger = driver.FindElementByXPath(URL.trigger_element);
                 if (trigger.Displayed)
@@ -1140,7 +1140,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
             }
             driver.Url = url;
             driver.Navigate();
-            if (URL.trigger_element != null || URL.trigger_element != "")
+            if (URL.trigger_element != null && URL.trigger_element != "")
             {
                 var trigger = driver.FindElementByXPath(URL.trigger_element);
                 if (trigger.Displayed)

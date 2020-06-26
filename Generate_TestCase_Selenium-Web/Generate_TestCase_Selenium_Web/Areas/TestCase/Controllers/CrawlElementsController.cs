@@ -164,7 +164,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 // usertesstvf
                 SetUpDriver(Url);
-                if (URL.trigger_element != null || URL.trigger_element != "")
+                if (URL.trigger_element != null && URL.trigger_element != "")
                 {
                     var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
                     if (trigger.Displayed)
@@ -220,8 +220,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
                     foreach (string tag in tag_elts)
                     {
-                        Thread thread = new Thread(() => GetElements(chromedriver, tag, "", id_url));
-                        thread.Start();
+                        if (this.IsOnlyDislayed)
+                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url);
+                        else
+                            GetElements(chromedriver, tag, "", id_url);
+                        //Thread thread = new Thread(() => GetElements(chromedriver, tag, "", id_url));
+                        //thread.Start();
                         //GetElements(chromedriver, tag, "", id_url);
                     }
                 }
@@ -263,7 +267,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     Chromedriver.Navigate();
                 }
                    
-                if(URL.trigger_element!=null || URL.trigger_element!="")
+                if(URL.trigger_element!=null && URL.trigger_element!="")
                 {
                     var trigger = Chromedriver.FindElementByXPath(URL.trigger_element);
                     if (trigger.Displayed)
@@ -315,8 +319,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 {
                     foreach (string tag in tag_elts)
                     {
-                        Thread thread = new Thread(() => GetElements(Chromedriver, tag, "", id_url));
-                        thread.Start();
+                        if (this.IsOnlyDislayed)
+                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url);
+                        else
+                            GetElements(chromedriver, tag, "", id_url);
+                        //Thread thread = new Thread(() => GetElements(Chromedriver, tag, "", id_url));
+                        //thread.Start();
                         //GetElements(chromedriver, tag, "", id_url);
                     }
                 }
@@ -334,7 +342,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             string return_url = "";
             var _context = new ElementDBContext();
             var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
-            string url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
+            Url URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
+            string url = URL.url1;
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
             if (Testcase.id_prerequisite_testcase != null)
             {
@@ -342,6 +351,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             driver.Url = url;
             driver.Navigate();
+            if (URL.trigger_element != null && URL.trigger_element != "")
+            {
+                var trigger = driver.FindElementByXPath(URL.trigger_element);
+                if (trigger.Displayed)
+                {
+                    trigger.Click();
+                }
+            }
             foreach (var inputtest in list_inputtest)
             {
                 switch (inputtest.action)

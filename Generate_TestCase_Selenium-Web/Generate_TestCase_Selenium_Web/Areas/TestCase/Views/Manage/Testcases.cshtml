@@ -195,11 +195,11 @@
                                                                 }
                                                             }
                                                             @*<div class="row form-group">
-            <div class="col col-md-3">@Html.Label("Result")</div>
-            <div class="col-12 col-md-9">
-                <input type="text" name="result" class="input-md form-control" value="@item.result" readonly />
-            </div>
-        </div>*@
+                                        <div class="col col-md-3">@Html.Label("Result")</div>
+                                        <div class="col-12 col-md-9">
+                                            <input type="text" name="result" class="input-md form-control" value="@item.result" readonly />
+                                        </div>
+                                    </div>*@
 
                                                         </div>
                                                         <div class="modal-footer">
@@ -218,8 +218,15 @@
 
 
                                 <a class="btn btn-success" asp-action="TestDatas" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Test data">Data</a>
+                                @if (item.Element_test.Count>0 || item.Alert_message.Count>0 || item.Redirect_url!=null)
+                                {
+                                    <a class="btn btn-success" asp-action="TestElement" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Validate items">Validate items</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary" asp-action="TestElement" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Validate items">Validate items</a>
+                                }
 
-                                <a class="btn btn-primary" asp-action="TestElement" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Validate items">Validate items</a>
                             </td>
                             </tr>
                         }
