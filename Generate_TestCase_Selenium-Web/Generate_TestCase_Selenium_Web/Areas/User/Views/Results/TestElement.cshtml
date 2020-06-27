@@ -36,23 +36,10 @@
                     <div class="card-body">
 
                         <div class="row form-group">
-                            <div class="col-2">@Html.Label("Test-return url:")</div>
-                            <div class="col-4">
-                                @{
-                                    if (ViewBag.test_url != ViewBag.return_url)
-                                    {
-                                        <input style="color:red;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_url" readonly>
-                                    }
-                                    else
-                                    {
-                                        <input style="color:green;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_url" readonly>
-                                    }
-                                }
 
-                            </div>
                             @*</div>
-                                <div class="row form-group">*@
-                            <div class="col-2">@Html.Label("Return url:")</div>
+        <div class="row form-group">*@
+                            <div class="col-2">@Html.Label("Actual return url:")</div>
                             <div class="col-4">
 
                                 @{
@@ -63,6 +50,20 @@
                                     else
                                     {
                                         <input style="color:green;" type="text" name="return_url" class="input form-control" value="@ViewBag.return_url" readonly>
+                                    }
+                                }
+
+                            </div>
+                            <div class="col-2">@Html.Label("Expected return url:")</div>
+                            <div class="col-4">
+                                @{
+                                    if (ViewBag.test_url != ViewBag.return_url)
+                                    {
+                                        <input style="color:red;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_url" readonly>
+                                    }
+                                    else
+                                    {
+                                        <input style="color:green;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_url" readonly>
                                     }
                                 }
 
@@ -106,22 +107,9 @@
                     <div class="card-body">
 
                         <div class="row form-group">
-                            <div class="col-2">@Html.Label("Test-Alert message:")</div>
-                            <div class="col-4">
-                                @{
-                                    if (ViewBag.test_alert != ViewBag.return_alert)
-                                    {
-                                        <input style="color:red;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_alert" readonly>
-                                    }
-                                    else
-                                    {
-                                        <input style="color:green;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_alert" readonly>
-                                    }
-                                }
 
-                            </div>
 
-                            <div class="col-2">@Html.Label("Alert message:")</div>
+                            <div class="col-2">@Html.Label("Actual message:")</div>
                             <div class="col-4">
 
                                 @{
@@ -132,6 +120,21 @@
                                     else
                                     {
                                         <input style="color:green;" type="text" name="return_url" class="input form-control" value="@ViewBag.return_alert" readonly>
+                                    }
+                                }
+
+                            </div>
+
+                            <div class="col-2">@Html.Label("Expected message:")</div>
+                            <div class="col-4">
+                                @{
+                                    if (ViewBag.test_alert != ViewBag.return_alert)
+                                    {
+                                        <input style="color:red;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_alert" readonly>
+                                    }
+                                    else
+                                    {
+                                        <input style="color:green;" type="text" name="test_url" class="input form-control" value="@ViewBag.test_alert" readonly>
                                     }
                                 }
 
@@ -201,7 +204,7 @@
                         </th>
 
                         <th>
-                            @Html.DisplayName("Actural results")
+                            @Html.DisplayName("Actual results")
                         </th>
                         <th>
                             @Html.DisplayName("Expected results")

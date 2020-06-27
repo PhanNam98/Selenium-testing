@@ -22,6 +22,7 @@ using Coravel;
 using Generate_TestCase_Selenium_Web.Jobs;
 using Generate_TestCase_Selenium_Web.Services;
 using System.Collections.Specialized;
+using Microsoft.AspNetCore.Http;
 
 namespace Generate_TestCase_Selenium_Web
 {
@@ -95,6 +96,9 @@ namespace Generate_TestCase_Selenium_Web
                 //cronExpression: "0/5 * * * * ?")); // run every 5 seconds
                 cronExpression: "")); // run after web start
             services.AddHostedService<QuartzHostedService>();
+
+            services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Login");
+
         }
         private void OnShutdown()
         {
@@ -140,6 +144,19 @@ namespace Generate_TestCase_Selenium_Web
 
                 endpoints.MapRazorPages();
             });
+            //app.Use(async (context, next) =>
+            //{
+            //    var url = context.Request.Path.Value;
+
+            //    // Redirect to an external URL
+            //    if (url.Contains("/Identity/Account/Login"))
+            //    {
+            //        context.Request.Path = "/Login";
+            //        return;   // short circuit
+            //    }
+
+            //    await next();
+            //});
         }
         public IScheduler ConfigureQuartz()
         {

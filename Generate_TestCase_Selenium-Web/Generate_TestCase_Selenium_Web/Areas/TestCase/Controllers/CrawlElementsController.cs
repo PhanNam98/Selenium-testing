@@ -92,8 +92,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             int isSuccess = GetElements(Url, IsOnlyDislayed, id_url, IsGetTagA);
             if (isSuccess == 1)
             {
+                if(listForm!=null)
                 _context.Form_elements.AddRange(listForm);
-                _context.Element.AddRange(listElt);
+                if (listElt != null)
+                    _context.Element.AddRange(listElt);
                 await _context.SaveChangesAsync();
                 if (returnUrl != null)
                 {
@@ -173,6 +175,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
                 }
                 var form = chromedriver.FindElementsByXPath("//form");
+                //List<Form_elements> form = null;
                 if (form != null)// have at least one form
                 {
                     listForm = new List<Form_elements>();
