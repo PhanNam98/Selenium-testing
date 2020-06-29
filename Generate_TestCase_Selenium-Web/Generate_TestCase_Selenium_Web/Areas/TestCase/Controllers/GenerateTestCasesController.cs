@@ -2856,6 +2856,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         public async Task<string> Run_ReturnResultJob(string jobId, int id_url, string url, string id_testcase)
         {
+            string logmessage = "";
             bool testobj = false;
             int isPass = 0;
             int isFailure = 0;
@@ -2870,15 +2871,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             running_Process.status = "running";
             running_Process.message = "Running test case " + id_testcase;
             _context.Running_process.Update(running_Process);
+
+            Result_testcase result_Testcase = new Result_testcase();
+            result_Testcase.id_result = running_Process.id_process;
+            result_Testcase.id_testcase = id_testcase;
+            result_Testcase.id_url = id_url;
+            result_Testcase.Result = "";
+            result_Testcase.TestDate = DateTime.Now;
+            _context.Result_testcase.Add(result_Testcase);
             try
             {
-                Result_testcase result_Testcase = new Result_testcase();
-                result_Testcase.id_result = running_Process.id_process;
-                result_Testcase.id_testcase = id_testcase;
-                result_Testcase.id_url = id_url;
-                result_Testcase.Result = "";
-                result_Testcase.TestDate = DateTime.Now;
-                _context.Result_testcase.Add(result_Testcase);
                 await _context.SaveChangesAsync();
 
                 if (browserRun.Equals("chrome"))
@@ -3051,6 +3053,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             result_Alert.message ="";
                             result_Alert.id_testcase = id_testcase;
                             _context.Result_AlertMessage.Add(result_Alert);
+                            logmessage += "No found alert message\n";
                             await _context.SaveChangesAsync();
                         }
                         testobj = true;
@@ -3227,11 +3230,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 if (!WasTested)// check skip case
                                 {
                                     isSkip++;
+                                    logmessage += "Not found element with xpath: " + outputtest.xpath != null ? outputtest.xpath : outputtest.xpath_full + "\n";
                                 }
                             }
                             catch
                             {
                                 isSkip++;
+                                logmessage += "Not found element with xpath: " + outputtest.xpath != null ? outputtest.xpath : outputtest.xpath_full+"\n";
                             }
                             test_Element_Result_Test.value = DataResult;
                             _context.Test_element_Result_test.Add(test_Element_Result_Test);
@@ -3273,6 +3278,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     if(!testobj)
                     {
                         isSkip++;
+                        logmessage += "No validate items\n";
                     }
                     chromedriver.Quit();
                     string result = "";
@@ -3299,6 +3305,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
                     Testcase.result = result;
                     result_Testcase.Result = result;
+                    result_Testcase.Log_message = logmessage;
                     await _context.SaveChangesAsync();
                     return result;
 
@@ -3456,20 +3463,35 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     var AlertMessage = _context.Alert_message.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefault();
                     if (AlertMessage != null)
                     {
-                        testobj = true;
-                        var alert_win = firefoxdriver.SwitchTo().Alert();
-                        if (AlertMessage.message != alert_win.Text)
+                        try
                         {
-                            isFailure++;
+                            var alert_win = firefoxdriver.SwitchTo().Alert();
+                            if (AlertMessage.message != alert_win.Text)
+                            {
+                                isFailure++;
+                            }
+                            Result_AlertMessage result_Alert = new Result_AlertMessage();
+                            result_Alert.id_result = jobId;
+                            result_Alert.test_message = AlertMessage.message;
+                            result_Alert.message = alert_win.Text;
+                            result_Alert.id_testcase = id_testcase;
+                            alert_win.Accept();
+                            _context.Result_AlertMessage.Add(result_Alert);
+                            await _context.SaveChangesAsync();
                         }
-                        Result_AlertMessage result_Alert = new Result_AlertMessage();
-                        result_Alert.id_result = jobId;
-                        result_Alert.test_message = AlertMessage.message;
-                        result_Alert.message = alert_win.Text;
-                        result_Alert.id_testcase = id_testcase;
-                        alert_win.Accept();
-                        _context.Result_AlertMessage.Add(result_Alert);
-                        await _context.SaveChangesAsync();
+                        catch
+                        {
+                            isSkip++;
+                            Result_AlertMessage result_Alert = new Result_AlertMessage();
+                            result_Alert.id_result = jobId;
+                            result_Alert.test_message = AlertMessage.message;
+                            result_Alert.message = "";
+                            result_Alert.id_testcase = id_testcase;
+                            _context.Result_AlertMessage.Add(result_Alert);
+                            logmessage += "No found alert message\n";
+                            await _context.SaveChangesAsync();
+                        }
+                        testobj = true;
                     }
                     //test
                     if (list_output.Count > 0)
@@ -3644,6 +3666,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             if (!WasTested)// check skip case
                             {
                                 isSkip++;
+                                logmessage += "Not found element with xpath: " + outputtest.xpath != null ? outputtest.xpath : outputtest.xpath_full + "\n";
+
                             }
                             _context.Test_element_Result_test.Add(test_Element_Result_Test);
                             outputtest.value_return = DataResult;
@@ -3682,6 +3706,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     if (!testobj)
                     {
                         isSkip++;
+                        logmessage += "No validate items\n";
                     }
                     firefoxdriver.Quit();
                     string result = "";
@@ -3709,7 +3734,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
                     Testcase.result = result;
                     result_Testcase.Result = result;
-
+                    result_Testcase.Log_message = logmessage;
                     await _context.SaveChangesAsync();
 
                     return result;
@@ -3722,9 +3747,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             catch
             {
-
+                logmessage = "Run error \n";
             }
-
+            result_Testcase.Log_message = logmessage;
+            await _context.SaveChangesAsync();
             return "Error";
         }
 

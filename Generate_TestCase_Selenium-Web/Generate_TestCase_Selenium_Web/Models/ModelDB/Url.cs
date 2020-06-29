@@ -27,9 +27,9 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         [Column("url")]
         public string url1 { get; set; }
         public int project_id { get; set; }
-        [Column(TypeName = "date")]
+        [Column(TypeName = "datetime")]
         public DateTime? CreatedDate { get; set; }
-        [Column(TypeName = "date")]
+        [Column(TypeName = "datetime")]
         public DateTime? ModifiedDate { get; set; }
         public bool? IsChange { get; set; }
         public string trigger_element { get; set; }

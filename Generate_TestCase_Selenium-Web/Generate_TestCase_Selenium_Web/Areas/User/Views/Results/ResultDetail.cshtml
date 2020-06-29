@@ -19,6 +19,7 @@
             <div class="col-4"><p style="color:green">Pass: @ViewBag.Pass</p></div>
             <div class="col-4"><p style="color:red">Failure: @ViewBag.Failure</p></div>
             <div class="col-4"><p style="color:blue">Skip: @ViewBag.Skip</p></div>
+
         </div>
     </div>
     <div class="col-md-2">
@@ -40,7 +41,7 @@
 
     </div>
     <div class="card-body">
-       
+
 
         @using (Html.BeginForm("DownloadExcel2", "GenerateTestCases", new { area = "TestCase" }, FormMethod.Post, false, htmlAttributes: new { @area = "TestCase", enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "testcaseform", @novalidate = "novalidate", @name = "testcaseform", @id_url = ViewBag.id_url }))
         {
@@ -77,11 +78,39 @@
                                     </td>
                                 }
                                 else
-if (item.Result.Equals("Skip"))
+                           if (item.Result.Equals("Skip"))
                                 {
-                                    <td style="color:blue">
-                                        @Html.DisplayFor(modelItem => item.Result)
+                                    @*<td style="color:blue">
+                                            @Html.DisplayFor(modelItem => item.Result)
+                                        </td>*@
+                                    <td>
+                                        @{
+                                            string m = "m" + @item.id_testcase.ToString();
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#@m">
+                                                Skip
+                                            </button>
+                                            <div class="modal fade" id="@m" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Log message</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @item.Log_message
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        }
                                     </td>
+
                                 }
                                 else
                                 {
@@ -156,7 +185,16 @@ if (item.Result.Equals("Skip"))
                                         </div>
                                     }
                                     <a class="btn btn-success" asp-action="TestData" asp-controller="Results" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" asp-route-id_result="@item.id_result" role="button" title="Test data">Data</a>
-                                    <a class="btn btn-success" asp-action="TestElement" asp-controller="Results" asp-route-id_testcase="@item.id_testcase" asp-route-id_result="@item.id_result" role="button" title="Validate items">Validate items</a>
+                                    @if (item.id_.Element_test.Count > 0 || item.id_.Alert_message.Count > 0 || item.id_.Redirect_url != null)
+                                    {
+                                        <a class="btn btn-success" asp-action="TestElement" asp-controller="Results" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Validate items">Validate items</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary" asp-action="TestElement" asp-controller="Results" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Validate items">Validate items</a>
+
+                                    }
+                                   @* <a class="btn btn-success" asp-action="TestElement" asp-controller="Results" asp-route-id_testcase="@item.id_testcase" asp-route-id_result="@item.id_result" role="button" title="Validate items">Validate items</a>*@
                                 </td>
                             </tr>
                         }

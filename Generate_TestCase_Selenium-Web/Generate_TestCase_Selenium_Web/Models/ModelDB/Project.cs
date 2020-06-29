@@ -22,9 +22,9 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         public string name { get; set; }
         [StringLength(450)]
         public string description { get; set; }
-        [Column(TypeName = "date")]
+        [Column(TypeName = "datetime")]
         public DateTime CreatedDate { get; set; }
-        [Column(TypeName = "date")]
+        [Column(TypeName = "datetime")]
         public DateTime ModifiedDate { get; set; }
 
         [ForeignKey(nameof(Id_User))]

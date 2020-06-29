@@ -24,6 +24,7 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         public string Result { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? TestDate { get; set; }
+        public string Log_message { get; set; }
 
         [ForeignKey("id_testcase,id_url")]
         [InverseProperty(nameof(Test_case.Result_testcase))]

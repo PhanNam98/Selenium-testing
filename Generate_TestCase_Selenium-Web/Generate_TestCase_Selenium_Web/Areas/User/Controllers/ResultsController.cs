@@ -47,6 +47,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             var results = await _context.Result_testcase
                 .Include(r => r.id_resultNavigation)
                 .Include(t=>t.id_)
+                .ThenInclude(u=>u.Alert_message)
+                .Include(t=>t.id_)
+                .ThenInclude(u => u.Redirect_url)
+                .Include(t=>t.id_)
+                .ThenInclude(u => u.Element_test)
+               
                 .Where(p=>p.id_result==id)
                 .ToListAsync();
             if (results == null)
@@ -76,12 +82,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             {
                 if (testdataDBContext.Count() == 0)
                 {
-                    ViewData["Message"] = "No data yet, create a new one";
+                    ViewData["Message"] = "No data yet";
                 }
                 else
                 if (testdataDBContext.Count() > 0)
                 {
-                    ViewData["Message"] = String.Format("{0} test data(s)", testdataDBContext.Count());
+                    //ViewData["Message"] = String.Format("{0} test data(s)", testdataDBContext.Count());
                 }
 
                 else
@@ -125,12 +131,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             {
                 if (testelementDBContext.Count() == 0)
                 {
-                    ViewData["Message"] = "No element yet, create a new one";
+                    ViewData["Message"] = "No item yet";
                 }
                 else
                 if (testelementDBContext.Count() > 0)
                 {
-                    ViewData["Message"] = String.Format("{0} test element(s)", testelementDBContext.Count());
+                    //ViewData["Message"] = String.Format("{0} test element(s)", testelementDBContext.Count());
                 }
 
                 else
