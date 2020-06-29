@@ -20,6 +20,7 @@
 </h1>
 <hr />
 <partial name="~/Views/Shared/LoadingViewPartial.cshtml" model="@ViewBag.LoadingTitle" />
+
 <div class="container">
     <div class="text-right">
         @*<input type="button" name="submit_id" id="btn_id" value="Delete element(s)" onclick="Delete_by_id()" />*@
@@ -231,7 +232,7 @@
                                     <div class="center">
                                         <div class="modal-dialog modal-dialog-center" role="document">
                                             <div class="modal-content">
-                                                @using (Html.BeginForm("BlockPost", "ManagePostsAdmin", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = detail, @novalidate = "novalidate", @name = "blockform" }))
+                                                @using (Html.BeginForm("AddSubmit", "CrawlElements", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = detail, @novalidate = "novalidate", @name = "blockform" }))
                                                 {
                                                     @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
                                                     <div class="modal-header">
@@ -240,11 +241,12 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
+                                                    <input type="text" name="id_url" class="input-md form-control" id="id_url" required placeholder="Project Name" hidden readonly value="@ViewBag.id_url">
                                                     <div class="modal-body">
                                                         <div class="row form-group">
                                                             <div class="col col-md-3">@Html.Label("Id element")</div>
                                                             <div class="col-12 col-md-9">
-                                                                <input type="text" name="idpost" class="input-md form-control" value="@item.id_element" readonly>
+                                                                <input type="text" name="id_element" class="input-md form-control" value="@item.id_element" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="row form-group">
@@ -286,7 +288,12 @@
 
                                                     </div>
                                                     <div class="modal-footer">
-
+                                                        @{
+                                                            if ((item.tag_name == "a" || item.tag_name == "button") && (item.href == null || !item.href.Contains("/")) && item.type != "submit")
+                                                            {
+                                                                <button type="submit" class="btn btn-primary">Set type submit</button>
+                                                            }
+                                                        }
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                     </div>
 
@@ -315,7 +322,7 @@
                 fixedHeader: true,
                 "lengthMenu": [[5,10, 25, 50, - 1], [5,10, 25, 50, "All record"]],
                 //"ordering": false,
-        //        "scrollY":        "400px",
+                "scrollY":        "400px",
         //"scrollCollapse": true,
         "paging":         false,
                 initComplete: function () {

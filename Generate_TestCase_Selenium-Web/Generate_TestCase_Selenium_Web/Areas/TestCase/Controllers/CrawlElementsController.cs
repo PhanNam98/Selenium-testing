@@ -23,6 +23,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
     [Authorize]
     public class CrawlElementsController : Controller
     {
+        [TempData]
+        public string StatusMessage { get; set; }
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ElementDBContext _context;
         private ChromeDriver chromedriver;
@@ -42,23 +44,35 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         // GET: TestCase/CrawlElements
         public async Task<IActionResult> Index(int id_url)
         {
+            ViewData["Message"] = StatusMessage;
             var id = _userManager.GetUserId(User);
             // var elementDBContext = await _context.Element.Include(e =>e.id_urlNavigation).Where(p => p.id_url == id_url).ToListAsync();
-            var elementDBContext = await _context.Element.Include(e =>e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url &&p.id_urlNavigation.project_.Id_User == id).ToListAsync();
+            var elementDBContext = await _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == id).ToListAsync();
             ViewData["id_url"] = id_url;
-            if (elementDBContext.Count() == 0)
+            if (ViewData["Message"] == null)
             {
-                ViewData["Message"] = "No element yet";
-            }
-            else
+                if (elementDBContext.Count() == 0)
+                {
+                    ViewData["Message"] = "No element yet";
+                }
+                else
          if (elementDBContext.Count() > 0)
-            {
-                ViewData["Message"] = String.Format("Success, {0} element(s) were found",elementDBContext.Count());
-            }
+                {
+                    ViewData["Message"] = String.Format("Success, {0} element(s) were found", elementDBContext.Count());
+                }
 
+                else
+                {
+                    ViewData["Message"] = "Error load data";
+                }
+            }
             else
             {
-                ViewData["Message"] = "Error load data";
+
+            }
+            if(StatusMessage!=null)
+            {
+                TempData.Remove(StatusMessage);
             }
             ViewData["LoadingTitle"] = "Generating test case. Please wait.";
             return View(elementDBContext);
@@ -66,24 +80,31 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteList(int id_url, IEnumerable<string> eltId_Delete)
         {
-            if (eltId_Delete == null)
+            try
             {
-                return NotFound();
+                if (eltId_Delete == null)
+                {
+                    return NotFound();
+                }
+                foreach (var id in eltId_Delete)
+                {
+                    var element = await _context.Element.Where(p => p.id_element == id && p.id_url == id_url).FirstOrDefaultAsync();
+                    _context.Element.RemoveRange(element);
+                }
+                await _context.SaveChangesAsync();
+                StatusMessage = "Delete successfully";
             }
-            foreach (var id in eltId_Delete)
+            catch
             {
-                var element = await _context.Element.Where(p => p.id_element == id && p.id_url == id_url).FirstOrDefaultAsync();
-                _context.Element.RemoveRange(element);
+                StatusMessage = "Delete failed";
             }
-            await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new
             {
                 id_url = id_url
 
             }));
         }
-        public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed,bool IsGetTagA, string returnUrl = null)
+        public async Task<IActionResult> CrawlElt(int id_url, bool IsOnlyDislayed, bool IsGetTagA = true, string returnUrl = null)
         {
             //--Code, dont delete
             string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
@@ -92,8 +113,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             int isSuccess = GetElements(Url, IsOnlyDislayed, id_url, IsGetTagA);
             if (isSuccess == 1)
             {
-                if(listForm!=null)
-                _context.Form_elements.AddRange(listForm);
+                if (listForm != null)
+                    _context.Form_elements.AddRange(listForm);
                 if (listElt != null)
                     _context.Element.AddRange(listElt);
                 await _context.SaveChangesAsync();
@@ -118,7 +139,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }));
 
         }
-        public async Task<IActionResult> CrawlEltSubUrl(int id_url, bool IsOnlyDislayed,bool IsGetTagA, string prerequisite_testcase,int prerequisite_url)
+        public async Task<IActionResult> CrawlEltSubUrl(int id_url, bool IsOnlyDislayed, string prerequisite_testcase, int prerequisite_url, bool IsGetTagA = true)
         {
             //--Code, dont delete
             string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
@@ -158,7 +179,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
         #region Get Element from Web
-        public int GetElements(string Url, bool IsOnlyDislayed, int id_url,bool IsGetTagA)
+        public int GetElements(string Url, bool IsOnlyDislayed, int id_url, bool IsGetTagA)
         {
             int flag = 0;
             var URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
@@ -199,16 +220,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
                     }
+                    var isgetlink = true;
                     if (IsGetTagA == false)
                     {
-                        tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
+                        //tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
+                        isgetlink = false;
                     }
                     foreach (string tag in tag_elts)
                     {
                         if (this.IsOnlyDislayed)
-                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url, listForm);
+                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url, listForm, isgetlink);
                         else
-                            GetElements(chromedriver, tag, "", id_url, listForm);
+                            GetElements(chromedriver, tag, "", id_url, listForm, isgetlink);
                     }
                     //GetElements(chromedriver, id_Url, "a", "", listForm);
 
@@ -217,16 +240,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 else //no form found
                 {
+                    var isgetlink = true;
                     if (IsGetTagA == false)
                     {
-                        tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
+                        //tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
+                        isgetlink = false;
                     }
                     foreach (string tag in tag_elts)
                     {
                         if (this.IsOnlyDislayed)
-                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url);
+                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url,null, isgetlink);
                         else
-                            GetElements(chromedriver, tag, "", id_url);
+                            GetElements(chromedriver, tag, "", id_url,null, isgetlink);
                         //Thread thread = new Thread(() => GetElements(chromedriver, tag, "", id_url));
                         //thread.Start();
                         //GetElements(chromedriver, tag, "", id_url);
@@ -241,14 +266,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             CloseDriver();
             return flag;
         }
-        public async Task<int> GetSubElements(string Url, bool IsOnlyDislayed, int id_url,string prerequisite_testcase,int prerequisite_url,bool IsGetTagA)
+        public async Task<int> GetSubElements(string Url, bool IsOnlyDislayed, int id_url, string prerequisite_testcase, int prerequisite_url, bool IsGetTagA)
         {
             var URL = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
             int flag = 0;
             ChromeDriver Chromedriver = null;
             try
             {
-               
+
                 try
                 {
                     ChromeDriverService service = ChromeDriverService.CreateDefaultService();
@@ -257,20 +282,20 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     var options = new ChromeOptions();
                     //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
                     Chromedriver = new ChromeDriver(service, options);
-              
+
                 }
                 catch (Exception e)
                 {
                     var a = e.Message;
                 }
-                var returnUrl=await RunPrerequesiteTestcase(Chromedriver, prerequisite_testcase, prerequisite_url);
+                var returnUrl = await RunPrerequesiteTestcase(Chromedriver, prerequisite_testcase, prerequisite_url);
                 if (URL.IsChange == false)
                 {
                     Chromedriver.Url = Url;
                     Chromedriver.Navigate();
                 }
-                   
-                if(URL.trigger_element!=null && URL.trigger_element!="")
+
+                if (URL.trigger_element != null && URL.trigger_element != "")
                 {
                     var trigger = Chromedriver.FindElementByXPath(URL.trigger_element);
                     if (trigger.Displayed)
@@ -302,16 +327,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
                     }
-                    if(IsGetTagA==false)
+                    var isgetlink = true;
+                    if (IsGetTagA == false)
                     {
-                        tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
+                        //tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
+                        isgetlink = false;
                     }
                     foreach (string tag in tag_elts)
                     {
                         if (this.IsOnlyDislayed)
-                            GetElementsOnlyDisplay(Chromedriver, tag, "", id_url, listForm);
+                            GetElementsOnlyDisplay(Chromedriver, tag, "", id_url, listForm, isgetlink);
                         else
-                            GetElements(Chromedriver, tag, "", id_url, listForm);
+                            GetElements(Chromedriver, tag, "", id_url, listForm, isgetlink);
                     }
                     //GetElements(chromedriver, id_Url, "a", "", listForm);
 
@@ -320,12 +347,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 else //no form found
                 {
+                    var isgetlink = true;
+                    if (IsGetTagA == false)
+                    {
+                        //tag_elts = tag_elts.Where(p => p.ToLower() != "a").ToArray();
+                        isgetlink = false;
+                    }
                     foreach (string tag in tag_elts)
                     {
                         if (this.IsOnlyDislayed)
-                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url);
+                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url,null, isgetlink);
                         else
-                            GetElements(chromedriver, tag, "", id_url);
+                            GetElements(chromedriver, tag, "", id_url,null, isgetlink);
                         //Thread thread = new Thread(() => GetElements(Chromedriver, tag, "", id_url));
                         //thread.Start();
                         //GetElements(chromedriver, tag, "", id_url);
@@ -340,7 +373,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             Chromedriver.Close();
             return flag;
         }
-        public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, string id_testcase,int id_url)
+        public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, string id_testcase, int id_url)
         {
             string return_url = "";
             var _context = new ElementDBContext();
@@ -350,7 +383,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
             if (Testcase.id_prerequisite_testcase != null)
             {
-                return_url = await RunPrerequesiteTestcase(driver, Testcase.id_prerequisite_testcase,(int) Testcase.id_prerequisite_url);
+                return_url = await RunPrerequesiteTestcase(driver, Testcase.id_prerequisite_testcase, (int)Testcase.id_prerequisite_url);
             }
             driver.Url = url;
             driver.Navigate();
@@ -490,7 +523,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 chromedriver.Url = url;
                 chromedriver.Navigate();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 var a = e.Message;
             }
@@ -598,7 +631,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     "return getElementXPath(arguments[0]);", elt);
         }
 
-        public void GetElements(ChromeDriver driver, string TagName, string TypeName, int id_url, List<Form_elements> form_elts = null)
+        public void GetElements(ChromeDriver driver, string TagName, string TypeName, int id_url, List<Form_elements> form_elts = null, bool IsGetTagA = true)
         {
             List<IWebElement> allElements = new List<IWebElement>();
             if (TypeName != "" && TagName.Equals("input"))
@@ -652,90 +685,97 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         elt.id_element = item.TagName + id_for_elt;
                         id_for_elt++;
                     }
-                    if (item.GetAttribute("name") != null)
+                    if (item.TagName == "a" && IsGetTagA == false && item.GetAttribute("href") != null)
                     {
-                        elt.name = item.GetAttribute("name");
-                    }
 
-                    if (item.GetAttribute("value") != null)
-                    {
-                        elt.value = item.GetAttribute("value");
                     }
                     else
                     {
-                        elt.value = "";
-                    }
-
-                    if (item.GetAttribute("type") != null)
-                    {
-                        if (item.GetAttribute("type").Equals("select-multiple"))
+                        if (item.GetAttribute("name") != null)
                         {
-                            elt.multiple = true;
+                            elt.name = item.GetAttribute("name");
+                        }
+
+                        if (item.GetAttribute("value") != null)
+                        {
+                            elt.value = item.GetAttribute("value");
                         }
                         else
-                            elt.type = item.GetAttribute("type");
+                        {
+                            elt.value = "";
+                        }
+
+                        if (item.GetAttribute("type") != null)
+                        {
+                            if (item.GetAttribute("type").Equals("select-multiple"))
+                            {
+                                elt.multiple = true;
+                            }
+                            else
+                                elt.type = item.GetAttribute("type");
+                        }
+
+                        if (item.GetAttribute("title") != null)
+                        {
+                            elt.title = item.GetAttribute("title");
+                        }
+
+                        if (item.GetAttribute("href") != null)
+                        {
+                            elt.href = item.GetAttribute("href");
+                        }
+
+                        if (item.GetAttribute("required") != null)
+                        {
+                            elt.required = item.GetAttribute("required").Equals("true") ? true : false;
+                        }
+
+                        if (item.GetAttribute("class") != null)
+                        {
+                            elt.class_name = item.GetAttribute("class");
+                        }
+
+                        if (item.GetAttribute("maxlength") != null)
+                        {
+                            elt.maxlength = Double.Parse(item.GetAttribute("maxlength"));
+                        }
+
+                        if (item.GetAttribute("minlength") != null)
+                        {
+                            elt.minlength = Double.Parse(item.GetAttribute("minlength"));
+                        }
+
+                        if (item.GetAttribute("max") != null)
+                        {
+                            elt.max_value = item.GetAttribute("max");
+                        }
+
+                        if (item.GetAttribute("min") != null)
+                        {
+                            elt.min_value = item.GetAttribute("min");
+                        }
+
+
+                        if (item.GetAttribute("readonly") != null)
+                        {
+                            elt.read_only = item.GetAttribute("readonly").Equals("true") ? true : false;
+                        }
+
+                        if (item.GetAttribute("multiple") != null)
+                        {
+                            elt.multiple = item.GetAttribute("multiple").Equals("true") ? true : false;
+                        }
+
+
+
+                        listElt.Add(elt);
                     }
-
-                    if (item.GetAttribute("title") != null)
-                    {
-                        elt.title = item.GetAttribute("title");
-                    }
-
-                    if (item.GetAttribute("href") != null)
-                    {
-                        elt.href = item.GetAttribute("href");
-                    }
-
-                    if (item.GetAttribute("required") != null)
-                    {
-                        elt.required = item.GetAttribute("required").Equals("true") ? true : false;
-                    }
-
-                    if (item.GetAttribute("class") != null)
-                    {
-                        elt.class_name = item.GetAttribute("class");
-                    }
-
-                    if (item.GetAttribute("maxlength") != null)
-                    {
-                        elt.maxlength = Double.Parse(item.GetAttribute("maxlength"));
-                    }
-
-                    if (item.GetAttribute("minlength") != null)
-                    {
-                        elt.minlength = Double.Parse(item.GetAttribute("minlength"));
-                    }
-
-                    if (item.GetAttribute("max") != null)
-                    {
-                        elt.max_value = item.GetAttribute("max");
-                    }
-
-                    if (item.GetAttribute("min") != null)
-                    {
-                        elt.min_value = item.GetAttribute("min");
-                    }
-
-
-                    if (item.GetAttribute("readonly") != null)
-                    {
-                        elt.read_only = item.GetAttribute("readonly").Equals("true") ? true : false;
-                    }
-
-                    if (item.GetAttribute("multiple") != null)
-                    {
-                        elt.multiple = item.GetAttribute("multiple").Equals("true") ? true : false;
-                    }
-
-
-
-                    listElt.Add(elt);
 
                 }
             }
 
         }
-        public void GetElementsOnlyDisplay(ChromeDriver driver, string TagName, string TypeName, int id_url, List<Form_elements> form_elts = null)
+        public void GetElementsOnlyDisplay(ChromeDriver driver, string TagName, string TypeName, int id_url, List<Form_elements> form_elts = null, bool IsGetTagA = true)
         {
             List<IWebElement> allElements = new List<IWebElement>();
             if (TypeName != "" && TagName.Equals("input"))
@@ -775,7 +815,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     }
                     elt.id_url = id_url;
                     elt.tag_name = item.TagName;
-                    
+
                     try
                     {
                         elt.id_element = item.GetAttribute("id");
@@ -790,104 +830,110 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         elt.id_element = item.TagName + id_for_elt;
                         id_for_elt++;
                     }
-                    if (item.GetAttribute("name")!=null)
+                    if (item.TagName == "a" && IsGetTagA == false && item.GetAttribute("href") != null && item.GetAttribute("href").Contains("/"))
                     {
-                        elt.name = item.GetAttribute("name");
-                    }
-                   
-                    if (item.GetAttribute("value")!=null)
-                    {
-                        if(item.TagName=="select")
-                        {
-                         
-                            var listOption= item.FindElements(By.TagName("option")).ToList();
-                            Random random = new Random();
-                            int index = random.Next(0, listOption.Count() -1 );
-                            elt.value = listOption[index].GetAttribute("value");
-                        }
-                       else
-                        elt.value = item.GetAttribute("value");
+
                     }
                     else
                     {
-                        elt.value = "";
-                    }
-                    
-                    if(item.GetAttribute("type")!=null)
-                    {
-                        if (item.GetAttribute("type").Equals("select-multiple"))
+                        if (item.GetAttribute("name") != null)
                         {
-                            elt.multiple = true;
+                            elt.name = item.GetAttribute("name");
+                        }
+
+                        if (item.GetAttribute("value") != null)
+                        {
+                            if (item.TagName == "select")
+                            {
+
+                                var listOption = item.FindElements(By.TagName("option")).ToList();
+                                Random random = new Random();
+                                int index = random.Next(0, listOption.Count() - 1);
+                                elt.value = listOption[index].GetAttribute("value");
+                            }
+                            else
+                                elt.value = item.GetAttribute("value");
                         }
                         else
-                            elt.type = item.GetAttribute("type");
-                    }
-                    
-                    if (item.GetAttribute("title")!=null)
-                    {
-                        elt.title = item.GetAttribute("title");
-                    }
-                   
-                    if(item.GetAttribute("href")!=null)
-                    {
-                        elt.href = item.GetAttribute("href");
-                    }
-                    if (item.GetAttribute("class") != null)
-                    {
-                        elt.class_name = item.GetAttribute("class");
-                    }
-
-                    if ((item.TagName != "a") )
-                    {
-                        if (item.GetAttribute("required") != null)
                         {
-                            elt.required = item.GetAttribute("required").Equals("true") ? true : false;
+                            elt.value = "";
                         }
 
-                      
-                        if (item.GetAttribute("maxlength") != null)
+                        if (item.GetAttribute("type") != null)
                         {
-                            elt.maxlength = Double.Parse(item.GetAttribute("maxlength"));
+                            if (item.GetAttribute("type").Equals("select-multiple"))
+                            {
+                                elt.multiple = true;
+                            }
+                            else
+                                elt.type = item.GetAttribute("type");
                         }
 
-                        if (item.GetAttribute("minlength") != null)
+                        if (item.GetAttribute("title") != null)
                         {
-                            elt.minlength = Double.Parse(item.GetAttribute("minlength"));
+                            elt.title = item.GetAttribute("title");
                         }
 
-                        if (item.GetAttribute("max") != null)
+                        if (item.GetAttribute("href") != null)
                         {
-                            elt.max_value = item.GetAttribute("max");
+                            elt.href = item.GetAttribute("href");
+                        }
+                        if (item.GetAttribute("class") != null)
+                        {
+                            elt.class_name = item.GetAttribute("class");
                         }
 
-                        if (item.GetAttribute("min") != null)
+                        if ((item.TagName != "a"))
                         {
-                            elt.min_value = item.GetAttribute("min");
+                            if (item.GetAttribute("required") != null)
+                            {
+                                elt.required = item.GetAttribute("required").Equals("true") ? true : false;
+                            }
+
+
+                            if (item.GetAttribute("maxlength") != null)
+                            {
+                                elt.maxlength = Double.Parse(item.GetAttribute("maxlength"));
+                            }
+
+                            if (item.GetAttribute("minlength") != null)
+                            {
+                                elt.minlength = Double.Parse(item.GetAttribute("minlength"));
+                            }
+
+                            if (item.GetAttribute("max") != null)
+                            {
+                                elt.max_value = item.GetAttribute("max");
+                            }
+
+                            if (item.GetAttribute("min") != null)
+                            {
+                                elt.min_value = item.GetAttribute("min");
+                            }
+
+
+                            //}
+                            if (item.GetAttribute("readonly") != null)
+                            {
+                                elt.read_only = item.GetAttribute("readonly").Equals("true") ? true : false;
+                            }
+
+                            if (item.GetAttribute("multiple") != null)
+                            {
+                                elt.multiple = item.GetAttribute("multiple").Equals("true") ? true : false;
+                            }
                         }
 
-
-                        //}
-                        if (item.GetAttribute("readonly") != null)
+                        if (IsOnlyDislayed == false)
                         {
-                            elt.read_only = item.GetAttribute("readonly").Equals("true") ? true : false;
+                            listElt.Add(elt);
                         }
-
-                        if (item.GetAttribute("multiple") != null)
+                        else
+                             if (item.Displayed == true && IsOnlyDislayed == true)
                         {
-                            elt.multiple = item.GetAttribute("multiple").Equals("true") ? true : false;
+                            listElt.Add(elt);
                         }
                     }
-
-                    if (IsOnlyDislayed == false)
-                    {
-                        listElt.Add(elt);
-                    }
-                    else
-                         if (item.Displayed == true && IsOnlyDislayed == true)
-                    {
-                        listElt.Add(elt);
-                    }
-
                 }
             }
 
@@ -1223,6 +1269,32 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return firefoxdriver;
         }
         #endregion
+
+        [HttpPost]
+        public async Task<IActionResult> AddSubmit(string id_element,int id_url)
+        {
+            try
+            {
+                var elt = await _context.Element.Where(p => p.id_element == id_element && p.id_url == id_url).SingleOrDefaultAsync();
+                if(elt!=null)
+                {
+                    elt.type = "submit";
+                    _context.Element.Update(elt);
+                    await _context.SaveChangesAsync();
+                    StatusMessage = "Update successfully";
+                }
+                
+            }
+            catch
+            {
+                StatusMessage = "Update fail";
+            }
+            return RedirectToAction(nameof(Index), new RouteValueDictionary(new
+            {
+                id_url = id_url
+
+            }));
+        }
 
         // GET: TestCase/CrawlElements/Details/5
         public async Task<IActionResult> Details(string id)

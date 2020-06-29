@@ -353,6 +353,31 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             }));
         }
+        [HttpPost]
+        public async Task<IActionResult> AddSubmit(string id_element, int id_url)
+        {
+            try
+            {
+                var elt = await _context.Element.Where(p => p.id_element == id_element && p.id_url == id_url).SingleOrDefaultAsync();
+                if (elt != null)
+                {
+                    elt.type = "submit";
+                    _context.Element.Update(elt);
+                    await _context.SaveChangesAsync();
+                    StatusMessage = "Update successfully";
+                }
+
+            }
+            catch
+            {
+                StatusMessage = "Update fail";
+            }
+            return RedirectToAction(nameof(Index), new RouteValueDictionary(new
+            {
+                id_url = id_url
+
+            }));
+        }
 
         #endregion
 
@@ -361,7 +386,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Testcases(int id_url)
         {
             var user = await _userManager.GetUserAsync(User);
-            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Include(t=>t.Element_test).Include(a=>a.Alert_message).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Include(t=>t.Element_test).Include(a=>a.Alert_message).Include(r=>r.Redirect_url).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
             if (listtestcase.Count > 0)
             {
                 //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();
