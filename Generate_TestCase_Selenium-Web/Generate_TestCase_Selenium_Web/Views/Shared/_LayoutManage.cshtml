@@ -79,20 +79,20 @@
                                 <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><div class="sb-nav-link-icon"><i class="fas fa-key"></i></div>Change password</a>
                                 @if (hasExternalLogins)
                                 {
-                                    <a id="external-login" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/ExternalLogins"><div class="sb-nav-link-icon"><i class="fa fa-google"></i></div>External logins</a>
+                                    <a id="external-login" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/ExternalLogins"><div class="sb-nav-link-icon"><i class="fab fa-google"></i></div>External logins</a>
                                 }
                             </nav>
                         </div>
 
                         <div class="sb-sidenav-menu-heading">Process</div>
                         <a class="nav-link" asp-area="User" asp-controller="Process" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fa fa-spinner fa-spin"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa fa-spinner"></i></div>
                             Running process
                         </a>
 
                         <div class="sb-sidenav-menu-heading">Schedule</div>
                         <a class="nav-link" asp-area="User" asp-controller="TestSchedule" asp-action="Index">
-                            <div class="sb-nav-link-icon"><i class="fa fa-spinner fa-spin"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa fa-calendar"></i></div>
                             Schedule
                         </a>
 

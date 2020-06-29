@@ -72,6 +72,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                     _context.Update(setting_);
                     await _context.SaveChangesAsync();
                     StatusMessage = "Update successfully";
+                    ViewData["Message"] = StatusMessage;
                     return View(setting_);
                 }
                 catch (DbUpdateConcurrencyException)

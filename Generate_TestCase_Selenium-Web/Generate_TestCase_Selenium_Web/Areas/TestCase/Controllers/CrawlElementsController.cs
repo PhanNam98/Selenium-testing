@@ -75,6 +75,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 TempData.Remove(StatusMessage);
             }
             ViewData["LoadingTitle"] = "Generating test case. Please wait.";
+            int countsubmit = elementDBContext.Where(p => p.type == "submit").Count();
+            if (countsubmit==0)
+            {
+                ViewData["Nosubmit"] = true;
+            }
+            else
+                ViewData["Nosubmit"] = false;
             return View(elementDBContext);
         }
         [HttpPost]

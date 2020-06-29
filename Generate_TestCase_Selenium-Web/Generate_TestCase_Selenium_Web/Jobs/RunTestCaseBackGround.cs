@@ -583,6 +583,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                     }
                     Testcase.result = result;
                     result_Testcase.Result = result;
+                    result_Testcase.Log_message = logmessage;
                     await _context.SaveChangesAsync();
                     return result;
                     //}

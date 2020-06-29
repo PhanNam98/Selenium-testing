@@ -56,7 +56,45 @@
                 </div>
             </div>
         </div>
-        <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url" role="button" onclick="ShowProgress();">Generate test case</a>
+        @{
+
+            if (ViewBag.Nosubmit == true)
+            {
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Generate test case
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Waring</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>The site cannot find an object of type submit.</p>
+                               <p>You can choose an element to set submit or click next to continue generating test cases.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url" role="button" onclick="ShowProgress();">Continue</a>
+                                
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url" role="button" onclick="ShowProgress();">Generate test case</a>
+            }
+        }
+
 
     </div>
 </div>
@@ -391,7 +429,7 @@
         ShowProgress();
         document.getElementById("elementform").submit();
     };
-    
+
     $(function () {
         $("#checkall").click(function () {
             $("input[name='eltId_Delete']").prop("checked", this.checked);

@@ -241,7 +241,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             await ClickAll_Tag_Button();
 
             _context.Test_case.AddRange(ListTestCase);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             foreach (var inputtest in List_ListInputTestcase)
             {
@@ -2046,7 +2046,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
         #region Run test case
-        [HttpPost]
+        [HttpPost]//not use
         [Route("/TestCase/Result")]
         public async Task<IActionResult> RunTestCase(int id_url, List<string> list_Idtestcase, string returnUrl = null)
         {
@@ -2150,34 +2150,43 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 browserRun = _context.Setting_.Where(p => p.Id_User == id).SingleOrDefault().Browser;
                 var url = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault().url1;
                 //var list_Idtestcase1 = _context.Test_case.Where(p => p.id_url == id_url).ToList();
-                do
+                try
                 {
-                    List<string> list_Idtestcase_Cut = list_Idtestcase.Skip(cont * runsize).Take(runsize).ToList();
-                    IEnumerable<Task<string>> runTasksQuery =
-                        from Id in list_Idtestcase_Cut select Run_ReturnResultJob(jobId, id_url, url, Id);
-                    List<Task<string>> runTasks = runTasksQuery.ToList();
-                    await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running test case");
-                    //try
-                    //{
-                    while (runTasks.Count > 0)
+                    do
                     {
-                        // Identify the first task that completes.
+                        List<string> list_Idtestcase_Cut = list_Idtestcase.Skip(cont * runsize).Take(runsize).ToList();
+                        IEnumerable<Task<string>> runTasksQuery =
+                            from Id in list_Idtestcase_Cut select Run_ReturnResultJob(jobId, id_url, url, Id);
+                        List<Task<string>> runTasks = runTasksQuery.ToList();
+                        await _hubContext.Clients.Group(jobId).SendAsync(jobId, "Running test case");
+                        //try
+                        //{
+                        while (runTasks.Count > 0)
+                        {
+                            // Identify the first task that completes.
 
-                        Task<string> firstFinishedTask = await Task.WhenAny(runTasks);
+                            Task<string> firstFinishedTask = await Task.WhenAny(runTasks);
 
-                        // ***Remove the selected task from the list so that you don't
-                        // process it more than once.
-                        runTasks.Remove(firstFinishedTask);
-                        // Await the completed task.
+                            // ***Remove the selected task from the list so that you don't
+                            // process it more than once.
+                            runTasks.Remove(firstFinishedTask);
+                            // Await the completed task.
 
-                        string length = await firstFinishedTask;
+                            string length = await firstFinishedTask;
 
+                        }
+                        cont++;
                     }
-                    cont++;
+                    while (cont * runsize < sizeList);
+                    StatusMessage = "Run successfully";
+                    ViewData["Message"] = "Run successfully";
                 }
-                while (cont * runsize < sizeList);
-                StatusMessage = "Run successfully";
-                ViewData["Message"] = "Run successfully";
+                catch
+                {
+                    StatusMessage = "Run failed";
+                    ViewData["Message"] = "Run failed";
+                }
+               
 
                 //}
                 //catch
@@ -3278,7 +3287,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     if(!testobj)
                     {
                         isSkip++;
-                        logmessage += "No validate items\n";
+                        logmessage += "No validate item\n";
                     }
                     chromedriver.Quit();
                     string result = "";
@@ -3673,10 +3682,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             outputtest.value_return = DataResult;
                             _context.Element_test.Update(outputtest);
                             await _context.SaveChangesAsync();
-
-
-
-
                         }
                     }
                     //else

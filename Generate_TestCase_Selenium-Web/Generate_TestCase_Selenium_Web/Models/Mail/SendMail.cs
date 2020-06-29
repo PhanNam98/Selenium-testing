@@ -16,7 +16,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Mail
         public static void sendMail(string Message, string email, string subject)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Generate_Testcase_Web Service", "nguoithichduajoker1@gmail.com"));
+            message.From.Add(new MailboxAddress("Automation Generate TestCase Web Service", "nguoithichduajoker1@gmail.com"));
             message.To.Add(new MailboxAddress(email));
             message.Subject = subject;
             message.Body = new TextPart("html")
@@ -38,7 +38,8 @@ namespace Generate_TestCase_Selenium_Web.Models.Mail
         public static async Task SendMailASync(string Message, string email, string subject)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Generate_Testcase_Web Service", "nguoithichduajoker1@gmail.com"));
+            //message.From.Add(new MailboxAddress("Generate_Testcase_Web Service", "nguoithichduajoker1@gmail.com"));
+            message.From.Add(new MailboxAddress("Automation Generate TestCase Web Service", "nguoithichduajoker1@gmail.com"));
             message.To.Add(new MailboxAddress(email));
             message.Subject = subject;
             message.Body = new TextPart("html")
@@ -65,7 +66,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Mail
         public static async Task SendMailWithFile(string Message, string email, string subject,string path)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Generate_Testcase_Web Service", "nguoithichduajoker1@gmail.com"));
+            message.From.Add(new MailboxAddress("Automation Generate TestCase Web Service", "nguoithichduajoker1@gmail.com"));
             message.To.Add(new MailboxAddress(email));
             message.Subject = subject;
             

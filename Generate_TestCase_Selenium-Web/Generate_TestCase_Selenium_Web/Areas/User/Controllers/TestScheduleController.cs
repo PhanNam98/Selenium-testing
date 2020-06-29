@@ -33,7 +33,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
         public async Task<IActionResult> Index()
         {
             var id_user = _userManager.GetUserId(User);
-            var listSchedule = _context.Test_schedule.Where(s => s.id_user == id_user);
+            var listSchedule = _context.Test_schedule.Where(s => s.id_user == id_user && s.status!="delete");
             ViewData["Message"] = StatusMessage;
             if(StatusMessage!=null)
             TempData.Remove(StatusMessage);
@@ -98,6 +98,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             StatusMessage = "Stop schedule successfully";
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public async Task<IActionResult> Delete_schedule(string scheduleId)
+        {
+            var id_user = _userManager.GetUserId(User);
+            await _scheduler.DeleteJob(new JobKey(scheduleId, id_user));
+            TriggerKey triggerKey = new TriggerKey("trigger" + scheduleId, id_user);
+            await _scheduler.UnscheduleJob(triggerKey);
+            var schedule = _context.Test_schedule.Find(scheduleId);
+            schedule.status = "delete";
+            await _context.SaveChangesAsync();
+            StatusMessage = "Delete schedule successfully";
+            return RedirectToAction("Index");
+        }
         public async Task<IActionResult> Start_schedule(string scheduleId)
         {
             var id_user = _userManager.GetUserId(User);
@@ -130,11 +143,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
         [Route("/Schedule/Detail")]
         public async Task<IActionResult> DetailSchedule(string scheduleId)
         {
-            var listTestcase = await _context.Testcase_scheduled.Include(p => p.id_).Where(p => p.id_schedule == scheduleId).ToListAsync();
+            var listTestcase = await _context.Testcase_scheduled.Include(p => p.id_).ThenInclude(r=>r.id_urlNavigation).ThenInclude(p=>p.project_).Where(p => p.id_schedule == scheduleId).ToListAsync();
             ViewData["scheduleId"] = scheduleId;
             ViewData["TimeScheduleId"] = _context.Test_schedule.Find(scheduleId).job_repeat_time;
             ViewData["id_url"] = listTestcase.FirstOrDefault().id_url;
             ViewData["Message"] = StatusMessage;
+            ViewData["project"] = listTestcase.FirstOrDefault().id_.id_urlNavigation.url1;
+            ViewData["site"] = listTestcase.FirstOrDefault().id_.id_urlNavigation.project_.name;
             if (StatusMessage != null)
                 TempData.Remove(StatusMessage);
             return View(listTestcase);
