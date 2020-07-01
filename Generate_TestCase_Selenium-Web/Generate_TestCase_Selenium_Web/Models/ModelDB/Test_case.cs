@@ -34,6 +34,8 @@ namespace Generate_TestCase_Selenium_Web.Models.ModelDB
         [StringLength(100)]
         public string id_prerequisite_testcase { get; set; }
         public int? id_prerequisite_url { get; set; }
+        [StringLength(50)]
+        public string TestType { get; set; }
 
         [ForeignKey("id_prerequisite_testcase,id_prerequisite_url")]
         [InverseProperty(nameof(Test_case.Inverseid_prerequisite_))]

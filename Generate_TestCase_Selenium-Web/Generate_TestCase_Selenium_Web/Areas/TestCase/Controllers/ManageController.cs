@@ -386,7 +386,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Testcases(int id_url)
         {
             var user = await _userManager.GetUserAsync(User);
-            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Include(t=>t.Element_test).Include(a=>a.Alert_message).Include(r=>r.Redirect_url).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
+            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Include(t=>t.Element_test).Include(a=>a.Alert_message).Include(r=>r.Redirect_url).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).OrderBy(p=>p.TestType).ToListAsync();
             if (listtestcase.Count > 0)
             {
                 //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();

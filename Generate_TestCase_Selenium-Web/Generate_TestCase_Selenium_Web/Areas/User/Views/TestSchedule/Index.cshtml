@@ -11,6 +11,24 @@
 </ol>
 
 <hr />
+<div class="row">
+
+    <div class="col-2">
+        <div class="row form-group">
+            <div class="col col-lg-10">Filtered By:</div>
+
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="row form-group">
+            <div class="col col-lg-5">Testcase type</div>
+            <div class="col col-lg-6">
+                <select class="form-control" id="tag_name_elt"></select>
+            </div>
+        </div>
+    </div>
+
+</div>
 <partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
 <div class="card mb-4">
     <div class="card-header">
@@ -123,6 +141,27 @@
                 "lengthMenu": [[10, 25, 50, - 1], [10, 25, 50, "All record"]],
               
                 
+                       initComplete: function () {
+                    this.api().columns(3).every(function () {
+                        var column = this;
+                        var select = $('#tag_name_elt')
+                            .appendTo($('#tag_name_elt').empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+                        select.append('<option value="">All</option>')
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                 
+                },
             }
         );
 

@@ -49,6 +49,24 @@
         </div>
     </div>
 </div>
+<div class="row">
+
+    <div class="col-2">
+        <div class="row form-group">
+            <div class="col col-lg-10">Filtered By:</div>
+
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="row form-group">
+            <div class="col col-lg-5">Testcase type</div>
+            <div class="col col-lg-6">
+                <select class="form-control" id="tag_name_elt"></select>
+            </div>
+        </div>
+    </div>
+    
+</div>
 <partial name="~/Views/Shared/LoadingViewPartial.cshtml" model="@ViewBag.LoadingTitle" />
 <div class="card mb-4">
     <div class="card-header">
@@ -84,15 +102,18 @@
                             <th style='width: 20%;'>
                                 @Html.DisplayName("Id test case")
                             </th>
-                            <th style='width: 45%;'>
+                            <th style='width: 35%;'>
                                 @Html.DisplayName("Description")
                             </th>
+                            <th style='width: 10%;'>
+                                @Html.DisplayName("TestType")
+                            </th>
                             @*<td>
-                                @Html.DisplayName("Created Date")
-                            </td>*@
+            @Html.DisplayName("Created Date")
+        </td>*@
                             @*<th>
-                                    @Html.DisplayName("Result")
-                                </th>*@
+            @Html.DisplayName("Result")
+        </th>*@
 
                             <th style='width: 30%;'></th>
                         </tr>
@@ -100,40 +121,43 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="list_Idtestcase" id="@item.id_testcase" value="@item.id_testcase" />
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.id_testcase)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.description)
-                                </td>
-                                @*<td>
-                                    @Html.DisplayFor(modelItem => item.CreatedDate)
-                                </td>*@
-                                @*@if (item.result.Equals("Pass"))
-                                        {
-                                            <td style="color:green">
-                                                @Html.DisplayFor(modelItem => item.result)
-                                            </td>
-                                        }
-                                        else
-                                    if (item.result.Equals("Skip"))
-                                        {
-                                            <td style="color:blue">
-                                                @Html.DisplayFor(modelItem => item.result)
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td style="color:red">
-                                                @Html.DisplayFor(modelItem => item.result)
-                                            </td>
-                                        }*@
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="list_Idtestcase" id="@item.id_testcase" value="@item.id_testcase" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id_testcase)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TestType)
+                            </td>
+                            @*<td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>*@
+                            @*@if (item.result.Equals("Pass"))
+            {
+                <td style="color:green">
+                    @Html.DisplayFor(modelItem => item.result)
+                </td>
+            }
+            else
+        if (item.result.Equals("Skip"))
+            {
+                <td style="color:blue">
+                    @Html.DisplayFor(modelItem => item.result)
+                </td>
+            }
+            else
+            {
+                <td style="color:red">
+                    @Html.DisplayFor(modelItem => item.result)
+                </td>
+            }*@
 
-                                @*  *@
+                            @*  *@
                             <td>
 
                                 @{
@@ -195,11 +219,11 @@
                                                                 }
                                                             }
                                                             @*<div class="row form-group">
-                                        <div class="col col-md-3">@Html.Label("Result")</div>
-                                        <div class="col-12 col-md-9">
-                                            <input type="text" name="result" class="input-md form-control" value="@item.result" readonly />
-                                        </div>
-                                    </div>*@
+                                            <div class="col col-md-3">@Html.Label("Result")</div>
+                                            <div class="col-12 col-md-9">
+                                                <input type="text" name="result" class="input-md form-control" value="@item.result" readonly />
+                                            </div>
+                                        </div>*@
 
                                                         </div>
                                                         <div class="modal-footer">
@@ -218,7 +242,7 @@
 
 
                                 <a class="btn btn-success" asp-action="TestDatas" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Test data">Data</a>
-                                @if (item.Element_test.Count>0 || item.Alert_message.Count>0 || item.Redirect_url!=null)
+                                @if (item.Element_test.Count > 0 || item.Alert_message.Count > 0 || item.Redirect_url != null)
                                 {
                                     <a class="btn btn-success" asp-action="TestElement" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" role="button" title="Validate items">Validate items</a>
                                 }
@@ -228,7 +252,7 @@
                                 }
 
                             </td>
-                            </tr>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -250,7 +274,28 @@
        "fixedHeader": {
             header: true,
             footer: true
-        }
+                },
+                       initComplete: function () {
+                    this.api().columns(3).every(function () {
+                        var column = this;
+                        var select = $('#tag_name_elt')
+                            .appendTo($('#tag_name_elt').empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+                        select.append('<option value="">All</option>')
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                 
+                },
             }
         );
 

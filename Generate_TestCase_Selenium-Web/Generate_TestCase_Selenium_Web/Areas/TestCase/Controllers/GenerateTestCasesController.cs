@@ -86,7 +86,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             if (authen > 0)
             {
                 ViewData["id_url"] = id_url;
-                var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Include(e=>e.Element_test).Include(a=>a.Alert_message).Include(r=>r.Redirect_url).Where(p => p.id_url == id_url).ToListAsync();
+                var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Include(e=>e.Element_test).Include(a=>a.Alert_message).Include(r=>r.Redirect_url).Where(p => p.id_url == id_url).OrderBy(p=>p.TestType).ToListAsync();
                 if (ViewData["Message"] == null)
                 {
                     if (!isload)
@@ -469,13 +469,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private async Task<bool> Fill_1000_charter_TypeText(string id_form, int index_submit, Element submit)
         {
             string DescriptiontestCase = "Fill 1000 character for all element TypeText_form:" + id_form + "_" + index_submit;
+            if(id_form==null)
+            {
+                DescriptiontestCase = "";
+                DescriptiontestCase = "Fill 1000 character for all element TypeText_" + index_submit;
+            }
             var _context = new ElementDBContext();
             var listTypeText = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
 
             if (listTypeText.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type text");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeText.Count; i++)
@@ -494,13 +499,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private async Task<bool> Fill_Text_TypeText(string id_form, int index_submit, Element submit)
         {
             string DescriptiontestCase = "Fill text for all element TypeTest_form:" + id_form + "_" + index_submit;
+            if(id_form==null)
+            {
+                DescriptiontestCase = "";
+                DescriptiontestCase = "Fill text for all element TypeTest_" + index_submit;
+            }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
 
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type text");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -529,7 +539,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 for (int i = 0; i < number_of_elements; i++)
                 {
                     string DescriptiontestCase = $"Not fill {listTypeText[i].id_element} -TypeText-form:" + id_form + "_" + index_submit + "_" + i;
-                    var id_testCase = Create_Testcase(DescriptiontestCase);
+                    if(id_form==null)
+                    {
+                        DescriptiontestCase = $"Not fill {listTypeText[i].id_element} -TypeText_" + "_" + index_submit + "_" + i;
+                    }
+                    var id_testCase = Create_Testcase(DescriptiontestCase,"Input type text");
                     List<Input_testcase> listInputElt = new List<Input_testcase>();
                     int step = 1;
                     for (int j = 0; j < number_of_elements; j++)
@@ -561,13 +575,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
             string DescriptiontestCase = "Fill Two Leading Spaces TypeText_form:" + id_form + "_" + index_submit;
+            if(id_form==null)
+            {
+                DescriptiontestCase = "";
+                DescriptiontestCase = "Fill Two Leading Spaces TypeText_" + index_submit;
+            }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
 
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type text");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -586,13 +605,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private async Task<bool> Fill_One_letter_characters_TypeText(string id_form, int index_submit, Element submit)
         {
             string DescriptiontestCase = "Fill one character TypeText_form:" + id_form + "_" + index_submit;
+            if(id_form==null)
+            {
+                DescriptiontestCase = "";
+                DescriptiontestCase = "Fill one character TypeText_"  + index_submit;
+            }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
 
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type text") ;
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -611,13 +635,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private async Task<bool> Fill_Text_Number_TypeText(string id_form, int index_submit, Element submit)
         {
             string DescriptiontestCase = "Fill text and number character TypeText_form:" + id_form + "_" + index_submit;
+            if(id_form==null)
+            {
+                DescriptiontestCase = "";
+                DescriptiontestCase = "Fill text and number character TypeText_"  + index_submit;
+            }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
 
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type text");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -636,13 +665,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private async Task<bool> Fill_Text_Number_Special_TypeText(string id_form, int index_submit, Element submit)
         {
             string DescriptiontestCase = "Fill text, number and special character TypeText_form:" + id_form + "_" + index_submit;
+            if(id_form==null)
+            {
+                DescriptiontestCase = "";
+                DescriptiontestCase = "Fill text, number and special character TypeText_"  + index_submit;
+            }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
 
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type text");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -663,12 +697,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         #region Not Fill, Submit
         private async Task<bool> NotFill_ClickSubmit(string id_form, int index_submit, Element submit)
         {
-
-
-            string DescriptiontestCase = "Not fill form, click submit-formId:" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+                if(id_form!=null)
+            {
+                DescriptiontestCase = "Not fill form, click submit-formId:" + id_form + "_" + index_submit;
+            }
+                else
+            DescriptiontestCase = "Not fill data, click submit-" + index_submit;
             var _context = new ElementDBContext();
             int step = 1;
-            var id_testCase = Create_Testcase(DescriptiontestCase);
+            var id_testCase = Create_Testcase(DescriptiontestCase,"");
             List<Input_testcase> listInputElt = new List<Input_testcase>();
             listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
 
@@ -705,13 +743,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_Not_Format_Email_TypeEmail(string id_form, int index_submit, Element submit)
         {
-
-            string DescriptiontestCase = "Fill incorrect email format TypeEmail_form:" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Fill incorrect email format TypeEmail_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill incorrect email format TypeEmail_"  + index_submit;
             var _context = new ElementDBContext();
             var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
             if (listTypeEmail.Count > 0)
             {
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type email");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
                 int step = 1;
                 for (int i = 0; i < listTypeEmail.Count; i++)
@@ -730,13 +771,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_Not_Email_TypeEmail(string id_form, int index_submit, Element submit)
         {
-            string DescriptiontestCase = "Fill incorrect email format TypeEmail_form:" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill incorrect email format TypeEmail_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill incorrect email format TypeEmail_"  + index_submit;
             var _context = new ElementDBContext();
             var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
             if (listTypeEmail.Count > 0)
             {
 
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type email");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
                 int step = 1;
                 for (int i = 0; i < listTypeEmail.Count; i++)
@@ -756,12 +801,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<bool> Fill_Format_Email_TypeEmail(string id_form, int index_submit, Element submit)
         {
             var _context = new ElementDBContext();
-            string DescriptiontestCase = "Fill email TypeEmail_form:" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Fill email TypeEmail_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill email TypeEmail_" + index_submit;
             var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
             int step = 1;
             if (listTypeEmail.Count > 0)
             {
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type email");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
                 for (int i = 0; i < listTypeEmail.Count; i++)
                 {
@@ -778,12 +827,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<bool> Fill_Special_characters_TypeEmail_TypeEmail(string id_form, int index_submit, Element submit)
         {
             var _context = new ElementDBContext();
-            string DescriptiontestCase = "Fill email with special characters  TypeEmail_form:" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!="")
+            DescriptiontestCase = "Fill email with special characters  TypeEmail_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill email with special characters  TypeEmail" + "_" + index_submit;
             var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
             int step = 1;
             if (listTypeEmail.Count > 0)
             {
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type email");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
                 for (int i = 0; i < listTypeEmail.Count; i++)
                 {
@@ -802,7 +855,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         #region Input Type Radio
         public async Task<bool> ClickAll_TypeRadio(string id_form, int index_submit, Element submit)
         {
-            string DescriptiontestCase = "Click All element TypeRadio_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Click All element TypeRadio_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Click All element TypeRadio_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeRadio = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "radio").ToListAsync();
 
@@ -823,7 +880,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             if (listTypeRadio.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type radio");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 List<List<Element>> listRadio = new List<List<Element>>();
@@ -882,15 +939,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         private async Task<bool> Fill_1000_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
         {
-
-            string DescriptiontestCase = "Fill 1000 character for all element TypePassword_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill 1000 character for all element TypePassword_form:" + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill 1000 character for all element TypePassword_" + index_submit;
+              
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
 
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type password");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -908,14 +969,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         private async Task<bool> Fill_Less_Than_8_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
         {
-
-            string DescriptiontestCase = "Fill less 8 character for all element TypePassword_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill less 8 character for all element TypePassword_form:" + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill less 8 character for all element TypePassword_" + index_submit;
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type password");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -934,14 +998,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         private async Task<bool> Fill__Special_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
         {
-
-            string DescriptiontestCase = "Fill data Contains Special character for all element TypePassword_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill data Contains Special character for all element TypePassword_form:" + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill data Contains Special character for all element TypePassword_" + index_submit;
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type password");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -960,13 +1027,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         private async Task<bool> Fill__Number_Special_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
         {
-            string DescriptiontestCase = "Fill data Contains number, special character for all element TypePassword_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill data Contains number, special character for all element TypePassword _form: " + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill data Contains number, special character for all element TypePassword_"  + index_submit;
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type password");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -986,8 +1057,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         private async Task<bool> Fill__Capital_Number_Special_character_TypePassword_ClickSubmit(string id_form, int index_submit, Element submit)
         {
-
-            string DescriptiontestCase = "Fill data Contains number, special, Capital character for all element TypePassword_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill data Contains number, special, Capital character for all element TypePassword _form:" + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill data Contains number, special, Capital character for all element TypePassword_" + index_submit;
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
             if (listTypePass.Count > 0)
@@ -1016,14 +1090,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<bool> Click_Any_CheckBox_TypeCheckBox(string id_form, int index_submit, Element submit)
         {
 
-
-            string DescriptiontestCase = "Click some CheckBox element TypeCkeckBox_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Click some CheckBox element TypeCkeckBox_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Click some CheckBox element TypeCkeckBox_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeCheckbox = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "checkbox").ToListAsync();
             if (listTypeCheckbox.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type checkbox");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeCheckbox.Count; i++)
@@ -1045,13 +1122,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> ClickAll_TypeCheckBox(string id_form, int index_submit, Element submit)
         {
-            string DescriptiontestCase = "Click all element TypeCkeckBox_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Click all element TypeCkeckBox_form:" + id_form + "_" + index_submit;
+            else
+
+                DescriptiontestCase = "Click all element TypeCkeckBox_"  + index_submit;
             var _context = new ElementDBContext();
             var listTypeCheckbox = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "checkbox").ToListAsync();
             if (listTypeCheckbox.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type checkbox");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeCheckbox.Count; i++)
@@ -1110,14 +1192,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<bool> Fill_Only_Day_TypeDate(string id_form, int index_submit, Element submit)
         {
 
-
-            string DescriptiontestCase = "Only fill day of element TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Only fill day of element TypeDate_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Only fill day of element TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1136,14 +1221,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_Only_Month_TypeDate(string id_form, int index_submit, Element submit)
         {
-
-            string DescriptiontestCase = "Only fill month of element TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+                 DescriptiontestCase = "Only fill month of element TypeDate_form" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Only fill month of element TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1162,14 +1250,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_Only_Year_TypeDate(string id_form, int index_submit, Element submit)
         {
-
-            string DescriptiontestCase = "Only fill year of element TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Only fill year of element TypeDate_form" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Only fill year of element TypeDate_"  + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1188,13 +1279,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_Incorrect_format_TypeDate(string id_form, int index_submit, Element submit)
         {
-            string DescriptiontestCase = "Fill the wrong format TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+                DescriptiontestCase = "Fill the wrong format TypeDate_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill the wrong format TypeDate_"  + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1213,15 +1308,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_OverDayInMonth_TypeDate(string id_form, int index_submit, Element submit)
         {
-
-
-            string DescriptiontestCase = "Fill Over Day In Month - TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+                if(id_form!=null)
+             DescriptiontestCase = "Fill Over Day In Month - TypeDate_form:" + id_form + "_" + index_submit;
+                else
+            DescriptiontestCase = "Fill Over Day In Month - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1240,14 +1337,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_OverMonthInYear_TypeDate(string id_form, int index_submit, Element submit)
         {
-
-            string DescriptiontestCase = "Fill Over Day In Year - TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill Over Day In Year - TypeDate_form:" + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill Over Day In Year - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1266,15 +1366,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_LeapYear_TypeDate(string id_form, int index_submit, Element submit)
         {
-
-
-            string DescriptiontestCase = "Fill LeapYear - TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill LeapYear - TypeDate_form:" + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill LeapYear - TypeDate_"  + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1293,15 +1395,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_No_profitYear_TypeDate(string id_form, int index_submit, Element submit)
         {
-
-
-            string DescriptiontestCase = "Fill  No profit year - TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill  No profit year - TypeDate_form: " + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill  No profit year - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1320,14 +1424,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_Day31InMonth_TypeDate(string id_form, int index_submit, Element submit)
         {
-
-            string DescriptiontestCase = "Fill Day 31 In Month - TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill Day 31 In Month - TypeDate_form:" + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill Day 31 In Month - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1346,13 +1453,17 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> Fill_NotDay31InMonth_TypeDate(string id_form, int index_submit, Element submit)
         {
-            string DescriptiontestCase = "Fill Day 31 In Month have 30 day - TypeDate_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Fill Day 31 In Month have 30 day - TypeDate_form:" + id_form + "_" + index_submit;
+            else
+                 DescriptiontestCase = "Fill Day 31 In Month have 30 day - TypeDate_"  + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Date");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeDate.Count; i++)
@@ -1383,7 +1494,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 {
                     int step = 1;
                     string DescriptiontestCase = "Click Tag a:" + listTaga[i].id_element.ToString();
-                    var id_testCase = Create_Testcase(DescriptiontestCase);
+                    var id_testCase = Create_Testcase(DescriptiontestCase,"Tag a");
                     List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                     listInputElt.Add(Crate_InputTestcase(listTaga[i], id_testCase, "", Actions.click.ToString(), step++));
@@ -1409,7 +1520,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 {
                     int step = 1;
                     string DescriptiontestCase = DescriptionScript + listTaga[i].id_element.ToString();
-                    var id_testCase = Create_Testcase(DescriptiontestCase);
+                    var id_testCase = Create_Testcase(DescriptiontestCase,"Button");
                     List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                     listInputElt.Add(Crate_InputTestcase(listTaga[i], id_testCase, "", Actions.click.ToString(), step++));
@@ -1496,9 +1607,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 int number_of_elements = listTypeSelect.Count;
                 for (int i = 0; i < number_of_elements; i++)
                 {
-                    string DescriptiontestCase = $"Skip {listTypeSelect[i].id_element} element _TypeSelect_" + id_form + "_" + index_submit;
+                    string DescriptiontestCase = "";
+                    if(id_form!=null)
+                        DescriptiontestCase = $"Skip {listTypeSelect[i].id_element} element _TypeSelect_form:" + id_form + "_" + index_submit;
+                    else
+                        DescriptiontestCase = $"Skip {listTypeSelect[i].id_element} element _TypeSelect_" + "_" + index_submit;
                     int step = 1;
-                    var id_testCase = Create_Testcase(DescriptiontestCase);
+                    var id_testCase = Create_Testcase(DescriptiontestCase,"Select");
                     List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                     for (int j = 0; j < listTypeSelect.Count; j++)
@@ -1522,14 +1637,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         public async Task<bool> SelectAllElement_TypeSelect(string id_form, int index_submit, Element submit)
         {
-            string DescriptiontestCase = "Select All Element_TypeSelect_" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+             DescriptiontestCase = "Select All Element_TypeSelect_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Select All Element_TypeSelect_" +  "_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeSelect = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "select").ToListAsync();
 
             if (listTypeSelect.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Select");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeSelect.Count; i++)
@@ -1577,12 +1696,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
 
             var _context = new ElementDBContext();
-            string DescriptiontestCase = "Fill big number elementS TypeNumber" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+                DescriptiontestCase = "Fill big number elementS TypeNumber_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill big number elementS TypeNumber" + "_" + index_submit;
             var listTypeNumber = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToListAsync();
             if (listTypeNumber.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type number");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeNumber.Count; i++)
@@ -1601,12 +1724,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<bool> Fill_Letter_characters_TypeNumber(string id_form, int index_submit, Element submit)
         {
             var _context = new ElementDBContext();
-            string DescriptiontestCase = "Fill Letter charter - elementS TypeNumber" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Fill Letter charter - elementS TypeNumber_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill Letter charter - elementS TypeNumber" + "_" + index_submit;
             var listTypeNumber = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToListAsync();
             if (listTypeNumber.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type number");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeNumber.Count; i++)
@@ -1625,12 +1752,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<bool> Fill_Special_characters_TypeNumber(string id_form, int index_submit, Element submit)
         {
             var _context = new ElementDBContext();
-            string DescriptiontestCase = "Fill Special characters - elementS TypeNumber" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Fill Special characters - elementS TypeNumber_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill Special characters - elementS TypeNumber"  + "_" + index_submit;
             var listTypeNumber = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToListAsync();
             if (listTypeNumber.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type number");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeNumber.Count; i++)
@@ -1649,12 +1780,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<bool> Fill_Number_characters_TypeNumber(string id_form, int index_submit, Element submit)
         {
             var _context = new ElementDBContext();
-            string DescriptiontestCase = "Fill number - elementS TypeNumber" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+            DescriptiontestCase = "Fill number - elementS TypeNumber_form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill number - elementS TypeNumber" + "_" + index_submit;
             var listTypeNumber = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToListAsync();
             if (listTypeNumber.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase,"Input type number");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypeNumber.Count; i++)
@@ -1688,7 +1823,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         #region Form
         private async Task<bool> Fill_Form(string id_form, int index_submit, Element submit)
         {
-            string DescriptiontestCase = "Fill form:" + id_form + "_" + index_submit;
+            string DescriptiontestCase = "";
+            if(id_form!=null)
+                DescriptiontestCase = "Fill form:" + id_form + "_" + index_submit;
+            else
+                DescriptiontestCase = "Fill data all element:" + id_form + "_" + index_submit;
             var _context = new ElementDBContext();
             var listElt = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type != "submit" && p.type != "radio" && p.tag_name != "a").ToListAsync();
             int step = 1;
@@ -1696,7 +1835,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             List<Input_testcase> listInputElt = new List<Input_testcase>();
             if (listElt.Count > 0)
             {
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = "";
+                if(id_form!=null)
+                    id_testCase = Create_Testcase(DescriptiontestCase,"Form");
+                else
+                    id_testCase = Create_Testcase(DescriptiontestCase, "All element");
                 for (int i = 0; i < listElt.Count; i++)
                 {
                     switch (listElt[i].tag_name)
@@ -2010,6 +2153,28 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             newTestCase.description = description;
             newTestCase.CreatedDate = DateTime.Now.Date;
             newTestCase.ModifiedDate = DateTime.Now.Date;
+            if (this.Prerequisite_testcase != null && this.Prerequisite_url != -1)
+            {
+                newTestCase.id_prerequisite_testcase = Prerequisite_testcase;
+                newTestCase.id_prerequisite_url = Prerequisite_url;
+            }
+            ListTestCase.Add(newTestCase);
+            //return BUL.TestCaseBUL.InsertTestcase(newTestCase);
+            return id_testcase;
+
+        }
+        public string Create_Testcase(string description,string testtype)
+        {
+            Test_case newTestCase = new Test_case();
+            var id_testcase = Guid.NewGuid().ToString("N").Substring(10);
+            newTestCase.id_testcase = id_testcase;
+            newTestCase.id_url = Id_Url;
+            newTestCase.result = "";
+            newTestCase.is_test = true;
+            newTestCase.description = description;
+            newTestCase.CreatedDate = DateTime.Now.Date;
+            newTestCase.ModifiedDate = DateTime.Now.Date;
+            newTestCase.TestType = testtype;
             if (this.Prerequisite_testcase != null && this.Prerequisite_url != -1)
             {
                 newTestCase.id_prerequisite_testcase = Prerequisite_testcase;

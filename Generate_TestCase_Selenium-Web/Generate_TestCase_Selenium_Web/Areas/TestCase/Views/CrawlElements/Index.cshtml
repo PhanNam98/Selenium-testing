@@ -140,20 +140,20 @@
         <table id="elttable" class="table table-striped table-condensed table-hover table-bordered">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="checkall" /></th>
-                    <th>
+                    <th style='width: 5%;'><input type="checkbox" id="checkall" /></th>
+                    <th style='width: 20%;'>
                         @Html.DisplayName("Id element")
                     </th>
-                    <th>
+                    <th style='width: 20%;'>
                         @Html.DisplayName("Name")
                     </th>
                     @*<th>
                             @Html.DisplayNameFor(model => model.class_name)
                         </th>*@
-                    <th>
+                    <th style='width: 20%;'>
                         @Html.DisplayName("Tag name")
                     </th>
-                    <th>
+                    <th style='width: 10%;'>
                         @Html.DisplayName("Type")
                     </th>
                     @*<th>
@@ -165,7 +165,7 @@
                         <th>
                             @Html.DisplayNameFor(model => model.title)
                         </th>*@
-                    <th>
+                    <th style='width: 10%;'>
                         @Html.DisplayName("Id form")
                     </th>
                     @*<th>
@@ -195,7 +195,7 @@
                     @*<th>
                             @Html.DisplayNameFor(model => model.id_urlNavigation)
                         </th>*@
-                    <th>@Html.DisplayName("Action")</th>
+                    <th style='width: 15%;'>@Html.DisplayName("Action")</th>
                 </tr>
             </thead>
             <tbody>
@@ -357,10 +357,10 @@
     $(document).ready(function () {
         $('#elttable').DataTable(
             {
-                fixedHeader: true,
+                //fixedHeader: true,
                 "lengthMenu": [[5,10, 25, 50, - 1], [5,10, 25, 50, "All record"]],
                 //"ordering": false,
-                "scrollY":        "400px",
+        //        "scrollY":        "400px",
         //"scrollCollapse": true,
         "paging":         false,
                 initComplete: function () {
