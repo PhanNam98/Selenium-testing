@@ -20,7 +20,16 @@
 </h1>
 <hr />
 <partial name="~/Views/Shared/LoadingViewPartial.cshtml" model="@ViewBag.LoadingTitle" />
+@{
 
+    if (ViewBag.Nosubmit == true)
+    {
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            Not found an object of type submit. You can choose an element to set submit.
+        </div>
+    }
+}
 <div class="container">
     <div class="text-right">
         @*<input type="button" name="submit_id" id="btn_id" value="Delete element(s)" onclick="Delete_by_id()" />*@
@@ -77,11 +86,11 @@
                             </div>
                             <div class="modal-body">
                                 <p>The site cannot find an object of type submit.</p>
-                               <p>You can choose an element to set submit or click next to continue generating test cases.</p>
+                                <p>You can choose an element to set submit or click next to continue generating test cases.</p>
                             </div>
                             <div class="modal-footer">
                                 <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url" role="button" onclick="ShowProgress();">Continue</a>
-                                
+
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
                             </div>

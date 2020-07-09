@@ -12,8 +12,76 @@
     <li class="breadcrumb-item active">Elements</li>
 </ol>
 <partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
+@{
+
+    if (ViewBag.Nosubmit == true)
+    {
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            Not found an object of type submit. You can choose an element to set submit.
+        </div>
+    }
+}
 <div class="card mb-4">
-    <div class="card-header"><i class="fas fa-table mr-1"></i>Elements list</div>
+    <div class="card-header">
+        <div class="row">
+            <div class="col-2">
+                <i class="fas fa-table mr-1"></i>Elements list
+            </div>
+            <div class="col-10">
+                <div class="container">
+                    <div class="text-right">
+                        <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#Delete">Delete Element(s)</button>
+                        @*@{
+
+                                if (ViewBag.Nosubmit == true)
+                                {
+
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                        Generate test case
+                                    </button>
+
+
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Waring</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>The site cannot find an object of type submit.</p>
+                                                    <p>You can choose an element to set submit or click next to continue generating test cases.</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
+
+                                                       asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Continue</a>
+
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
+
+                                       asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Generate test case</a>
+                                }
+                            }*@
+                        @*<a class="btn btn-primary" asp-action="Generate_Subtestcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
+                            asp-route-prerequisite_testcase="@ViewBag.prerequisite_testcase" asp-route-prerequisite_url="@ViewBag.prerequisite_url"
+                            asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Generate test case</a>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="card-body">
         <div class="row">
 
@@ -48,13 +116,13 @@
                 </div>
             </div>
             <div class="col-2">
-                @{ if(true)
+                @{ if (true)
                     {
 
                     }
-                        }
+                }
                 <div class="row form-group">
-                    <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#Delete">Delete Element(s)</button>
+                    @* <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#Delete">Delete Element(s)</button>*@
                     <!-- Modal -->
                     <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="center">
@@ -160,7 +228,8 @@
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
-                                                            <input type="text" name="id_url" class="input-md form-control" id="id_url" required placeholder="Project Name" hidden readonly value="@ViewBag.id_url">
+                                                            <input type="text" name="id_url" class="input-md form-control" id="id_url" required hidden readonly value="@ViewBag.id_url">
+                                                            <input type="text" name="returnurl" class="input-md form-control" id="returnurl" required hidden readonly value="manage">
                                                             <div class="modal-body">
                                                                 <div class="row form-group">
                                                                     <div class="col col-md-3">@Html.Label("Id element")</div>
@@ -238,12 +307,12 @@
     $(document).ready(function () {
         $('#elttable').DataTable(
             {
-                fixedHeader: true,
-                "lengthMenu": [[5,10, 25, 50, - 1], [5,10, 25, 50, "All record"]],
+                //fixedHeader: true,
+                "lengthMenu": [[5, 10, 25, 50, - 1], [5, 10, 25, 50, "All record"]],
                 //"ordering": false,
-                "scrollY":        "400px",
-        //"scrollCollapse": true,
-        "paging":         false,
+                "scrollY": "400px",
+                //"scrollCollapse": true,
+                "paging": false,
                 initComplete: function () {
                     this.api().columns(3).every(function () {
                         var column = this;
@@ -310,7 +379,7 @@
         //ShowProgress();
         document.getElementById("elementform").submit();
     };
-   
+
     $(function () {
         $("#checkall").click(function () {
             $("input[name='eltId_Delete']").prop("checked", this.checked);
@@ -327,5 +396,5 @@
         });
 
     });
-    
+
 </script>

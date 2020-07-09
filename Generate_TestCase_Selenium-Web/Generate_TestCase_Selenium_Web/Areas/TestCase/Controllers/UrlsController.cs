@@ -67,7 +67,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(url);
 
 
-            //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 50, IsOnlyDislayed = IsOnlyDislayed ,IsGetTagA=IsGetTagA}));
+            //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 65, IsOnlyDislayed = IsOnlyDislayed ,IsGetTagA=IsGetTagA}));
         }
 
 

@@ -216,26 +216,26 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 //not form
                 var _context1 = new ElementDBContext();
-                    List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.type == "submit").ToListAsync();
-                    for (int j = 0; j < submit.Count; j++)
-                    {
+                List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.type == "submit").ToListAsync();
+                for (int j = 0; j < submit.Count; j++)
+                {
 
-                        await NotFill_ClickSubmit(null, j, submit[j]);
-                        await Input_Type_Email(null, j, submit[j]);
-                        await Input_Type_Text(null, j, submit[j]);
-                        await ClickAll_TypeRadio(null, j, submit[j]);
-                        await SelectAllElement_TypeSelect(null, j, submit[j]);
-                        await SkipOneSelect_TypeSelect(null, j, submit[j]);
-                        await ClickAll_TypeRadio(null, j, submit[j]);
-                        await Input_Type_Password(null, j, submit[j]);
-                        await Click_Any_CheckBox_TypeCheckBox(null, j, submit[j]);
-                        await ClickAll_TypeCheckBox(null, j, submit[j]);
-                        await Input_Type_TypeDate(null, j, submit[j]);
-                        await Input_Type_TypeNumber(null, j, submit[j]);
-                        await Fill_Form(null, j, submit[j]);
-                    }
-                
-               
+                    await NotFill_ClickSubmit(null, j, submit[j]);
+                    await Input_Type_Email(null, j, submit[j]);
+                    await Input_Type_Text(null, j, submit[j]);
+                    await ClickAll_TypeRadio(null, j, submit[j]);
+                    await SelectAllElement_TypeSelect(null, j, submit[j]);
+                    await SkipOneSelect_TypeSelect(null, j, submit[j]);
+                    await ClickAll_TypeRadio(null, j, submit[j]);
+                    await Input_Type_Password(null, j, submit[j]);
+                    await Click_Any_CheckBox_TypeCheckBox(null, j, submit[j]);
+                    await ClickAll_TypeCheckBox(null, j, submit[j]);
+                    await Input_Type_TypeDate(null, j, submit[j]);
+                    await Input_Type_TypeNumber(null, j, submit[j]);
+                    await Fill_Form(null, j, submit[j]);
+                }
+
+
             }
             await ClickAll_Tag_a();
             await ClickAll_Tag_Button();

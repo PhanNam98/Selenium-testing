@@ -253,7 +253,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
                 ViewData["id_url"] = id_url;
                 ViewData["project_id"] = listelt.FirstOrDefault().id_urlNavigation.project_.id;
-
+                int countsubmit = listelt.Where(p => p.type == "submit").Count();
+                if (countsubmit == 0)
+                {
+                    ViewData["Nosubmit"] = true;
+                }
+                else
+                    ViewData["Nosubmit"] = false;
                 return View(listelt);
             }
             return View(listelt);
@@ -293,7 +299,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 ViewData["prerequisite_testcase"] = prerequisite_testcase;
                 ViewData["prerequisite_url"] = prerequisite_url;
                 ViewData["project_id"] = listelt.FirstOrDefault().id_urlNavigation.project_.id;
-
+                int countsubmit = listelt.Where(p => p.type == "submit").Count();
+                if (countsubmit == 0)
+                {
+                    ViewData["Nosubmit"] = true;
+                }
+                else
+                    ViewData["Nosubmit"] = false;
                 return View(listelt);
             }
             return View(listelt);

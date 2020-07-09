@@ -70,13 +70,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
 
             }
-            if(StatusMessage!=null)
+            if (StatusMessage != null)
             {
                 TempData.Remove(StatusMessage);
             }
             ViewData["LoadingTitle"] = "Generating test case. Please wait.";
             int countsubmit = elementDBContext.Where(p => p.type == "submit").Count();
-            if (countsubmit==0)
+            if (countsubmit == 0)
             {
                 ViewData["Nosubmit"] = true;
             }
@@ -116,7 +116,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //--Code, dont delete
             string Url = _context.Url.Where(p => p.id_url == id_url).FirstOrDefault().url1;
             this.IsOnlyDislayed = IsOnlyDislayed;
-            SetUp(Url);
+            try
+            {
+                SetUp(Url);
+            }
+            catch
+            {
+                SetUp(Url);
+            }
+           
             int isSuccess = GetElements(Url, IsOnlyDislayed, id_url, IsGetTagA);
             if (isSuccess == 1)
             {
@@ -155,8 +163,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             int isSuccess = await GetSubElements(Url, IsOnlyDislayed, id_url, prerequisite_testcase, prerequisite_url, IsGetTagA);
             if (isSuccess == 1)
             {
-                _context.Form_elements.AddRange(listForm);
-                _context.Element.AddRange(listElt);
+                if (listForm != null)
+                    _context.Form_elements.AddRange(listForm);
+                if (listElt != null)
+                    _context.Element.AddRange(listElt);
                 await _context.SaveChangesAsync();
                 //if (returnUrl != null)
                 //{
@@ -210,8 +220,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     for (int i = 0; i < form.Count; i++)
                     {
                         Form_elements form_ = new Form_elements();
-                        form_.id_form = form[i].GetAttribute("id");
-
+                        if (form[i].GetAttribute("id") != null && form[i].GetAttribute("id") != "")
+                            form_.id_form = form[i].GetAttribute("id");
+                        else
+                            form_.id_form = "form_" + i;
                         form_.id_url = id_url;
                         try
                         {
@@ -256,9 +268,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     foreach (string tag in tag_elts)
                     {
                         if (this.IsOnlyDislayed)
-                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url,null, isgetlink);
+                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url, null, isgetlink);
                         else
-                            GetElements(chromedriver, tag, "", id_url,null, isgetlink);
+                            GetElements(chromedriver, tag, "", id_url, null, isgetlink);
                         //Thread thread = new Thread(() => GetElements(chromedriver, tag, "", id_url));
                         //thread.Start();
                         //GetElements(chromedriver, tag, "", id_url);
@@ -316,8 +328,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     listForm = new List<Form_elements>();
                     for (int i = 0; i < form.Count; i++)
                     {
-                        Form_elements form_ = new Form_elements();
-                        form_.id_form = form[i].GetAttribute("id");
+                        Form_elements form_ = new Form_elements(); if (form[i].GetAttribute("id") != null && form[i].GetAttribute("id") != "")
+                            form_.id_form = form[i].GetAttribute("id");
+                        else
+                            form_.id_form = "form_" + i;
 
                         form_.id_url = id_url;
                         try
@@ -363,9 +377,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     foreach (string tag in tag_elts)
                     {
                         if (this.IsOnlyDislayed)
-                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url,null, isgetlink);
+                            GetElementsOnlyDisplay(chromedriver, tag, "", id_url, null, isgetlink);
                         else
-                            GetElements(chromedriver, tag, "", id_url,null, isgetlink);
+                            GetElements(chromedriver, tag, "", id_url, null, isgetlink);
                         //Thread thread = new Thread(() => GetElements(Chromedriver, tag, "", id_url));
                         //thread.Start();
                         //GetElements(chromedriver, tag, "", id_url);
@@ -665,16 +679,31 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     elt.xpath = getAbsoluteXPath(driver, item);
                     if (form_elts != null)
                     {
+                        //foreach (var form in form_elts)
+                        //{
+                        //    if (elt.xpath.Contains(form.xpath))
+                        //    {
+
+                        //        elt.id_form = form.id_form;
+
+                        //        break;
+                        //    }
+                        //}
+                        string temp = "";
                         foreach (var form in form_elts)
                         {
                             if (elt.xpath.Contains(form.xpath))
                             {
+                                if (temp.Length < form.xpath.Length)
+                                {
+                                    temp = form.id_form;
+                                }
+                                //elt.id_form = form.id_form;
 
-                                elt.id_form = form.id_form;
-
-                                break;
+                                //break;
                             }
                         }
+                        elt.id_form = temp;
                     }
                     elt.id_url = id_url;
                     elt.tag_name = item.TagName;
@@ -794,8 +823,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 allElements = driver.FindElementsByXPath(String.Format("//{0}", TagName, TypeName)).ToList();
             }
 
-
-
             foreach (var item in allElements)
             {
 
@@ -809,16 +836,21 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     elt.xpath = getAbsoluteXPath(driver, item);
                     if (form_elts != null)
                     {
+                        string temp = "";
                         foreach (var form in form_elts)
                         {
                             if (elt.xpath.Contains(form.xpath))
                             {
+                                if(temp.Length< form.xpath.Length)
+                                {
+                                    temp = form.id_form;
+                                }
+                                //elt.id_form = form.id_form;
 
-                                elt.id_form = form.id_form;
-
-                                break;
+                                //break;
                             }
                         }
+                        elt.id_form = temp;
                     }
                     elt.id_url = id_url;
                     elt.tag_name = item.TagName;
@@ -1278,7 +1310,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         #endregion
 
         [HttpPost]
-        public async Task<IActionResult> AddSubmit(string id_element,int id_url)
+        public async Task<IActionResult> AddSubmit(string id_element, int id_url, string returnurl = "", string prerequisite_url1 = "", string prerequisite_testcase1 ="")
         {
             try
             {
@@ -1295,6 +1327,25 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             catch
             {
                 StatusMessage = "Update fail";
+            }
+            if(returnurl=="sub")
+            {
+                return RedirectToAction("Elements_SubTestcase", "Manage", new RouteValueDictionary(new
+                {
+                    id_url = id_url,
+                    prerequisite_testcase= prerequisite_testcase1,
+                    prerequisite_url= prerequisite_url1
+
+
+                }));
+            }
+            else if(returnurl== "manage")
+            {
+                return RedirectToAction("Elements", "Manage", new RouteValueDictionary(new
+                {
+                    id_url = id_url
+
+                }));
             }
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new
             {
