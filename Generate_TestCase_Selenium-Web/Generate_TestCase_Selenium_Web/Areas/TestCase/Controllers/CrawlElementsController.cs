@@ -124,7 +124,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 SetUp(Url);
             }
-           
+
             int isSuccess = GetElements(Url, IsOnlyDislayed, id_url, IsGetTagA);
             if (isSuccess == 1)
             {

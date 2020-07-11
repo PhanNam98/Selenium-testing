@@ -9,6 +9,8 @@
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a asp-area="User" asp-controller="Results" asp-action="Index">Results</a></li>
     <li class="breadcrumb-item active">Result detail</li>
+    <li class="breadcrumb-item active">Project: <a asp-area="TestCase" asp-controller="Manage" asp-action="Projects">@ViewBag.projectname</a> </li>
+    <li class="breadcrumb-item active">Url id: <a asp-area="TestCase" asp-controller="Manage" asp-action="Urls" asp-route-project_id="@ViewBag.project_id">@ViewBag.id_url</a></li>
 </ol>
 <div class="row">
     <div class="col-md-2">
@@ -155,6 +157,12 @@
                                                                     <div class="col-12 col-md-9">
                                                                         <input type="text" name="description" id="@description" class="input-md form-control" value="@item.id_.description" readonly />
 
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row form-group">
+                                                                    <div class="col col-md-3">@Html.Label("Project")</div>
+                                                                    <div class="col-12 col-md-9">
+                                                                        <input type="text" name="project"  class="input-md form-control" value="@item.id_.id_urlNavigation.project_.name" readonly />
                                                                     </div>
                                                                 </div>
                                                                 <div class="row form-group">

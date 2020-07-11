@@ -356,8 +356,8 @@
         var table = $('#testcasetable').DataTable(
             {
                 "lengthMenu": [[10, 25, 50, - 1], [10, 25, 50, "All record"]],
-                //"scrollY":        "500px",
-        //"scrollCollapse": true,
+                "scrollY":        "500px",
+        "scrollCollapse": true,
                 "paging": false,
                 initComplete: function () {
                     this.api().columns(3).every(function () {

@@ -52,7 +52,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                 .ThenInclude(u => u.Redirect_url)
                 .Include(t=>t.id_)
                 .ThenInclude(u => u.Element_test)
-               
+                .Include(t => t.id_)
+                .ThenInclude(u => u.id_urlNavigation.project_)
                 .Where(p=>p.id_result==id)
                 .ToListAsync();
             if (results == null)
@@ -65,6 +66,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             ViewData["Failure"] = results.Where(p => p.Result.ToLower().Equals("failure")).Count();
             ViewData["id_result"] = id;
             ViewData["id_url"] = results.FirstOrDefault().id_url ;
+            ViewData["projectname"] = results.FirstOrDefault().id_.id_urlNavigation.project_.name;
+            ViewData["project_id"] = results.FirstOrDefault().id_.id_urlNavigation.project_id;
            
             return View(results);
         }

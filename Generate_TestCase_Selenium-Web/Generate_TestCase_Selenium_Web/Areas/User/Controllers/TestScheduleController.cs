@@ -40,7 +40,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             return View(await listSchedule.ToListAsync());
         }
 
-        public async Task<IActionResult> Create_schedule(string time, List<string> list_Idtestcase, int id_url)
+        public async Task<IActionResult> Create_schedule(string time, string timem, List<string> list_Idtestcase, int id_url)
         {
             Test_schedule test_Schedule = new Test_schedule();
             test_Schedule.CreatedDate = DateTime.Now;
@@ -48,7 +48,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             test_Schedule.id_schedule = scheduleId;
             var id_user = _userManager.GetUserId(User);
             test_Schedule.id_user = id_user;
-            test_Schedule.job_repeat_time = time;
+            test_Schedule.job_repeat_time = time+":"+timem;
             test_Schedule.status = "running";
             _context.Test_schedule.Add(test_Schedule);
             await _context.SaveChangesAsync();
@@ -75,7 +75,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                                              .ForJob(job)
                                              //.UsingJobData("triggerparam", "Simple trigger 1 Parameter")
                                              .WithIdentity(scheduleId + "trigger", id_user)
-                                               .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(int.Parse(time), 0))
+                                               .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(int.Parse(time), int.Parse(timem)))
             //                                 .StartNow()
             //                                 .WithSimpleSchedule(z => z.WithIntervalInSeconds(600).RepeatForever())
                                              .Build();
@@ -98,7 +98,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             StatusMessage = "Stop schedule successfully";
             return RedirectToAction("Index");
         }
-        [HttpPost]
+       
         public async Task<IActionResult> Delete_schedule(string scheduleId)
         {
             var id_user = _userManager.GetUserId(User);
@@ -145,7 +145,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
         {
             var listTestcase = await _context.Testcase_scheduled.Include(p => p.id_).ThenInclude(r=>r.id_urlNavigation).ThenInclude(p=>p.project_).Where(p => p.id_schedule == scheduleId).ToListAsync();
             ViewData["scheduleId"] = scheduleId;
-            ViewData["TimeScheduleId"] = _context.Test_schedule.Find(scheduleId).job_repeat_time;
+            string[] time = _context.Test_schedule.Find(scheduleId).job_repeat_time.Split(':');
+            ViewData["TimeSchedule"] = time[0];
+            ViewData["TimeSchedulem"] = time[1];
             ViewData["id_url"] = listTestcase.FirstOrDefault().id_url;
             ViewData["Message"] = StatusMessage;
             ViewData["project"] = listTestcase.FirstOrDefault().id_.id_urlNavigation.url1;
@@ -278,7 +280,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
                 ViewData["id_url"] = id_url;
                 ViewData["project_id"] = listtestcase.FirstOrDefault().id_urlNavigation.project_.id;
                 ViewData["url_name"] = listtestcase.FirstOrDefault().id_urlNavigation.name;
-                ViewData["LoadingTitle"] = "Running test case. Please wait.";
+                ViewData["LoadingTitle"] = "Please wait.";
                 return View(listtestcase);
             }
             return View(listtestcase);
@@ -344,12 +346,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.User.Controllers
             return RedirectToAction(nameof(DetailSchedule), new { scheduleId = scheduleId });
         }
         [HttpPost]
-        public async Task<IActionResult> ChangeTimeSchedule(int time, string scheduleId)
+        public async Task<IActionResult> ChangeTimeSchedule(int time,int timem, string scheduleId)
         {
             try
             {
                 var schedule = _context.Test_schedule.Find(scheduleId);
-                schedule.job_repeat_time = time.ToString();
+                schedule.job_repeat_time = time.ToString()+":"+timem;
                 _context.Test_schedule.Update(schedule);
                 _context.SaveChanges();
                 StatusMessage = "Update successfully";
