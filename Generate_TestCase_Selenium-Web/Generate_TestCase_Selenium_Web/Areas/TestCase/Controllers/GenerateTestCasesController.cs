@@ -210,6 +210,30 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         await Fill_Form(forms[i].id_form, j, submit[j]);
                     }
                 }
+                //Xét các trường hợp element không có form
+                List<Element> notform = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form ==null).ToListAsync();
+                if(notform.Count>0)
+                {
+                    var _context2 = new ElementDBContext();
+                    List<Element> submit = await _context2.Element.Where(p => p.id_url == Id_Url && p.id_form == null && p.type == "submit").ToListAsync();
+                    for (int j = 0; j < submit.Count; j++)
+                    {
+
+                        await NotFill_ClickSubmit(null, j, submit[j]);
+                        await Input_Type_Email(null, j, submit[j]);
+                        await Input_Type_Text(null, j, submit[j]);
+                        await ClickAll_TypeRadio(null, j, submit[j]);
+                        await SelectAllElement_TypeSelect(null, j, submit[j]);
+                        await SkipOneSelect_TypeSelect(null, j, submit[j]);
+                        await ClickAll_TypeRadio(null, j, submit[j]);
+                        await Input_Type_Password(null, j, submit[j]);
+                        await Click_Any_CheckBox_TypeCheckBox(null, j, submit[j]);
+                        await ClickAll_TypeCheckBox(null, j, submit[j]);
+                        await Input_Type_TypeDate(null, j, submit[j]);
+                        await Input_Type_TypeNumber(null, j, submit[j]);
+                        await Fill_Form(null, j, submit[j]);
+                    }
+                }
                 //await ClickAll_Tag_a();
                 //await ClickAll_Tag_Button();
             }
@@ -266,6 +290,95 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
         }
+        //not used
+        public async Task<IActionResult> Generate_testcase_selectedElement(int id_url, IEnumerable<string> eltId, string returnUrl = null)
+        {
+            Id_Url = id_url;
+            ListTestCase = new List<Test_case>();
+            List_ListInputTestcase = new List<List<Input_testcase>>();
+            List<Form_elements> forms = await _context.Form_elements.Where(p => p.id_url == Id_Url).ToListAsync();
+            if (forms.Count > 0)
+            {
+                for (int i = 0; i < forms.Count; i++)
+                {
+                    var _context1 = new ElementDBContext();
+                    List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.id_form == forms[i].id_form && p.type == "submit").ToListAsync();
+                    for (int j = 0; j < submit.Count; j++)
+                    {
+
+                        await NotFill_ClickSubmit(forms[i].id_form, j, submit[j]);
+                        await Input_Type_Email(forms[i].id_form, j, submit[j]);
+                        await Input_Type_Text(forms[i].id_form, j, submit[j]);
+                        await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                        await SelectAllElement_TypeSelect(forms[i].id_form, j, submit[j]);
+                        await SkipOneSelect_TypeSelect(forms[i].id_form, j, submit[j]);
+                        await ClickAll_TypeRadio(forms[i].id_form, j, submit[j]);
+                        await Input_Type_Password(forms[i].id_form, j, submit[j]);
+                        await Click_Any_CheckBox_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        await ClickAll_TypeCheckBox(forms[i].id_form, j, submit[j]);
+                        await Input_Type_TypeDate(forms[i].id_form, j, submit[j]);
+                        await Input_Type_TypeNumber(forms[i].id_form, j, submit[j]);
+                        await Fill_Form(forms[i].id_form, j, submit[j]);
+                    }
+                }
+                //await ClickAll_Tag_a();
+                //await ClickAll_Tag_Button();
+            }
+            else
+            {
+                //not form
+                var _context1 = new ElementDBContext();
+                List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.type == "submit").ToListAsync();
+                for (int j = 0; j < submit.Count; j++)
+                {
+
+                    await NotFill_ClickSubmit(null, j, submit[j]);
+                    await Input_Type_Email(null, j, submit[j]);
+                    await Input_Type_Text(null, j, submit[j]);
+                    await ClickAll_TypeRadio(null, j, submit[j]);
+                    await SelectAllElement_TypeSelect(null, j, submit[j]);
+                    await SkipOneSelect_TypeSelect(null, j, submit[j]);
+                    await ClickAll_TypeRadio(null, j, submit[j]);
+                    await Input_Type_Password(null, j, submit[j]);
+                    await Click_Any_CheckBox_TypeCheckBox(null, j, submit[j]);
+                    await ClickAll_TypeCheckBox(null, j, submit[j]);
+                    await Input_Type_TypeDate(null, j, submit[j]);
+                    await Input_Type_TypeNumber(null, j, submit[j]);
+                    await Fill_Form(null, j, submit[j]);
+                }
+
+
+            }
+            await ClickAll_Tag_a();
+            await ClickAll_Tag_Button();
+
+            _context.Test_case.AddRange(ListTestCase);
+            _context.SaveChanges();
+
+            foreach (var inputtest in List_ListInputTestcase)
+            {
+                _context.Input_testcase.AddRange(inputtest);
+
+            }
+            if (_context.SaveChanges() > 0)
+            {
+                StatusMessage = String.Format("Success, {0} test case(s) were created", ListTestCase.Count());
+                if (returnUrl != null)
+                {
+                    return LocalRedirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
+                }
+            }
+
+            return RedirectToAction(nameof(Index), new RouteValueDictionary(new { id_url = id_url }));
+
+
+        }
+
+
         public async Task<IActionResult> Generate_Subtestcase(int id_url, int prerequisite_url, string prerequisite_testcase, string returnUrl = null)
         {
             Id_Url = id_url;
@@ -5047,19 +5160,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                            "The excel file has been attached below.";
                 await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
                 //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
-                try
-                {
-                    // Check if file exists with its full path    
-                    if ((System.IO.File.Exists(path)))
-                    {
-                        System.IO.File.Delete(path);
-                    }
-                    //else Console.WriteLine("File not found");
-                }
-                catch (IOException ioExp)
-                {
-                    string mes=ioExp.Message;
-                }
+               
             }
 
 

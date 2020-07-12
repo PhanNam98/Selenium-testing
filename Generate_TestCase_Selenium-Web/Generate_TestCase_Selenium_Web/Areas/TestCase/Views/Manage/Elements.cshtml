@@ -32,6 +32,7 @@
                 <div class="container">
                     <div class="text-right">
                         <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#Delete">Delete Element(s)</button>
+                        @*<button type="button" name="generatebtn" id="btn-generate" class="btn btn-custon-rounded-three btn-primary btn-xs" onclick="Generate_by_id()">Generate element selected</button>*@
                         @*@{
 
                                 if (ViewBag.Nosubmit == true)
@@ -160,6 +161,7 @@
         @using (Html.BeginForm("DeleteElts", "Manage", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = "elementform", @novalidate = "novalidate", @name = "elementform", @id_url = ViewBag.id_url }))
         {
             <input type="text" name="id_url" class="input-md form-control" id="id_url" hidden readonly value="@ViewBag.id_url">
+            <input id="isGenerate" name="isGenerate" value="false" hidden readonly />
             <div class="table-responsive">
                 <table id="elttable" class="table table-striped table-condensed table-hover table-bordered">
                     <thead>
@@ -178,7 +180,9 @@
                             <th>
                                 @Html.DisplayName("Type")
                             </th>
-
+                            <th>
+                                @Html.DisplayName("Title")
+                            </th>
                             <th>
                                 @Html.DisplayName("Id form")
                             </th>
@@ -189,110 +193,116 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="eltId_Delete" id=@item.id_element value="@item.id_element" />
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.id_element)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.tag_name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.type)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.id_form)
-                                </td>
-                                <td>
-                                    @{
-                                        string detail = "d" + @item.id_element.ToString();
-                                        <button type="button" class="btn btn-custon-rounded-three btn-success btn-xs" data-toggle="modal" data-target="#@detail">Detail</button>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="eltId_Delete" id=@item.id_element value="@item.id_element" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id_element)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tag_name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.id_form)
+                            </td>
+                            <td>
+                                @{
+                                    string detail = "d" + @item.id_element.ToString();
+                                    <button type="button" class="btn btn-custon-rounded-three btn-success btn-xs" data-toggle="modal" data-target="#@detail">Detail</button>
 
-                                        <!-- Modal -->
+                                    <!-- Modal -->
 
-                                        <div class="modal fade" id="@detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="center">
-                                                <div class="modal-dialog modal-dialog-center" role="document">
-                                                    <div class="modal-content">
-                                                        @using (Html.BeginForm("AddSubmit", "Manage", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = detail, @novalidate = "novalidate", @name = "blockform" }))
-                                                        {
-                                                            @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Detail element</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
+                                    <div class="modal fade" id="@detail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="center">
+                                            <div class="modal-dialog modal-dialog-center" role="document">
+                                                <div class="modal-content">
+                                                    @using (Html.BeginForm("AddSubmit", "Manage", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @class = "dropzone dropzone-custom needsclick add-professors dz-clickable", @id = detail, @novalidate = "novalidate", @name = "blockform" }))
+                                                    {
+                                                        @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Detail element</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <input type="text" name="id_url" class="input-md form-control" id="id_url" required hidden readonly value="@ViewBag.id_url">
+                                                        <input type="text" name="returnurl" class="input-md form-control" id="returnurl" required hidden readonly value="manage">
+                                                        <div class="modal-body">
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Id element")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="idpost" class="input-md form-control" value="@item.id_element" readonly>
+                                                                </div>
                                                             </div>
-                                                            <input type="text" name="id_url" class="input-md form-control" id="id_url" required hidden readonly value="@ViewBag.id_url">
-                                                            <input type="text" name="returnurl" class="input-md form-control" id="returnurl" required hidden readonly value="manage">
-                                                            <div class="modal-body">
-                                                                <div class="row form-group">
-                                                                    <div class="col col-md-3">@Html.Label("Id element")</div>
-                                                                    <div class="col-12 col-md-9">
-                                                                        <input type="text" name="idpost" class="input-md form-control" value="@item.id_element" readonly>
-                                                                    </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Name")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.name" readonly />
                                                                 </div>
-                                                                <div class="row form-group">
-                                                                    <div class="col col-md-3">@Html.Label("Name")</div>
-                                                                    <div class="col-12 col-md-9">
-                                                                        <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.name" readonly />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row form-group">
-                                                                    <div class="col col-md-3">@Html.Label("Class Name")</div>
-                                                                    <div class="col-12 col-md-9">
-                                                                        <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.class_name" readonly />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row form-group">
-                                                                    <div class="col col-md-3">@Html.Label("Value")</div>
-                                                                    <div class="col-12 col-md-9">
-                                                                        <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.value" readonly />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row form-group">
-                                                                    <div class="col col-md-3">@Html.Label("Href")</div>
-                                                                    <div class="col-12 col-md-9">
-                                                                        <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.href" readonly />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row form-group">
-                                                                    <div class="col col-md-3">@Html.Label("Title")</div>
-                                                                    <div class="col-12 col-md-9">
-                                                                        <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.title" readonly />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row form-group">
-                                                                    <div class="col col-md-3">@Html.Label("Xpath")</div>
-                                                                    <div class="col-12 col-md-9">
-                                                                        <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.xpath" readonly />
-                                                                    </div>
-                                                                </div>
-
                                                             </div>
-                                                            <div class="modal-footer">
-                                                                @{
-                                                                    if ((item.tag_name == "a" || item.tag_name == "button") && (item.href == null || !item.href.Contains("/")) && item.type != "submit")
-                                                                    {
-                                                                        <button type="submit" class="btn btn-primary">Set type submit</button>
-                                                                    }
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Class Name")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.class_name" readonly />
+                                                                </div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Value")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.value" readonly />
+                                                                </div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Href")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.href" readonly />
+                                                                </div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Title")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.title" readonly />
+                                                                </div>
+                                                            </div>
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-3">@Html.Label("Xpath")</div>
+                                                                <div class="col-12 col-md-9">
+                                                                    <input type="text" name="reasonBlockPost" class="input-md form-control" value="@item.xpath" readonly />
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            @{
+                                                                if ((item.tag_name == "a" || item.tag_name == "button") && (item.href == null
+                                                                    //|| !item.href.Contains("/")
+                                                                    )
+                                                                    && item.type != "submit")
+                                                                {
+                                                                    <button type="submit" class="btn btn-primary">Set type submit</button>
                                                                 }
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            </div>
+                                                            }
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        </div>
 
-                                                        }
-                                                    </div>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
-                                    }
-                                </td>
-                            </tr>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -377,6 +387,11 @@
     });
     function Delete_by_id() {
         //ShowProgress();
+        document.getElementById("elementform").submit();
+    };
+    function Generate_by_id() {
+         document.getElementById("isGenerate").value = "true";
+        ShowProgress();
         document.getElementById("elementform").submit();
     };
 
