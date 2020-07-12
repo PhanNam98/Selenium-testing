@@ -49,6 +49,14 @@
 
                         </div>
                     </div>
+                    <p>Or</p>
+                    <div class="row form-group">
+                        <div class="col col-md-3">@Html.Label("Import xlsx")</div>
+                        <div class="col-12 col-md-9">
+                            <input type="file" name="file" class="input-md form-control" id="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+
+                        </div>
+                    </div>
                     <div class="row form-group" hidden>
                         <div class="col col-md-3">@Html.Label("Activated object")</div>
                         <div class="col-12 col-md-9">
@@ -396,7 +404,7 @@
 <script>
 
     function IsEmpty() {
-        if (document.getElementById("xpath").value === "" && document.getElementById("fullxpath").value === "") {
+        if (document.getElementById("xpath").value === "" && document.getElementById("fullxpath").value === "" && document.getElementById("file").files.length == 0) {
             alert("Xpath or fulll xpath is required.");
             return false;
         }

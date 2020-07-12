@@ -123,6 +123,14 @@
 
                         </div>
                     </div>
+                    <p>Or</p>
+                    <div class="row form-group">
+                        <div class="col col-md-3">@Html.Label("Import xlsx")</div>
+                        <div class="col-12 col-md-9">
+                            <input type="file" name="file" class="input-md form-control" id="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+
+                        </div>
+                    </div>
                     <input id="id_url" name="id_url" value="@ViewBag.id_url" readonly hidden />
                     <input id="id_testcase" name="id_testcase" value="@ViewBag.id_testcase" readonly hidden />
                 </div>
@@ -393,7 +401,7 @@
 <script>
 
     function IsEmpty() {
-        if (document.getElementById("xpath").value === "" && document.getElementById("fullxpath").value === "") {
+        if (document.getElementById("xpath").value === "" && document.getElementById("fullxpath").value === ""  && document.getElementById("file").files.length == 0) {
             alert("Xpath or fulll xpath is required.");
             return false;
         }
