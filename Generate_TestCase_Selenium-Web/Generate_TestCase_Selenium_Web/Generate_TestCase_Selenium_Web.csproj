@@ -35,7 +35,6 @@
     <Folder Include="Areas\User\Data\" />
     <Folder Include="Areas\User\Models\" />
     <Folder Include="Hubs\" />
-    <Folder Include="wwwroot\excels\" />
     <Folder Include="wwwroot\lib\signalr\" />
   </ItemGroup>
 

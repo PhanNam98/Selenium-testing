@@ -1411,6 +1411,19 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                            "The excel file has been attached below.";
                 await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
                 //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
+                try
+                {
+                    // Check if file exists with its full path    
+                    if ((System.IO.File.Exists(path)))
+                    {
+                        System.IO.File.Delete(path);
+                    }
+                    //else Console.WriteLine("File not found");
+                }
+                catch (IOException ioExp)
+                {
+                    string mes = ioExp.Message;
+                }
             }
 
 

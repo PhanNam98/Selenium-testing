@@ -5047,6 +5047,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                            "The excel file has been attached below.";
                 await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
                 //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
+                try
+                {
+                    // Check if file exists with its full path    
+                    if ((System.IO.File.Exists(path)))
+                    {
+                        System.IO.File.Delete(path);
+                    }
+                    //else Console.WriteLine("File not found");
+                }
+                catch (IOException ioExp)
+                {
+                    string mes=ioExp.Message;
+                }
             }
 
 
@@ -5114,6 +5127,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 fileDownloadName: "Testcase.xlsx"
                 );
+        }
+        //Download Sample file
+        public async Task<IActionResult> DownloadExcelTemplate()
+        {
+            string filename = "ValidateElement-Template.xlsx";
+            var path = Path.Combine(Directory.GetCurrentDirectory(), Constants.EXCEL_FILE_TEMPLATE, filename);
+            
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+            return  File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, filename);
         }
 
         private void BindingFormatForExcel(ExcelWorksheet worksheet, List<TestcaseExcel> listItems)
