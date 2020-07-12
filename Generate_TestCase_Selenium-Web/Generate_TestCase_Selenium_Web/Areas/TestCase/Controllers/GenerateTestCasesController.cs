@@ -5002,8 +5002,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var user = _context.AspNetUsers.Find(id_user);
             var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
             var testcases = await _context.Result_testcase.Include(d => d.id_).Include(i => i.Input_Result_test).Include(p => p.Test_element_Result_test).Where(p => p.id_url == id_url && p.id_result == id_result).ToListAsync();
+            var alert = await _context.Result_AlertMessage.Where(p => p.id_result == id_result).SingleOrDefaultAsync();
             TestcaseExcel testcaseExcel = new TestcaseExcel();
-            var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases);
+            var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases, alert);
             byte[] fileContents;
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var stream = new MemoryStream();
@@ -5071,10 +5072,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> DownloadExcel2(List<string> list_Idtestcase, int id_url, string id_result)
         {
             var testcases = await _context.Result_testcase.Include(d => d.id_).Include(i => i.Input_Result_test).Include(p => p.Test_element_Result_test).Where(p => p.id_url == id_url && p.id_result == id_result).ToListAsync();
+            var alert = await _context.Result_AlertMessage.Where(p => p.id_result == id_result).SingleOrDefaultAsync();
+            var redirect = await _context.Result_Url.Where(p => p.id_result == id_result).SingleOrDefaultAsync();
             var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
 
             TestcaseExcel testcaseExcel = new TestcaseExcel();
-            var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases);
+            var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases,alert, redirect);
             byte[] fileContents;
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -5115,12 +5118,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             worksheet.Cells[2, 1].Value = "No.";
             worksheet.Cells[2, 2].Value = "Test case";
             worksheet.Cells[2, 3].Value = "Description";
-            worksheet.Cells[2, 4].Value = "Actural results";
+            //worksheet.Cells[2, 4].Value = "Actural results";
+            worksheet.Cells[2, 4].Value = "Results";
             //worksheet.Cells[2, 5].Value = "Test Data";
             worksheet.Cells[2, 5].Value = "Test steps";
             //worksheet.Cells[2, 6].Value = "Test Elements";
             worksheet.Cells[2, 6].Value = "Expected results";
-            worksheet.Cells[2, 7].Value = "Result Test Elements";
+            worksheet.Cells[2, 7].Value = "Actural results";
             // Tự động xuống hàng khi text quá dài
             worksheet.Cells.Style.WrapText = true;
             // Tạo header

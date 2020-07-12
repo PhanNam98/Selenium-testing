@@ -55,7 +55,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Models
             }
             return testcaseExcels;
         }
-        public List<TestcaseExcel> ConvertToTestcaseExcel(List<Result_testcase> listtest_Cases)
+        public List<TestcaseExcel> ConvertToTestcaseExcel(List<Result_testcase> listtest_Cases,Result_AlertMessage result_Alert=null,Result_Url result_Url=null)
         {
             List<TestcaseExcel> testcaseExcels = new List<TestcaseExcel>();
             foreach (var testcase in listtest_Cases)
@@ -75,6 +75,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Models
                 {
                     testelement += data.xpath + ": " + data.value_test + "\n";
                     resulttestelement += data.xpath + ": " + data.value + "\n";
+                }
+                if(result_Alert!=null)
+                {
+                    testelement +=  "Alert: " + result_Alert.test_message + "\n";
+                    resulttestelement += "Alert: " + result_Alert.message + "\n";
+                }
+                if(result_Url != null)
+                {
+                    testelement +=  "Redirect url: " + result_Url.test_url + "\n";
+                    resulttestelement += "Redirect url: " + result_Url.return_url + "\n";
                 }
                 testcaseExcel.Result = testcase.Result;
                 testcaseExcel.ResultTestElement = resulttestelement;

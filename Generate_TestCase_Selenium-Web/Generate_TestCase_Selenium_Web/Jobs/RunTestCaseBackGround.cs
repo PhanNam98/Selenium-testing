@@ -177,7 +177,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
             _context.Result_testcase.Add(result_Testcase);
             try
             {
-               
+
                 await _context.SaveChangesAsync();
                 if (browserRun.Equals("chrome"))
                 {
@@ -1007,603 +1007,608 @@ namespace Generate_TestCase_Selenium_Web.Jobs
 
 
         }
-    
 
 
 
-    private ChromeDriver SetUpDriver(string url)
-    {
-        ChromeDriverService service = ChromeDriverService.CreateDefaultService();
-        service.HideCommandPromptWindow = true;//hide commandPromptWindow
 
-        var options = new ChromeOptions();
-        //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
-        //options.AddArgument("headless");
-        //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
-        //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
-        options.AddArgument("no-sandbox");
-        options.AddArgument("proxy-server='direct://'");
-        options.AddArgument("proxy-bypass-list=*");
-        ChromeDriver chromedriver = new ChromeDriver(service, options);
-        chromedriver.Url = url;
-        chromedriver.Navigate();
-        //The HTTP request to the remote WebDriver server for URL 
-        return chromedriver;
-    }
-    private FirefoxDriver SetUpDriverFireFox(string url)
-    {
-        FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
-        service.HideCommandPromptWindow = true;//hide commandPromptWindow
-
-        var options = new FirefoxOptions();
-        //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
-        //options.AddArgument("headless");
-        //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
-        //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
-        //options.AddArgument("no-sandbox");
-        options.AddArgument("proxy-server='direct://'");
-        options.AddArgument("proxy-bypass-list=*");
-        FirefoxDriver firefoxdriver = new FirefoxDriver(service, options);
-        firefoxdriver.Url = url;
-        firefoxdriver.Navigate();
-        //The HTTP request to the remote WebDriver server for URL 
-        return firefoxdriver;
-    }
-
-    private void QuitDriver(ChromeDriver chromedriver)
-    {
-
-        chromedriver.Quit();
-
-    }
-    private void CloseDriver(ChromeDriver chromedriver)
-    {
-
-        chromedriver.Close();
-
-    }
-
-    public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, int id_url, string id_testcase)
-    {
-        string return_url = "";
-        var _context = new ElementDBContext();
-        var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
-        Url URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
-        string url = URL.url1;
-        var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
-
-        if (Testcase.id_prerequisite_testcase != null)
+        private ChromeDriver SetUpDriver(string url)
         {
-            return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+
+            var options = new ChromeOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            options.AddArgument("no-sandbox");
+            options.AddArgument("proxy-server='direct://'");
+            options.AddArgument("proxy-bypass-list=*");
+            ChromeDriver chromedriver = new ChromeDriver(service, options);
+            chromedriver.Url = url;
+            chromedriver.Navigate();
+            //The HTTP request to the remote WebDriver server for URL 
+            return chromedriver;
         }
-        driver.Url = url;
-        driver.Navigate();
-        if (URL.trigger_element != null && URL.trigger_element != "")
+        private FirefoxDriver SetUpDriverFireFox(string url)
         {
-            var trigger = driver.FindElementByXPath(URL.trigger_element);
-            if (trigger.Displayed)
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+
+            var options = new FirefoxOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            //options.AddArgument("no-sandbox");
+            options.AddArgument("proxy-server='direct://'");
+            options.AddArgument("proxy-bypass-list=*");
+            FirefoxDriver firefoxdriver = new FirefoxDriver(service, options);
+            firefoxdriver.Url = url;
+            firefoxdriver.Navigate();
+            //The HTTP request to the remote WebDriver server for URL 
+            return firefoxdriver;
+        }
+
+        private void QuitDriver(ChromeDriver chromedriver)
+        {
+
+            chromedriver.Quit();
+
+        }
+        private void CloseDriver(ChromeDriver chromedriver)
+        {
+
+            chromedriver.Close();
+
+        }
+
+        public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, int id_url, string id_testcase)
+        {
+            string return_url = "";
+            var _context = new ElementDBContext();
+            var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            Url URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
+            string url = URL.url1;
+            var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
+
+            if (Testcase.id_prerequisite_testcase != null)
             {
-                trigger.Click();
+                return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
             }
-        }
-        foreach (var inputtest in list_inputtest)
-        {
-            switch (inputtest.action)
+            driver.Url = url;
+            driver.Navigate();
+            if (URL.trigger_element != null && URL.trigger_element != "")
             {
-
-                case "fill":
-                    {
-                        try
-                        {
-                            var fill = driver.FindElementByXPath(inputtest.xpath);
-                            if (fill.Displayed)
-                            {
-                                fill.Click();
-                                fill.SendKeys(inputtest.value);
-                            }
-
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-
-
-                        break;
-                    }
-                case "select":
-                    {
-                        try
-                        {
-                            var select = driver.FindElementByXPath(inputtest.xpath);
-                            var selectElement = new SelectElement(select);
-
-                            selectElement.SelectByValue(inputtest.value);
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-                        break;
-                    }
-                case "click":
-                    {
-                        try
-                        {
-                            var click = driver.FindElementByXPath(inputtest.xpath);
-                            click.Click();
-                        }
-                        catch (Exception e)
-                        {
-                            if (e.Message.Equals("element not interactable"))
-                            {
-
-                            }
-                        }
-
-                        break;
-                    }
-                case "check":
-                    {
-                        try
-                        {
-                            var click = driver.FindElementByXPath(inputtest.xpath);
-                            click.Click();
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-
-                        break;
-                    }
-                case "submit":
-                    {
-                        try
-                        {
-                            driver.FindElementByXPath(inputtest.xpath).Click();
-
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-
-                        break;
-                    }
-            }
-
-        }
-
-        return_url = driver.Url;
-
-
-        return return_url;
-    }
-    public async Task<string> RunPrerequesiteTestcase(FirefoxDriver driver, int id_url, string id_testcase)
-    {
-        string return_url = "";
-        var _context = new ElementDBContext();
-        var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
-        Url URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
-        string url = URL.url1;
-        var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
-
-        if (Testcase.id_prerequisite_testcase != null)
-        {
-            return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
-        }
-        driver.Url = url;
-        driver.Navigate();
-        if (URL.trigger_element != null && URL.trigger_element != "")
-        {
-            var trigger = driver.FindElementByXPath(URL.trigger_element);
-            if (trigger.Displayed)
-            {
-                trigger.Click();
-            }
-        }
-        foreach (var inputtest in list_inputtest)
-        {
-            switch (inputtest.action)
-            {
-
-                case "fill":
-                    {
-                        try
-                        {
-                            var fill = driver.FindElementByXPath(inputtest.xpath);
-                            if (fill.Displayed)
-                            {
-                                fill.Click();
-                                fill.SendKeys(inputtest.value);
-                            }
-
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-
-
-                        break;
-                    }
-                case "select":
-                    {
-                        try
-                        {
-                            var select = driver.FindElementByXPath(inputtest.xpath);
-                            var selectElement = new SelectElement(select);
-
-                            selectElement.SelectByValue(inputtest.value);
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-                        break;
-                    }
-                case "click":
-                    {
-                        try
-                        {
-                            var click = driver.FindElementByXPath(inputtest.xpath);
-                            click.Click();
-                        }
-                        catch (Exception e)
-                        {
-                            if (e.Message.Equals("element not interactable"))
-                            {
-
-                            }
-                        }
-
-                        break;
-                    }
-                case "check":
-                    {
-                        try
-                        {
-                            var click = driver.FindElementByXPath(inputtest.xpath);
-                            click.Click();
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-
-                        break;
-                    }
-                case "submit":
-                    {
-                        try
-                        {
-                            driver.FindElementByXPath(inputtest.xpath).Click();
-
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-
-                        break;
-                    }
-            }
-
-        }
-
-        return_url = driver.Url;
-
-
-        return return_url;
-    }
-    private ChromeDriver SetUpDriver()
-    {
-        ChromeDriverService service = ChromeDriverService.CreateDefaultService();
-        service.HideCommandPromptWindow = true;//hide commandPromptWindow
-
-        var options = new ChromeOptions();
-        //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
-        //options.AddArgument("headless");
-        //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
-        //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
-        options.AddArgument("no-sandbox");
-        options.AddArgument("proxy-server='direct://'");
-        options.AddArgument("proxy-bypass-list=*");
-        ChromeDriver chromedriver = new ChromeDriver(service, options);
-        //The HTTP request to the remote WebDriver server for URL 
-        return chromedriver;
-    }
-    private FirefoxDriver SetUpDriverFireFox()
-    {
-        FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
-        service.HideCommandPromptWindow = true;//hide commandPromptWindow
-
-        var options = new FirefoxOptions();
-        //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
-        //options.AddArgument("headless");
-        //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
-        //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
-        //options.AddArgument("no-sandbox");
-        //options.AddArgument("proxy-server='direct://'");
-        //options.AddArgument("proxy-bypass-list=*");
-        FirefoxDriver firefoxdriver = new FirefoxDriver(service, options);
-
-        //The HTTP request to the remote WebDriver server for URL 
-        return firefoxdriver;
-    }
-    #region Excel
-    // Send excel to mail
-    private async Task SendExcel(int id_url, List<string> list_Idtestcase, string id_user)
-    {
-        var user = _context.AspNetUsers.Find(id_user);
-        var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
-        var testcases = await _context.Test_case.Include(i => i.Input_testcase).Include(p => p.Element_test).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
-        TestcaseExcel testcaseExcel = new TestcaseExcel();
-        var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases);
-        byte[] fileContents;
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-        var stream = new MemoryStream();
-        string filename = "Testcase-" + DateTime.Now.ToString("MM-dd-yyyy") + "-" + Generate_RandomString(5) + ".xlsx";
-        var path = Path.Combine(Directory.GetCurrentDirectory(), Constants.EXCEL_FILE, filename);
-        using (var package = new ExcelPackage())
-        {
-            var worksheet = package.Workbook.Worksheets.Add("Test case");
-            package.Workbook.Properties.Author = "Genergate testcase web";
-            //worksheet.Cells["A2"].LoadFromCollection<TestcaseExcel>(testcaseExcels, true);
-            worksheet.Cells[1, 1].Value = "Url: " + url.url1;
-            BindingFormatForExcel(worksheet, testcaseExcels);
-            fileContents = package.GetAsByteArray();
-            System.IO.File.WriteAllBytes(path, fileContents);// save to dissk
-
-        }
-
-
-        if (fileContents == null || fileContents.Length == 0)
-        {
-
-        }
-        else
-        {
-            string emailcontent = "Thank you for using our service. " +
-                       "The excel file has been attached below.";
-            await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
-            //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
-        }
-
-
-    }
-
-    public async Task SendExcelBackground(int id_url, List<string> list_Idtestcase, string id_result, string id_user)
-    {
-        var user = _context.AspNetUsers.Find(id_user);
-        var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
-        var testcases = await _context.Result_testcase.Include(d => d.id_).Include(i => i.Input_Result_test).Include(p => p.Test_element_Result_test).Where(p => p.id_url == id_url && p.id_result == id_result).ToListAsync();
-        TestcaseExcel testcaseExcel = new TestcaseExcel();
-        var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases);
-        byte[] fileContents;
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-        var stream = new MemoryStream();
-        string filename = "Testcase-" + DateTime.Now.ToString("MM-dd-yyyy") + "-" + Generate_RandomString(5) + ".xlsx";
-        var path = Path.Combine(Directory.GetCurrentDirectory(), Constants.EXCEL_FILE, filename);
-        using (var package = new ExcelPackage())
-        {
-            var worksheet = package.Workbook.Worksheets.Add("Test case");
-            package.Workbook.Properties.Author = "Genergate testcase web";
-            //worksheet.Cells["A2"].LoadFromCollection<TestcaseExcel>(testcaseExcels, true);
-            worksheet.Cells[1, 1].Value = "Url: " + url.url1;
-            BindingFormatForExcel(worksheet, testcaseExcels);
-            fileContents = package.GetAsByteArray();
-            System.IO.File.WriteAllBytes(path, fileContents);// save to dissk
-
-        }
-
-
-        if (fileContents == null || fileContents.Length == 0)
-        {
-
-        }
-        else
-        {
-            string emailcontent = "Thank you for using our service. " +
-                       "The excel file has been attached below.";
-            await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
-            //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
-        }
-
-
-    }
-    private void BindingFormatForExcel(ExcelWorksheet worksheet, List<TestcaseExcel> listItems)
-    {
-        // Set default width cho tất cả column
-        //worksheet.DefaultColWidth = 10;
-        worksheet.Cells["A1:C1"].Merge = true;
-        worksheet.Cells[1, 1].Style.Font.SetFromFont(new Font("Arial", 14));
-        worksheet.Column(1).Width = 50;
-        worksheet.Column(2).Width = 50;
-        worksheet.Column(3).Width = 30;
-        worksheet.Column(4).Width = 30;
-        worksheet.Column(5).Width = 150;
-        worksheet.Column(6).Width = 150;
-        worksheet.Column(7).Width = 150;
-        worksheet.Cells[2, 1].Value = "No.";
-        worksheet.Cells[2, 2].Value = "Test case";
-        worksheet.Cells[2, 3].Value = "Description";
-        worksheet.Cells[2, 4].Value = "Result";
-        worksheet.Cells[2, 5].Value = "Test Data";
-        worksheet.Cells[2, 6].Value = "Test Elements";
-        worksheet.Cells[2, 7].Value = "Result Test Elements";
-        // Tự động xuống hàng khi text quá dài
-        worksheet.Cells.Style.WrapText = true;
-        // Tạo header
-
-        // Lấy range vào tạo format cho range đó ở đây là từ A1 tới D1
-        using (var range = worksheet.Cells["A2:G2"])
-        {
-            // Set PatternType
-            //range.Style.Fill.PatternType = ExcelFillStyle.;
-            // Set Màu cho Background
-            // range.Style.Fill.BackgroundColor.SetColor(Color.Gray);
-            // Canh giữa cho các text
-            range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            // Set Font cho text  trong Range hiện tại
-            range.Style.Font.SetFromFont(new Font("Arial", 12));
-            // Set Border
-            range.Style.Border.Bottom.Style = ExcelBorderStyle.Thick;
-            // Set màu ch Border
-            range.Style.Border.Bottom.Color.SetColor(Color.Blue);
-        }
-
-        // Đỗ dữ liệu từ list vào 
-        for (int i = 0; i < listItems.Count; i++)
-        {
-            var item = listItems[i];
-            worksheet.Cells[i + 3, 1].Value = i + 1;
-            worksheet.Cells[i + 3, 2].Value = item.Id_testcase;
-            worksheet.Cells[i + 3, 3].Value = item.Description;
-            worksheet.Cells[i + 3, 4].Value = item.Result;
-            worksheet.Cells[i + 3, 5].Value = item.TestData;
-            worksheet.Cells[i + 3, 6].Value = item.TestElement;
-            worksheet.Cells[i + 3, 7].Value = item.ResultTestElement;
-
-            worksheet.Cells[i + 3, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            worksheet.Cells[i + 3, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            worksheet.Cells[i + 3, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            worksheet.Cells[i + 3, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            worksheet.Cells[i + 3, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells[i + 3, 2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells[i + 3, 3].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            worksheet.Cells[i + 3, 4].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            // Format lại color nếu như thỏa điều kiện
-            // Ở đây chúng ta sẽ format lại theo dạng fromRow,fromCol,toRow,toCol
-            using (var range = worksheet.Cells[i + 3, 4])
-            {
-                // Format text đỏ và đậm
-                if (item.Result == "Pass")
+                var trigger = driver.FindElementByXPath(URL.trigger_element);
+                if (trigger.Displayed)
                 {
-                    range.Style.Font.Color.SetColor(Color.Green);
+                    trigger.Click();
                 }
-                else if (item.Result == "Skip")
+            }
+            foreach (var inputtest in list_inputtest)
+            {
+                switch (inputtest.action)
                 {
-                    range.Style.Font.Color.SetColor(Color.Blue);
-                }
-                else
-                {
-                    range.Style.Font.Color.SetColor(Color.Red);
+
+                    case "fill":
+                        {
+                            try
+                            {
+                                var fill = driver.FindElementByXPath(inputtest.xpath);
+                                if (fill.Displayed)
+                                {
+                                    fill.Click();
+                                    fill.SendKeys(inputtest.value);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+
+                            break;
+                        }
+                    case "select":
+                        {
+                            try
+                            {
+                                var select = driver.FindElementByXPath(inputtest.xpath);
+                                var selectElement = new SelectElement(select);
+
+                                selectElement.SelectByValue(inputtest.value);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            break;
+                        }
+                    case "click":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.Message.Equals("element not interactable"))
+                                {
+
+                                }
+                            }
+
+                            break;
+                        }
+                    case "check":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                    case "submit":
+                        {
+                            try
+                            {
+                                driver.FindElementByXPath(inputtest.xpath).Click();
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
                 }
 
-                range.Style.Font.Bold = true;
+            }
+
+            return_url = driver.Url;
+
+
+            return return_url;
+        }
+        public async Task<string> RunPrerequesiteTestcase(FirefoxDriver driver, int id_url, string id_testcase)
+        {
+            string return_url = "";
+            var _context = new ElementDBContext();
+            var Testcase = await _context.Test_case.Where(p => p.id_testcase == id_testcase && p.id_url == id_url).SingleOrDefaultAsync();
+            Url URL = _context.Url.Where(p => p.id_url == id_url).SingleOrDefault();
+            string url = URL.url1;
+            var list_inputtest = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).OrderBy(p => p.test_step).ToList();
+
+            if (Testcase.id_prerequisite_testcase != null)
+            {
+                return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
+            }
+            driver.Url = url;
+            driver.Navigate();
+            if (URL.trigger_element != null && URL.trigger_element != "")
+            {
+                var trigger = driver.FindElementByXPath(URL.trigger_element);
+                if (trigger.Displayed)
+                {
+                    trigger.Click();
+                }
+            }
+            foreach (var inputtest in list_inputtest)
+            {
+                switch (inputtest.action)
+                {
+
+                    case "fill":
+                        {
+                            try
+                            {
+                                var fill = driver.FindElementByXPath(inputtest.xpath);
+                                if (fill.Displayed)
+                                {
+                                    fill.Click();
+                                    fill.SendKeys(inputtest.value);
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+
+                            break;
+                        }
+                    case "select":
+                        {
+                            try
+                            {
+                                var select = driver.FindElementByXPath(inputtest.xpath);
+                                var selectElement = new SelectElement(select);
+
+                                selectElement.SelectByValue(inputtest.value);
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            break;
+                        }
+                    case "click":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+                                if (e.Message.Equals("element not interactable"))
+                                {
+
+                                }
+                            }
+
+                            break;
+                        }
+                    case "check":
+                        {
+                            try
+                            {
+                                var click = driver.FindElementByXPath(inputtest.xpath);
+                                click.Click();
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                    case "submit":
+                        {
+                            try
+                            {
+                                driver.FindElementByXPath(inputtest.xpath).Click();
+
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+
+                            break;
+                        }
+                }
+
+            }
+
+            return_url = driver.Url;
+
+
+            return return_url;
+        }
+        private ChromeDriver SetUpDriver()
+        {
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+
+            var options = new ChromeOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            options.AddArgument("no-sandbox");
+            options.AddArgument("proxy-server='direct://'");
+            options.AddArgument("proxy-bypass-list=*");
+            ChromeDriver chromedriver = new ChromeDriver(service, options);
+            //The HTTP request to the remote WebDriver server for URL 
+            return chromedriver;
+        }
+        private FirefoxDriver SetUpDriverFireFox()
+        {
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;//hide commandPromptWindow
+
+            var options = new FirefoxOptions();
+            //options.AddArgument("--window-position=-32000,-32000");//hide chrome tab
+            //options.AddArgument("headless");
+            //ChromeDriver drv = new ChromeDriver(ChromeDriverService.CreateDefaultService(), options, TimeSpan.FromMinutes(3));
+            //drv.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(30));
+            //options.AddArgument("no-sandbox");
+            //options.AddArgument("proxy-server='direct://'");
+            //options.AddArgument("proxy-bypass-list=*");
+            FirefoxDriver firefoxdriver = new FirefoxDriver(service, options);
+
+            //The HTTP request to the remote WebDriver server for URL 
+            return firefoxdriver;
+        }
+        #region Excel
+        // Send excel to mail
+        private async Task SendExcel(int id_url, List<string> list_Idtestcase, string id_user)
+        {
+            var user = _context.AspNetUsers.Find(id_user);
+            var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
+            var testcases = await _context.Test_case.Include(i => i.Input_testcase).Include(p => p.Element_test).Where(p => p.id_url == id_url && list_Idtestcase.Contains(p.id_testcase)).ToListAsync();
+            TestcaseExcel testcaseExcel = new TestcaseExcel();
+            var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases);
+            byte[] fileContents;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var stream = new MemoryStream();
+            string filename = "Testcase-" + DateTime.Now.ToString("MM-dd-yyyy") + "-" + Generate_RandomString(5) + ".xlsx";
+            var path = Path.Combine(Directory.GetCurrentDirectory(), Constants.EXCEL_FILE, filename);
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Test case");
+                package.Workbook.Properties.Author = "Genergate testcase web";
+                //worksheet.Cells["A2"].LoadFromCollection<TestcaseExcel>(testcaseExcels, true);
+                worksheet.Cells[1, 1].Value = "Url: " + url.url1;
+                BindingFormatForExcel(worksheet, testcaseExcels);
+                fileContents = package.GetAsByteArray();
+                System.IO.File.WriteAllBytes(path, fileContents);// save to dissk
+
+            }
+
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+
+            }
+            else
+            {
+                string emailcontent = "Thank you for using our service. " +
+                           "The excel file has been attached below.";
+                await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
+                //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
             }
 
 
         }
 
-    }
-    #endregion
-
-
-    #region Helper Generate
-
-    public string Generate_RandomPassword()
-    {
-        StringBuilder builder = new StringBuilder();
-        builder.Append(Generate_RandomString(4, true));
-        builder.Append(Generate_RandomSpecialString(1));
-        builder.Append(Generate_RandomNumber(1000, 9999));
-        builder.Append(Generate_RandomString(2, false));
-        return builder.ToString();
-    }
-    public string Generate_RandomEmail()
-    {
-        StringBuilder builder = new StringBuilder();
-        builder.Append(Generate_RandomString(8, true));
-        builder.Append(Generate_RandomNumber(0, 99));
-        builder.Append("@email.com");
-        return builder.ToString();
-    }
-    public string Generate_RandomStringNumberSpecialString()
-    {
-        StringBuilder builder = new StringBuilder();
-        builder.Append(Generate_RandomString(8, true));
-        builder.Append(Generate_RandomNumber(0, 99));
-        builder.Append(Generate_RandomSpecialString(2));
-        return builder.ToString();
-    }
-    public string Generate_RandomStringNumberSpecialString(Random random)
-    {
-        StringBuilder builder = new StringBuilder();
-        builder.Append(Generate_RandomString(random, 8, true));
-        builder.Append(Generate_RandomSpecialString(random, 2));
-        builder.Append(Generate_RandomNumber(random, 0, 100));
-        builder.Append(Generate_RandomString(random, 3, true));
-        return builder.ToString();
-    }
-    public string Generate_RandomString(int size, bool lowerCase = true)
-    {
-        StringBuilder builder = new StringBuilder();
-        Thread.Sleep(10);
-        Random random = new Random();
-        char ch;
-        for (int i = 0; i < size; i++)
+        public async Task SendExcelBackground(int id_url, List<string> list_Idtestcase, string id_result, string id_user)
         {
-            ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
-            builder.Append(ch);
-        }
-        if (lowerCase)
-            return builder.ToString().ToLower();
-        return builder.ToString();
-    }
-    public string Generate_RandomString(Random random, int size, bool lowerCase = true)
-    {
-        StringBuilder builder = new StringBuilder();
-        Thread.Sleep(10);
+            var user = _context.AspNetUsers.Find(id_user);
+            var url = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
+            var testcases = await _context.Result_testcase.Include(d => d.id_).Include(i => i.Input_Result_test).Include(p => p.Test_element_Result_test).Where(p => p.id_url == id_url && p.id_result == id_result).ToListAsync();
+            var alert = await _context.Result_AlertMessage.Where(p => p.id_result == id_result).SingleOrDefaultAsync();
+            var redirect = await _context.Result_Url.Where(p => p.id_result == id_result).SingleOrDefaultAsync();
+            TestcaseExcel testcaseExcel = new TestcaseExcel();
+            var testcaseExcels = testcaseExcel.ConvertToTestcaseExcel(testcases, alert, redirect);
+            byte[] fileContents;
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var stream = new MemoryStream();
+            string filename = "Testcase-" + DateTime.Now.ToString("MM-dd-yyyy") + "-" + Generate_RandomString(5) + ".xlsx";
+            var path = Path.Combine(Directory.GetCurrentDirectory(), Constants.EXCEL_FILE, filename);
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Test case");
+                package.Workbook.Properties.Author = "Genergate testcase web";
+                //worksheet.Cells["A2"].LoadFromCollection<TestcaseExcel>(testcaseExcels, true);
+                worksheet.Cells[1, 1].Value = "Url: " + url.url1;
+                BindingFormatForExcel(worksheet, testcaseExcels);
+                fileContents = package.GetAsByteArray();
+                System.IO.File.WriteAllBytes(path, fileContents);// save to dissk
 
-        char ch;
-        for (int i = 0; i < size; i++)
-        {
-            ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
-            builder.Append(ch);
-        }
-        if (lowerCase)
-            return builder.ToString().ToLower();
-        return builder.ToString();
-    }
-    public string Generate_RandomSpecialString(int size)
-    {
-        StringBuilder builder = new StringBuilder();
-        Random random = new Random();
-        char ch;
-        for (int i = 0; i < size; i++)
-        {
-            ch = Convert.ToChar(
-               listSpecialCharacter[random.Next(0, 20)]);
-            builder.Append(ch);
-        }
-        return builder.ToString();
-    }
-    public string Generate_RandomSpecialString(Random random, int size)
-    {
-        StringBuilder builder = new StringBuilder();
-        char ch;
-        for (int i = 0; i < size; i++)
-        {
-            ch = Convert.ToChar(
-               listSpecialCharacter[random.Next(0, 20)]);
-            builder.Append(ch);
-        }
-        return builder.ToString();
-    }
-    public int Generate_RandomNumber(int min, int max)
-    {
-        Random random = new Random();
-        return random.Next(min, max);
-    }
-    public int Generate_RandomNumber(Random random, int min, int max)
-    {
+            }
 
-        return random.Next(min, max);
-    }
 
-    #endregion
-}
+            if (fileContents == null || fileContents.Length == 0)
+            {
+
+            }
+            else
+            {
+                string emailcontent = "Thank you for using our service. " +
+                           "The excel file has been attached below.";
+                await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
+                //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
+            }
+
+
+        }
+        private void BindingFormatForExcel(ExcelWorksheet worksheet, List<TestcaseExcel> listItems)
+        {
+            // Set default width cho tất cả column
+            //worksheet.DefaultColWidth = 10;
+            worksheet.Cells["A1:C1"].Merge = true;
+            worksheet.Cells[1, 1].Style.Font.SetFromFont(new Font("Arial", 14));
+            worksheet.Column(1).Width = 50;
+            worksheet.Column(2).Width = 50;
+            worksheet.Column(3).Width = 30;
+            worksheet.Column(4).Width = 30;
+            worksheet.Column(5).Width = 150;
+            worksheet.Column(6).Width = 150;
+            worksheet.Column(7).Width = 150;
+            worksheet.Cells[2, 1].Value = "No.";
+            worksheet.Cells[2, 2].Value = "Test case";
+            worksheet.Cells[2, 3].Value = "Description";
+            //worksheet.Cells[2, 4].Value = "Actural results";
+            worksheet.Cells[2, 4].Value = "Results";
+            //worksheet.Cells[2, 5].Value = "Test Data";
+            worksheet.Cells[2, 5].Value = "Test steps";
+            //worksheet.Cells[2, 6].Value = "Test Elements";
+            worksheet.Cells[2, 6].Value = "Expected results";
+            worksheet.Cells[2, 7].Value = "Actural results";
+            // Tự động xuống hàng khi text quá dài
+            worksheet.Cells.Style.WrapText = true;
+            // Tạo header
+
+            // Lấy range vào tạo format cho range đó ở đây là từ A1 tới D1
+            using (var range = worksheet.Cells["A2:G2"])
+            {
+                // Set PatternType
+                //range.Style.Fill.PatternType = ExcelFillStyle.;
+                // Set Màu cho Background
+                // range.Style.Fill.BackgroundColor.SetColor(Color.Gray);
+                // Canh giữa cho các text
+                range.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                // Set Font cho text  trong Range hiện tại
+                range.Style.Font.SetFromFont(new Font("Arial", 12));
+                // Set Border
+                range.Style.Border.Bottom.Style = ExcelBorderStyle.Thick;
+                // Set màu ch Border
+                range.Style.Border.Bottom.Color.SetColor(Color.Blue);
+            }
+
+            // Đỗ dữ liệu từ list vào 
+            for (int i = 0; i < listItems.Count; i++)
+            {
+                var item = listItems[i];
+                worksheet.Cells[i + 3, 1].Value = i + 1;
+                worksheet.Cells[i + 3, 2].Value = item.Id_testcase;
+                worksheet.Cells[i + 3, 3].Value = item.Description;
+                worksheet.Cells[i + 3, 4].Value = item.Result;
+                worksheet.Cells[i + 3, 5].Value = item.TestData;
+                worksheet.Cells[i + 3, 6].Value = item.TestElement;
+                worksheet.Cells[i + 3, 7].Value = item.ResultTestElement;
+
+                worksheet.Cells[i + 3, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[i + 3, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[i + 3, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[i + 3, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[i + 3, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                worksheet.Cells[i + 3, 2].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                worksheet.Cells[i + 3, 3].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                worksheet.Cells[i + 3, 4].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                // Format lại color nếu như thỏa điều kiện
+                // Ở đây chúng ta sẽ format lại theo dạng fromRow,fromCol,toRow,toCol
+                using (var range = worksheet.Cells[i + 3, 4])
+                {
+                    // Format text đỏ và đậm
+                    if (item.Result == "Pass")
+                    {
+                        range.Style.Font.Color.SetColor(Color.Green);
+                    }
+                    else if (item.Result == "Skip")
+                    {
+                        range.Style.Font.Color.SetColor(Color.Blue);
+                    }
+                    else
+                    {
+                        range.Style.Font.Color.SetColor(Color.Red);
+                    }
+
+                    range.Style.Font.Bold = true;
+                }
+
+
+            }
+
+        }
+        #endregion
+
+
+        #region Helper Generate
+
+        public string Generate_RandomPassword()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(Generate_RandomString(4, true));
+            builder.Append(Generate_RandomSpecialString(1));
+            builder.Append(Generate_RandomNumber(1000, 9999));
+            builder.Append(Generate_RandomString(2, false));
+            return builder.ToString();
+        }
+        public string Generate_RandomEmail()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(Generate_RandomString(8, true));
+            builder.Append(Generate_RandomNumber(0, 99));
+            builder.Append("@email.com");
+            return builder.ToString();
+        }
+        public string Generate_RandomStringNumberSpecialString()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(Generate_RandomString(8, true));
+            builder.Append(Generate_RandomNumber(0, 99));
+            builder.Append(Generate_RandomSpecialString(2));
+            return builder.ToString();
+        }
+        public string Generate_RandomStringNumberSpecialString(Random random)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(Generate_RandomString(random, 8, true));
+            builder.Append(Generate_RandomSpecialString(random, 2));
+            builder.Append(Generate_RandomNumber(random, 0, 100));
+            builder.Append(Generate_RandomString(random, 3, true));
+            return builder.ToString();
+        }
+        public string Generate_RandomString(int size, bool lowerCase = true)
+        {
+            StringBuilder builder = new StringBuilder();
+            Thread.Sleep(10);
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
+        }
+        public string Generate_RandomString(Random random, int size, bool lowerCase = true)
+        {
+            StringBuilder builder = new StringBuilder();
+            Thread.Sleep(10);
+
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
+        }
+        public string Generate_RandomSpecialString(int size)
+        {
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(
+                   listSpecialCharacter[random.Next(0, 20)]);
+                builder.Append(ch);
+            }
+            return builder.ToString();
+        }
+        public string Generate_RandomSpecialString(Random random, int size)
+        {
+            StringBuilder builder = new StringBuilder();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(
+                   listSpecialCharacter[random.Next(0, 20)]);
+                builder.Append(ch);
+            }
+            return builder.ToString();
+        }
+        public int Generate_RandomNumber(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max);
+        }
+        public int Generate_RandomNumber(Random random, int min, int max)
+        {
+
+            return random.Next(min, max);
+        }
+
+        #endregion
+    }
 }
