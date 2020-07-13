@@ -155,7 +155,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
 
             }
-
+            else
+            {
+                StatusMessage = "Crawling data error";
+            }
             return RedirectToAction(nameof(Index), new RouteValueDictionary(new
             {
                 id_url = id_url
@@ -195,7 +198,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     prerequisite_url = prerequisite_url
                 }));
             }
-
+            else
+            {
+                StatusMessage = "Crawling data error";
+            }
             return RedirectToAction("Elements_SubTestcase", "Manage", new RouteValueDictionary(new
             {
                 id_url = id_url,
@@ -213,8 +219,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 // usertesstvf
                 SetUpDriver(Url);
+                chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+                chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
                 if (URL.trigger_element != null && URL.trigger_element != "")
                 {
+                    
                     var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
                     if (trigger.Displayed)
                     {
@@ -299,6 +308,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var URL = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
             int flag = 0;
             ChromeDriver Chromedriver = null;
+            Chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+            Chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
             try
             {
 
@@ -325,6 +336,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
                 if (URL.trigger_element != null && URL.trigger_element != "")
                 {
+                    
                     var trigger = Chromedriver.FindElementByXPath(URL.trigger_element);
                     if (trigger.Displayed)
                     {
@@ -417,6 +429,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             driver.Url = url;
             driver.Navigate();
+            driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+            driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
             if (URL.trigger_element != null && URL.trigger_element != "")
             {
                 var trigger = driver.FindElementByXPath(URL.trigger_element);
@@ -995,6 +1009,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var list_output = _context.Element_test.Where(p => p.id_url == id_url && p.id_testcase == id_testcase).ToList();
             driver.Url = url;
             driver.Navigate();
+            driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+            driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
             foreach (var inputtest in list_inputtest)
             {
                 switch (inputtest.action)

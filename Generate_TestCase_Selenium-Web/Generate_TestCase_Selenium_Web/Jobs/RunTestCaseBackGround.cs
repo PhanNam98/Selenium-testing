@@ -184,6 +184,8 @@ namespace Generate_TestCase_Selenium_Web.Jobs
 
                     //ChromeDriver chromedriver = SetUpDriver(url);
                     ChromeDriver chromedriver = null;
+                    chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20)); 
+                    chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
                     if (Testcase.id_prerequisite_testcase != null)
                     {
                         chromedriver = SetUpDriver();
@@ -597,6 +599,8 @@ namespace Generate_TestCase_Selenium_Web.Jobs
 
                     //FirefoxDriver firefoxdriver = SetUpDriverFireFox(url);
                     FirefoxDriver firefoxdriver = null;
+                    firefoxdriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+                    firefoxdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
                     if (Testcase.id_prerequisite_testcase != null)
                     {
                         firefoxdriver = SetUpDriverFireFox();
@@ -1076,8 +1080,11 @@ namespace Generate_TestCase_Selenium_Web.Jobs
             {
                 return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
             }
+            driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
             driver.Url = url;
             driver.Navigate();
+            
             if (URL.trigger_element != null && URL.trigger_element != "")
             {
                 var trigger = driver.FindElementByXPath(URL.trigger_element);
@@ -1193,8 +1200,11 @@ namespace Generate_TestCase_Selenium_Web.Jobs
             {
                 return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
             }
+            driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
             driver.Url = url;
             driver.Navigate();
+          
             if (URL.trigger_element != null && URL.trigger_element != "")
             {
                 var trigger = driver.FindElementByXPath(URL.trigger_element);

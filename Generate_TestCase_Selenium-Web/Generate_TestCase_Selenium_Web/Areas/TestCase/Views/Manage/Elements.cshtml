@@ -44,7 +44,7 @@
                         <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#Delete">Delete Element(s)</button>
                         <button type="button" name="generatebtn" id="btn-generate" class="btn btn-custon-rounded-three btn-success btn-xs" onclick="Generate_by_id();">Generate from element selected</button>
                         <a role="button" class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
-                           title="Generate test case" onclick="ShowProgress()" asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })">Create Testcase</a>
+                           title="Generate test case" onclick="ShowProgress()" asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })">Generate Testcase</a>
                         @*@{
 
             if (ViewBag.Nosubmit == true)
@@ -135,7 +135,7 @@
                     }
                 }
                 <div class="row form-group">
-                    @* <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#Delete">Delete Element(s)</button>*@
+                   
                     <!-- Modal -->
                     <div class="modal fade" id="Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="center">
@@ -176,7 +176,7 @@
             <input id="isGenerate" name="isGenerate" value="false" hidden readonly />
             <input id="returnUrl" name="returnUrl" value="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" hidden readonly />
             <div class="table-responsive">
-                <table id="elttable" class="table table-striped table-condensed table-hover table-bordered">
+                <table id="elttable" class="table table-striped table-condensed table-hover table-bordered" width="100%">
                     <thead>
                         <tr>
                             <th><input type="checkbox" id="checkall" /></th>
@@ -297,9 +297,10 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 @{
-                                                                    if ((item.tag_name == "a" || item.tag_name == "button") && (item.href == null
+                                                                    if ((item.tag_name == "a" || item.tag_name == "button") 
+                                                                        //&& (item.href == null
                                                                         //|| !item.href.Contains("/")
-                                                                        )
+                                                                        //)
                                                                         && item.type != "submit")
                                                                     {
                                                                         <button type="submit" class="btn btn-primary">Set type submit</button>
@@ -334,7 +335,7 @@
                 "lengthMenu": [[5, 10, 25, 50, - 1], [5, 10, 25, 50, "All record"]],
                 //"ordering": false,
                 "scrollY": "400px",
-                "scrollX": "400px",
+                "scrollX": true,
                 "scrollCollapse": true,
                 "paging": false,
                 initComplete: function () {

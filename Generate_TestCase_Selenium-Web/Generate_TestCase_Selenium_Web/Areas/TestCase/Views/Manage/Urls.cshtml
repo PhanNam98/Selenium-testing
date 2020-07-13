@@ -53,9 +53,9 @@
                         </div>
                     </div>
                     @*<div class="form-group">
-                        <input type="checkbox" id="IsGetTagA" name="IsGetTagA" checked value="true"> <label for="vehicle1">Retrieve the links in the website</label><br>
+                            <input type="checkbox" id="IsGetTagA" name="IsGetTagA" checked value="true"> <label for="vehicle1">Retrieve the links in the website</label><br>
 
-                    </div>*@
+                        </div>*@
                     <div class="row form-group">
                         <div class="col col-md-3">@Html.Label("Trigger element") </div>
                         <div class="col-12 col-md-9">
@@ -63,7 +63,7 @@
 
                         </div>
                         @*<label class="control-label">Trigger element</label>
-            <input class="form-control" id="trigger_element" name="trigger_element" placeholder="E.g: /html/div/div/a"> <br>*@
+                            <input class="form-control" id="trigger_element" name="trigger_element" placeholder="E.g: /html/div/div/a"> <br>*@
 
                     </div>
 
@@ -82,7 +82,7 @@
 <partial name="~/Views/Shared/_StatusMessage.cshtml" model="@ViewBag.Message" />
 <div class="card mb-4">
     <div class="card-header">
-       
+
         <div class="row">
             <div class="col-2">
                 <i class="fas fa-table mr-1"></i>Urls list
@@ -95,7 +95,7 @@
                 </div>
             </div>
         </div>
-    
+
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -115,8 +115,8 @@
                             @Html.DisplayName("Created Date")
                         </th>
                         @*<th>
-                            @Html.DisplayName("Modified Date")
-                        </th>*@
+                                @Html.DisplayName("Modified Date")
+                            </th>*@
                         <th style='width: 35%;'></th>
                     </tr>
                 </thead>
@@ -137,39 +137,107 @@
                                 @Html.DisplayFor(modelItem => item.CreatedDate)
                             </td>
                             @*<td>
-                                @Html.DisplayFor(modelItem => item.ModifiedDate)
-                            </td>*@
+                                    @Html.DisplayFor(modelItem => item.ModifiedDate)
+                                </td>*@
 
-                            <td>
-                                @{ if (item.Element.Count() > 0)
+                        <td>
+                            @{ if (item.Element.Count() > 0)
+                                {
+                                    <a role="button" class="btn btn-success" asp-area="TestCase" asp-controller="Manage" asp-action="Elements" asp-route-id_url="@item.id_url">Element(s)</a>
+                                    if (item.Test_case.Count() ==0)
                                     {
-                                        <a role="button" class="btn btn-success" asp-area="TestCase" asp-controller="Manage" asp-action="Elements" asp-route-id_url="@item.id_url">Element(s)</a>
+                                        var de = "de" + item.id_url;
+                                        <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#@de">Delete</button>
+                                        <div class="modal fade" id="@de" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="center">
+                                                <div class="modal-dialog modal-dialog-center" role="document">
+                                                    <div class="modal-content">
+
+                                                        @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Delete url</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+
+                                                            <div class="row form-group">
+                                                                <div class="col col-md-12">Are you sure?</div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a role="button" class="btn btn-secondary" asp-action="DeleteUrl" asp-controller="Manage" asp-route-id_url="@item.id_url"
+                                                               asp-route-project_id="@ViewBag.project_id"
+                                                               asp-route-returnUrl="@Url.Action("Urls", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })">I sure</a>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     }
 
-                                    else
-                                    {
-                                        <a role="button" class="btn btn-primary" asp-area="TestCase" asp-controller="CrawlElements" asp-action="CrawlElt" asp-route-id_url="@item.id_url"
-                                           asp-route-IsOnlyDislayed="true" title="Crawl elements to web" onclick="crawldata()"
-                                           asp-route-returnUrl="@Url.Action("Urls", "Manage", new { area = "TestCase", project_id = @ViewBag.project_id })">Crawl Element(s)</a>
-                                    }
-                                    if (item.Test_case.Count() > 0)
-                                    {
-                                        <a role="button" class="btn btn-success" asp-area="TestCase" asp-controller="Manage" asp-action="Testcases" asp-route-id_url="@item.id_url">Test case(s)</a>
 
-                                    }
-                                    else
-                                             if (item.Test_case.Count() == 0 && item.Element.Count() > 0)
-                                    {
-                                        @*<a role="button" class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url"
-                                           title="Generate test case" onclick="ShowProgress()" asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = item.id_url })">Create Testcase</a>*@
+                                }
 
-                                    }
+                                else
+                                {
+                                    <a role="button" class="btn btn-primary" asp-area="TestCase" asp-controller="CrawlElements" asp-action="CrawlElt" asp-route-id_url="@item.id_url"
+                                       asp-route-IsOnlyDislayed="true" title="Crawl elements to web" onclick="crawldata()"
+                                       asp-route-returnUrl="@Url.Action("Urls", "Manage", new { area = "TestCase", project_id = @ViewBag.project_id })">Crawl Element(s)</a>
+                                    var de = "de" + item.id_url;
+                                    <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#@de">Delete</button>
+                                    <div class="modal fade" id="@de" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="center">
+                                            <div class="modal-dialog modal-dialog-center" role="document">
+                                                <div class="modal-content">
+
+                                                    @Html.ValidationSummary(true, null, new { @class = "alert alert-block alert-danger fade in" })
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Delete url</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                        <div class="row form-group">
+                                                            <div class="col col-md-12">Are you sure?</div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a role="button" class="btn btn-secondary" asp-action="DeleteUrl" asp-controller="Manage" asp-route-id_url="@item.id_url" asp-route-project_id="@ViewBag.project_id"
+                                                           asp-route-returnUrl="@Url.Action("Urls", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })">I sure</a>
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                if (item.Test_case.Count() > 0)
+                                {
+                                    <a role="button" class="btn btn-success" asp-area="TestCase" asp-controller="Manage" asp-action="Testcases" asp-route-id_url="@item.id_url">Test case(s)</a>
+
+                                }
+                                else
+                                 if (item.Test_case.Count() == 0 && item.Element.Count() > 0)
+                                {
                                     @*<a role="button" class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url"
-                                       title="Generate test case" onclick="ShowProgress()" asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url= item.id_url })">Create Testcase</a>
+                title="Generate test case" onclick="ShowProgress()" asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = item.id_url })">Create Testcase</a>*@
+
+                                }
+                                @*<a role="button" class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@item.id_url"
+            title="Generate test case" onclick="ShowProgress()" asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url= item.id_url })">Create Testcase</a>
                                 *@
-                                    }
-                            </td>
+                            }
+                        </td>
                         </tr>
                     }
                 </tbody>

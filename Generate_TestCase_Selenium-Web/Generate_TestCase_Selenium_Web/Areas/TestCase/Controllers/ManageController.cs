@@ -218,7 +218,45 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //    prerequisite_testcase= id_testcase
             //});
         }
-       
+
+        public async Task<IActionResult> DeleteUrl(int id_url, string returnUrl, int project_id)
+        {
+            
+           
+            try
+            {
+                var url = await _context.Url.Include(o=>o.Element).Include(p=>p.Form_elements).Where(p => p.id_url == id_url && p.project_id==project_id).SingleOrDefaultAsync();
+               if(url.Element!=null)
+                {
+                    _context.Element.RemoveRange(url.Element);
+                    
+                }
+                if (url.Form_elements != null)
+                {
+                    _context.Form_elements.RemoveRange(url.Form_elements);
+
+                }
+                if (url != null)
+                {
+                    _context.Url.Remove(url);
+                }
+
+
+                 _context.SaveChanges();
+                StatusMessage = "Delete successfully";
+            }
+            catch(Exception e)
+            {
+                var a = e.Message;
+                StatusMessage = "Delete failed";
+            }
+            return RedirectToAction(nameof(Urls), new RouteValueDictionary(new
+            {
+                id_url = id_url,
+                project_id= project_id
+
+            }));
+        }
         #endregion
 
         #region Elements
@@ -311,7 +349,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(listelt);
 
         }
-        public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete,bool isGenerate,string returnUrl, string prerequisite_testcase, int prerequisite_url)
+        public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete,bool isGenerate, string returnUrl, string prerequisite_testcase, int prerequisite_url)
         {
             if(isGenerate)
             {
@@ -344,14 +382,36 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 StatusMessage = "Delete failed";
             }
+            if(prerequisite_testcase!=null && prerequisite_url!=-1)
+            {
+                return RedirectToAction(nameof(Elements_SubTestcase), new RouteValueDictionary(new
+                {
+                    id_url = id_url,
+                      prerequisite_testcase = prerequisite_testcase,
+                    prerequisite_url = prerequisite_url
+                }));
+            }
             return RedirectToAction(nameof(Elements), new RouteValueDictionary(new
             {
                 id_url = id_url
 
             }));
         }
-        public async Task<IActionResult> DeleteElt(int id_url, IEnumerable<string> eltId_Delete, string prerequisite_testcase, int prerequisite_url)
+        public async Task<IActionResult> DeleteElt(int id_url, IEnumerable<string> eltId_Delete, bool isGenerate, string returnUrl, string prerequisite_testcase, int prerequisite_url)
         {
+            if (isGenerate)
+            {
+                return RedirectToAction("Generate_testcase_selectedElement", "GenerateTestCases", new RouteValueDictionary(new
+                {
+                    id_url = id_url,
+                    isGenerate = isGenerate,
+                    returnUrl = returnUrl,
+                    eltId = eltId_Delete,
+                    prerequisite_testcase = prerequisite_testcase,
+                    prerequisite_url = prerequisite_url
+
+                }));
+            }
             if (eltId_Delete == null)
             {
                 return NotFound();

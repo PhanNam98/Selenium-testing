@@ -2736,6 +2736,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 ChromeDriver chromedriver = SetUpDriver(url);
                 if (URL.trigger_element != null || URL.trigger_element != "")
                 {
+                    chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
                     var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
                     if (trigger.Displayed)
                     {
@@ -3055,6 +3056,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 FirefoxDriver firefoxdriver = SetUpDriverFireFox(url);
                 if (URL.trigger_element != null || URL.trigger_element != "")
                 {
+                    firefoxdriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
                     var trigger = firefoxdriver.FindElementByXPath(URL.trigger_element);
                     if (trigger.Displayed)
                     {
@@ -3401,6 +3403,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     if (Testcase.id_prerequisite_testcase != null)
                     {
                         chromedriver = SetUpDriver();
+                        chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
                         var r_url = await RunPrerequesiteTestcase(chromedriver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
                         if (URL.IsChange == false)
                         {
@@ -3412,9 +3415,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     {
                         chromedriver = SetUpDriver(url);
                     }
-
+                    chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
                     if (URL.trigger_element != null && URL.trigger_element != "")
                     {
+                      
                         var trigger = chromedriver.FindElementByXPath(URL.trigger_element);
                         if (trigger.Displayed)
                         {
@@ -3441,6 +3445,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     try
                                     {
+                                       
                                         var fill = chromedriver.FindElementByXPath(inputtest.xpath);
                                         if (fill.Displayed)
                                         {
@@ -3449,7 +3454,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                         }
 
                                     }
-                                    catch (Exception e)
+                                    catch
                                     {
                                         //if (e.Message.Equals("element not interactable"))
                                         //{
@@ -3464,6 +3469,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     try
                                     {
+                                        
                                         var select = chromedriver.FindElementByXPath(inputtest.xpath);
                                         var selectElement = new SelectElement(select);
                                         //int CountallSelectedOptions = selectElement.AllSelectedOptions.Count();
@@ -3472,12 +3478,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                         //selectElement.SelectByIndex(int.Parse(inputtest.value));
                                         selectElement.SelectByValue(inputtest.value);
                                     }
-                                    catch (Exception e)
+                                    catch 
                                     {
-                                        if (e.Message.Equals("element not interactable"))
-                                        {
-
-                                        }
+                                        
                                     }
                                     break;
                                 }
@@ -3485,6 +3488,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     try
                                     {
+                                       
                                         var click = chromedriver.FindElementByXPath(inputtest.xpath);
                                         click.Click();
                                     }
@@ -3502,6 +3506,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     try
                                     {
+                                        
                                         var click = chromedriver.FindElementByXPath(inputtest.xpath);
                                         click.Click();
                                     }
@@ -3519,6 +3524,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     try
                                     {
+                                       
                                         chromedriver.FindElementByXPath(inputtest.xpath).Click();
 
                                     }
@@ -3591,6 +3597,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                                     {
+                                        
                                         testelt = chromedriver.FindElementByXPath(outputtest.xpath);
                                         test_Element_Result_Test.xpath = outputtest.xpath;
                                         string vt;
@@ -3625,7 +3632,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                             if (testDisplayed.Displayed)
                                             {
                                                 testDisplayed.Click();
-                                                chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                              
                                                 if (chromedriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                                                 {
 
@@ -3701,7 +3708,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                             if (testDisplayed.Displayed)
                                             {
                                                 testDisplayed.Click();
-                                                chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                               
                                                 if (chromedriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
                                                 {
                                                     testelt = chromedriver.FindElementByXPath(outputtest.xpath_full);
@@ -3748,12 +3755,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             catch
                             {
                                 isSkip++;
-                                logmessage += "Not found element with xpath: " + outputtest.xpath != null ? outputtest.xpath : outputtest.xpath_full + "\n";
+                                logmessage += "Error when found element with xpath: " + outputtest.xpath != null ? outputtest.xpath : outputtest.xpath_full + "\n";
                             }
                             test_Element_Result_Test.value = DataResult;
                             _context.Test_element_Result_test.Add(test_Element_Result_Test);
-                            outputtest.value_return = DataResult;
-                            _context.Element_test.Update(outputtest);
+                            //outputtest.value_return = DataResult;
+                            //_context.Element_test.Update(outputtest);
                             await _context.SaveChangesAsync();
 
                         }
@@ -3842,8 +3849,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     {
                         firefoxdriver = SetUpDriverFireFox(url);
                     }
+                    firefoxdriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+                    firefoxdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
                     if (URL.trigger_element != null && URL.trigger_element != "")
                     {
+                       
                         var trigger = firefoxdriver.FindElementByXPath(URL.trigger_element);
                         if (trigger.Displayed)
                         {
@@ -3869,7 +3879,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     try
                                     {
-
+                                       
                                         var fill = firefoxdriver.FindElementByXPath(inputtest.xpath);
                                         if (fill.Displayed)
                                         {
@@ -3902,6 +3912,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                         //int index = random.Next(0, CountallSelectedOptions + 1);
                                         ////selectElement.SelectByIndex(int.Parse(inputtest.value));
                                         //selectElement.SelectByIndex(index);
+                                        
                                         var select = firefoxdriver.FindElementByXPath(inputtest.xpath);
                                         var selectElement = new SelectElement(select);
                                         selectElement.SelectByValue(inputtest.value);
@@ -3920,6 +3931,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     try
                                     {
+                                       
                                         var click = firefoxdriver.FindElementByXPath(inputtest.xpath);
                                         click.Click();
                                     }
@@ -3954,6 +3966,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     try
                                     {
+                                       
                                         firefoxdriver.FindElementByXPath(inputtest.xpath).Click();
 
                                     }
@@ -4053,14 +4066,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     foreach (var inputtest in list_inputtest)
                                     {
+                                        
                                         var testDisplayed = firefoxdriver.FindElementByXPath(inputtest.xpath);
                                         if (testDisplayed.Displayed)
                                         {
+                                          
                                             testDisplayed.Click();
-                                            firefoxdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                          
                                             if (firefoxdriver.FindElementsByXPath(outputtest.xpath).Count() > 0)
                                             {
-
+                                               
                                                 testelt = firefoxdriver.FindElementByXPath(outputtest.xpath);
                                                 test_Element_Result_Test.xpath = outputtest.xpath;
                                                 string vt = null;
@@ -4100,6 +4115,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
                                 if (firefoxdriver.FindElementsByXPath(outputtest.xpath_full).Count() > 0)
                                 {
+                                   
                                     testelt = firefoxdriver.FindElementByXPath(outputtest.xpath_full);
                                     test_Element_Result_Test.xpath = outputtest.xpath_full;
                                     string vt = null;
@@ -4130,15 +4146,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     foreach (var inputtest in list_inputtest)
                                     {
-
+                                      
                                         var testDisplayed = firefoxdriver.FindElementByXPath(inputtest.xpath);
 
                                         if (testDisplayed.Displayed)
                                         {
                                             testDisplayed.Click();
-                                            firefoxdriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                                          
                                             if (firefoxdriver.FindElementsByXPath(outputtest.xpath_full).Count > 0)
                                             {
+                                              
                                                 testelt = firefoxdriver.FindElementByXPath(outputtest.xpath_full);
                                                 test_Element_Result_Test.xpath = outputtest.xpath_full;
                                                 string vt = null;
@@ -4261,7 +4278,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             await _context.SaveChangesAsync();
             return "Error";
         }
-
+        //for chrome
         public async Task<string> RunPrerequesiteTestcase(ChromeDriver driver, int id_url, string id_testcase)
         {
             string return_url = "";
@@ -4275,10 +4292,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
             }
+            driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
             driver.Url = url;
-            driver.Navigate();
+            driver.Navigate(); 
+            
             if (URL.trigger_element != null && URL.trigger_element != "")
             {
+              
                 var trigger = driver.FindElementByXPath(URL.trigger_element);
                 if (trigger.Displayed)
                 {
@@ -4294,6 +4315,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         {
                             try
                             {
+
                                 var fill = driver.FindElementByXPath(inputtest.xpath);
                                 if (fill.Displayed)
                                 {
@@ -4379,6 +4401,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             return return_url;
         }
+        //for firefox
         public async Task<string> RunPrerequesiteTestcase(FirefoxDriver driver, int id_url, string id_testcase)
         {
             string return_url = "";
@@ -4392,8 +4415,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 return_url = await RunPrerequesiteTestcase(driver, (int)Testcase.id_prerequisite_url, Testcase.id_prerequisite_testcase);
             }
+            driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
             driver.Url = url;
             driver.Navigate();
+           
             if (URL.trigger_element != null && URL.trigger_element != "")
             {
                 var trigger = driver.FindElementByXPath(URL.trigger_element);
