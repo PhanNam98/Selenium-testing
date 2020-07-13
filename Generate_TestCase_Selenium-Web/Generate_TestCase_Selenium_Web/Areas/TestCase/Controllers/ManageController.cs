@@ -311,11 +311,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(listelt);
 
         }
-        public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete,bool isGenerate)
+        public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete,bool isGenerate,string returnUrl)
         {
             if(isGenerate)
             {
-                return NotFound();
+                return RedirectToAction("Generate_testcase_selectedElement", "GenerateTestCases", new RouteValueDictionary(new
+                {
+                    id_url = id_url,
+                    isGenerate= isGenerate,
+                    returnUrl= returnUrl,
+                    eltId= eltId_Delete
+
+                }));
             }
             if (eltId_Delete == null)
             {

@@ -41,6 +41,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ElementDBContext _context;
         private int Id_Url;
+        private bool IsSelectedElement=false;
         private List<Test_case> ListTestCase;
         private List<List<Input_testcase>> List_ListInputTestcase;
         private List<string> listSpecialCharacter;
@@ -50,6 +51,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private readonly IHubContext<JobProgressHub> _hubContext;
         private int Prerequisite_url = -1;
         private string Prerequisite_testcase = null;
+        private List<Element> ListEltSelected = null;
+        
         IScheduler _scheduler;
         //private ChromeDriver chromedriver;
         [TempData]
@@ -182,6 +185,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         public async Task<IActionResult> Generate_testcase(int id_url, string returnUrl = null)
         {
+            IsSelectedElement = false;
             Id_Url = id_url;
             ListTestCase = new List<Test_case>();
             List_ListInputTestcase = new List<List<Input_testcase>>();
@@ -293,16 +297,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         //not used
         public async Task<IActionResult> Generate_testcase_selectedElement(int id_url, IEnumerable<string> eltId, string returnUrl = null)
         {
+            IsSelectedElement = true;
             Id_Url = id_url;
             ListTestCase = new List<Test_case>();
             List_ListInputTestcase = new List<List<Input_testcase>>();
-            List<Form_elements> forms = await _context.Form_elements.Where(p => p.id_url == Id_Url).ToListAsync();
+            ListEltSelected = await _context.Element.Where(p => p.id_url == id_url && eltId.Contains(p.id_element)).ToListAsync();
+            List<string> ListFormSelected = ListEltSelected.Select(p => p.id_form).ToList();
+            List<Form_elements> forms = await _context.Form_elements.Where(p => p.id_url == Id_Url && ListFormSelected.Contains(p.id_form)).ToListAsync();
             if (forms.Count > 0)
             {
                 for (int i = 0; i < forms.Count; i++)
                 {
                     var _context1 = new ElementDBContext();
-                    List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.id_form == forms[i].id_form && p.type == "submit").ToListAsync();
+                    List<Element> submit = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == forms[i].id_form && p.type == "submit").ToList();
                     for (int j = 0; j < submit.Count; j++)
                     {
 
@@ -327,8 +334,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             else
             {
                 //not form
-                var _context1 = new ElementDBContext();
-                List<Element> submit = await _context1.Element.Where(p => p.id_url == Id_Url && p.type == "submit").ToListAsync();
+                //var _context1 = new ElementDBContext();
+                List<Element> submit = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == null && p.type == "submit").ToList();
                 for (int j = 0; j < submit.Count; j++)
                 {
 
@@ -381,6 +388,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         public async Task<IActionResult> Generate_Subtestcase(int id_url, int prerequisite_url, string prerequisite_testcase, string returnUrl = null)
         {
+            IsSelectedElement = false;
             Id_Url = id_url;
             ListTestCase = new List<Test_case>();
             List_ListInputTestcase = new List<List<Input_testcase>>();

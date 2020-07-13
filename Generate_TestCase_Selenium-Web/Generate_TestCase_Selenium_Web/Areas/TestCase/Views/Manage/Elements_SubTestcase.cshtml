@@ -4,7 +4,7 @@
     ViewData["Title"] = "Elements";
     Layout = "~/Views/Shared/_LayoutManage.cshtml";
 }
-@*<link rel="stylesheet" href="http://cdn.datatables.net/fixedheader/2.0.0/js/FixedHeader.min.js" />*@
+<link rel="stylesheet" href="http://cdn.datatables.net/fixedheader/2.0.0/js/FixedHeader.min.js" />
 <h2>Elements</h2>
 <ol class="breadcrumb mb-4">
     <li class="breadcrumb-item"><a asp-area="TestCase" asp-controller="Manage" asp-action="Projects">Project</a></li>
@@ -183,9 +183,9 @@
                             <th>
                                 @Html.DisplayName("Type")
                             </th>
-                            <th>
+                            @*<th>
                                 @Html.DisplayName("Title")
-                            </th>
+                            </th>*@
                             <th>
                                 @Html.DisplayName("Id form")
                             </th>
@@ -212,9 +212,9 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.type)
                             </td>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.title)
-                            </td>
+                            </td>*@
                             <td>
                                 @Html.DisplayFor(modelItem => item.id_form)
                             </td>
@@ -324,10 +324,10 @@
     $(document).ready(function () {
         $('#elttable').DataTable(
             {
-                //fixedHeader: true,
+                fixedHeader: true,
                 "lengthMenu": [[5, 10, 25, 50, - 1], [5, 10, 25, 50, "All record"]],
                 //"ordering": false,
-                "scrollY": "400px",
+                //"scrollY": "400px",
                 "scrollCollapse": true,
                 "paging": false,
                 initComplete: function () {
