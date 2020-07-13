@@ -1,0 +1,7 @@
+﻿https://www.c-sharpcorner.com/login
+
+https://www.facebook.com/login/device-based/regular/login/?login_attempt=1&lwv=110
+
+http://online.hcmute.edu.vn
+/html/body/div[1]/form/table/tbody/tr[3]/td/table/tbody/tr/td[2]/table/tbody/tr/td[2]/a
+Lỗi đăng nhập: Tên đăng nhập và mật khẩu không đúng!
