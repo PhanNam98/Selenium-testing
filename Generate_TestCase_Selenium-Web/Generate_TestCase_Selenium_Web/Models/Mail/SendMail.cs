@@ -103,21 +103,11 @@ namespace Generate_TestCase_Selenium_Web.Models.Mail
 
                     client.Disconnect(true);
                     Console.WriteLine("Send Mail successfully");
+                   
                 });
             }
-            try
-            {
-                // Check if file exists with its full path    
-                if ((System.IO.File.Exists(path)))
-                {
-                    System.IO.File.Delete(path);
-                }
-                //else Console.WriteLine("File not found");
-            }
-            catch (IOException ioExp)
-            {
-                string mes = ioExp.Message;
-            }
+           
+
         }
     }
 }

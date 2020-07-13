@@ -53,7 +53,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         private string Prerequisite_testcase = null;
         private List<Element> ListEltSelected = null;
         
-        IScheduler _scheduler;
         //private ChromeDriver chromedriver;
         [TempData]
         public string StatusMessage { get; set; }
@@ -90,7 +89,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             if (authen > 0)
             {
                 ViewData["id_url"] = id_url;
-                var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Include(e => e.Element_test).Include(a => a.Alert_message).Include(r => r.Redirect_url).Where(p => p.id_url == id_url).OrderBy(p => p.TestType).ToListAsync();
+                var testcaseDBContext = await _context.Test_case.Include(t => t.id_urlNavigation).Include(p => p.Input_testcase).Include(e => e.Element_test)
+                    .Include(a => a.Alert_message).Include(r => r.Redirect_url).Where(p => p.id_url == id_url).OrderBy(p => p.TestType).OrderByDescending(p=>p.ModifiedDate).ToListAsync();
                 if (ViewData["Message"] == null)
                 {
                     if (!isload)
@@ -294,11 +294,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
         }
-        //not used
-        public async Task<IActionResult> Generate_testcase_selectedElement(int id_url, IEnumerable<string> eltId, string returnUrl = null)
+        
+        public async Task<IActionResult> Generate_testcase_selectedElement(int id_url, IEnumerable<string> eltId, string returnUrl = null,int prerequisite_url=-1, string prerequisite_testcase=null)
         {
             IsSelectedElement = true;
             Id_Url = id_url;
+            this.Prerequisite_url = prerequisite_url==0?-1: prerequisite_url;
+            this.Prerequisite_testcase = prerequisite_testcase;
             ListTestCase = new List<Test_case>();
             List_ListInputTestcase = new List<List<Input_testcase>>();
             ListEltSelected = await _context.Element.Where(p => p.id_url == id_url && eltId.Contains(p.id_element)).ToListAsync();
@@ -328,13 +330,33 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         await Fill_Form(forms[i].id_form, j, submit[j]);
                     }
                 }
-                //await ClickAll_Tag_a();
-                //await ClickAll_Tag_Button();
+                List<Element> notform = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == null).ToList();
+                if (notform.Count > 0)
+                {
+                    var _context2 = new ElementDBContext();
+                    List<Element> submit = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == null && p.type == "submit").ToList();
+                    for (int j = 0; j < submit.Count; j++)
+                    {
+
+                        await NotFill_ClickSubmit(null, j, submit[j]);
+                        await Input_Type_Email(null, j, submit[j]);
+                        await Input_Type_Text(null, j, submit[j]);
+                        await ClickAll_TypeRadio(null, j, submit[j]);
+                        await SelectAllElement_TypeSelect(null, j, submit[j]);
+                        await SkipOneSelect_TypeSelect(null, j, submit[j]);
+                        await ClickAll_TypeRadio(null, j, submit[j]);
+                        await Input_Type_Password(null, j, submit[j]);
+                        await Click_Any_CheckBox_TypeCheckBox(null, j, submit[j]);
+                        await ClickAll_TypeCheckBox(null, j, submit[j]);
+                        await Input_Type_TypeDate(null, j, submit[j]);
+                        await Input_Type_TypeNumber(null, j, submit[j]);
+                        await Fill_Form(null, j, submit[j]);
+                    }
+                }
             }
             else
             {
                 //not form
-                //var _context1 = new ElementDBContext();
                 List<Element> submit = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == null && p.type == "submit").ToList();
                 for (int j = 0; j < submit.Count; j++)
                 {
@@ -385,7 +407,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
 
-
         public async Task<IActionResult> Generate_Subtestcase(int id_url, int prerequisite_url, string prerequisite_testcase, string returnUrl = null)
         {
             IsSelectedElement = false;
@@ -418,8 +439,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                         await Fill_Form(forms[i].id_form, j, submit[j]);
                     }
                 }
-                //await ClickAll_Tag_a();
-                //await ClickAll_Tag_Button();
+              
             }
             else
             {
@@ -538,6 +558,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 {
                     try
                     {
+                       
                         foreach (var t in testcase)
                         {
                             _context.Input_testcase.RemoveRange(t.Input_testcase);
@@ -598,7 +619,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             var _context = new ElementDBContext();
             var listTypeText = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTypeText.Clear();
+                listTypeText = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToList();
+            }
             if (listTypeText.Count > 0)
             {
                 int step = 1;
@@ -628,7 +653,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
@@ -652,7 +681,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             var _context = new ElementDBContext();
             var listTypeText = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "text" && p.tag_name == "input").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTypeText.Clear();
+                listTypeText = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToList();
+            }
             int number_of_elements = listTypeText.Count;
 
             if (number_of_elements > 1)
@@ -704,7 +737,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
@@ -734,7 +771,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
@@ -764,7 +805,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
@@ -794,7 +839,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "text").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
@@ -828,7 +877,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Not fill data, click submit-" + index_submit;
             var _context = new ElementDBContext();
             int step = 1;
-            var id_testCase = Create_Testcase(DescriptiontestCase, "");
+            var id_testCase = Create_Testcase(DescriptiontestCase, "Not fill");
             List<Input_testcase> listInputElt = new List<Input_testcase>();
             listInputElt.Add(Crate_InputTestcase(submit, id_testCase, "", Actions.submit.ToString(), step++));
 
@@ -872,6 +921,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill incorrect email format TypeEmail_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeEmail.Clear();
+                listTypeEmail = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToList();
+            }
             if (listTypeEmail.Count > 0)
             {
                 var id_testCase = Create_Testcase(DescriptiontestCase, "Input type email");
@@ -900,6 +954,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill incorrect email format TypeEmail_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeEmail.Clear();
+                listTypeEmail = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToList();
+            }
             if (listTypeEmail.Count > 0)
             {
 
@@ -929,6 +988,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             else
                 DescriptiontestCase = "Fill email TypeEmail_" + index_submit;
             var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeEmail.Clear();
+                listTypeEmail = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToList();
+            }
             int step = 1;
             if (listTypeEmail.Count > 0)
             {
@@ -955,6 +1019,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             else
                 DescriptiontestCase = "Fill email with special characters  TypeEmail" + "_" + index_submit;
             var listTypeEmail = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeEmail.Clear();
+                listTypeEmail = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type == "email" && p.tag_name == "input").ToList();
+            }
             int step = 1;
             if (listTypeEmail.Count > 0)
             {
@@ -985,7 +1054,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var _context = new ElementDBContext();
             var listTypeRadio = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "radio").ToListAsync();
 
-
+            if (IsSelectedElement)
+            {
+                listTypeRadio.Clear();
+                listTypeRadio = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "radio").ToList();
+            }
 
             //for (int i = 0; i < listTypeRadio.Count; i++)
             //{
@@ -1070,6 +1143,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
 
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
@@ -1098,6 +1176,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill less 8 character for all element TypePassword_" + index_submit;
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
@@ -1127,6 +1210,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill data Contains Special character for all element TypePassword_" + index_submit;
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
@@ -1156,6 +1244,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill data Contains number, special character for all element TypePassword_" + index_submit;
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
@@ -1186,10 +1279,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill data Contains number, special, Capital character for all element TypePassword_" + index_submit;
             var _context = new ElementDBContext();
             var listTypePass = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypePass.Clear();
+                listTypePass = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "password").ToList();
+            }
             if (listTypePass.Count > 0)
             {
                 int step = 1;
-                var id_testCase = Create_Testcase(DescriptiontestCase);
+                var id_testCase = Create_Testcase(DescriptiontestCase, "Input type password");
                 List<Input_testcase> listInputElt = new List<Input_testcase>();
 
                 for (int i = 0; i < listTypePass.Count; i++)
@@ -1219,6 +1317,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Click some CheckBox element TypeCkeckBox_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeCheckbox = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "checkbox").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeCheckbox.Clear();
+                listTypeCheckbox = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "checkbox").ToList();
+            }
             if (listTypeCheckbox.Count > 0)
             {
                 int step = 1;
@@ -1252,6 +1355,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Click all element TypeCkeckBox_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeCheckbox = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "checkbox").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeCheckbox.Clear();
+                listTypeCheckbox = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "checkbox").ToList();
+            }
             if (listTypeCheckbox.Count > 0)
             {
                 int step = 1;
@@ -1321,6 +1429,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Only fill day of element TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1350,6 +1463,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Only fill month of element TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1379,6 +1497,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Only fill year of element TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1408,6 +1531,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill the wrong format TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1437,6 +1570,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill Over Day In Month - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1466,6 +1609,16 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill Over Day In Year - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1495,6 +1648,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill LeapYear - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1524,6 +1682,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill  No profit year - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1553,6 +1716,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill Day 31 In Month - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1582,6 +1750,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill Day 31 In Month have 30 day - TypeDate_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeDate = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeDate.Clear();
+                listTypeDate = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "date").ToList();
+            }
             if (listTypeDate.Count > 0)
             {
                 int step = 1;
@@ -1609,7 +1782,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         {
             var _context = new ElementDBContext();
             var listTaga = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "a").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTaga.Clear();
+                listTaga = ListEltSelected.Where(p => p.id_url == Id_Url && p.tag_name == "a").ToList();
+            }
             if (listTaga.Count > 0)
             {
                 for (int i = 0; i < listTaga.Count; i++)
@@ -1635,7 +1812,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var _context = new ElementDBContext();
             string DescriptionScript = "Click  element tag button: ";
             var listTaga = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "button" && p.type != "submit").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTaga.Clear();
+                listTaga = ListEltSelected.Where(p => p.id_url == Id_Url && p.tag_name == "button" && p.type != "submit").ToList();
+            }
             if (listTaga.Count > 0)
             {
                 for (int i = 0; i < listTaga.Count; i++)
@@ -1723,7 +1904,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
             var _context = new ElementDBContext();
             var listTypeSelect = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "select").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTypeSelect.Clear();
+                listTypeSelect = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "select").ToList();
+            }
             if (listTypeSelect.Count > 1)
             {
                 int number_of_elements = listTypeSelect.Count;
@@ -1766,7 +1951,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Select All Element_TypeSelect_" + "_" + index_submit;
             var _context = new ElementDBContext();
             var listTypeSelect = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "select").ToListAsync();
-
+            if (IsSelectedElement)
+            {
+                listTypeSelect.Clear();
+                listTypeSelect = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "select").ToList();
+            }
             if (listTypeSelect.Count > 0)
             {
                 int step = 1;
@@ -1824,6 +2013,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             else
                 DescriptiontestCase = "Fill big number elementS TypeNumber" + "_" + index_submit;
             var listTypeNumber = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeNumber.Clear();
+                listTypeNumber = ListEltSelected.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToList();
+            }
             if (listTypeNumber.Count > 0)
             {
                 int step = 1;
@@ -1852,6 +2046,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             else
                 DescriptiontestCase = "Fill Letter charter - elementS TypeNumber" + "_" + index_submit;
             var listTypeNumber = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeNumber.Clear();
+                listTypeNumber = ListEltSelected.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToList();
+            }
             if (listTypeNumber.Count > 0)
             {
                 int step = 1;
@@ -1880,6 +2079,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             else
                 DescriptiontestCase = "Fill Special characters - elementS TypeNumber" + "_" + index_submit;
             var listTypeNumber = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeNumber.Clear();
+                listTypeNumber = ListEltSelected.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToList();
+            }
             if (listTypeNumber.Count > 0)
             {
                 int step = 1;
@@ -1908,6 +2112,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             else
                 DescriptiontestCase = "Fill number - elementS TypeNumber" + "_" + index_submit;
             var listTypeNumber = await _context.Element.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listTypeNumber.Clear();
+                listTypeNumber = ListEltSelected.Where(p => p.id_url == Id_Url && p.tag_name == "input" && p.type == "number").ToList();
+            }
             if (listTypeNumber.Count > 0)
             {
                 int step = 1;
@@ -1952,6 +2161,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 DescriptiontestCase = "Fill data all element:" + id_form + "_" + index_submit;
             var _context = new ElementDBContext();
             var listElt = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type != "submit" && p.type != "radio" && p.tag_name != "a").ToListAsync();
+            if (IsSelectedElement)
+            {
+                listElt.Clear();
+                listElt = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.type != "submit" && p.type != "radio" && p.tag_name != "a").ToList();
+            }
             int step = 1;
 
             List<Input_testcase> listInputElt = new List<Input_testcase>();
@@ -2113,7 +2327,11 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
 
                 var listTypeRadio = await _context.Element.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "radio").ToListAsync();
-
+                if (IsSelectedElement)
+                {
+                    listTypeRadio.Clear();
+                    listTypeRadio = ListEltSelected.Where(p => p.id_url == Id_Url && p.id_form == id_form && p.tag_name == "input" && p.type == "radio").ToList();
+                }
                 if (listTypeRadio.Count > 0)
                 {
                     List<List<Element>> listRadio = new List<List<Element>>();
@@ -2331,7 +2549,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
         #endregion
 
-
         #region Run test case
         [HttpPost]//not use
         [Route("/TestCase/Result")]
@@ -2394,7 +2611,6 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return NotFound();
         }
         [HttpPost]
-
         public async Task<IActionResult> RunTestCasesJob(int id_url, List<string> list_Idtestcase, bool runall, string returnUrl = null)
         {
             string jobId = Guid.NewGuid().ToString("N");
@@ -5168,7 +5384,19 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                            "The excel file has been attached below.";
                 await SendMail.SendMailWithFile(emailcontent, user.Email, "Export Test case", path);
                 //await SendMail.SendMailWithFile("file exel", user.Email, "Export Excel", path);
-               
+                //try
+                //{
+                //    // Check if file exists with its full path    
+                //    if ((System.IO.File.Exists(path)))
+                //    {
+                //      System.IO.File.Delete(path);
+                //    }
+                //    //else Console.WriteLine("File not found");
+                //}
+                //catch (IOException ioExp)
+                //{
+                //    string mes = ioExp.Message;
+                //}
             }
 
 
@@ -5408,6 +5636,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
         }
         #endregion
+
         #region Url Redirect
         [HttpPost]
         public async Task<IActionResult> UrlRedirect(int id_url, string id_testcase, string redirect_url_test, string returnUrl)
@@ -5467,6 +5696,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
         #endregion
+
         #region Alert Message alertMessage
         [HttpPost]
         public async Task<IActionResult> AlertMessage(int id_url, string id_testcase, string alertMessage, string returnUrl)
@@ -5526,133 +5756,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         }
         #endregion
-        /* temp
-
-        // GET: TestCase/GenerateTestCases/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var test_case = await _context.Test_case
-                .Include(t => t.id_urlNavigation)
-                .FirstOrDefaultAsync(m => m.id_testcase == id);
-            if (test_case == null)
-            {
-                return NotFound();
-            }
-
-            return View(test_case);
-        }
-
-        // GET: TestCase/GenerateTestCases/Create
-        public IActionResult Create()
-        {
-            ViewData["id_url"] = new SelectList(_context.Url, "id_url", "name");
-            return View();
-        }
-
-        // POST: TestCase/GenerateTestCases/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_testcase,id_url,description,result,is_test,CreatedDate,ModifiedDate")] Test_case test_case)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(test_case);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["id_url"] = new SelectList(_context.Url, "id_url", "name", test_case.id_url);
-            return View(test_case);
-        }
-
-        // GET: TestCase/GenerateTestCases/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var test_case = await _context.Test_case.FindAsync(id);
-            if (test_case == null)
-            {
-                return NotFound();
-            }
-            ViewData["id_url"] = new SelectList(_context.Url, "id_url", "name", test_case.id_url);
-            return View(test_case);
-        }
-
-        // POST: TestCase/GenerateTestCases/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("id_testcase,id_url,description,result,is_test,CreatedDate,ModifiedDate")] Test_case test_case)
-        {
-            if (id != test_case.id_testcase)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(test_case);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!Test_caseExists(test_case.id_testcase))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["id_url"] = new SelectList(_context.Url, "id_url", "name", test_case.id_url);
-            return View(test_case);
-        }
-
-        // GET: TestCase/GenerateTestCases/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var test_case = await _context.Test_case
-                .Include(t => t.id_urlNavigation)
-                .FirstOrDefaultAsync(m => m.id_testcase == id);
-            if (test_case == null)
-            {
-                return NotFound();
-            }
-
-            return View(test_case);
-        }
-
-        // POST: TestCase/GenerateTestCases/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var test_case = await _context.Test_case.FindAsync(id);
-            _context.Test_case.Remove(test_case);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }*/
+       
 
         private bool Test_caseExists(string id)
         {

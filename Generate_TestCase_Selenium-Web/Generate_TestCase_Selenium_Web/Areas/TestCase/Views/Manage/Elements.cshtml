@@ -42,52 +42,54 @@
                 <div class="container">
                     <div class="text-right">
                         <button type="button" name="deletebtn" id="btn-delete" class="btn btn-custon-rounded-three btn-danger btn-xs" data-toggle="modal" data-target="#Delete">Delete Element(s)</button>
-                        <button type="button" name="generatebtn" id="btn-generate" class="btn btn-custon-rounded-three btn-primary btn-xs" onclick="Generate_by_id();">Generate element selected</button>
+                        <button type="button" name="generatebtn" id="btn-generate" class="btn btn-custon-rounded-three btn-success btn-xs" onclick="Generate_by_id();">Generate from element selected</button>
+                        <a role="button" class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
+                           title="Generate test case" onclick="ShowProgress()" asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })">Create Testcase</a>
                         @*@{
 
-                                if (ViewBag.Nosubmit == true)
-                                {
+            if (ViewBag.Nosubmit == true)
+            {
 
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                        Generate test case
-                                    </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Generate test case
+                </button>
 
 
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Waring</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>The site cannot find an object of type submit.</p>
-                                                    <p>You can choose an element to set submit or click next to continue generating test cases.</p>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Waring</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>The site cannot find an object of type submit.</p>
+                                <p>You can choose an element to set submit or click next to continue generating test cases.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
 
-                                                       asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Continue</a>
+                                   asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Continue</a>
 
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a class="btn btn-primary" asp-action="Generate_testcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
 
-                                       asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Generate test case</a>
-                                }
-                            }*@
+                   asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Generate test case</a>
+            }
+        }*@
                         @*<a class="btn btn-primary" asp-action="Generate_Subtestcase" asp-controller="GenerateTestCases" asp-route-id_url="@ViewBag.id_url"
-                            asp-route-prerequisite_testcase="@ViewBag.prerequisite_testcase" asp-route-prerequisite_url="@ViewBag.prerequisite_url"
-                            asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Generate test case</a>*@
+        asp-route-prerequisite_testcase="@ViewBag.prerequisite_testcase" asp-route-prerequisite_url="@ViewBag.prerequisite_url"
+        asp-route-returnUrl="@Url.Action("Testcases", "Manage", new { area = "TestCase", id_url = ViewBag.id_url })" role="button" onclick="ShowProgress();">Generate test case</a>*@
                     </div>
                 </div>
             </div>
@@ -372,7 +374,7 @@
                             select.append('<option value="' + d + '">' + d + '</option>')
                         });
                     });
-                    this.api().columns(5).every(function () {
+                    this.api().columns(6).every(function () {
                         var column = this;
                         var select = $('#form_elt')
                             .appendTo($('#form_elt').empty())

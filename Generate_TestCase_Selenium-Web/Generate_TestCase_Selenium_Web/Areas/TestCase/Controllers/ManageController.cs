@@ -311,7 +311,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(listelt);
 
         }
-        public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete,bool isGenerate,string returnUrl)
+        public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete,bool isGenerate,string returnUrl, string prerequisite_testcase, int prerequisite_url)
         {
             if(isGenerate)
             {
@@ -320,7 +320,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     id_url = id_url,
                     isGenerate= isGenerate,
                     returnUrl= returnUrl,
-                    eltId= eltId_Delete
+                    eltId= eltId_Delete,
+                    prerequisite_testcase= prerequisite_testcase,
+                    prerequisite_url= prerequisite_url
 
                 }));
             }
@@ -409,7 +411,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Testcases(int id_url)
         {
             var user = await _userManager.GetUserAsync(User);
-            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Include(t=>t.Element_test).Include(a=>a.Alert_message).Include(r=>r.Redirect_url).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).OrderBy(p=>p.TestType).ToListAsync();
+            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Include(t=>t.Element_test).Include(a=>a.Alert_message)
+                .Include(r=>r.Redirect_url).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).OrderBy(p=>p.TestType).OrderByDescending(p=>p.ModifiedDate).ToListAsync();
             if (listtestcase.Count > 0)
             {
                 //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();

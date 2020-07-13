@@ -85,13 +85,22 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(elementDBContext);
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteList(int id_url, IEnumerable<string> eltId_Delete)
+        public async Task<IActionResult> DeleteList(int id_url, IEnumerable<string> eltId_Delete, bool isGenerate)
         {
             try
             {
                 if (eltId_Delete == null)
                 {
                     return NotFound();
+                }
+                if (isGenerate)
+                {
+                    return RedirectToAction("Generate_testcase_selectedElement", "GenerateTestCases", new RouteValueDictionary(new
+                    {
+                        id_url = id_url,
+                        isGenerate = isGenerate,
+                        eltId = eltId_Delete
+                    }));
                 }
                 foreach (var id in eltId_Delete)
                 {
