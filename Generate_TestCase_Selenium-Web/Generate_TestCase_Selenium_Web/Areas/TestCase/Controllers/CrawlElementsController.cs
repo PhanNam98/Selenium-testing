@@ -56,7 +56,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                     ViewData["Message"] = "No element yet";
                 }
                 else
-         if (elementDBContext.Count() > 0)
+                if (elementDBContext.Count() > 0)
                 {
                     ViewData["Message"] = String.Format("Success, {0} element(s) were found", elementDBContext.Count());
                 }

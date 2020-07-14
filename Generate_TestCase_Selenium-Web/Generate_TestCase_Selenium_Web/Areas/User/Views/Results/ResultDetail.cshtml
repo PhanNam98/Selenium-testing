@@ -80,7 +80,7 @@
                                     </td>
                                 }
                                 else
-                           if (item.Result.Equals("Skip"))
+                             if (item.Result.Equals("Skip"))
                                 {
                                     @*<td style="color:blue">
                                             @Html.DisplayFor(modelItem => item.Result)
@@ -116,8 +116,36 @@
                                 }
                                 else
                                 {
-                                    <td style="color:red">
-                                        @Html.DisplayFor(modelItem => item.Result)
+                                    @*<td style="color:red">
+                                            @Html.DisplayFor(modelItem => item.Result)
+                                        </td>*@
+                                    <td>
+                                        @{
+
+                                            string m1 = "mf" + @item.id_testcase.ToString();
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#@m1">
+                                                Failure
+                                            </button>
+                                            <div class="modal fade" id="@m1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Log message</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @item.Log_message
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        }
                                     </td>
                                 }
 
@@ -162,7 +190,7 @@
                                                                 <div class="row form-group">
                                                                     <div class="col col-md-3">@Html.Label("Project")</div>
                                                                     <div class="col-12 col-md-9">
-                                                                        <input type="text" name="project"  class="input-md form-control" value="@item.id_.id_urlNavigation.project_.name" readonly />
+                                                                        <input type="text" name="project" class="input-md form-control" value="@item.id_.id_urlNavigation.project_.name" readonly />
                                                                     </div>
                                                                 </div>
                                                                 <div class="row form-group">
@@ -202,7 +230,7 @@
                                         <a class="btn btn-primary" asp-action="TestElement" asp-controller="Results" asp-route-id_url="@item.id_url" asp-route-id_testcase="@item.id_testcase" asp-route-id_result="@item.id_result" role="button" title="Validate items">Validate items</a>
 
                                     }
-                                   @* <a class="btn btn-success" asp-action="TestElement" asp-controller="Results" asp-route-id_testcase="@item.id_testcase" asp-route-id_result="@item.id_result" role="button" title="Validate items">Validate items</a>*@
+                                    @* <a class="btn btn-success" asp-action="TestElement" asp-controller="Results" asp-route-id_testcase="@item.id_testcase" asp-route-id_result="@item.id_result" role="button" title="Validate items">Validate items</a>*@
                                 </td>
                             </tr>
                         }

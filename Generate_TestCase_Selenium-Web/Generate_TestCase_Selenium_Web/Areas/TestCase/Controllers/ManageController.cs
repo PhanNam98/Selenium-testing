@@ -53,7 +53,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Projects()
         {
             var user = await _userManager.GetUserAsync(User);
-            var elementDBContext = await _context.Project.Include(p => p.Id_UserNavigation).Where(p => p.Id_User == user.Id).OrderByDescending(d=>d.ModifiedDate).ToListAsync();
+            var elementDBContext = await _context.Project.Include(p => p.Id_UserNavigation).Where(p => p.Id_User == user.Id).OrderByDescending(d => d.ModifiedDate).ToListAsync();
             if (StatusMessage == null)
             {
                 if (elementDBContext.Count() == 0)
@@ -142,7 +142,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewUrl(string name, string url1, int project_id, bool IsOnlyDislayed,string trigger_element, bool IsGetTagA)
+        public async Task<IActionResult> AddNewUrl(string name, string url1, int project_id, bool IsOnlyDislayed, string trigger_element, bool IsGetTagA)
         {
             Url url = new Url();
             try
@@ -171,7 +171,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             //return RedirectToAction("CrawlElt", "CrawlElements", new RouteValueDictionary(new { id_url = 1, IsOnlyDislayed = IsOnlyDislayed }));
         }
 
-        public async Task<IActionResult> AddNewSubUrl(int project_id,string id_testcase,int id_url)
+        public async Task<IActionResult> AddNewSubUrl(int project_id, string id_testcase, int id_url)
         {
             ViewData["project_id"] = project_id;
             ViewData["id_url"] = id_url;
@@ -180,7 +180,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddNewSubUrl(string name,string url1,bool IsChange, string id_testcase,bool IsOnlyDislayed,int project_id,int id_url,string trigger_element,bool IsGetTagA)
+        public async Task<IActionResult> AddNewSubUrl(string name, string url1, bool IsChange, string id_testcase, bool IsOnlyDislayed, int project_id, int id_url, string trigger_element, bool IsGetTagA)
         {
             Url url = new Url();
             try
@@ -212,7 +212,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 IsOnlyDislayed = IsOnlyDislayed,
                 prerequisite_url = id_url,
                 prerequisite_testcase = id_testcase,
-                IsGetTagA= IsGetTagA
+                IsGetTagA = IsGetTagA
             });
             //return RedirectToAction("CrawlEltSubUrl", "CrawlElements", new { area="TestCase",project_id = project_id, id_url = 41, IsOnlyDislayed = IsOnlyDislayed , prerequisite_url =id_url,
             //    prerequisite_testcase= id_testcase
@@ -221,15 +221,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
 
         public async Task<IActionResult> DeleteUrl(int id_url, string returnUrl, int project_id)
         {
-            
-           
+
+
             try
             {
-                var url = await _context.Url.Include(o=>o.Element).Include(p=>p.Form_elements).Where(p => p.id_url == id_url && p.project_id==project_id).SingleOrDefaultAsync();
-               if(url.Element!=null)
+                var url = await _context.Url.Include(o => o.Element).Include(p => p.Form_elements).Where(p => p.id_url == id_url && p.project_id == project_id).SingleOrDefaultAsync();
+                if (url.Element != null)
                 {
                     _context.Element.RemoveRange(url.Element);
-                    
+
                 }
                 if (url.Form_elements != null)
                 {
@@ -242,10 +242,10 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 }
 
 
-                 _context.SaveChanges();
+                _context.SaveChanges();
                 StatusMessage = "Delete successfully";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 var a = e.Message;
                 StatusMessage = "Delete failed";
@@ -253,7 +253,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return RedirectToAction(nameof(Urls), new RouteValueDictionary(new
             {
                 id_url = id_url,
-                project_id= project_id
+                project_id = project_id
 
             }));
         }
@@ -302,13 +302,13 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             return View(listelt);
 
-        }       
+        }
         [Route("/SubTestCase/Elements/")]
-        public async Task<IActionResult> Elements_SubTestcase(int id_url,string prerequisite_testcase, int prerequisite_url)
+        public async Task<IActionResult> Elements_SubTestcase(int id_url, string prerequisite_testcase, int prerequisite_url)
         {
             var user = await _userManager.GetUserAsync(User);
             var listelt = await _context.Element.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).ToListAsync();
-            
+
             if (listelt.Count > 0)
             {
                 //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();
@@ -349,18 +349,18 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(listelt);
 
         }
-        public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete,bool isGenerate, string returnUrl, string prerequisite_testcase, int prerequisite_url)
+        public async Task<IActionResult> DeleteElts(int id_url, IEnumerable<string> eltId_Delete, bool isGenerate, string returnUrl, string prerequisite_testcase, int prerequisite_url)
         {
-            if(isGenerate)
+            if (isGenerate)
             {
                 return RedirectToAction("Generate_testcase_selectedElement", "GenerateTestCases", new RouteValueDictionary(new
                 {
                     id_url = id_url,
-                    isGenerate= isGenerate,
-                    returnUrl= returnUrl,
-                    eltId= eltId_Delete,
-                    prerequisite_testcase= prerequisite_testcase,
-                    prerequisite_url= prerequisite_url
+                    isGenerate = isGenerate,
+                    returnUrl = returnUrl,
+                    eltId = eltId_Delete,
+                    prerequisite_testcase = prerequisite_testcase,
+                    prerequisite_url = prerequisite_url
 
                 }));
             }
@@ -382,12 +382,12 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 StatusMessage = "Delete failed";
             }
-            if(prerequisite_testcase!=null && prerequisite_url!=-1)
+            if (prerequisite_testcase != null && prerequisite_url != -1)
             {
                 return RedirectToAction(nameof(Elements_SubTestcase), new RouteValueDictionary(new
                 {
                     id_url = id_url,
-                      prerequisite_testcase = prerequisite_testcase,
+                    prerequisite_testcase = prerequisite_testcase,
                     prerequisite_url = prerequisite_url
                 }));
             }
@@ -433,8 +433,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return RedirectToAction(nameof(Elements_SubTestcase), new RouteValueDictionary(new
             {
                 id_url = id_url,
-                prerequisite_testcase= prerequisite_testcase,
-                prerequisite_url= prerequisite_url
+                prerequisite_testcase = prerequisite_testcase,
+                prerequisite_url = prerequisite_url
 
             }));
         }
@@ -471,8 +471,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
         public async Task<IActionResult> Testcases(int id_url)
         {
             var user = await _userManager.GetUserAsync(User);
-            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Include(t=>t.Element_test).Include(a=>a.Alert_message)
-                .Include(r=>r.Redirect_url).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).OrderBy(p=>p.TestType).OrderByDescending(p=>p.ModifiedDate).ToListAsync();
+            var listtestcase = await _context.Test_case.Include(e => e.id_urlNavigation).ThenInclude(p => p.project_).Include(t => t.Element_test).Include(a => a.Alert_message)
+                .Include(r => r.Redirect_url).Where(p => p.id_url == id_url && p.id_urlNavigation.project_.Id_User == user.Id).OrderBy(p => p.TestType).OrderByDescending(p => p.ModifiedDate).ToListAsync();
             if (listtestcase.Count > 0)
             {
                 //var listelt = await _context.Element.Where(p => p.id_url == id_url).ToListAsync();
@@ -528,6 +528,46 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             }
             return NotFound();
 
+        }
+        public async Task<IActionResult> DuplicateTestcase(int project_id, string id_testcase, int id_url)
+        {
+            try
+            {
+                var test_Case = await _context.Test_case.Include(p => p.Input_testcase).Where(p => p.id_url == id_url && p.id_testcase == id_testcase).SingleOrDefaultAsync();
+                var id_testcasenew = Guid.NewGuid().ToString("N").Substring(10);
+                Test_case duplicateelt = new Test_case();
+                duplicateelt.id_url = id_url;
+                duplicateelt.id_testcase = id_testcasenew;
+                duplicateelt.CreatedDate = DateTime.Now;
+                duplicateelt.ModifiedDate = DateTime.Now;
+                duplicateelt.is_test = true;
+                duplicateelt.result = "";
+                duplicateelt.description = test_Case.description+"-Copy";
+                duplicateelt.TestType = test_Case.TestType";
+                duplicateelt.id_prerequisite_testcase = test_Case.id_prerequisite_testcase;
+                duplicateelt.id_prerequisite_url = test_Case.id_prerequisite_url;
+                _context.Test_case.Add(duplicateelt);
+                _context.SaveChanges();
+                foreach (var i in test_Case.Input_testcase)
+                {
+                    Input_testcase newinput = new Input_testcase();
+                    newinput.id_element = i.id_element;
+                    newinput.id_testcase = id_testcasenew;
+                    newinput.id_url = id_url;
+                    newinput.value = i.value;
+                    newinput.action = i.action;
+                    newinput.xpath = i.xpath;
+                    newinput.test_step = i.test_step;
+                    _context.Input_testcase.Add(newinput);
+                }
+                _context.SaveChanges();
+                StatusMessage = "Duplicate successfully";
+            }
+            catch
+            {
+                StatusMessage = "Duplicate failed";
+            }
+            return RedirectToAction("Testcases", new { id_url = id_url });
         }
         #endregion
 
@@ -612,14 +652,14 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(testdataDBContext);
         }
         [Route("/Manage/Testcase/TestDatas/ChangeOption")]
-        public async Task<IActionResult> ChaneOptionRadio(int id_url, string id_testcase, string id_element,string name_element)
+        public async Task<IActionResult> ChaneOptionRadio(int id_url, string id_testcase, string id_element, string name_element)
         {
             ViewData["Message"] = StatusMessage;
             TempData.Remove("StatusMessage");
             ViewData["id_url"] = id_url;
             ViewData["id_testcase"] = id_testcase;
             ViewData["id_element"] = id_element;
-            var elt = await _context.Element.Where(p => p.id_url == id_url && p.type=="radio" && p.name== name_element).ToListAsync();
+            var elt = await _context.Element.Where(p => p.id_url == id_url && p.type == "radio" && p.name == name_element).ToListAsync();
             if (ViewData["Message"] == null)
             {
                 if (elt.Count() == 0)
@@ -640,15 +680,15 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return View(elt);
         }
         [HttpPost]
-        public async Task<IActionResult> ChangeValueDataTest(int id_url,string id_testcase, string id_element,string testvalue)
+        public async Task<IActionResult> ChangeValueDataTest(int id_url, string id_testcase, string id_element, string testvalue)
         {
             try
             {
                 var testdata = _context.Input_testcase.Where(p => p.id_url == id_url && p.id_testcase == id_testcase && p.id_element == id_element).SingleOrDefault();
                 testdata.value = testvalue;
-                if((testvalue.ToLower().Equals("true") || testvalue.ToLower().Equals("false") )&& (testdata.action.ToLower().Equals("check") || testdata.action.ToLower().Equals("nocheck")))
+                if ((testvalue.ToLower().Equals("true") || testvalue.ToLower().Equals("false")) && (testdata.action.ToLower().Equals("check") || testdata.action.ToLower().Equals("nocheck")))
                 {
-                    if(testvalue.ToLower().Equals("true"))
+                    if (testvalue.ToLower().Equals("true"))
                     {
                         testdata.action = "check";
                     }
@@ -668,7 +708,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             return RedirectToAction("TestDatas", new { id_url = id_url, id_testcase = id_testcase });
         }
         [HttpPost]
-        public async Task<IActionResult> SaveValueOption(int id_url, string id_testcase, string id_element,string id_elementchange)
+        public async Task<IActionResult> SaveValueOption(int id_url, string id_testcase, string id_element, string id_elementchange)
         {
             try
             {
@@ -693,9 +733,9 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             {
                 StatusMessage = "Update failed";
             }
-            return RedirectToAction("TestDatas", new { id_url=id_url,id_testcase=id_testcase});
+            return RedirectToAction("TestDatas", new { id_url = id_url, id_testcase = id_testcase });
         }
-#endregion
+        #endregion
 
     }
 }

@@ -227,7 +227,8 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <a class="btn btn-danger" asp-action="AddNewSubUrl" asp-controller="Manage" asp-route-project_id="@ViewBag.project_id" asp-route-id_testcase="@item.id_testcase" asp-route-id_url="@ViewBag.id_url" role="button" title="Test data">Sub testcase</a>|
+                                                            <a class="btn btn-danger" asp-action="AddNewSubUrl" asp-controller="Manage" asp-route-project_id="@ViewBag.project_id" asp-route-id_testcase="@item.id_testcase" asp-route-id_url="@ViewBag.id_url" role="button" title="Sub testcase">Sub testcase</a>|
+                                                            <a class="btn btn-primary" asp-action="DuplicateTestcase" asp-controller="Manage" asp-route-project_id="@ViewBag.project_id" asp-route-id_testcase="@item.id_testcase" asp-route-id_url="@ViewBag.id_url" role="button" title="Duplicate">Duplicate</a>|
                                                             <button type="button" class="btn btn-success" onclick="UpdateTestcase('@item.id_testcase', @item.id_url, '@description')">Update</button>
 
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
