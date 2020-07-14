@@ -543,7 +543,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 duplicateelt.is_test = true;
                 duplicateelt.result = "";
                 duplicateelt.description = test_Case.description+"-Copy";
-                duplicateelt.TestType = test_Case.TestType";
+                duplicateelt.TestType = test_Case.TestType;
                 duplicateelt.id_prerequisite_testcase = test_Case.id_prerequisite_testcase;
                 duplicateelt.id_prerequisite_url = test_Case.id_prerequisite_url;
                 _context.Test_case.Add(duplicateelt);

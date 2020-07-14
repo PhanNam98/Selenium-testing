@@ -308,8 +308,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
             var URL = await _context.Url.Where(p => p.id_url == id_url).SingleOrDefaultAsync();
             int flag = 0;
             ChromeDriver Chromedriver = null;
-            Chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
-            Chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+            
             try
             {
 
@@ -330,6 +329,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                 var returnUrl = await RunPrerequesiteTestcase(Chromedriver, prerequisite_testcase, prerequisite_url);
                 if (URL.IsChange == false)
                 {
+                    Chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
                     Chromedriver.Url = Url;
                     Chromedriver.Navigate();
                 }

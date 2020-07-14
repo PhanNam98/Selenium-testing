@@ -3525,8 +3525,8 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                     try
                                     {
                                        
-                                        chromedriver.FindElementByXPath(inputtest.xpath).Click();
-
+                                        chromedriver.FindElementByXPath(inputtest.xpath).Submit();
+                                        chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
                                     }
                                     catch (Exception e)
                                     {
@@ -4060,7 +4060,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                     {
                                        
                                         firefoxdriver.FindElementByXPath(inputtest.xpath).Click();
-
+                                        firefoxdriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
                                     }
                                     catch (Exception e)
                                     {
@@ -4566,7 +4566,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             try
                             {
                                 driver.FindElementByXPath(inputtest.xpath).Click();
-
+                                driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
                             }
                             catch (Exception e)
                             {
@@ -4687,7 +4687,7 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                             try
                             {
                                 driver.FindElementByXPath(inputtest.xpath).Click();
-
+                                driver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
                             }
                             catch (Exception e)
                             {
