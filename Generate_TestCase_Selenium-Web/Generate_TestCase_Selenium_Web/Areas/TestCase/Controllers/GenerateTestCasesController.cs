@@ -3524,9 +3524,23 @@ namespace Generate_TestCase_Selenium_Web.Areas.TestCase.Controllers
                                 {
                                     try
                                     {
-                                       
-                                        chromedriver.FindElementByXPath(inputtest.xpath).Submit();
-                                        chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(20));
+                                        chromedriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                                        chromedriver.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(50));
+                                        var click = chromedriver.FindElementByXPath(inputtest.xpath);
+                                        //var click = chromedriver.FindElementById(inputtest.id_element);
+                                        if(click.Displayed)
+                                        {
+                                            try
+                                            {
+                                                click.Submit();
+                                            }
+                                           catch
+                                            {
+                                                click.Click();
+                                            }
+                                        }
+                                        
+                                        
                                     }
                                     catch (Exception e)
                                     {
