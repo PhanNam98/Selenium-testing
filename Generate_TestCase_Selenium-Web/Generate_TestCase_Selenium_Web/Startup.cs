@@ -71,8 +71,8 @@ namespace Generate_TestCase_Selenium_Web
                IConfigurationSection googleAuthNSection =
                Configuration.GetSection("Authentication:Google");
 
-                options.ClientId = "880817271081-p0eldkcvuajmt6cfrejdl7kjf3asm5mm.apps.googleusercontent.com";
-                options.ClientSecret = "COW_bCXJVYpjhNpVmpXh6slA";
+                options.ClientId = "";
+                options.ClientSecret = "";
              });
 
 
@@ -96,7 +96,7 @@ namespace Generate_TestCase_Selenium_Web
                 //cronExpression: "0/5 * * * * ?")); // run every 5 seconds
                 cronExpression: "")); // run after web start
             services.AddHostedService<QuartzHostedService>();
-
+            // config login default
             services.ConfigureApplicationCookie(opts => opts.LoginPath = "/Login");
 
         }

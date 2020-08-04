@@ -26,7 +26,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Mail
             using (var client = new SmtpClient())
             {
                 client.Connect("smtp.gmail.com", 587, false);
-                client.Authenticate("nguoithichduajoker1@gmail.com", "yccuenfqgfdxsnbu");
+                client.Authenticate("", "");
 
                 client.Send(message);
 
@@ -53,7 +53,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Mail
                 await Task.Run(() =>
                 {
                     client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("nguoithichduajoker1@gmail.com", "yccuenfqgfdxsnbu");
+                    client.Authenticate("", "");
 
                     client.Send(message);
 
@@ -97,7 +97,7 @@ namespace Generate_TestCase_Selenium_Web.Models.Mail
                 await Task.Run(() =>
                 {
                     client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("nguoithichduajoker1@gmail.com", "yccuenfqgfdxsnbu");
+                    client.Authenticate("", "");
 
                     client.Send(message);
 

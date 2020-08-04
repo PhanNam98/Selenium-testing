@@ -652,7 +652,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                                         }
 
                                     }
-                                    catch (Exception e)
+                                    catch 
                                     {
                                         //if (e.Message.Equals("element not interactable"))
                                         //{
@@ -676,7 +676,7 @@ namespace Generate_TestCase_Selenium_Web.Jobs
                                         selectElement.SelectByIndex(index);
 
                                     }
-                                    catch (Exception e)
+                                    catch(Exception e)
                                     {
                                         if (e.Message.Equals("element not interactable"))
                                         {
